@@ -77,6 +77,10 @@ spec:
             traefik: true
           bookmarks.yaml: |
             - Resources:
+              - BentoPDF:
+                  - icon: bentopdf.png
+                    href: https://pdf.erwanleboucher.dev
+                    description: PDF Manager
               - GitHub:
                   - icon: github.png
                     href: https://github.com/erwanleboucher/mediaserver
