@@ -31,7 +31,7 @@ spec:
           app:
             image:
               repository: lscr.io/linuxserver/speedtest-tracker
-              tag: "v1.13.3-ls130"
+              tag: "v1.13.3-ls130@sha256:ce42fcb3c4fdcceb22e8c91ad93b8293ea0fe0873221f07fce36aed65b6a1f51"
               pullPolicy: Always
             env:
               - name: PUID
