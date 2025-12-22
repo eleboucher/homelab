@@ -8,7 +8,7 @@ spec:
   interval: 1h
   chartRef:
     kind: OCIRepository
-    name: victoria-logs-single
+    name: victoria-logs-collector
   values:
     nameOverride: *app
     remoteWrite:
