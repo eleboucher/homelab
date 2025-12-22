@@ -1,0 +1,17 @@
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDatasource
+metadata:
+  name: 'victoriametrics-logs-datasource'
+  namespace: 'monitoring'
+spec:
+  instanceSelector:
+    matchLabels:
+      dashboards: 'grafana'
+  allowCrossNamespaceImport: true
+  datasource:
+    name: VictoriaLogs
+    type: victoriametrics-logs-datasource
+    access: proxy
+    url: http://vls-server:9428
+    isDefault: true

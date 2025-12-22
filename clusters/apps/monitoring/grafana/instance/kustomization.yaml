@@ -4,4 +4,4 @@ kind: Kustomization
 resources:
   - helmrelease.yaml
   - repository.yaml
-  - grafanadatasource.yaml
+  - secret.sops.yaml

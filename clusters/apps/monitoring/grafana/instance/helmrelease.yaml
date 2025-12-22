@@ -1,0 +1,50 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: grafana
+  namespace: monitoring
+spec:
+  interval: 1h
+  chartRef:
+    kind: OCIRepository
+    name: grafana
+  values:
+    plugins:
+      - victoriametrics-logs-datasource
+    admin:
+      existingSecret: grafana-secret
+    ingress:
+      enabled: true
+      annotations:
+        traefik.ingress.kubernetes.io/router.entrypoints: websecure
+        cert-manager.io/cluster-issuer: "letsencrypt-production"
+      hosts:
+        - grafana.erwanleboucher.dev
+      tls:
+        - secretName: grafana-tls
+          hosts:
+            - grafana.erwanleboucher.dev
+    persistence:
+      enabled: true
+      size: 10Gi
+      storageClass: longhorn
+    extraObjects:
+      - |-
+        apiVersion: grafana.integreatly.org/v1beta1
+        kind: Grafana
+        metadata:
+          name: {{ include "grafana.fullname" . }}
+          namespace: {{ include "grafana.namespace" . }}
+          labels:
+            dashboards: grafana
+            {{- include "grafana.labels" . | nindent 4 }}
+        spec:
+          external:
+            url: "http://{{ include "grafana.fullname" . }}.{{ include "grafana.namespace" . }}.svc.cluster.local:{{ .Values.service.port }}/"
+            adminUser:
+              name: {{ (tpl .Values.admin.existingSecret .) | default (include "grafana.fullname" .) }}
+              key: {{ .Values.admin.userKey | default "admin-user" }}
+            adminPassword:
+              name: {{ (tpl .Values.admin.existingSecret .) | default (include "grafana.fullname" .) }}
+              key: {{ .Values.admin.passwordKey | default "admin-password" }}

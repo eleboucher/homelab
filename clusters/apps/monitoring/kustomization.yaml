@@ -9,4 +9,4 @@ resources:
   - speedtest-tracker
   - victoria-metrics-k8s-stack
   - victoria-logs
-  - grafana-operator
+  - grafana

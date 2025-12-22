@@ -22,23 +22,15 @@ spec:
     kubeEtcd:
       enabled: false
     grafana:
+      enabled: false
+      forceDeployDatasource: true
+    defaultDashboards:
       enabled: true
-      ingress:
+      grafanaOperator:
         enabled: true
-        annotations:
-          traefik.ingress.kubernetes.io/router.entrypoints: websecure
-          cert-manager.io/cluster-issuer: "letsencrypt-production"
-        hosts:
-          - grafana.erwanleboucher.dev
-        tls:
-          - secretName: grafana-tls
-            hosts:
-              - grafana.erwanleboucher.dev
-      persistence:
+    defaultDatasources:
+      grafanaOperator:
         enabled: true
-        size: 10Gi
-        storageClass: longhorn
-
     vmagent:
       spec:
         inlineRelabelConfig:
