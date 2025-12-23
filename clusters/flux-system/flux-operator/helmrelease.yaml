@@ -9,6 +9,3 @@ spec:
     kind: OCIRepository
     name: flux-operator
   interval: 30m
-  values:
-    serviceMonitor:
-      create: true
