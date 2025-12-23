@@ -12,4 +12,5 @@ resources:
   - wizarr
   - profilarr
   - cleanuparr
+  - maintainerr
   - namespace.yaml
