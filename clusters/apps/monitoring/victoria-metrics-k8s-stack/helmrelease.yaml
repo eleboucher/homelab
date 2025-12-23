@@ -6,12 +6,14 @@ metadata:
   namespace: monitoring
 spec:
   interval: 1h
+
   chartRef:
     kind: OCIRepository
     name: victoria-metrics-k8s-stack
   values:
     nameOverride: *app
-
+    annotations:
+      reloader.stakater.com/auto: "true"
     defaultRules:
       rules:
         etcd: false

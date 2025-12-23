@@ -25,6 +25,8 @@ spec:
         namespace: traefik
       interval: 12h
   values:
+    annotations:
+      reloader.stakater.com/auto: "true"
     deployment:
       replicas: 1
     nodeSelector:

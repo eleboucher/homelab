@@ -20,6 +20,8 @@ spec:
       beszel:
         type: deployment
         replicas: 1
+        annotations:
+          reloader.stakater.com/auto: "true"
         containers:
           app:
             image:
@@ -89,6 +91,8 @@ spec:
   values:
     controllers:
       beszel-agent-intel:
+        annotations:
+          reloader.stakater.com/auto: "true"
         type: daemonset
         pod:
           hostNetwork: true

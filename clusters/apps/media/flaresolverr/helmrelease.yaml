@@ -19,6 +19,8 @@ spec:
   values:
     controllers:
       flaresolverr:
+        annotations:
+          reloader.stakater.com/auto: "true"
         type: deployment
         replicas: 1
         pod:

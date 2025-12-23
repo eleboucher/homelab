@@ -21,7 +21,8 @@ spec:
       sonarr:
         type: deployment
         replicas: 1
-        strategy: Recreate
+        annotations:
+          reloader.stakater.com/auto: "true"
         pod:
           nodeSelector:
             kubernetes.io/hostname: kharkiv

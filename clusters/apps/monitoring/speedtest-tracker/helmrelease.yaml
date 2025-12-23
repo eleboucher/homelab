@@ -20,9 +20,11 @@ spec:
       speedtest-tracker:
         type: deployment
         replicas: 1
+        annotations:
+          reloader.stakater.com/auto: "true"
         pod:
           nodeSelector:
-            kubernetes.io/hostname: le-havre
+            kubernetes.io/hostname: kharkiv
           securityContext:
             fsGroup: 1000
             fsGroupChangePolicy: "OnRootMismatch"

@@ -22,6 +22,8 @@ spec:
         type: deployment
         replicas: 2
         strategy: RollingUpdate
+        annotations:
+          reloader.stakater.com/auto: "true"
         containers:
           app:
             image:
