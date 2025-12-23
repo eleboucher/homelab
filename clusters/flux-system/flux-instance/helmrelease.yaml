@@ -26,7 +26,7 @@ spec:
         domain: "cluster.local"
       sync:
         kind: GitRepository
-        url: "ssh://git@github.com/eleboucher/mediaserver"
+        url: "https://github.com/eleboucher/mediaserver.git"
         ref: "refs/heads/main"
         path: "flux/cluster"
         pullSecret: "flux-system"

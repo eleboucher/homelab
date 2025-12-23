@@ -4,4 +4,4 @@ kind: Kustomization
 resources:
   - flux-system
   - infrastructure
-  # - apps
+  - apps
