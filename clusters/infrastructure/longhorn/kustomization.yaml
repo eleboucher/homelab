@@ -6,3 +6,4 @@ resources:
   - repository.yaml
   - namespace.yaml
   - secret.sops.yaml
+  - snapshotvolumeclass.yaml
