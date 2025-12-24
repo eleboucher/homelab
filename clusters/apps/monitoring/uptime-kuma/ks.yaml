@@ -7,6 +7,9 @@ metadata:
 spec:
   interval: 1h
   path: ./clusters/apps/monitoring/uptime-kuma/app
+  dependsOn:
+    - name: longhorn
+    - name: reloader
   postBuild:
     substitute:
       APP: uptime-kuma

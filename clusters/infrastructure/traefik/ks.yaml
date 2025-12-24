@@ -7,6 +7,9 @@ metadata:
 spec:
   interval: 12h
   path: ./clusters/infrastructure/traefik/app
+  dependsOn:
+    - name: cert-manager
+    - name: metallb
   prune: false # Will enable after migration complete
   sourceRef:
     kind: GitRepository

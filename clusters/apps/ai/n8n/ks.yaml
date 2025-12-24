@@ -7,6 +7,10 @@ metadata:
 spec:
   interval: 1h
   path: ./clusters/apps/ai/n8n/app
+  dependsOn:
+    - name: traefik
+    - name: longhorn
+    - name: reloader
   postBuild:
     substitute:
       APP: n8n

@@ -7,6 +7,10 @@ metadata:
 spec:
   interval: 6h
   path: ./clusters/apps/system/adguard/app
+  dependsOn:
+    - name: traefik
+    - name: longhorn
+    - name: reloader
   postBuild:
     substitute:
       APP: adguard

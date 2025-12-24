@@ -7,6 +7,8 @@ metadata:
 spec:
   interval: 12h
   path: ./clusters/infrastructure/longhorn/app
+  dependsOn:
+    - name: snapshot-controller
   prune: false # Will enable after migration complete
   sourceRef:
     kind: GitRepository

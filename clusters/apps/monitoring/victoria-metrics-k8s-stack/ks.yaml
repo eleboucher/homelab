@@ -7,6 +7,9 @@ metadata:
 spec:
   interval: 1h
   path: ./clusters/apps/monitoring/victoria-metrics-k8s-stack/app
+  dependsOn:
+    - name: longhorn
+    - name: reloader
   postBuild:
     substitute:
       APP: victoria-metrics-k8s-stack

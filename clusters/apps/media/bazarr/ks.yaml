@@ -7,6 +7,10 @@ metadata:
 spec:
   interval: 1h
   path: ./clusters/apps/media/bazarr/app
+  dependsOn:
+    - name: traefik
+    - name: longhorn
+    - name: reloader
   postBuild:
     substitute:
       APP: bazarr

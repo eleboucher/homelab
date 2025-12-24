@@ -7,6 +7,10 @@ metadata:
 spec:
   interval: 30m
   path: ./clusters/apps/downloads/qui/app
+  dependsOn:
+    - name: traefik
+    - name: longhorn
+    - name: reloader
   postBuild:
     substitute:
       APP: qui
