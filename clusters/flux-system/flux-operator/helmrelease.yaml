@@ -9,3 +9,20 @@ spec:
     kind: OCIRepository
     name: flux-operator
   interval: 30m
+  values:
+    web:
+      ingress:
+        enabled: true
+        className: traefik
+        annotations:
+          traefik.ingress.kubernetes.io/router.entrypoints: websecure
+          cert-manager.io/cluster-issuer: "letsencrypt-production"
+        hosts:
+          - host: flux.erwanleboucher.dev
+            paths:
+              - path: /
+                pathType: Prefix
+        tls:
+          - secretName: flux-tls
+            hosts:
+              - flux.erwanleboucher.dev
