@@ -5,7 +5,7 @@ resources:
   - namespace.yaml
   - vpn-secret.sops.yaml
   - qbitmanage-secret.sops.yaml
-  - qbittorrent
-  - sabnzbd
-  - qui
-  - autobrr
+  - qbittorrent/ks.yaml
+  - sabnzbd/ks.yaml
+  - qui/ks.yaml
+  - autobrr/ks.yaml

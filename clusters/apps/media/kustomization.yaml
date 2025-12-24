@@ -2,14 +2,14 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - jellyfin
-  - sonarr
-  - radarr
-  - prowlarr
-  - bazarr
-  - jellyseerr
-  - flaresolverr
-  - wizarr
-  - profilarr
-  - cleanuparr
+  - jellyfin/ks.yaml
+  - sonarr/ks.yaml
+  - radarr/ks.yaml
+  - prowlarr/ks.yaml
+  - bazarr/ks.yaml
+  - jellyseerr/ks.yaml
+  - flaresolverr/ks.yaml
+  - wizarr/ks.yaml
+  - profilarr/ks.yaml
+  - cleanuparr/ks.yaml
   - namespace.yaml
