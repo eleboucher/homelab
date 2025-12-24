@@ -22,17 +22,6 @@ spec:
         type: deployment
         replicas: 1
         strategy: Recreate
-        initContainers:
-          migrate-2:
-            image:
-              repository: alpine
-              tag: latest
-            command:
-              - /bin/sh
-              - -c
-              - |
-                echo "Migrating config from NFS..."
-                cp -av /migration/* /config
         annotations:
           reloader.stakater.com/auto: "true"
         pod:
@@ -122,13 +111,6 @@ spec:
         size: 4Gi
         globalMounts:
           - path: /config
-      migration:
-        enabled: true
-        type: hostPath
-        hostPath: /home/homeserver/mediaserver/config/homeassistant
-        globalMounts:
-          - path: /migration
-            readOnly: true
       # Mount /etc/localtime for timezone
       localtime:
         type: hostPath
