@@ -9,7 +9,7 @@ spec:
   path: ./clusters/infrastructure/longhorn/app
   dependsOn:
     - name: snapshot-controller
-  prune: false # Will enable after migration complete
+  prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system

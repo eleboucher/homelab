@@ -14,7 +14,7 @@ spec:
     substitute:
       APP: beszel
       APP_NAMESPACE: monitoring
-  prune: false # Will enable after migration complete
+  prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system

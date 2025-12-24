@@ -11,7 +11,7 @@ spec:
     substitute:
       APP: renovate
       APP_NAMESPACE: automation
-  prune: false # Will enable after migration complete
+  prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system

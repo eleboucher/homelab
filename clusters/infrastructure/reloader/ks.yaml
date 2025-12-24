@@ -7,7 +7,7 @@ metadata:
 spec:
   interval: 12h
   path: ./clusters/infrastructure/reloader/app
-  prune: false # Will enable after migration complete
+  prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system

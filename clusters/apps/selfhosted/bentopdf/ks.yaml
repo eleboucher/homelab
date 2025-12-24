@@ -15,7 +15,7 @@ spec:
     substitute:
       APP: bentopdf
       APP_NAMESPACE: selfhosted
-  prune: false # Will enable after migration complete
+  prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system

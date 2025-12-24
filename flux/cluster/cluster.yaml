@@ -60,7 +60,7 @@ spec:
       target:
         group: kustomize.toolkit.fluxcd.io
         kind: Kustomization
-  prune: false
+  prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system

@@ -15,7 +15,7 @@ spec:
     substitute:
       APP: prowlarr
       APP_NAMESPACE: media
-  prune: false # Will enable after migration complete
+  prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system

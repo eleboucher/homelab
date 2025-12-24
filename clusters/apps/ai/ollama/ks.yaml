@@ -15,7 +15,7 @@ spec:
     substitute:
       APP: ollama
       APP_NAMESPACE: ai
-  prune: false # Will enable after migration complete
+  prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system

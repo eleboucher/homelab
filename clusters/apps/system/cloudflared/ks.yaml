@@ -15,7 +15,7 @@ spec:
     substitute:
       APP: cloudflared
       APP_NAMESPACE: system
-  prune: false # Will enable after migration complete
+  prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
