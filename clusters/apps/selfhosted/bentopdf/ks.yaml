@@ -1,0 +1,21 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: bentopdf
+  namespace: flux-system
+spec:
+  interval: 1h
+  path: ./clusters/apps/selfhosted/bentopdf/app
+  postBuild:
+    substitute:
+      APP: bentopdf
+      APP_NAMESPACE: selfhosted
+  prune: false # Will enable after migration complete
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+  targetNamespace: selfhosted
+  timeout: 5m
+  wait: false
