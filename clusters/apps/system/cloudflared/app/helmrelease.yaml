@@ -79,7 +79,7 @@ spec:
             protocol: TCP
     serviceMonitor:
       app:
-        enabled: true
+        enabled: false
         serviceName: cloudflared
         endpoints:
           - port: metrics
