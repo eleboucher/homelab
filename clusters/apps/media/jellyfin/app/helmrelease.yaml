@@ -24,9 +24,19 @@ spec:
         type: deployment
         replicas: 1
         strategy: Recreate
+        initContainers:
+          migrate-config:
+            image:
+              repository: busybox
+              tag: latest
+            command:
+              - sh
+              - -c
+              - |
+                cp -av /migration/* /config
         pod:
           nodeSelector:
-            kubernetes.io/hostname: kharkiv
+            kubernetes.io/hostname: le-havre
           securityContext:
             fsGroup: 1000
             fsGroupChangePolicy: "OnRootMismatch"
@@ -113,12 +123,12 @@ spec:
         size: 20Gi
         globalMounts:
           - path: /config
-      data:
-        enabled: true
-        type: hostPath
-        hostPath: /srv/media
-        globalMounts:
-          - path: /data
+      # data:
+      #   enabled: true
+      #   type: hostPath
+      #   hostPath: /srv/media
+      #   globalMounts:
+      #     - path: /data
       transcode:
         type: emptyDir
         globalMounts:
@@ -128,3 +138,9 @@ spec:
         hostPath: /dev/dri
         globalMounts:
           - path: /dev/dri
+      migration:
+        enabled: true
+        type: hostPath
+        hostPath: /home/homeserver/mediaserver/config/jellyfin
+        globalMounts:
+          - path: /migration
