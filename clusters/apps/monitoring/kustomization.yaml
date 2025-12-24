@@ -5,7 +5,7 @@ resources:
   - namespace.yaml
   - uptime-kuma/ks.yaml
   - secret.sops.yaml
-  - beszel
-  - speedtest-tracker
-  - victoria-metrics-k8s-stack
-  - grafana
+  - beszel/ks.yaml
+  - speedtest-tracker/ks.yaml
+  - victoria-metrics-k8s-stack/ks.yaml
+  - grafana/ks.yaml
