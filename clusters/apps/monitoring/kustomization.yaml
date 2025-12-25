@@ -9,3 +9,4 @@ resources:
   - speedtest-tracker/ks.yaml
   - victoria-metrics-k8s-stack/ks.yaml
   - grafana/ks.yaml
+  - prometheus/ks.yaml

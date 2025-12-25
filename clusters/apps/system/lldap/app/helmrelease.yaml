@@ -1,0 +1,115 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/app-template-4.5.0/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: lldap
+  namespace: system
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: app-template
+      version: "4.5.0"
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  values:
+    controllers:
+      lldap:
+        type: deployment
+        replicas: 1
+        strategy: Recreate
+        annotations:
+          reloader.stakater.com/auto: "true"
+        containers:
+          app:
+            image:
+              repository: ghcr.io/lldap/lldap
+              tag: v0.6.2
+            env:
+              - name: TZ
+                value: "Europe/Paris"
+              - name: LLDAP_HTTP_PORT
+                value: "17170"
+              - name: LLDAP_LDAP_PORT
+                value: "3890"
+              - name: LLDAP_LDAP_BASE_DN
+                value: "dc=erwanleboucher,dc=dev"
+              - name: LLDAP_JWT_SECRET
+                valueFrom:
+                  secretKeyRef:
+                    name: lldap-secrets
+                    key: JWT_SECRET
+              - name: LLDAP_LDAP_USER_PASS
+                valueFrom:
+                  secretKeyRef:
+                    name: lldap-secrets
+                    key: LDAP_USER_PASS
+            resources:
+              requests:
+                cpu: 50m
+                memory: 128Mi
+              limits:
+                memory: 256Mi
+            probes:
+              liveness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /health
+                    port: 17170
+                  initialDelaySeconds: 30
+                  periodSeconds: 10
+                  timeoutSeconds: 5
+                  failureThreshold: 3
+              readiness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /health
+                    port: 17170
+                  initialDelaySeconds: 10
+                  periodSeconds: 10
+                  timeoutSeconds: 5
+                  failureThreshold: 3
+    service:
+      app:
+        controller: lldap
+        ports:
+          http:
+            port: 17170
+            protocol: TCP
+          ldap:
+            port: 3890
+            protocol: TCP
+    ingress:
+      app:
+        enabled: true
+        className: traefik
+        annotations:
+          traefik.ingress.kubernetes.io/router.entrypoints: websecure
+          cert-manager.io/cluster-issuer: "letsencrypt-production"
+        hosts:
+          - host: ldap.erwanleboucher.dev
+            paths:
+              - path: /
+                pathType: Prefix
+                service:
+                  identifier: app
+                  port: http
+        tls:
+          - secretName: lldap-tls
+            hosts:
+              - ldap.erwanleboucher.dev
+    persistence:
+      data:
+        type: persistentVolumeClaim
+        storageClass: "longhorn"
+        accessMode: ReadWriteOnce
+        size: 1Gi
+        globalMounts:
+          - path: /data

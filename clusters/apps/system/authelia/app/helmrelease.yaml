@@ -1,0 +1,110 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: authelia
+  namespace: system
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: authelia
+      version: "0.9.10"
+      sourceRef:
+        kind: HelmRepository
+        name: authelia
+        namespace: flux-system
+  values:
+    domain: erwanleboucher.dev
+
+    pod:
+      kind: Deployment
+      replicas: 1
+      resources:
+        requests:
+          cpu: 50m
+          memory: 128Mi
+        limits:
+          memory: 256Mi
+
+    ingress:
+      enabled: true
+      className: traefik
+      annotations:
+        cert-manager.io/cluster-issuer: "letsencrypt-production"
+      rulesOverride:
+        - host: auth.erwanleboucher.dev
+          path: /
+      tls:
+        enabled: true
+        secret: authelia-tls
+
+    configMap:
+      theme: auto
+      default_2fa_method: "totp"
+
+      log:
+        level: info
+
+      authentication_backend:
+        ldap:
+          enabled: true
+          implementation: lldap
+          address: ldap://lldap.system.svc.cluster.local:3890
+          timeout: 5s
+          start_tls: false
+          base_dn: dc=erwanleboucher,dc=dev
+          username_attribute: uid
+          additional_users_dn: ou=people
+          users_filter: (&({username_attribute}={input})(objectClass=person))
+          additional_groups_dn: ou=groups
+          groups_filter: (member={dn})
+          group_name_attribute: cn
+          mail_attribute: mail
+          display_name_attribute: displayName
+          user: uid=admin,ou=people,dc=erwanleboucher,dc=dev
+
+      session:
+        same_site: lax
+        inactivity: 5m
+        expiration: 1h
+        remember_me: 1M
+        cookies:
+          - domain: erwanleboucher.dev
+            authelia_url: https://auth.erwanleboucher.dev
+            default_redirection_url: https://auth.erwanleboucher.dev
+
+      storage:
+        local:
+          enabled: true
+          path: /config/db.sqlite3
+
+      notifier:
+        disable_startup_check: true
+        filesystem:
+          enabled: true
+          filename: /config/notification.txt
+
+      access_control:
+        default_policy: deny
+        rules:
+          - domain: auth.erwanleboucher.dev
+            policy: bypass
+          - domain: "*.erwanleboucher.dev"
+            policy: one_factor
+
+      identity_providers:
+        oidc:
+          enabled: false
+
+    secret:
+      existingSecret: authelia-secrets
+
+    persistence:
+      enabled: true
+      storageClass: longhorn
+      size: 5Gi
+
+    # Redis disabled - using SQLite for sessions
+    redis:
+      enabled: false

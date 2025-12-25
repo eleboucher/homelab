@@ -46,25 +46,8 @@ spec:
             probes:
               startup:
                 enabled: true
-                custom: true
-                spec:
-                  httpGet:
-                    path: /
-                    port: 5690
-                  initialDelaySeconds: 10
-                  periodSeconds: 5
-                  timeoutSeconds: 3
-                  failureThreshold: 30
               liveness:
                 enabled: true
-                custom: true
-                spec:
-                  httpGet:
-                    path: /
-                    port: 5690
-                  periodSeconds: 30
-                  timeoutSeconds: 5
-                  failureThreshold: 3
     service:
       app:
         controller: wizarr
