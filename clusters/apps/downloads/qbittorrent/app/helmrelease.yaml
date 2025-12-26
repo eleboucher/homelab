@@ -136,7 +136,7 @@ spec:
           app:
             image:
               repository: lscr.io/linuxserver/qbittorrent
-              tag: 5.1.4@sha256:a68c4cfb7b07c39cf3f13e7f1d23d333c1e4a60304d37bc1eec7af3eacfe12d5
+              tag: 4.6.3
             env:
               - name: PUID
                 value: "1000"
@@ -204,7 +204,7 @@ spec:
         type: persistentVolumeClaim
         storageClass: "longhorn"
         accessMode: ReadWriteOnce
-        size: 4Gi
+        size: 50Gi
         globalMounts:
           - path: /config
       data:
