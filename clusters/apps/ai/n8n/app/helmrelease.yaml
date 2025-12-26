@@ -40,6 +40,13 @@ spec:
                 value: "Europe/Paris"
               - name: VUE_APP_URL_BASE_API
                 value: "https://n8n.erwanleboucher.dev/"
+            resources:
+              requests:
+                cpu: 100m
+                memory: 256Mi
+              limits:
+                cpu: 1000m
+                memory: 1Gi
     service:
       app:
         controller: n8n

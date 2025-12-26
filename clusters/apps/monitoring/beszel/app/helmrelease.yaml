@@ -28,6 +28,13 @@ spec:
               repository: henrygd/beszel
               tag: "0.17.0@sha256:185142e6c91bd44c77fef6cd31784aee0f782eb1d7193c3ee34a9902a936621c"
               pullPolicy: Always
+            resources:
+              requests:
+                cpu: 25m
+                memory: 64Mi
+              limits:
+                cpu: 200m
+                memory: 256Mi
             probes:
               liveness:
                 enabled: true
@@ -122,6 +129,13 @@ spec:
                     key: TOKEN
               - name: LISTEN
                 value: "45876"
+            resources:
+              requests:
+                cpu: 25m
+                memory: 32Mi
+              limits:
+                cpu: 100m
+                memory: 128Mi
             ports:
               - containerPort: 45876
                 hostPort: 45876

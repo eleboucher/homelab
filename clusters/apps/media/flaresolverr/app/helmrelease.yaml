@@ -45,6 +45,13 @@ spec:
                 value: "none"
               - name: TZ
                 value: "Europe/London"
+            resources:
+              requests:
+                cpu: 100m
+                memory: 256Mi
+              limits:
+                cpu: 1000m
+                memory: 1Gi
             probes:
               startup:
                 enabled: true

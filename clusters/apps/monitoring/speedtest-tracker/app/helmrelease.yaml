@@ -53,6 +53,13 @@ spec:
                 value: "0 */6 * * *"
               - name: SPEEDTEST_SERVERS
                 value: "32565, 62493, 61933"
+            resources:
+              requests:
+                cpu: 50m
+                memory: 128Mi
+              limits:
+                cpu: 500m
+                memory: 512Mi
             probes:
               liveness:
                 enabled: true
