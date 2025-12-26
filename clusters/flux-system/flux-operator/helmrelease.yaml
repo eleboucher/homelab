@@ -26,3 +26,5 @@ spec:
           - secretName: flux-tls
             hosts:
               - flux.erwanleboucher.dev
+    serviceMonitor:
+      create: true

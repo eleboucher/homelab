@@ -54,6 +54,6 @@ spec:
       annotations:
         cert-manager.io/cluster-issuer: letsencrypt-production
 
-    # metrics:
-    #   serviceMonitor:
-    #     enabled: true
+    metrics:
+      serviceMonitor:
+        enabled: true
