@@ -1,0 +1,25 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: traefik-dashboard
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    cert-manager.io/cluster-issuer: "letsencrypt-production"
+    traefik.ingress.kubernetes.io/router.middlewares: traefik-authelia-middleware@kubernetescrd
+spec:
+  rules:
+    - host: traefik.erwanleboucher.dev
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: traefik-api
+                port:
+                  name: traefik
+  tls:
+    - hosts:
+        - traefik.erwanleboucher.dev
+      secretName: traefik-dashboard-tls
