@@ -54,7 +54,7 @@ spec:
           timeout: 5s
           start_tls: false
           tls:
-            skip_verify: false
+            skip_verify: true
             minimum_version: TLS1.2
           base_dn: dc=erwanleboucher,dc=dev
           username_attribute: uid

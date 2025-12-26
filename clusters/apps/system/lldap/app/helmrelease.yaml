@@ -126,7 +126,7 @@ spec:
           - path: /data
       certs:
         type: secret
-        name: lldap-ldaps-tls
+        name: lldap-tls
         globalMounts:
           - path: /certs
             readOnly: true
