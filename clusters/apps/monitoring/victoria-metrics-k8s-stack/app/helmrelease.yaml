@@ -95,7 +95,7 @@ spec:
         resources:
           requests:
             cpu: 50m
-            memory: 128Mi
+            memory: 192Mi
           limits:
             cpu: 500m
             memory: 512Mi
@@ -109,10 +109,10 @@ spec:
         resources:
           requests:
             cpu: 100m
-            memory: 500Mi
+            memory: 1200Mi
           limits:
             cpu: 1000m
-            memory: 1.5Gi
+            memory: 2Gi
     vmalert:
       spec:
         nodeSelector:

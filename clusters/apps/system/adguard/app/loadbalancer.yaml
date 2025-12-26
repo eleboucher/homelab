@@ -10,7 +10,6 @@ spec:
   type: LoadBalancer
   loadBalancerIP: 192.168.1.63
   externalTrafficPolicy: Cluster
-  # ⚠️ This selector targets BOTH Helm Releases because they share the chart name
   selector:
     app.kubernetes.io/name: adguard-home
   ports:
