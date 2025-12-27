@@ -111,6 +111,13 @@ spec:
         size: 4Gi
         globalMounts:
           - path: /config
+      backup:
+        enabled: true
+        type: nfs
+        server: 10.0.0.1
+        path: /backups/homeassistant
+        globalMounts:
+          - path: /config/backups
       # Mount /etc/localtime for timezone
       localtime:
         type: hostPath
