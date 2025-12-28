@@ -18,6 +18,8 @@ spec:
     pod:
       kind: Deployment
       replicas: 1
+      annotations:
+        reloader.stakater.com/auto: "true"
       resources:
         requests:
           cpu: 50m
@@ -53,6 +55,7 @@ spec:
           timeout: 5s
           start_tls: false
           tls:
+            skip_verify: true
             minimum_version: TLS1.2
           base_dn: dc=erwanleboucher,dc=dev
           additional_users_dn: ou=people
@@ -69,7 +72,7 @@ spec:
         cookies:
           - domain: erwanleboucher.dev
             authelia_url: https://auth.erwanleboucher.dev
-            default_redirection_url: https://auth.erwanleboucher.dev
+            default_redirection_url: https://dash.erwanleboucher.dev
 
       storage:
         local:

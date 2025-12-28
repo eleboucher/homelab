@@ -15,6 +15,9 @@ spec:
       version: v1.10.1
   interval: 1m0s
   values:
+    annotations:
+      reloader.stakater.com/auto: "true"
+
     persistence:
       defaultClass: true
       defaultClassReplicaCount: 2
