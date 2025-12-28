@@ -33,24 +33,31 @@ spec:
     # Enable Prometheus metrics
     prometheus:
       enabled: true
+    # Replicas for HA
+    replicaCount: 2
     # Resource limits
     resources:
       requests:
         cpu: 10m
         memory: 32Mi
       limits:
+        cpu: 100m
         memory: 128Mi
     webhook:
+      replicaCount: 2
       resources:
         requests:
           cpu: 10m
           memory: 32Mi
         limits:
+          cpu: 100m
           memory: 128Mi
     cainjector:
+      replicaCount: 2
       resources:
         requests:
           cpu: 10m
           memory: 32Mi
         limits:
+          cpu: 100m
           memory: 128Mi

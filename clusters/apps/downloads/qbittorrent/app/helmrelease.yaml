@@ -56,6 +56,13 @@ spec:
               capabilities:
                 add:
                   - NET_ADMIN
+            resources:
+              requests:
+                cpu: 100m
+                memory: 128Mi
+              limits:
+                cpu: 500m
+                memory: 256Mi
             env:
               - name: VPN_SERVICE_PROVIDER
                 valueFrom:
@@ -102,9 +109,6 @@ spec:
                 value: "10.42.0.0/24,10.42.1.0/24,192.168.1.0/24,10.0.0.0/24"
               - name: DOT
                 value: "off"
-            resources:
-              requests:
-                memory: 128Mi
           port-forward:
             dependsOn: gluetun
             image:
@@ -148,8 +152,10 @@ spec:
                 value: "8081"
             resources:
               requests:
+                cpu: 200m
                 memory: 512Mi
               limits:
+                cpu: 1000m
                 memory: 2Gi
             probes:
               startup:

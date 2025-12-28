@@ -19,13 +19,32 @@ spec:
     annotations:
       reloader.stakater.com/auto: "true"
     deployment:
-      replicas: 1
-    nodeSelector:
-      kubernetes.io/hostname: le-havre
+      replicas: 2
+    affinity:
+      podAntiAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                  - key: app.kubernetes.io/name
+                    operator: In
+                    values:
+                      - traefik
+              topologyKey: kubernetes.io/hostname
+      nodeAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 50
+            preference:
+              matchExpressions:
+                - key: kubernetes.io/hostname
+                  operator: In
+                  values:
+                    - le-havre
     service:
       type: LoadBalancer
       loadBalancerIP: 192.168.1.62
-      externalTrafficPolicy: Cluster
+      externalTrafficPolicy: Local
     ports:
       web:
         port: 80
@@ -62,6 +81,7 @@ spec:
         cpu: 100m
         memory: 128Mi
       limits:
+        cpu: 500m
         memory: 512Mi
     extraObjects:
       - apiVersion: v1
