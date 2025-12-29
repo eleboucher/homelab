@@ -1,0 +1,101 @@
+---
+# ServiceAccount for Beszel Agent
+# Provides identity for the agent pods to access Kubernetes API
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: beszel-agent
+  namespace: monitoring
+  labels:
+    app.kubernetes.io/name: beszel-agent
+    app.kubernetes.io/component: monitoring-agent
+
+---
+# ClusterRole with read-only permissions
+# Grants minimal permissions needed for metrics collection
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: beszel-agent
+  labels:
+    app.kubernetes.io/name: beszel-agent
+    app.kubernetes.io/component: monitoring-agent
+rules:
+  # Read nodes (for node metrics and health)
+  - apiGroups:
+      - ""
+    resources:
+      - "nodes"
+    verbs:
+      - "get"
+      - "list"
+      - "watch"
+
+  # Access node stats from kubelet (for network metrics)
+  - apiGroups:
+      - ""
+    resources:
+      - "nodes/stats"
+      - "nodes/proxy"
+    verbs:
+      - "get"
+
+  # Read pods (for pod metrics and status)
+  - apiGroups:
+      - ""
+    resources:
+      - "pods"
+    verbs:
+      - "get"
+      - "list"
+      - "watch"
+
+  # Read pod logs (for log viewing)
+  - apiGroups:
+      - ""
+    resources:
+      - "pods/log"
+    verbs:
+      - "get"
+      - "list"
+
+  # Read pod metrics from Metrics Server
+  - apiGroups:
+      - "metrics.k8s.io"
+    resources:
+      - "pods"
+      - "nodes"
+    verbs:
+      - "get"
+      - "list"
+
+  # Read deployments, statefulsets, daemonsets (for workload metrics)
+  - apiGroups:
+      - "apps"
+    resources:
+      - "deployments"
+      - "statefulsets"
+      - "daemonsets"
+    verbs:
+      - "get"
+      - "list"
+      - "watch"
+
+---
+# ClusterRoleBinding to grant permissions
+# Binds the ClusterRole to the ServiceAccount
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: beszel-agent
+  labels:
+    app.kubernetes.io/name: beszel-agent
+    app.kubernetes.io/component: monitoring-agent
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: beszel-agent
+subjects:
+  - kind: ServiceAccount
+    name: beszel-agent
+    namespace: monitoring
