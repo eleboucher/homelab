@@ -32,8 +32,7 @@ spec:
       backupTarget: "nfs://10.0.0.1:/backups/longhorn-backups"
       backupTargetCredentialSecret: ""
     defaultSettings:
-      guaranteedEngineManagerCPU: "12"
-      guaranteedReplicaManagerCPU: "12"
+      guaranteedInstanceManagerCPU: "12"
       defaultDataLocality: best-effort
       replicaAutoBalance: best-effort
       storageMinimalAvailablePercentage: "1"
@@ -45,9 +44,7 @@ spec:
       replicaDiskSoftAntiAffinity: false
       replicaZoneSoftAntiAffinity: false
       createDefaultDiskLabeledNodes: true
-      orphanAutoDeletion: true
-      # Read cache configuration
-      cacheReplicaCount: "1"
+      orphanResourceAutoDeletion: "replica-data;instance"
       backupCompressionMethod: "lz4"
 
     longhornUI:
