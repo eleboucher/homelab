@@ -23,27 +23,22 @@ spec:
       defaultClassReplicaCount: 2
       defaultDataLocality: best-effort
       disableRevisionCounter: "true"
-    csi:
-      attacherReplicaCount: 2
-      provisionerReplicaCount: 2
-      resizerReplicaCount: 2
-      snapshotterReplicaCount: 2
     defaultBackupStore:
       backupTarget: "nfs://10.0.0.1:/backups/longhorn-backups"
       backupTargetCredentialSecret: ""
     defaultSettings:
-      guaranteedInstanceManagerCPU: "12"
+      defaultLonghornStaticStorageClass: longhorn
+      createDefaultDiskLabeledNodes: true
+      guaranteedEngineManagerCPU: "20"
+      guaranteedReplicaManagerCPU: "20"
       defaultDataLocality: best-effort
-      replicaAutoBalance: best-effort
       storageMinimalAvailablePercentage: "1"
       storageReservedPercentageForDefaultDisk: "10"
       allowRecurringJobWhileVolumeDetached: true
-      # Replication for resilience
       defaultReplicaCount: "2"
       replicaSoftAntiAffinity: true
       replicaDiskSoftAntiAffinity: false
       replicaZoneSoftAntiAffinity: false
-      createDefaultDiskLabeledNodes: true
       orphanResourceAutoDeletion: "replica-data;instance"
       backupCompressionMethod: "lz4"
 
@@ -62,4 +57,4 @@ spec:
 
     metrics:
       serviceMonitor:
-        enabled: true
+        enabled: false
