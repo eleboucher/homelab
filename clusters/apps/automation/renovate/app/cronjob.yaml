@@ -20,7 +20,7 @@ spec:
           restartPolicy: Never
           containers:
             - name: renovate
-              image: ghcr.io/renovatebot/renovate:42.68.4@sha256:ef2fb1000c945c594d4b5f59896a140fbfac622353b4c1ecadf6689723dbf407
+              image: ghcr.io/renovatebot/renovate:42.69.1@sha256:20998a326591431ce148150e4745fde62d994d36f4960b90218a4a57f97abd24
               env:
                 - name: LOG_LEVEL
                   value: "info"
