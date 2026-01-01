@@ -8,6 +8,7 @@ resources:
   - intel-device-plugins-operator/ks.yaml
   - node-feature-discovery/ks.yaml
   - longhorn/ks.yaml
+  - envoy
   - backup/ks.yaml
   - metallb/ks.yaml
   - snapshot-controller/ks.yaml

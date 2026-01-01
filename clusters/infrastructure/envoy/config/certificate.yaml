@@ -1,0 +1,14 @@
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: erwanleboucher-dev
+spec:
+  secretName: erwanleboucher-dev-tls
+  issuerRef:
+    name: letsencrypt-production
+    kind: ClusterIssuer
+  commonName: erwanleboucher.dev
+  dnsNames:
+    - "erwanleboucher.dev"
+    - "*.erwanleboucher.dev"

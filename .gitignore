@@ -4,7 +4,6 @@ secrets.env
 
 # --- Netdata (The source of your current error) ---
 # We ONLY want the config folder. Ignore lib (database) and cache.
-config/
 log/
 
 # Ignore the SQLite databases (Binary files = Bad for Git)
