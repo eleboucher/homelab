@@ -75,25 +75,13 @@ spec:
           http:
             port: 9696
             protocol: TCP
-    ingress:
+    route:
       app:
-        enabled: true
-        className: traefik
-        annotations:
-          traefik.ingress.kubernetes.io/router.entrypoints: websecure
-          cert-manager.io/cluster-issuer: "letsencrypt-production"
-        hosts:
-          - host: prowlarr.erwanleboucher.dev
-            paths:
-              - path: /
-                pathType: Prefix
-                service:
-                  identifier: app
-                  port: http
-        tls:
-          - secretName: prowlarr-tls
-            hosts:
-              - prowlarr.erwanleboucher.dev
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
+        hostnames:
+          - prowlarr.erwanleboucher.dev
     persistence:
       config:
         enabled: true

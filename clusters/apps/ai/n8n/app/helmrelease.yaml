@@ -54,25 +54,13 @@ spec:
           http:
             port: 5678
             protocol: TCP
-    ingress:
+    route:
       app:
-        enabled: true
-        className: traefik
-        annotations:
-          traefik.ingress.kubernetes.io/router.entrypoints: websecure
-          cert-manager.io/cluster-issuer: "letsencrypt-production"
-        hosts:
-          - host: n8n.erwanleboucher.dev
-            paths:
-              - path: /
-                pathType: Prefix
-                service:
-                  identifier: app
-                  port: http
-        tls:
-          - secretName: n8n-tls
-            hosts:
-              - n8n.erwanleboucher.dev
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
+        hostnames:
+          - n8n.erwanleboucher.dev
     persistence:
       config:
         enabled: true

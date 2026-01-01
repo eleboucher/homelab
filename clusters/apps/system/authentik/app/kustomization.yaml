@@ -7,3 +7,4 @@ resources:
   - postgres-credentials.sops.yaml
   - postgres-cluster.yaml
   - helmrelease.yaml
+  - httproute.yaml

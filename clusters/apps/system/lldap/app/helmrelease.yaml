@@ -97,26 +97,13 @@ spec:
           ldaps:
             port: 6360
             protocol: TCP
-    ingress:
+    route:
       app:
-        enabled: true
-        className: traefik
-        annotations:
-          traefik.ingress.kubernetes.io/router.entrypoints: websecure
-          cert-manager.io/cluster-issuer: "letsencrypt-production"
-          traefik.ingress.kubernetes.io/router.middlewares: traefik-authelia@kubernetescrd
-        hosts:
-          - host: ldap.erwanleboucher.dev
-            paths:
-              - path: /
-                pathType: Prefix
-                service:
-                  identifier: app
-                  port: http
-        tls:
-          - secretName: lldap-tls
-            hosts:
-              - ldap.erwanleboucher.dev
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
+        hostnames:
+          - ldap.erwanleboucher.dev
     persistence:
       data:
         type: persistentVolumeClaim

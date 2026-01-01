@@ -9,4 +9,4 @@ resources:
   - release-backup.yaml
   - loadbalancer.yaml
   - sync-bot.yaml
-  - ingress.yaml
+  - httproute.yaml

@@ -52,25 +52,13 @@ spec:
         ports:
           http:
             port: 8090
-    ingress:
+    route:
       app:
-        enabled: true
-        className: traefik
-        annotations:
-          traefik.ingress.kubernetes.io/router.entrypoints: websecure
-          cert-manager.io/cluster-issuer: "letsencrypt-production"
-        hosts:
-          - host: monitor.erwanleboucher.dev
-            paths:
-              - path: /
-                pathType: Prefix
-                service:
-                  identifier: app
-                  port: http
-        tls:
-          - secretName: beszel-tls
-            hosts:
-              - monitor.erwanleboucher.dev
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
+        hostnames:
+          - monitor.erwanleboucher.dev
     persistence:
       config:
         type: persistentVolumeClaim

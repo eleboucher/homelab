@@ -78,25 +78,13 @@ spec:
           http:
             port: 8080
             protocol: TCP
-    ingress:
+    route:
       app:
-        enabled: true
-        className: traefik
-        annotations:
-          traefik.ingress.kubernetes.io/router.entrypoints: websecure
-          cert-manager.io/cluster-issuer: "letsencrypt-production"
-        hosts:
-          - host: sabnzbd.erwanleboucher.dev
-            paths:
-              - path: /
-                pathType: Prefix
-                service:
-                  identifier: app
-                  port: http
-        tls:
-          - secretName: sabnzbd-tls
-            hosts:
-              - sabnzbd.erwanleboucher.dev
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
+        hostnames:
+          - sabnzbd.erwanleboucher.dev
     persistence:
       config:
         type: persistentVolumeClaim

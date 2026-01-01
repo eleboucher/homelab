@@ -55,16 +55,7 @@ spec:
           mountPath: /authentik-creds
           readOnly: true
       ingress:
-        enabled: true
-        ingressClassName: traefik
-        annotations:
-          cert-manager.io/cluster-issuer: "letsencrypt-production"
-        hosts:
-          - authentik.erwanleboucher.dev
-        tls:
-          - secretName: authentik-tls
-            hosts:
-              - authentik.erwanleboucher.dev
+        enabled: false
 
     worker:
       replicas: 1

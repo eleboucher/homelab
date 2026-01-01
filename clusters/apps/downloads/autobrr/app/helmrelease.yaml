@@ -71,25 +71,13 @@ spec:
           http:
             port: *port
             protocol: TCP
-    ingress:
+    route:
       app:
-        enabled: true
-        className: traefik
-        annotations:
-          traefik.ingress.kubernetes.io/router.entrypoints: websecure
-          cert-manager.io/cluster-issuer: "letsencrypt-production"
-        hosts:
-          - host: autobrr.erwanleboucher.dev
-            paths:
-              - path: /
-                pathType: Prefix
-                service:
-                  identifier: app
-                  port: http
-        tls:
-          - secretName: autobrr-tls
-            hosts:
-              - autobrr.erwanleboucher.dev
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
+        hostnames:
+          - autobrr.erwanleboucher.dev
     persistence:
       config:
         type: persistentVolumeClaim
