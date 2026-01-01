@@ -71,7 +71,6 @@ spec:
           docker.yaml: ""
           kubernetes.yaml: |
             mode: cluster
-            traefik: true
           bookmarks.yaml: |
             - Resources:
               - BentoPDF:
