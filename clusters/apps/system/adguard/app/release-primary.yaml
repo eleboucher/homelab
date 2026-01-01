@@ -73,14 +73,7 @@ spec:
         readOnly: true
     config: |-
       rewrites:
-        - 'domain': "request.erwanleboucher.dev"
-          'answer': "192.168.1.64"
-        - 'domain': "home.erwanleboucher.dev"
-          'answer': "192.168.1.64"
-        - 'domain': "wizarr.erwanleboucher.dev"
-          'answer': "192.168.1.64"
-        - 'domain': "watch.erwanleboucher.dev"
-          'answer': "192.168.1.64"
+        # All services accessible from internal gateway (home network)
         - 'domain': "*.erwanleboucher.dev"
           'answer': "192.168.1.65"
       tls:

@@ -82,6 +82,8 @@ spec:
         parentRefs:
           - name: envoy-external
             namespace: network
+          - name: envoy-internal
+            namespace: network
         hostnames:
           - request.erwanleboucher.dev
     persistence:
