@@ -4,6 +4,8 @@ kind: HTTPRoute
 metadata:
   name: webhook-receiver
   namespace: flux-system
+  annotations:
+    gatus.home-operations.com/enabled: "false"
 spec:
   parentRefs:
     - name: envoy-external

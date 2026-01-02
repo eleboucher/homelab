@@ -1,0 +1,58 @@
+---
+connectivity:
+  checker:
+    target: 1.1.1.1:53
+    interval: 1m
+
+endpoints:
+  - name: Cloudflare
+    group: connectivity
+    url: icmp://1.1.1.1
+    interval: 1m
+    conditions:
+      - "[CONNECTED] == true"
+
+  - name: Google
+    group: connectivity
+    url: icmp://8.8.8.8
+    interval: 1m
+    conditions:
+      - "[CONNECTED] == true"
+
+  - name: Quad9
+    group: connectivity
+    url: icmp://9.9.9.9
+    interval: 1m
+    conditions:
+      - "[CONNECTED] == true"
+  - name: flux-webhook
+    group: external
+    url: https://wsflux.erwanleboucher.dev
+    interval: 1m
+    client:
+      dns-resolver: tcp://1.1.1.1:53
+    conditions:
+      - "[STATUS] == 404"
+    alerts:
+      - type: discord
+
+metrics: false
+
+storage:
+  type: sqlite
+  path: ${GATUS_CONFIG_PATH}/sqlite.db
+  caching: true
+
+alerting:
+  discord:
+    webhook-url: ${CUSTOM_DISCORD_WEBHOOK_URL}
+    priority: 1
+    resolved-priority: 0
+    default-alert:
+      description: health-check failed
+      send-on-resolved: true
+      failure-threshold: 5
+      success-threshold: 3
+
+web:
+  port: ${GATUS_WEB_PORT}
