@@ -140,7 +140,7 @@ spec:
           app:
             image:
               repository: lscr.io/linuxserver/qbittorrent
-              tag: 4.6.3
+              tag: 5.1.4
             env:
               - name: PUID
                 value: "1000"

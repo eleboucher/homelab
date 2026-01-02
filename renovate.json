@@ -52,8 +52,7 @@
     },
     {
       "versioning": "regex:^(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)-(?<compatibility>r\\d)-ls(?<build>\\d+)$",
-      "matchPackageNames": ["/^lscr.io\\/linuxserver\\/qbittorrent/"],
-      "allowedVersions": "4.6.3"
+      "matchPackageNames": ["/^lscr.io\\/linuxserver\\/qbittorrent/"]
     }
   ]
 }
