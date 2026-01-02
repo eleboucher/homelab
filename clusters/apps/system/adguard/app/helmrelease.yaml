@@ -1,0 +1,208 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/app-template-4.5.0/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: adguard-home
+  namespace: adguard
+spec:
+  chart:
+    spec:
+      chart: app-template
+      version: 4.5.0
+      reconcileStrategy: ChartVersion
+      sourceRef:
+        kind: HelmRepository
+        namespace: flux-system
+        name: bjw-s
+  interval: 30m
+  driftDetection:
+    mode: enabled
+  values:
+    controllers:
+      adguard-home:
+        type: statefulset
+        replicas: 2
+        annotations:
+          reloader.stakater.com/auto: "true"
+        containers:
+          app:
+            image:
+              repository: adguard/adguardhome
+              tag: v0.107.71@sha256:92929135ced2554aaf94706f766a98ad348f211df61b0704e2db7e8498cc00b7
+              pullPolicy: IfNotPresent
+            env:
+              TZ: Europe/Paris
+            probes:
+              liveness: &probe
+                enabled: true
+                type: HTTP
+                port: 3000
+                path: /
+              readiness: *probe
+              startup:
+                !!merge <<: *probe
+                spec:
+                  failureThreshold: 30
+                  periodSeconds: 5
+            resources:
+              requests:
+                cpu: 50m
+                memory: 64Mi
+              limits:
+                cpu: 200m
+                memory: 256Mi
+            securityContext:
+              readOnlyRootFilesystem: false
+              capabilities:
+                add:
+                  - NET_BIND_SERVICE
+                  - NET_RAW
+        pod:
+          securityContext:
+            fsGroup: 0
+            fsGroupChangePolicy: OnRootMismatch
+          affinity:
+            podAntiAffinity:
+              preferredDuringSchedulingIgnoredDuringExecution:
+                - weight: 100
+                  podAffinityTerm:
+                    topologyKey: kubernetes.io/hostname
+                    labelSelector:
+                      matchLabels:
+                        app.kubernetes.io/name: adguard-home
+                        app.kubernetes.io/component: adguard-home
+        statefulset:
+          volumeClaimTemplates:
+            - name: config
+              storageClass: longhorn
+              accessMode: ReadWriteOnce
+              size: 4Gi
+              globalMounts:
+                - path: /opt/adguardhome/conf
+            - name: data
+              storageClass: longhorn
+              accessMode: ReadWriteOnce
+              size: 4Gi
+              globalMounts:
+                - path: /opt/adguardhome/work
+
+      sync:
+        containers:
+          app:
+            image:
+              repository: ghcr.io/bakito/adguardhome-sync
+              tag: v0.8.2@sha256:0d8411bfaae9e1e368b9a5ca8f3df28e8f0a335e9975003cc47892c22524ca15
+              pullPolicy: IfNotPresent
+            args:
+              - run
+            env:
+              ORIGIN_URL: http://adguard-home-origin:3000
+              REPLICA_URL: http://adguard-home-replica:3000
+              CRON: "*/5 * * * *"
+              LOG_LEVEL: info
+            securityContext:
+              readOnlyRootFilesystem: true
+              allowPrivilegeEscalation: false
+              capabilities: {drop: [ALL]}
+        pod:
+          securityContext:
+            runAsNonRoot: true
+
+    service:
+      adguard-home:
+        controller: adguard-home
+        ports:
+          http:
+            port: 3000
+      sync:
+        controller: sync
+        ports:
+          http:
+            port: 8080
+      origin: &origin-http
+        controller: adguard-home
+        extraSelectorLabels:
+          apps.kubernetes.io/pod-index: "0"
+        ports:
+          http:
+            port: 3000
+      origin-dns: &origin-dns
+        controller: adguard-home
+        extraSelectorLabels:
+          apps.kubernetes.io/pod-index: "0"
+        ports:
+          dns-tcp:
+            port: 53
+            protocol: TCP
+          dns-udp:
+            port: 53
+            protocol: UDP
+          dns-tls:
+            port: 853
+            protocol: TCP
+      replica:
+        !!merge <<: *origin-http
+        extraSelectorLabels:
+          apps.kubernetes.io/pod-index: "1"
+      replica-dns:
+        controller: adguard-home
+        extraSelectorLabels:
+          apps.kubernetes.io/pod-index: "1"
+        ports:
+          dns-tcp:
+            port: 53
+            protocol: TCP
+          dns-udp:
+            port: 53
+            protocol: UDP
+          dns-tls:
+            port: 853
+            protocol: TCP
+      ha-dns:
+        controller: adguard-home
+        type: LoadBalancer
+        loadBalancerIP: 192.168.1.63
+        externalTrafficPolicy: Cluster
+        annotations:
+          metallb.universe.tf/allow-shared-ip: "adguard-vip"
+        ports:
+          dns-tcp:
+            port: 53
+            protocol: TCP
+          dns-udp:
+            port: 53
+            protocol: UDP
+          dns-tls:
+            port: 853
+            protocol: TCP
+
+    route:
+      origin:
+        annotations:
+          gatus.home-operations.com/enabled: "false"
+        parentRefs: &parentRefs
+          - namespace: network
+            name: envoy-internal
+        hostnames:
+          - dns.erwanleboucher.dev
+        rules:
+          - backendRefs:
+              - identifier: origin
+      replica:
+        annotations:
+          gatus.home-operations.com/enabled: "false"
+        parentRefs: *parentRefs
+        hostnames:
+          - replica.dns.erwanleboucher.dev
+        rules:
+          - backendRefs:
+              - identifier: replica
+
+    persistence:
+      tls:
+        type: secret
+        name: adguard-tls
+        globalMounts:
+          - path: /opt/adguardhome/ssl
+            readOnly: true

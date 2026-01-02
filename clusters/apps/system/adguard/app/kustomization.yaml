@@ -4,9 +4,4 @@ kind: Kustomization
 namespace: adguard
 resources:
   - namespace.yaml
-  - repository.yaml
-  - release-primary.yaml
-  - release-backup.yaml
-  - loadbalancer.yaml
-  - sync-bot.yaml
-  - httproute.yaml
+  - helmrelease.yaml
