@@ -35,6 +35,51 @@ spec:
             supplementalGroups:
               - 44 # video group
               - 992 # render group for /dev/dri
+        initContainers:
+          # Migrate from linuxserver/jellyfin to jellyfin/jellyfin folder structure
+          # linuxserver: /config/.jellyfin-config, /config/data/.jellyfin-data
+          # official:    /config/config/.jellyfin-config, /config/.jellyfin-data
+          migrate-config:
+            image:
+              repository: docker.io/library/busybox
+              tag: latest
+            command:
+              - /bin/sh
+              - -c
+              - |
+                echo "Checking for linuxserver to official jellyfin migration..."
+
+                # Check if migration is needed (linuxserver structure detected)
+                if [ -d "/config/data" ] && [ -f "/config/data/jellyfin.db" ]; then
+                  echo "Detected linuxserver folder structure, migrating..."
+
+                  # Create the new config directory for jellyfin config files
+                  mkdir -p /config/config
+
+                  # Move config files from /config to /config/config (excluding data folder)
+                  for item in /config/*; do
+                    name=$(basename "$item")
+                    if [ "$name" != "config" ] && [ "$name" != "data" ] && [ "$name" != "lost+found" ]; then
+                      echo "Moving $name to /config/config/"
+                      mv "$item" /config/config/
+                    fi
+                  done
+
+                  # Move data folder contents to /config root (official uses /config as data dir)
+                  if [ -d "/config/data" ]; then
+                    echo "Moving data folder contents to /config/"
+                    for item in /config/data/*; do
+                      name=$(basename "$item")
+                      echo "Moving data/$name to /config/"
+                      mv "$item" /config/
+                    done
+                    rmdir /config/data 2>/dev/null || true
+                  fi
+
+                  echo "Migration complete!"
+                else
+                  echo "No migration needed (already official structure or fresh install)"
+                fi
         containers:
           app:
             image:
