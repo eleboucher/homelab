@@ -49,9 +49,6 @@ spec:
                 sabnzbd.downloads.svc.cluster,
                 sabnzbd.downloads.svc.cluster.local,
                 sabnzbd.erwanleboucher.dev
-            envFrom:
-              - secretRef:
-                  name: sabnzbd-secret
             resources:
               requests:
                 cpu: 150m
@@ -100,10 +97,6 @@ spec:
         hostPath: /srv/media
         globalMounts:
           - path: /data
-      scripts:
-        type: configMap
-        defaultMode: 0775
-        name: sabnzbd-scripts
       incomplete:
         type: emptyDir
         globalMounts:

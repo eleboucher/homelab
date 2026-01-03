@@ -9,4 +9,3 @@ resources:
   - sabnzbd/ks.yaml
   - qui/ks.yaml
   - autobrr/ks.yaml
-  - cross-seed/ks.yaml
