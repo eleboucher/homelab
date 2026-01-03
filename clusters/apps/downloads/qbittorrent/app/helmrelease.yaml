@@ -90,22 +90,9 @@ spec:
               limits:
                 cpu: 100m
                 memory: 64Mi
-            envFrom:
-              - secretRef:
-                  name: qbitmanage-secrets
             env:
               QBITTORRENT_SERVER: localhost
               QBITTORRENT_PORT: "8081"
-              QBITTORRENT_PASS:
-                valueFrom:
-                  secretKeyRef:
-                    name: qbitmanage-secrets
-                    key: qbitmanage-pass
-              QBITTORRENT_USER:
-                valueFrom:
-                  secretKeyRef:
-                    name: qbitmanage-secrets
-                    key: qbitmanage-user
               PORT_FORWARDED: "/tmp/gluetun/forwarded_port"
               HTTP_S: "http"
           # qBittorrent application container
