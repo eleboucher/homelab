@@ -53,10 +53,18 @@ spec:
                 cpu: 400m
                 memory: 500Mi
             probes:
-              startup:
+              liveness: &probes
                 enabled: true
-              liveness:
-                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /
+                    port: 5690
+                  initialDelaySeconds: 0
+                  periodSeconds: 10
+                  timeoutSeconds: 1
+                  failureThreshold: 3
+              readiness: *probes
     service:
       app:
         controller: wizarr

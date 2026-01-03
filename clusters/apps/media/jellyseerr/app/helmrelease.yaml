@@ -51,27 +51,18 @@ spec:
                 cpu: 500m
                 memory: 1Gi
             probes:
-              startup:
+              liveness: &probes
                 enabled: true
                 custom: true
                 spec:
                   httpGet:
                     path: /api/v1/status
                     port: 5055
-                  initialDelaySeconds: 20
-                  periodSeconds: 5
-                  timeoutSeconds: 3
-                  failureThreshold: 30
-              liveness:
-                enabled: true
-                custom: true
-                spec:
-                  httpGet:
-                    path: /api/v1/status
-                    port: 5055
-                  periodSeconds: 15
-                  timeoutSeconds: 3
+                  initialDelaySeconds: 0
+                  periodSeconds: 10
+                  timeoutSeconds: 1
                   failureThreshold: 3
+              readiness: *probes
     service:
       app:
         controller: jellyseerr
