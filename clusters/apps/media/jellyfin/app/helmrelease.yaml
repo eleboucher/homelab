@@ -28,91 +28,27 @@ spec:
           nodeSelector:
             kubernetes.io/hostname: kharkiv
           securityContext:
-            runAsUser: 1000
-            runAsGroup: 1000
             fsGroup: 1000
             fsGroupChangePolicy: "OnRootMismatch"
             supplementalGroups:
               - 44 # video group
               - 992 # render group for /dev/dri
-        initContainers:
-          # Migrate from linuxserver/jellyfin to jellyfin/jellyfin folder structure
-          # linuxserver: /config/.jellyfin-config, /config/data/.jellyfin-data
-          # official:    /config/config/.jellyfin-config, /config/.jellyfin-data
-          migrate-config:
-            image:
-              repository: docker.io/library/busybox
-              tag: latest
-            command:
-              - /bin/sh
-              - -c
-              - |
-                echo "Checking for linuxserver to official jellyfin migration..."
-                echo "Current /config contents:"
-                ls -la /config/
-
-                # Check if migration is needed by looking for .jellyfin-config marker in root
-                # (linuxserver puts config marker in /config/, official expects it in /config/config/)
-                if [ -f "/config/.jellyfin-config" ]; then
-                  echo "Detected linuxserver folder structure (.jellyfin-config in root), migrating..."
-
-                  # Create the new config directory for jellyfin config files
-                  mkdir -p /config/config
-
-                  # Move all config files/folders from /config to /config/config
-                  # (excluding data folder and the new config folder)
-                  for item in /config/*; do
-                    name=$(basename "$item")
-                    if [ "$name" != "config" ] && [ "$name" != "data" ] && [ "$name" != "lost+found" ]; then
-                      echo "Moving $name to /config/config/"
-                      mv "$item" /config/config/
-                    fi
-                  done
-
-                  # Also move hidden files (like .jellyfin-config)
-                  for item in /config/.*; do
-                    name=$(basename "$item")
-                    if [ "$name" != "." ] && [ "$name" != ".." ] && [ "$name" != ".jellyfin-data" ]; then
-                      echo "Moving $name to /config/config/"
-                      mv "$item" /config/config/
-                    fi
-                  done
-
-                  # Move data folder contents to /config root (official uses /config as data dir)
-                  if [ -d "/config/data" ]; then
-                    echo "Moving data folder contents to /config/"
-                    for item in /config/data/*; do
-                      if [ -e "$item" ]; then
-                        name=$(basename "$item")
-                        echo "Moving data/$name to /config/"
-                        mv "$item" /config/
-                      fi
-                    done
-                    # Move hidden files from data folder too
-                    for item in /config/data/.*; do
-                      name=$(basename "$item")
-                      if [ "$name" != "." ] && [ "$name" != ".." ]; then
-                        echo "Moving data/$name to /config/"
-                        mv "$item" /config/
-                      fi
-                    done
-                    rmdir /config/data 2>/dev/null || true
-                  fi
-
-                  echo "Migration complete! New /config contents:"
-                  ls -la /config/
-                  echo "/config/config contents:"
-                  ls -la /config/config/
-                else
-                  echo "No migration needed (already official structure or fresh install)"
-                fi
         containers:
           app:
             image:
-              repository: docker.io/jellyfin/jellyfin
-              tag: 10.11.5
+              repository: lscr.io/linuxserver/jellyfin
+              tag: 10.11.5ubu2404-ls15@sha256:747bc6725c5e4f1330e693b50d787e2106e52ac5b25c4174ca5f58915fc17ec8
             env:
-              TZ: "Europe/Paris"
+              - name: PUID
+                value: "1000"
+              - name: PGID
+                value: "1000"
+              - name: TZ
+                value: "Europe/Paris"
+              - name: DOCKER_MODS
+                value: linuxserver/mods:jellyfin-opencl-intel
+            securityContext:
+              privileged: true
             resources:
               requests:
                 cpu: 1000m
