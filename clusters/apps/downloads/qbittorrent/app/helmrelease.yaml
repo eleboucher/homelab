@@ -63,52 +63,21 @@ spec:
               limits:
                 cpu: 500m
                 memory: 256Mi
+            envFrom:
+              - secretRef:
+                  name: vpn-config
             env:
-              - name: VPN_SERVICE_PROVIDER
-                valueFrom:
-                  secretKeyRef:
-                    name: vpn-config
-                    key: VPN_SERVICE_PROVIDER
-              - name: VPN_TYPE
-                valueFrom:
-                  secretKeyRef:
-                    name: vpn-config
-                    key: VPN_TYPE
-              - name: IPV6_DISABLED
-                value: "true"
-              - name: WIREGUARD_PRIVATE_KEY
-                valueFrom:
-                  secretKeyRef:
-                    name: vpn-config
-                    key: WIREGUARD_PRIVATE_KEY
-              - name: VPN_PORT_FORWARDING
-                valueFrom:
-                  secretKeyRef:
-                    name: vpn-config
-                    key: VPN_PORT_FORWARDING
-              - name: VPN_PORT_FORWARDING_PROVIDER
-                valueFrom:
-                  secretKeyRef:
-                    name: vpn-config
-                    key: VPN_PORT_FORWARDING_PROVIDER
-              - name: PORT_FORWARD_ONLY
-                valueFrom:
-                  secretKeyRef:
-                    name: vpn-config
-                    key: PORT_FORWARD_ONLY
-              - name: SERVER_COUNTRIES
-                valueFrom:
-                  secretKeyRef:
-                    name: vpn-config
-                    key: SERVER_COUNTRIES
-              - name: TZ
-                value: "Europe/Paris"
-              - name: FIREWALL_INPUT_PORTS
-                value: "8081,9999"
-              - name: FIREWALL_OUTBOUND_SUBNETS
-                value: "10.42.0.0/24,10.42.1.0/24,192.168.1.0/24,10.0.0.0/24"
-              - name: DOT
-                value: "off"
+              IPV6_DISABLED: "true"
+              TZ: "Europe/Paris"
+              FIREWALL_INPUT_PORTS: "8081,9999"
+              FIREWALL_OUTBOUND_SUBNETS: "10.42.0.0/24,10.42.1.0/24,192.168.1.0/24,10.0.0.0/24"
+              DOT: "off"
+              VPN_PORT_FORWARDING: "on"
+              VPN_PORT_FORWARDING_PROVIDER: protonvpn
+              PORT_FORWARD_ONLY: "on"
+              VPN_SERVICE_PROVIDER: protonvpn
+              VPN_TYPE: wireguard
+              SERVER_COUNTRIES: "Netherlands"
           port-forward:
             dependsOn: gluetun
             image:
@@ -125,24 +94,20 @@ spec:
               - secretRef:
                   name: qbitmanage-secrets
             env:
-              - name: QBITTORRENT_SERVER
-                value: localhost
-              - name: QBITTORRENT_PORT
-                value: "8081"
-              - name: QBITTORRENT_PASS
+              QBITTORRENT_SERVER: localhost
+              QBITTORRENT_PORT: "8081"
+              QBITTORRENT_PASS:
                 valueFrom:
                   secretKeyRef:
                     name: qbitmanage-secrets
                     key: qbitmanage-pass
-              - name: QBITTORRENT_USER
+              QBITTORRENT_USER:
                 valueFrom:
                   secretKeyRef:
                     name: qbitmanage-secrets
                     key: qbitmanage-user
-              - name: PORT_FORWARDED
-                value: "/tmp/gluetun/forwarded_port"
-              - name: "HTTP_S"
-                value: "http"
+              PORT_FORWARDED: "/tmp/gluetun/forwarded_port"
+              HTTP_S: "http"
           # qBittorrent application container
           app:
             image:
@@ -158,10 +123,8 @@ spec:
               runAsNonRoot: true
               runAsUser: 1000
             env:
-              - name: TZ
-                value: "Europe/Paris"
-              - name: WEBUI_PORT
-                value: "8081"
+              TZ: "Europe/Paris"
+              WEBUI_PORT: "8081"
             resources:
               requests:
                 cpu: 200m
