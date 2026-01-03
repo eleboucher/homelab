@@ -44,7 +44,7 @@ spec:
               - name: TZ
                 value: "Europe/Paris"
               - name: GUNICORN_WORKERS
-                value: "2"
+                value: "1"
             resources:
               requests:
                 cpu: 200m
