@@ -101,6 +101,13 @@ spec:
               REPLICA_URL: http://adguard-home-replica:3000
               CRON: "*/5 * * * *"
               LOG_LEVEL: info
+            resources:
+              requests:
+                cpu: 25m
+                memory: 64Mi
+              limits:
+                cpu: 200m
+                memory: 128Mi
             securityContext:
               readOnlyRootFilesystem: true
               allowPrivilegeEscalation: false

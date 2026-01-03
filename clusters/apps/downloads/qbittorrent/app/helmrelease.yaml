@@ -114,6 +114,13 @@ spec:
             image:
               repository: docker.io/snoringdragon/gluetun-qbittorrent-port-manager
               tag: "1.3@sha256:679b7a92c494f93b78ad37ef24f3a261e73d0a1a52505ad4f1e39580eedfa14f"
+            resources:
+              requests:
+                cpu: 10m
+                memory: 32Mi
+              limits:
+                cpu: 100m
+                memory: 64Mi
             envFrom:
               - secretRef:
                   name: qbitmanage-secrets
@@ -139,13 +146,18 @@ spec:
           # qBittorrent application container
           app:
             image:
-              repository: lscr.io/linuxserver/qbittorrent
+              repository: ghcr.io/home-operations/qbittorrent
               tag: 5.1.4
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop:
+                  - ALL
+              readOnlyRootFilesystem: true
+              runAsGroup: 1000
+              runAsNonRoot: true
+              runAsUser: 1000
             env:
-              - name: PUID
-                value: "1000"
-              - name: PGID
-                value: "1000"
               - name: TZ
                 value: "Europe/Paris"
               - name: WEBUI_PORT
@@ -153,7 +165,7 @@ spec:
             resources:
               requests:
                 cpu: 200m
-                memory: 512Mi
+                memory: 1.5Gi
               limits:
                 cpu: 1000m
                 memory: 2Gi
