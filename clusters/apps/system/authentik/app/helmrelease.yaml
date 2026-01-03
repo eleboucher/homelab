@@ -35,8 +35,10 @@ spec:
         password: file:///authentik-creds/AUTHENTIK_POSTGRES_PASSWORD
       web:
         workers: 1
-        threads: 2
-
+        threads: 1
+      worker:
+        workers: 1
+        threads: 1
     server:
       replicas: 1
       resources:
