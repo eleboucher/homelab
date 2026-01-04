@@ -107,6 +107,10 @@ spec:
         type: emptyDir
         globalMounts:
           - path: /transcode
+      cache:
+        type: emptyDir
+        globalMounts:
+          - path: /cache
       dri:
         type: hostPath
         hostPath: /dev/dri
