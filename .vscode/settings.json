@@ -1,7 +1,7 @@
 {
   "yaml.schemaStore.enable": true,
   "yaml.schemas": {
-    "kubernetes": "./clusters/**/*.yaml"
+    "kubernetes": "./kubernetes/**/*.yaml"
   },
   "[yaml]": {
     "editor.defaultFormatter": "bluebrown.yamlfmt"

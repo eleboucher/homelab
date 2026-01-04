@@ -17,19 +17,19 @@
   "labels": ["dependencies"],
   "minimumReleaseAge": "3 days",
   "flux": {
-    "managerFilePatterns": ["/clusters/.+\\.ya?ml$/"]
+    "managerFilePatterns": ["/kubernetes/.+\\.ya?ml$/"]
   },
   "helm-values": {
-    "managerFilePatterns": ["/clusters/.+\\.ya?ml$/"]
+    "managerFilePatterns": ["/kubernetes/.+\\.ya?ml$/"]
   },
   "kubernetes": {
-    "managerFilePatterns": ["/clusters/.+\\.ya?ml$/"]
+    "managerFilePatterns": ["/kubernetes/.+\\.ya?ml$/"]
   },
   "customManagers": [
     {
       "customType": "regex",
       "description": "Process OCI dependencies",
-      "managerFilePatterns": ["/^clusters/.+\\.yaml(?:\\.j2)?$/"],
+      "managerFilePatterns": ["/^kubernetes/.+\\.yaml(?:\\.j2)?$/"],
       "matchStrings": ["oci://(?<depName>[^:]+):(?<currentValue>\\S+)"],
       "datasourceTemplate": "docker"
     }

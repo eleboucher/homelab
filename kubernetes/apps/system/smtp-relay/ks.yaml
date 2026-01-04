@@ -1,0 +1,21 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: smtp-relay
+  namespace: flux-system
+spec:
+  interval: 6h
+  path: ./kubernetes/apps/system/smtp-relay/app
+  postBuild:
+    substitute:
+      APP: smtp-relay
+      APP_NAMESPACE: system
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+  targetNamespace: system
+  timeout: 5m
+  wait: false

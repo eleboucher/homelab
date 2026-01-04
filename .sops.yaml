@@ -1,6 +1,6 @@
 ---
 creation_rules:
-  - path_regex: clusters/.*/.*\.yaml
+  - path_regex: kubernetes/.*/.*\.yaml
     encrypted_regex: ^(data|stringData)$
     mac_only_encrypted: true
     age: >-

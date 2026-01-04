@@ -1,0 +1,24 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: lldap
+  namespace: flux-system
+spec:
+  interval: 6h
+  path: ./kubernetes/apps/system/lldap/app
+  dependsOn:
+    - name: envoy-gateway
+    - name: longhorn
+  postBuild:
+    substitute:
+      APP: lldap
+      APP_NAMESPACE: system
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+  targetNamespace: system
+  timeout: 5m
+  wait: false
