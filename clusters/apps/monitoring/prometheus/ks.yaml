@@ -9,7 +9,6 @@ spec:
   path: ./clusters/apps/monitoring/prometheus/app
   dependsOn:
     - name: longhorn
-    - name: reloader
   postBuild:
     substitute:
       APP: prometheus

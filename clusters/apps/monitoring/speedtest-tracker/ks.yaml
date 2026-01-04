@@ -9,7 +9,6 @@ spec:
   path: ./clusters/apps/monitoring/speedtest-tracker/app
   dependsOn:
     - name: longhorn
-    - name: reloader
   postBuild:
     substitute:
       APP: speedtest-tracker

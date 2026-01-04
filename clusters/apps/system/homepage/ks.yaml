@@ -10,7 +10,6 @@ spec:
   dependsOn:
     - name: envoy-gateway
     - name: longhorn
-    - name: reloader
   postBuild:
     substitute:
       APP: homepage
