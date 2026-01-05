@@ -16,6 +16,7 @@
   "timezone": "Europe/Paris",
   "labels": ["dependencies"],
   "minimumReleaseAge": "3 days",
+  "schedule": ["0 * * * *"],
   "flux": {
     "managerFilePatterns": ["/kubernetes/.+\\.ya?ml$/"]
   },
