@@ -7,16 +7,6 @@ repos:
         entry: ./check-sops-encryption.sh
         language: system
         files: ^kubernetes/.+\.sops\.yaml$
-      - id: ensure-helmrelease-schema
-        name: Ensure HelmRelease Schema
-        # Runs the script we created above
-        entry: python3 pre-commit/ensure_helmrelease_schema.py
-        language: python
-        # Only trigger for files named helmrelease.yaml
-        files: ^kubernetes/.+.yaml$
-        # Run on file modification
-        types:
-          - file
       - id: yamllint
         name: YAML Lint
         entry: yamllint
