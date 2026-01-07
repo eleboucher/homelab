@@ -80,6 +80,7 @@ metadata:
   name: envoy-internal
   annotations:
     external-dns.alpha.kubernetes.io/target: &hostname internal.erwanleboucher.dev
+    cert-manager.io/cluster-issuer: letsencrypt-production
     gatus.home-operations.com/endpoint: |-
       group: internal
       guarded: true
@@ -93,6 +94,7 @@ spec:
   infrastructure:
     annotations:
       metallb.io/loadBalancerIPs: 192.168.1.65
+      cert-manager.io/cluster-issuer: letsencrypt-production
       external-dns.alpha.kubernetes.io/target: *hostname
   listeners:
     - name: http

@@ -27,15 +27,12 @@ spec:
   values:
     crds:
       enabled: true
-    global:
-      leaderElection:
-        namespace: cert-manager
-    # Enable Prometheus metrics
-    prometheus:
-      enabled: true
-    # Replicas for HA
-    replicaCount: 2
-    # Resource limits
+    config:
+      apiVersion: controller.config.cert-manager.io/v1alpha1
+      kind: ControllerConfiguration
+      enableGatewayAPI: true
+    extraArgs:
+      - --enable-gateway-api
     resources:
       requests:
         cpu: 10m
@@ -44,7 +41,6 @@ spec:
         cpu: 100m
         memory: 128Mi
     webhook:
-      replicaCount: 2
       resources:
         requests:
           cpu: 10m
@@ -53,7 +49,6 @@ spec:
           cpu: 100m
           memory: 128Mi
     cainjector:
-      replicaCount: 2
       resources:
         requests:
           cpu: 10m
