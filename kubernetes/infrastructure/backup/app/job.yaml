@@ -23,7 +23,9 @@ spec:
           # Run at 5:00 AM every Sunday (After the local Longhorn backup finishes)
           schedule: "0 5 * * 0"
           concurrencyPolicy: Forbid
-
+        pod:
+          nodeSelector:
+            kubernetes.io/hostname: kharkiv
         containers:
           app:
             image:
@@ -71,8 +73,7 @@ spec:
 
       data:
         enabled: true
-        type: nfs
-        server: 10.0.0.1
-        path: /
+        type: hostPath
+        hostPath: /srv/media
         globalMounts:
           - path: /data
