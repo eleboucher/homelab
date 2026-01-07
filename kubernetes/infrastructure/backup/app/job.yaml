@@ -68,7 +68,6 @@ spec:
         name: google-drive-backup
         globalMounts:
           - path: /config
-            readOnly: true
 
       data:
         enabled: true
