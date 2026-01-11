@@ -24,8 +24,6 @@ spec:
         annotations:
           reloader.stakater.com/auto: "true"
         pod:
-          nodeSelector:
-            kubernetes.io/hostname: kharkiv
           securityContext:
             fsGroup: 1000
             fsGroupChangePolicy: "OnRootMismatch"
@@ -91,7 +89,7 @@ spec:
           - path: /config
       data:
         enabled: true
-        type: hostPath
-        hostPath: /var/mnt/media
+        type: persistentVolumeClaim
+        existingClaim: shared-media
         globalMounts:
           - path: /data

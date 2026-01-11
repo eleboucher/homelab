@@ -4,6 +4,8 @@ kind: Kustomization
 metadata:
   name: sonarr
   namespace: flux-system
+components:
+  - ../../../../components/nfs-media
 spec:
   interval: 1h
   path: ./kubernetes/apps/media/sonarr/app
