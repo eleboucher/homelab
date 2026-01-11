@@ -22,7 +22,7 @@ spec:
       tproxy: true
     bpfClockProbe: true
     bgpControlPlane:
-      enabled: true
+      enabled: false
     cgroup:
       automount:
         enabled: false
@@ -30,7 +30,7 @@ spec:
     # NOTE: devices might need to be set if you have more than one active NIC on your hosts
     # devices: eno+ eth+
     dashboards:
-      enabled: true
+      enabled: false
     endpointRoutes:
       enabled: true
     envoy:
@@ -39,18 +39,7 @@ spec:
       enabled: false
 
     hubble:
-      enabled: true
-      tls:
-        auto:
-          method: certmanager
-          certManagerIssuerRef:
-            group: cert-manager.io
-            kind: ClusterIssuer
-            name: cluster-ca
-      ui:
-        enabled: true
-      relay:
-        enabled: true
+      enabled: false
 
     ipam:
       mode: kubernetes
@@ -69,7 +58,7 @@ spec:
       enabled: true
     operator:
       dashboards:
-        enabled: true
+        enabled: false
       prometheus:
         enabled: false
       replicas: 1
