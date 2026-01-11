@@ -37,8 +37,21 @@ spec:
       enabled: false
     gatewayAPI:
       enabled: false
+
     hubble:
-      enabled: false
+      enabled: true
+      tls:
+        auto:
+          method: certmanager
+          certManagerIssuerRef:
+            group: cert-manager.io
+            kind: ClusterIssuer
+            name: cluster-ca
+      ui:
+        enabled: true
+      relay:
+        enabled: true
+
     ipam:
       mode: kubernetes
     ipv4NativeRoutingCIDR: "10.42.0.0/16"
@@ -52,7 +65,8 @@ spec:
       algorithm: maglev
       mode: "dsr"
       serviceTopology: true
-    localRedirectPolicies: true
+    localRedirectPolicies:
+      enabled: true
     operator:
       dashboards:
         enabled: true
