@@ -30,11 +30,11 @@ spec:
                   secretKeyRef:
                     name: streamystats-secret
                     key: SESSION_SECRET
-              DATABASE_URL:
+              POSTGRES_HOST:
                 valueFrom:
                   secretKeyRef:
                     name: &pg postgres-streamystats-app
-                    key: uri
+                    key: host
               POSTGRES_DB:
                 valueFrom:
                   secretKeyRef:
@@ -50,6 +50,7 @@ spec:
                   secretKeyRef:
                     name: streamystats-cnpg-secret
                     key: password
+              DATABASE_URL: postgresql://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@$(POSTGRES_HOST):5432/$(POSTGRES_DB)
             securityContext: &sec
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
