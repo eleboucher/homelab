@@ -23,7 +23,7 @@ spec:
       defaultDataLocality: best-effort
       disableRevisionCounter: "true"
     defaultBackupStore:
-      backupTarget: "nfs://10.0.0.1:/backups/longhorn-backups"
+      backupTarget: "nfs://192.168.1.63:/backups/longhorn-backups"
       backupTargetCredentialSecret: ""
     defaultSettings:
       defaultDataPath: /var/mnt/longhorn
