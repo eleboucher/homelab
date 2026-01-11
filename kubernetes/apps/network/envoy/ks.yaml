@@ -24,6 +24,11 @@ metadata:
 spec:
   dependsOn:
     - name: envoy-gateway
+  healthChecks:
+    - apiVersion: helm.toolkit.fluxcd.io/v2
+      kind: HelmRelease
+      name: envoy-gateway
+      namespace: network
   interval: 1h
   path: ./kubernetes/apps/network/envoy/config
   prune: true
