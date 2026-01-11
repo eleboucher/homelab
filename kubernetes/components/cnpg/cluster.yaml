@@ -8,6 +8,7 @@ spec:
 
   primaryUpdateStrategy: unsupervised
 
+  enableSuperuserAccess: true
   superuserSecret:
     name: ${APP}-cnpg-secret
 

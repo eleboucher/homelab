@@ -16,6 +16,7 @@ spec:
       namespace: kube-system
     - name: external-secrets
       namespace: security
+    - name: cloudnative-pg
   prune: true
   postBuild:
     substitute:

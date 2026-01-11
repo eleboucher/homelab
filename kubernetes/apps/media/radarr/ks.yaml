@@ -4,9 +4,9 @@ kind: Kustomization
 metadata:
   name: radarr
   namespace: flux-system
-components:
-  - ../../../../components/nfs-media
 spec:
+  components:
+    - ../../../../components/nfs-media
   interval: 1h
   path: ./kubernetes/apps/media/radarr/app
   dependsOn:
@@ -14,6 +14,8 @@ spec:
       namespace: network
     - name: longhorn
       namespace: kube-system
+    - name: nfs-server
+    - name: nfs-csi-driver
   postBuild:
     substitute:
       APP: radarr
