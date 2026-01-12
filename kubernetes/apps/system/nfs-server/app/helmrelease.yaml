@@ -13,6 +13,8 @@ spec:
   values:
     controllers:
       nfs-server:
+        replicas: 1
+        strategy: RollingUpdate
         pod:
           priorityClassName: nfs-critical
           hostNetwork: true

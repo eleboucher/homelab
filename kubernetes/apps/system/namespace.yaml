@@ -5,3 +5,5 @@ metadata:
   name: system
   labels:
     name: system
+  annotations:
+    kustomize.toolkit.fluxcd.io/prune: disabled

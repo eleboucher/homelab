@@ -5,3 +5,5 @@ metadata:
   name: nfs-server
   labels:
     name: nfs-server
+  annotations:
+    kustomize.toolkit.fluxcd.io/prune: disabled
