@@ -7,14 +7,9 @@ metadata:
   namespace: monitoring
 spec:
   interval: 1h
-  chart:
-    spec:
-      chart: app-template
-      version: "4.6.0"
-      sourceRef:
-        kind: HelmRepository
-        name: bjw-s
-        namespace: flux-system
+  chartRef:
+    kind: OCIRepository
+    name: beszel
   values:
     controllers:
       beszel:
@@ -75,14 +70,9 @@ metadata:
   namespace: monitoring
 spec:
   interval: 1h
-  chart:
-    spec:
-      chart: app-template
-      version: "4.6.0"
-      sourceRef:
-        kind: HelmRepository
-        name: bjw-s
-        namespace: flux-system
+  chartRef:
+    kind: OCIRepository
+    name: beszel
   values:
     controllers:
       beszel-agent-intel:

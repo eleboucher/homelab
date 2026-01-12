@@ -6,15 +6,9 @@ metadata:
   name: adguard-home
   namespace: adguard
 spec:
-  chart:
-    spec:
-      chart: app-template
-      version: 4.6.0
-      reconcileStrategy: ChartVersion
-      sourceRef:
-        kind: HelmRepository
-        namespace: flux-system
-        name: bjw-s
+  chartRef:
+    kind: OCIRepository
+    name: adguard-home
   interval: 1h
   driftDetection:
     mode: enabled
