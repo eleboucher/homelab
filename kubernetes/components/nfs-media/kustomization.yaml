@@ -4,4 +4,5 @@ kind: Component
 
 resources:
   - storageclass.yaml
+  - pv-media.yaml
   - pvc-media.yaml
