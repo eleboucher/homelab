@@ -3,17 +3,23 @@ apiVersion: v1
 kind: PersistentVolume
 metadata:
   name: nfs-media
+  annotations:
+    pv.kubernetes.io/provisioned-by: nfs.csi.k8s.io
 spec:
   capacity:
     storage: 500Gi
   accessModes:
     - ReadWriteMany
   persistentVolumeReclaimPolicy: Retain
-  nfs:
-    server: 192.168.1.63
-    path: /
+  storageClassName: nfs-media
   mountOptions:
     - nfsvers=4.2
     - nconnect=16
     - hard
     - noatime
+  csi:
+    driver: nfs.csi.k8s.io
+    volumeHandle: 192.168.1.63#/#
+    volumeAttributes:
+      server: "192.168.1.63"
+      share: "/"
