@@ -8,4 +8,4 @@ resources:
   - cloudflared/ks.yaml
   - homepage/ks.yaml
   - smtp-relay/ks.yaml
-  - nfs-server/ks.yaml
+  - nfs-server

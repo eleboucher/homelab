@@ -12,5 +12,6 @@ volumeBindingMode: Immediate
 allowVolumeExpansion: true
 mountOptions:
   - nfsvers=4.2
+  - nconnect=16
   - hard
-  - intr
+  - noatime

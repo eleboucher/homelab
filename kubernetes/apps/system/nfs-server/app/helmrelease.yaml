@@ -1,0 +1,86 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/app-template-4.5.0/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: nfs-server
+  namespace: nfs-server
+spec:
+  interval: 1h
+  chartRef:
+    kind: OCIRepository
+    name: nfs-server
+  values:
+    controllers:
+      nfs-server:
+        pod:
+          priorityClassName: nfs-critical
+          hostNetwork: true
+          securityContext:
+            runAsUser: 0
+            runAsGroup: 0
+            fsGroup: 1000
+            fsGroupChangePolicy: OnRootMismatch
+            runAsNonRoot: false
+            seccompProfile: {type: Unconfined}
+          nodeSelector:
+            kubernetes.io/hostname: kharkiv
+        containers:
+          app:
+            image:
+              repository: quay.io/aminvakil/alpine-nfs-server
+              tag: latest
+              pullPolicy: IfNotPresent
+            securityContext:
+              allowPrivilegeEscalation: true
+              readOnlyRootFilesystem: false
+              privileged: true
+            env:
+              NFS_THREADS: 128
+              SHARED_DIRECTORY: /media
+            resources:
+              requests:
+                cpu: 50m
+                memory: 128Mi
+              limits:
+                cpu: 500m
+                memory: 512Mi
+            probes:
+              startup:
+                enabled: true
+                custom: true
+                spec:
+                  exec:
+                    command:
+                      - sh
+                      - -c
+                      - "showmount -e localhost | grep -q /media"
+              readiness: &probes
+                enabled: true
+                type: TCP
+                port: 2049
+              liveness: *probes
+    service:
+      app:
+        controller: nfs-server
+        type: LoadBalancer
+        ports:
+          nfs:
+            port: 2049
+            targetPort: 2049
+            protocol: TCP
+          mountd:
+            port: 20048
+            targetPort: 20048
+            protocol: TCP
+          rpcbind:
+            port: 111
+            targetPort: 111
+            protocol: TCP
+    persistence:
+      media:
+        enabled: true
+        type: hostPath
+        hostPath: /var/mnt/media
+        globalMounts:
+          - path: /media
