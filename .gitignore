@@ -12,3 +12,9 @@ Brewfile.lock.json
 Thumbs.db
 kubeconfig
 talosconfig
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+*.tfvars
+*.tfvars.json
+

@@ -8,3 +8,4 @@ LEFTHOOK_OUTPUT = "false"
 [tools]
 "uv" = "latest"
 "pipx:flux-local" = "latest"
+"aqua:opentofu/opentofu" = "1"
