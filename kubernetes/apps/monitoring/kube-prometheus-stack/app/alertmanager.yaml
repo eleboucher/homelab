@@ -8,7 +8,12 @@ spec:
     receiver: discord
     repeatInterval: 12h
     routes:
-      - receiver: blackhole
+      - receiver: "null"
+        matchers:
+          - name: alertname
+            value: Watchdog
+            matchType: =
+      - receiver: "null"
         matchers:
           - name: alertname
             value: InfoInhibitor
@@ -20,7 +25,6 @@ spec:
             matchType: =
     groupBy:
       - alertname
-      - cluster
       - job
     groupInterval: 5m
     groupWait: 1m
@@ -39,7 +43,7 @@ spec:
           matchType: =
 
   receivers:
-    - name: blackhole
+    - name: "null"
     - name: discord
       discordConfigs:
         - title: |-
