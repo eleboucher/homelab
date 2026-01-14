@@ -107,9 +107,8 @@ cluster:
   discovery:
     enabled: true
     registries:
-      kubernetes:
-        disabled: true
-      service: {}
+      kubernetes: { disabled: true }
+      service: { disabled: false }
   id: {{ ENV.TALOS_CLUSTER_ID }}
   network:
     cni:
@@ -133,6 +132,8 @@ cluster:
       rules:
         - level: Metadata
     certSANs:
+      - 127.0.0.1
+      - 192.168.1.41
       - k8s.internal
     disablePodSecurityPolicy: true
     extraArgs:

@@ -36,10 +36,10 @@ spec:
                 requests:
                   storage: 1Gi
 
-    kubeControllerManager:
-      enabled: false
     kubeEtcd:
-      enabled: false
+      service:
+        selector:
+          component: kube-apiserver
     kubeProxy:
       enabled: false
 
