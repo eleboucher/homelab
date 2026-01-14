@@ -52,7 +52,7 @@ spec:
                 valueFrom:
                   secretKeyRef:
                     name: discord-webhook
-                    key: webhook-url
+                    key: WEBHOOK_URL
             probes:
               liveness: &probes
                 enabled: true
