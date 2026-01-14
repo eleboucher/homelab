@@ -1,20 +1,16 @@
-# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/app-template-4.5.0/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/app-template-4.5.0/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: cloudflared
-  namespace: system
+  name: cloudflare-tunnel
 spec:
-  interval: 1h
   chartRef:
     kind: OCIRepository
-    name: cloudflared
+    name: cloudflare-tunnel
+  interval: 1h
   values:
     controllers:
-      cloudflared:
-        type: deployment
+      cloudflare-tunnel:
         replicas: 2
         strategy: RollingUpdate
         annotations:
@@ -24,18 +20,15 @@ spec:
             image:
               repository: mirror.gcr.io/cloudflare/cloudflared
               tag: 2025.11.1@sha256:89ee50efb1e9cb2ae30281a8a404fed95eb8f02f0a972617526f8c5b417acae2
-            args:
-              - tunnel
-              - run
             env:
               NO_AUTOUPDATE: true
               TUNNEL_METRICS: 0.0.0.0:8080
-              TUNNEL_ORIGIN_ENABLE_HTTP2: true
-              TUNNEL_TRANSPORT_PROTOCOL: http2
-              TUNNEL_POST_QUANTUM: false
             envFrom:
               - secretRef:
-                  name: cloudflared-token
+                  name: "cloudflared-token"
+            args:
+              - tunnel
+              - run
             probes:
               liveness: &probes
                 enabled: true
@@ -68,6 +61,10 @@ spec:
         ports:
           http:
             port: *port
+    serviceMonitor:
+      app:
+        endpoints:
+          - port: http
     configMaps:
       config:
         data:
@@ -79,7 +76,7 @@ spec:
                   keepAliveTimeout: 3600s
                   originServerName: external.erwanleboucher.dev
                   tcpKeepAlive: 7200s
-                service: https://envoy-external.network.svc.cluster.local:443
+                service: https://envoy-external.{{ .Release.Namespace }}.svc.cluster.local:443
               - service: http_status:404
     persistence:
       config-file:

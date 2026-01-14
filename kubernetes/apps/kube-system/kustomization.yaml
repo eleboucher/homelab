@@ -6,7 +6,7 @@ components:
   - ../../components/sops
 
 resources:
-  - intel-gpu-driver/ks.yaml
+  - intel-gpu-resource-driver/ks.yaml
   - node-feature-discovery/ks.yaml
   - longhorn/ks.yaml
   - backup/ks.yaml

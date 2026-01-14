@@ -14,10 +14,11 @@ spec:
     crds: CreateReplace
   values:
     config:
-      provider:
-        type: Kubernetes
-        kubernetes:
-          deploy:
-            type: GatewayNamespace
+      envoyGateway:
+        provider:
+          type: Kubernetes
+          kubernetes:
+            deploy:
+              type: GatewayNamespace
     global:
       imageRegistry: mirror.gcr.io
