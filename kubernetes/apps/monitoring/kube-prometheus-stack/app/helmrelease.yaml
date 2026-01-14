@@ -23,6 +23,8 @@ spec:
       alertmanagerSpec:
         alertmanagerConfiguration:
           name: alertmanager
+          global:
+            resolveTimeout: 5m
         externalUrl: https://alertmanager.erwanleboucher.dev
         storage:
           volumeClaimTemplate:
@@ -32,8 +34,10 @@ spec:
                 requests:
                   storage: 1Gi
 
-    kubeEtcd:
-      enabled: false
+        kubeEtcd:
+      service:
+        selector:
+          component: kube-apiserver # etcd runs on control plane nodes
     kubeProxy:
       enabled: false
 
@@ -50,9 +54,6 @@ spec:
             sourceLabels:
               - "__name__"
             regex: (apiserver_response_sizes_bucket|apiserver_watch_events_sizes_bucket)
-
-    kubeControllerManager:
-      enabled: false
 
     kubelet:
       enabled: true
