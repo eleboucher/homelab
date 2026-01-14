@@ -10,5 +10,5 @@ resources:
   - externalsecret.yaml
   - beszel/ks.yaml
   - speedtest-tracker/ks.yaml
-  # - kube-prometheus-stack/ks.yaml
+  - kube-prometheus-stack/ks.yaml
   - gatus/ks.yaml
