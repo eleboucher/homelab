@@ -19,7 +19,6 @@
   ],
   "timezone": "Europe/Paris",
   "labels": ["dependencies"],
-  "minimumReleaseAge": "3 days",
   "flux": {
     "managerFilePatterns": ["/\\.yaml(?:\\.j2)?$/"]
   },
