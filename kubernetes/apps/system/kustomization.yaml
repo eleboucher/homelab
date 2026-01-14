@@ -9,6 +9,5 @@ resources:
   - namespace.yaml
   - adguard/ks.yaml
   - home-assistant/ks.yaml
-  - cloudflared/ks.yaml
   - homepage/ks.yaml
   - smtp-relay/ks.yaml

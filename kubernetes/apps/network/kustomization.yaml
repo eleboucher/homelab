@@ -8,5 +8,7 @@ components:
 
 resources:
   - namespace.yaml
+  - externalsecret.yaml
   - envoy/ks.yaml
   - external-dns/ks.yaml
+  - cloudflared/ks.yaml

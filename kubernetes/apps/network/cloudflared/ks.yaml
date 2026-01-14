@@ -3,18 +3,15 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: cloudflared
-  namespace: flux-system
 spec:
   interval: 6h
-  path: ./kubernetes/apps/system/cloudflared/app
+  path: ./kubernetes/apps/network/cloudflared/app
   dependsOn:
     - name: external-secrets
       namespace: security
-
   postBuild:
     substitute:
       APP: cloudflared
-      APP_NAMESPACE: system
     substituteFrom:
       - kind: Secret
         name: cloudflared-token
@@ -23,6 +20,6 @@ spec:
     kind: GitRepository
     name: flux-system
     namespace: flux-system
-  targetNamespace: system
+  targetNamespace: network
   timeout: 5m
   wait: false
