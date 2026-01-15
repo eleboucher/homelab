@@ -82,7 +82,7 @@ kind: Gateway
 metadata:
   name: envoy-internal
   annotations:
-    external-dns.alpha.kubernetes.io/target: &hostname internal.erwanleboucher.dev
+    external-dns.alpha.kubernetes.io/target: &loadBalancerIP "192.168.69.10"
     cert-manager.io/cluster-issuer: letsencrypt-production
     gatus.home-operations.com/endpoint: |-
       group: internal
@@ -96,9 +96,9 @@ spec:
   gatewayClassName: envoy
   infrastructure:
     annotations:
-      lbipam.cilium.io/ips: "192.168.69.10"
+      lbipam.cilium.io/ips: *loadBalancerIP
       cert-manager.io/cluster-issuer: letsencrypt-production
-      external-dns.alpha.kubernetes.io/target: *hostname
+      external-dns.alpha.kubernetes.io/target: *loadBalancerIP
   listeners:
     - name: http
       protocol: HTTP

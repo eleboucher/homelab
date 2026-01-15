@@ -19,7 +19,7 @@ spec:
     - noatime
   csi:
     driver: nfs.csi.k8s.io
-    volumeHandle: 192.168.1.63#/#
+    volumeHandle: 192.168.1.41#/#
     volumeAttributes:
-      server: "192.168.1.63"
+      server: "192.168.1.41"
       share: "/"

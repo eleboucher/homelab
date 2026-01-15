@@ -1,0 +1,69 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: external-dns-mikrotik
+spec:
+  interval: 30m
+  chartRef:
+    kind: OCIRepository
+    name: external-dns-mikrotik
+
+  values:
+    fullnameOverride: external-dns-mikrotik
+    triggerLoopOnEvent: true
+    policy: sync
+    sources:
+      - crd
+      - gateway-httproute
+    txtOwnerId: default
+    txtPrefix: k8s.
+    domainFilters:
+      - erwanleboucher.dev
+    serviceMonitor:
+      enabled: true
+    resources:
+      requests:
+        cpu: 20m
+        memory: 128Mi
+      limits:
+        memory: 256Mi
+
+    provider:
+      name: webhook
+      webhook:
+        image:
+          repository: ghcr.io/mirceanton/external-dns-provider-mikrotik
+          tag: v1.5.3
+        env:
+          - name: LOG_FORMAT
+            value: text
+          - name: LOG_LEVEL
+            value: info
+
+          - name: MIKROTIK_BASEURL
+            value: "https://192.168.1.2:443"
+          - name: MIKROTIK_SKIP_TLS_VERIFY
+            value: "true"
+          - name: MIKROTIK_DEFAULT_COMMENT
+            value: "Managed by ExternalDNS"
+          - name: MIKROTIK_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: mikrotik-credentials
+                key: password
+          - name: MIKROTIK_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: mikrotik-credentials
+                key: username
+        extraArgs:
+          - --crd-source-apiversion=externaldns.k8s.io/v1alpha1
+          - --crd-source-kind=DNSEndpoint
+          - --gateway-name=envoy-internal
+        resources:
+          requests:
+            cpu: 20m
+            memory: 32Mi
+          limits:
+            memory: 128Mi

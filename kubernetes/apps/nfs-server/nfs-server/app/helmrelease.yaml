@@ -36,6 +36,13 @@ spec:
               allowPrivilegeEscalation: true
               readOnlyRootFilesystem: false
               privileged: true
+              capabilities:
+                add:
+                  - "SYS_ADMIN"
+                  - "SETPCAP"
+                  - "DAC_READ_SEARCH"
+                  - "NET_ADMIN"
+                  - "SYS_MODULE"
             env:
               NFS_THREADS: 128
               SHARED_DIRECTORY: /media
@@ -50,7 +57,7 @@ spec:
     service:
       app:
         controller: nfs-server
-        type: LoadBalancer
+        type: ClusterIP
         ports:
           nfs:
             port: 2049

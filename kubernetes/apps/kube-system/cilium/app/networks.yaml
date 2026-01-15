@@ -6,7 +6,7 @@ metadata:
   name: pool
 spec:
   allowFirstLastIPs: "No"
-  cidrs:
+  blocks:
     - cidr: "192.168.69.0/24"
 
 ---
