@@ -23,8 +23,6 @@ spec:
       enabled: "true"
     news:
       news_feed_enabled: "false"
-    plugins:
-      plugin_admin_enabled: "false"
     security:
       angular_support_enabled: "true"
     server:

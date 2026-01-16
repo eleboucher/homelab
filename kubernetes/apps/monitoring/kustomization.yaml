@@ -15,3 +15,4 @@ resources:
   - grafana/ks.yaml
   - fluent-bit/ks.yaml
   - victoria-logs/ks.yaml
+  - mikrotik-exporter/ks.yaml
