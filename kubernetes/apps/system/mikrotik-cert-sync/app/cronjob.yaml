@@ -18,7 +18,7 @@ spec:
           restartPolicy: OnFailure
           containers:
             - name: cert-sync
-              image: alpine:3.21
+              image: alpine:3.23
               env:
                 - name: ROUTER_HOST
                   value: "192.168.1.2"
