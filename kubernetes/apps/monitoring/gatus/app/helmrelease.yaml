@@ -1,22 +1,14 @@
-# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/app-template-4.5.0/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &app gatus
+  name: gatus
 spec:
-  interval: 1h
   chartRef:
     kind: OCIRepository
     name: gatus
-  install:
-    remediation:
-      retries: -1
-  upgrade:
-    cleanupOnFail: true
-    remediation:
-      retries: 3
+  interval: 1h
   values:
     controllers:
       gatus:
@@ -46,7 +38,7 @@ spec:
             env:
               GATUS_DELAY_START_SECONDS: 5
               GATUS_CONFIG_PATH: /config
-              GATUS_WEB_PORT: &port 8090
+              GATUS_WEB_PORT: &port 80
               TZ: Europe/Paris
               CUSTOM_DISCORD_WEBHOOK_URL:
                 valueFrom:
@@ -69,14 +61,18 @@ spec:
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
-              capabilities: {drop: [ALL]}
+              capabilities: {drop: ["ALL"]}
             resources:
               requests:
                 cpu: 100m
-                memory: 128Mi
               limits:
-                cpu: 500m
                 memory: 256Mi
+        statefulset:
+          volumeClaimTemplates:
+            - name: config
+              storageClass: longhorn
+              accessMode: ReadWriteOnce
+              size: 5Gi
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true
@@ -86,16 +82,11 @@ spec:
         fsGroupChangePolicy: OnRootMismatch
     service:
       app:
-        controller: *app
         ports:
           http:
             port: *port
-    serviceAccount:
-      gatus: {}
     serviceMonitor:
       app:
-        serviceName: *app
-        enabled: true
         endpoints:
           - port: http
     route:
@@ -103,15 +94,11 @@ spec:
         annotations:
           gatus.home-operations.com/enabled: "false"
         hostnames:
-          - "status.erwanleboucher.dev"
+          - "{{ .Release.Name }}.erwanleboucher.dev"
+          - status.erwanleboucher.dev
         parentRefs:
           - name: envoy-internal
             namespace: network
-            sectionName: https
-        rules:
-          - backendRefs:
-              - name: *app
-                port: *port
     rbac:
       roles:
         gatus:
@@ -141,16 +128,12 @@ spec:
             identifier: gatus
           subjects:
             - identifier: gatus
+    serviceAccount:
+      gatus: {}
     persistence:
-      config:
-        type: persistentVolumeClaim
-        storageClass: "longhorn"
-        accessMode: ReadWriteOnce
-        size: 2Gi
       config-file:
         type: configMap
-        name: "gatus-configmap"
+        name: "{{ .Release.Name }}-configmap"
         globalMounts:
           - path: /config/config.yaml
             subPath: config.yaml
-            readOnly: true

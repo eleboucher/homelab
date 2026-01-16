@@ -90,8 +90,6 @@ metadata:
       ui:
         hide-hostname: true
         hide-url: true
-      alerts:
-        - type: discord
 spec:
   gatewayClassName: envoy
   infrastructure:
