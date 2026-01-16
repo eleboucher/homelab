@@ -10,8 +10,6 @@ spec:
     name: kube-prometheus-stack
   interval: 1h
   values:
-    crds:
-      enabled: true
     cleanPrometheusOperatorObjectNames: true
     alertmanager:
       route:
