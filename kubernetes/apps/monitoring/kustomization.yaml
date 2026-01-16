@@ -13,3 +13,5 @@ resources:
   - kube-prometheus-stack/ks.yaml
   - gatus/ks.yaml
   - grafana/ks.yaml
+  - fluent-bit/ks.yaml
+  - victoria-logs/ks.yaml
