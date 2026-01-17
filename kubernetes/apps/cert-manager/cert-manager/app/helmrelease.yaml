@@ -17,28 +17,9 @@ spec:
       apiVersion: controller.config.cert-manager.io/v1alpha1
       kind: ControllerConfiguration
       enableGatewayAPI: true
-    extraArgs:
-      - --enable-gateway-api
-    resources:
-      requests:
-        cpu: 10m
-        memory: 32Mi
-      limits:
-        cpu: 100m
-        memory: 128Mi
-    webhook:
-      resources:
-        requests:
-          cpu: 10m
-          memory: 32Mi
-        limits:
-          cpu: 100m
-          memory: 128Mi
-    cainjector:
-      resources:
-        requests:
-          cpu: 10m
-          memory: 32Mi
-        limits:
-          cpu: 100m
-          memory: 128Mi
+    dns01RecursiveNameservers: https://1.1.1.1:443/dns-query,https://1.0.0.1:443/dns-query
+    dns01RecursiveNameserversOnly: true
+    prometheus:
+      enabled: true
+      servicemonitor:
+        enabled: true

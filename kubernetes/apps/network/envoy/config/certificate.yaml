@@ -5,11 +5,13 @@ kind: Certificate
 metadata:
   name: erwanleboucher-dev
 spec:
-  secretName: erwanleboucher-dev-tls
-  issuerRef:
-    name: letsencrypt-production
-    kind: ClusterIssuer
-  commonName: erwanleboucher.dev
   dnsNames:
     - "erwanleboucher.dev"
     - "*.erwanleboucher.dev"
+  duration: 160h
+  issuerRef:
+    kind: ClusterIssuer
+    name: letsencrypt-production
+  secretName: erwanleboucher-dev-tls
+  usages:
+    - digital signature

@@ -1,0 +1,39 @@
+# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/monitoring.coreos.com/prometheusrule_v1.json
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: cert-manager-rules
+spec:
+  groups:
+    - name: cert-manager.rules
+      rules:
+        - alert: CertManagerCertNotReady
+          expr: |-
+            max by (name, namespace) (certmanager_certificate_ready_status{condition="False"} == 1)
+          for: 10m
+          annotations:
+            summary: >-
+              Certificate {{ $labels.name }} in namespace {{ $labels.namespace }} is not ready
+          labels:
+            severity: critical
+
+        - alert: CertManagerCertExpired
+          expr: |-
+            (certmanager_certificate_expiration_timestamp_seconds - time()) < 3600
+          for: 0m
+          annotations:
+            summary: >-
+              Certificate {{ $labels.name }} in namespace {{ $labels.namespace }} has expired or expires within 1 hour
+          labels:
+            severity: critical
+
+        - alert: CertManagerHittingRateLimits
+          expr: |-
+            sum by (host) (rate(certmanager_http_acme_client_request_count{status="429"}[5m])) > 0
+          for: 5m
+          annotations:
+            summary: >-
+              Cert-manager is hitting Let's Encrypt rate limits for {{ $labels.host }}
+          labels:
+            severity: warning

@@ -8,3 +8,4 @@ resources:
   - clusterissuer.yaml
   - clusterissuer-selfsigned.yaml
   - ocirepository.yaml
+  - prometheusrule.yaml
