@@ -195,7 +195,7 @@ spec:
                     type: grafana
                     version: 2
                     alerts: alertmanager
-                    url: http://grafana-service.monitoring:3030
+                    url: http://grafana-service.monitoring:3000
                     username: '{{ "{{" }}HOMEPAGE_VAR_GRAFANA_USER{{ "}}" }}'
                     password: '{{ "{{" }}HOMEPAGE_VAR_GRAFANA_PASS{{ "}}" }}'
               - Mikrotik:
