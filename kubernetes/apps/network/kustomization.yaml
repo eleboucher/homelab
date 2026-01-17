@@ -12,3 +12,4 @@ resources:
   - envoy/ks.yaml
   - external-dns/ks.yaml
   - cloudflared/ks.yaml
+  - echo/ks.yaml
