@@ -187,6 +187,15 @@ spec:
                   widget:
                     type: prometheus
                     url: http://prometheus-operated.monitoring:9090
+              - Grafana:
+                  icon: grafana.png
+                  href: https://grafana.erwanleboucher.dev
+                  description: Dashboards
+                  widget:
+                    type: grafana
+                    url: http://grafana-service.monitoring:3030
+                    username: '{{ "{{" }}HOMEPAGE_VAR_GRAFANA_USER{{ "}}" }}'
+                    password '{{ "{{" }}HOMEPAGE_VAR_GRAFANA_PASS{{ "}}" }}'
               - Mikrotik:
                   icon: mikrotik.png
                   href: https://router.erwanleboucher.dev
