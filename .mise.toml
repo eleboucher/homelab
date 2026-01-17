@@ -9,3 +9,5 @@ LEFTHOOK_OUTPUT = "false"
 "uv" = "latest"
 "pipx:flux-local" = "latest"
 "aqua:opentofu/opentofu" = "1"
+"aqua:google/yamlfmt" = ["latest"]
+"aqua:yannh/kubeconform" = "latest"

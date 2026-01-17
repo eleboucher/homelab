@@ -1,7 +1,10 @@
 {
   "yaml.schemaStore.enable": true,
   "yaml.schemas": {
-    "kubernetes": "./kubernetes/**/*.yaml"
+    "kubernetes": [
+      "kubernetes/*.yml",
+      "kubernetes/*.yaml"
+    ]
   },
   "[yaml]": {
     "editor.defaultFormatter": "bluebrown.yamlfmt"

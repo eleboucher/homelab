@@ -1,3 +1,4 @@
+# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/generators.external-secrets.io/githubaccesstoken_v1alpha1.json
 ---
 apiVersion: generators.external-secrets.io/v1alpha1
 kind: GithubAccessToken

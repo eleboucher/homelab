@@ -7,6 +7,12 @@ repos:
         entry: ./check-sops-encryption.sh
         language: system
         files: .*\.sops\.ya?ml
+      - id: yaml-schema-check
+        name: YAML Schema Validation
+        entry: kubeconform -strict -ignore-missing-schemas -schema-location "https://k8s-schemas.erwanleboucher.dev/{{.Group}}/{{.ResourceKind}}_{{.ResourceAPIVersion}}.json"
+        language: system
+        files: ^kubernetes/.+\.ya?ml$
+        exclude: (/config/|\.sops\.ya?ml$|kustomization\.ya?ml$|namespace\.ya?ml$|/components/)
       - id: yamllint
         name: YAML Lint
         entry: yamllint

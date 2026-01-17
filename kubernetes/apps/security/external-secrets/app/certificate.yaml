@@ -1,3 +1,4 @@
+# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/cert-manager.io/certificate_v1.json
 ---
 apiVersion: cert-manager.io/v1
 kind: Certificate
