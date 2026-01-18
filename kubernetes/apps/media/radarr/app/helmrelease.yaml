@@ -86,3 +86,7 @@ spec:
         existingClaim: shared-media
         globalMounts:
           - path: /data
+      tmp:
+        type: emptyDir
+        globalMounts:
+          - path: /tmp

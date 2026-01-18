@@ -74,12 +74,6 @@ spec:
         hostnames:
           - bazarr.erwanleboucher.dev
     persistence:
-      data:
-        enabled: true
-        type: hostPath
-        hostPath: /var/mnt/media
-        globalMounts:
-          - path: /data
       config:
         type: persistentVolumeClaim
         storageClass: "longhorn"
@@ -87,3 +81,13 @@ spec:
         size: 2Gi
         globalMounts:
           - path: /config
+      data:
+        enabled: true
+        type: hostPath
+        hostPath: /var/mnt/media
+        globalMounts:
+          - path: /data
+      tmp:
+        type: emptyDir
+        globalMounts:
+          - path: /tmp

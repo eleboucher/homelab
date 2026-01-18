@@ -164,3 +164,9 @@ spec:
             port-forward:
               - path: /tmp/gluetun
                 readOnly: true
+      tmp:
+        type: emptyDir
+        advancedMounts:
+          qbittorrent:
+            app:
+              - path: /tmp
