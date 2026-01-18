@@ -15,6 +15,6 @@ spec:
     kind: GitRepository
     name: flux-system
     namespace: flux-system
-  targetNamespace: observability
+  targetNamespace: monitoring
   timeout: 5m
   wait: false
