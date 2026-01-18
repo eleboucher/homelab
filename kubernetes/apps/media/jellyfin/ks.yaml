@@ -8,12 +8,15 @@ metadata:
 spec:
   components:
     - ../../../../components/gpu
+    - ../../../../components/nfs-media
   interval: 1h
   path: ./kubernetes/apps/media/jellyfin/app
   dependsOn:
     - name: envoy-gateway
       namespace: network
     - name: longhorn
+      namespace: kube-system
+    - name: nfs-csi-driver
       namespace: kube-system
   postBuild:
     substitute:

@@ -41,11 +41,13 @@ machine:
       content: |
         [ NFSMount_Global_Options ]
         nfsvers=4.2
-        hard=True
         nconnect=16
+        hard=True
+        timeo=100
+        retrans=5
         noatime=True
   install:
-    image: factory.talos.dev/installer/da464b356c618ce0c36c9c4e77dc215b0a8c82865547d617775f9c776bad09ad:v1.12.1
+    image: factory.talos.dev/installer/60ff9a702b13327ff9ebf210e95289dd4ce3c0eedbb0b13c0d6de115352013b7:v1.12.1
     wipe: false
     grubUseUKICmdline: true
   kernel:

@@ -79,8 +79,8 @@ spec:
     persistence:
       data:
         enabled: true
-        type: hostPath
-        hostPath: /var/mnt/media
+        type: persistentVolumeClaim
+        existingClaim: shared-media
         globalMounts:
           - path: /data
       config:

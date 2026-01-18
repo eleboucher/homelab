@@ -6,10 +6,14 @@ metadata:
   name: qbittorrent
   namespace: flux-system
 spec:
+  components:
+    - ../../../../components/nfs-media
   interval: 1h
   path: ./kubernetes/apps/downloads/qbittorrent/app
   dependsOn:
     - name: longhorn
+      namespace: kube-system
+    - name: nfs-csi-driver
       namespace: kube-system
   postBuild:
     substitute:
