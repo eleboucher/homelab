@@ -1,0 +1,80 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: mealie
+spec:
+  interval: 30m
+  chartRef:
+    kind: OCIRepository
+    name: mealie
+  values:
+    controllers:
+      mealie:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        containers:
+          app:
+            image:
+              repository: ghcr.io/mealie-recipes/mealie
+              tag: v3.9.2
+            env:
+              TZ: "Europe/Paris"
+              BASE_URL: https://mealie.erwanleboucher.dev
+              DB_ENGINE: postgres
+              POSTGRES_SERVER: postgres-mealie-rw
+              POSTGRES_PASSWORD:
+                secretKeyRef:
+                  name: postgres-mealie-app
+                  key: password
+              POSTGRES_USER:
+                secretKeyRef:
+                  name: postgres-mealie-app
+                  key: username
+              POSTGRES_DB:
+                secretKeyRef:
+                  name: postgres-mealie-app
+                  key: dbname
+              SMTP_HOST: smtp-relay.system.svc.cluster.local
+              SMTP_PORT: 25
+              SMTP_FROM_NAME: Mealie
+              SMTP_FROM_EMAIL: noreply@erwanleboucher.dev
+              SMTP_AUTH_STRATEGY: NONE
+              SMTP_USER: mealie@erwanleboucher.dev
+              OPENAI_BASE_URL: http://ollama.ai:11434/v1
+              OPENAI_API_KEY: mealie
+            envFrom:
+              - secretRef:
+                  name: postgres-mealie-app
+            resources:
+              requests:
+                memory: 250Mi
+                cpu: 50m
+              limits:
+                memory: 500Mi
+
+    service:
+      app:
+        controller: mealie
+        ports:
+          http:
+            port: 9000
+            protocol: TCP
+
+    route:
+      app:
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
+        hostnames:
+          - mealie.erwanleboucher.dev
+
+    persistence:
+      data:
+        type: persistentVolumeClaim
+        storageClass: "longhorn"
+        accessMode: ReadWriteOnce
+        size: 2Gi
+        globalMounts:
+          - path: /app/data

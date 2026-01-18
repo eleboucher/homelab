@@ -8,3 +8,4 @@ components:
 resources:
   - namespace.yaml
   - bentopdf/ks.yaml
+  - mealie/ks.yaml
