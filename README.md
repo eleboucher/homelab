@@ -6,7 +6,7 @@ GitOps-managed Kubernetes homelab running a media server stack, home automation,
 
 | Node         | OS                  | Hardware          | CPU                  | RAM  | Role          | Storage                        |
 | ------------ | ------------------- | ----------------- | -------------------- | ---- | ------------- | ------------------------------ |
-| **kharkiv**  | Talos               | Intel i5 12th Gen | 8 cores / 16 threads | 16GB | Control Plane | USB Hard Drives (`/srv/media`) |
-| **le-havre** | Talos in Proxmox VM | Intel N150        | 4 cores              | 16GB | Worker        | -                              |
+| **kharkiv**  | Talos               | Intel i5 12th Gen | 8 cores / 16 threads | 32GB | Control Plane | USB Hard Drives (`/srv/media`) |
+| **le-havre** | Talos in Proxmox VM | Intel N150        | 4 cores              | 32GB | Worker        | -                              |
 
 May the lord of ram make it cheaper
