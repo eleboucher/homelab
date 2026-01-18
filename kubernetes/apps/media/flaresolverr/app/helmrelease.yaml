@@ -16,7 +16,7 @@ spec:
         annotations:
           reloader.stakater.com/auto: "true"
         type: deployment
-        replicas: 3
+        replicas: 1
         pod:
           securityContext:
             fsGroup: 1000
