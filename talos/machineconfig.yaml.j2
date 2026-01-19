@@ -77,11 +77,11 @@ machine:
     nodeIP:
       validSubnets:
         - 192.168.1.0/24
-  {% if ENV.IS_CONTROLLER %}
   nodeLabels:
+  {% if ENV.IS_CONTROLLER %}
     node.kubernetes.io/gpu: "true"
-    topology.kubernetes.io/region: main
   {% endif %}
+    topology.kubernetes.io/region: main
   time:
     disabled: false
     servers:
