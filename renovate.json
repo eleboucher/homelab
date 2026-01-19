@@ -7,7 +7,6 @@
     "github>eleboucher/mediaserver//.renovate/customManagers.json5",
     "github>eleboucher/mediaserver//.renovate/groups.json5",
     "github>eleboucher/mediaserver//.renovate/overrides.json5",
-    "github>eleboucher/mediaserver//.renovate/packageRules.json5",
     "github>eleboucher/mediaserver//.renovate/grafanaDashboard.json5",
     ":label(renovate)",
     ":automergeBranch",
