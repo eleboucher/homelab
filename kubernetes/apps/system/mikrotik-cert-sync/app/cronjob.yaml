@@ -5,7 +5,7 @@ metadata:
   name: mikrotik-cert-sync
   namespace: system
 spec:
-  schedule: "0 3 * * 0"
+  schedule: "0 3 * * *"
   concurrencyPolicy: Forbid
   successfulJobsHistoryLimit: 3
   failedJobsHistoryLimit: 3

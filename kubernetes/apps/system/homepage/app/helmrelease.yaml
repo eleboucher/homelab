@@ -203,7 +203,7 @@ spec:
                   description: Router Management
                   widget:
                     type: mikrotik
-                    url: http://192.168.1.2
+                    url: https://192.168.1.2
                     username: '{{ "{{" }}HOMEPAGE_VAR_MIKROTIK_USER{{ "}}" }}'
                     password: '{{ "{{" }}HOMEPAGE_VAR_MIKROTIK_PASS{{ "}}" }}'
               - Cloudflared:
