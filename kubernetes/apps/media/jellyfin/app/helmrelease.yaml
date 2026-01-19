@@ -86,7 +86,7 @@ spec:
         type: persistentVolumeClaim
         storageClass: "longhorn"
         accessMode: ReadWriteOnce
-        size: 20Gi
+        size: 50Gi
         globalMounts:
           - path: /config
       data:
@@ -103,6 +103,10 @@ spec:
         type: emptyDir
         globalMounts:
           - path: /cache
+      log:
+        type: emptyDir
+        globalMounts:
+          - path: /config/log
       render-device:
         type: hostPath
         hostPath: /dev/dri/renderD128
