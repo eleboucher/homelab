@@ -13,53 +13,50 @@ spec:
   values:
     controllers:
       flaresolverr:
-        annotations:
-          reloader.stakater.com/auto: "true"
+        enabled: true
         type: deployment
+
         replicas: 1
+
         pod:
           securityContext:
-            fsGroup: 1000
+            runAsUser: &context 1000
+            runAsGroup: *context
+            fsGroup: *context
             fsGroupChangePolicy: "OnRootMismatch"
+          dnsPolicy: ClusterFirst
+
         containers:
           app:
             image:
               repository: ghcr.io/flaresolverr/flaresolverr
-              tag: v3.4.6@sha256:7962759d99d7e125e108e0f5e7f3cdbcd36161776d058d1d9b7153b92ef1af9e
+              tag: v3.4.6
+              pullPolicy: IfNotPresent
             env:
-              - name: LOG_LEVEL
-                value: "info"
-              - name: LOG_FILE
-                value: "none"
-              - name: LOG_HTML
-                value: "false"
-              - name: CAPTCHA_SOLVER
-                value: "none"
-              - name: TZ
-                value: "Europe/London"
+              TZ: "Europe/Paris"
+              LOG_LEVEL: info
+
+            probes:
+              liveness:
+                enabled: false
+
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop:
+                  - ALL
+
             resources:
               requests:
                 cpu: 20m
                 memory: 128Mi
               limits:
-                memory: 500Mi
-            probes:
-              liveness: &probes
-                enabled: true
-                custom: true
-                spec:
-                  httpGet:
-                    path: /
-                    port: 8191
-                  initialDelaySeconds: 0
-                  periodSeconds: 10
-                  timeoutSeconds: 1
-                  failureThreshold: 3
-              readiness: *probes
+                memory: 600Mi
+
     service:
       app:
+        primary: true
         controller: flaresolverr
         ports:
           http:
             port: 8191
-            protocol: TCP
