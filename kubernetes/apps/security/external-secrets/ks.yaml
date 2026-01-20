@@ -4,13 +4,12 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: external-secrets-cert
-  namespace: flux-system
 spec:
   interval: 1h
   path: ./kubernetes/apps/security/external-secrets/cert
   dependsOn:
     - name: cert-manager
-      namespace: flux-system
+      namespace: cert-manager
   prune: true
   sourceRef:
     kind: GitRepository
@@ -24,13 +23,11 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: external-secrets
-  namespace: flux-system
 spec:
   interval: 1h
   path: ./kubernetes/apps/security/external-secrets/app
   dependsOn:
     - name: external-secrets-cert
-      namespace: flux-system
   prune: true
   sourceRef:
     kind: GitRepository
@@ -44,7 +41,6 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: external-secrets-store
-  namespace: flux-system
 spec:
   interval: 1h
   path: ./kubernetes/apps/security/external-secrets/store
