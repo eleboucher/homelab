@@ -28,7 +28,7 @@ spec:
           app:
             image:
               repository: ghcr.io/autobrr/qui
-              tag: develop@sha256:decdb7b40b5a596f98825bdda54e50167ed3b98afca971be6bc90c5126b7250f
+              tag: develop@sha256:5ced945a67342f1c76c1054d20681369d4ea1284828b3522bd72b7979a7f9a34
             env:
               - name: TZ
                 value: "Europe/Paris"
