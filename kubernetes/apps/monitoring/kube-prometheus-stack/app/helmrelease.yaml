@@ -38,6 +38,8 @@ spec:
       service:
         selector:
           component: kube-apiserver
+        port: 2381
+        targetPort: 2381
     kubeProxy:
       enabled: false
 
