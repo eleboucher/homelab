@@ -33,6 +33,10 @@ metrics:
     query: sum(kube_pod_status_phase{phase="Running"})
     title: Pods
 
+  - name: gh_contributions_last_year
+    query: avg (gh_contributions_last_year)
+    title: GH Contributions (1y)
+
   - name: cluster_latency_over_7d
     query: histogram_quantile(0.99, sum(rate(envoy_cluster_upstream_rq_time_bucket[7d])) by (le))
     title: Envoy Latency
