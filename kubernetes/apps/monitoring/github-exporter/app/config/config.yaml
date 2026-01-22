@@ -23,6 +23,6 @@ requests:
     body: |
       { "query": "query { user(login: \"{{ .GITHUB_USER }}\") { contributionsCollection { contributionCalendar { totalContributions } } } }" }
     metrics:
-      - name: gh_contributions_last_year
+      - name: gh_contributions_year
         path: "data.user.contributionsCollection.contributionCalendar.totalContributions"
         help: "Total contributions in the last year "
