@@ -22,7 +22,7 @@ spec:
           app:
             image:
               repository: ghcr.io/eleboucher/github-exporter
-              tag: latest
+              tag: sha-42621d2
               pullPolicy: Always
             env:
               GITHUB_USER: "eleboucher"

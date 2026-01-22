@@ -32,6 +32,7 @@ requests:
       - name: github_last_push_timestamp_seconds
         path: '#(type=="PushEvent").created_at'
         help: "Timestamp of the last push event"
+        value_type: "date"
 
       - name: github_last_push_info
         path: '#(type=="PushEvent").id'
