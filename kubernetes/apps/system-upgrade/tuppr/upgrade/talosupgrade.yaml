@@ -10,8 +10,3 @@ spec:
     version: v1.12.2
   policy:
     rebootMode: powercycle
-  healthChecks:
-    - apiVersion: v1
-      kind: Node
-      expr: status.conditions.exists(c, c.type == "Ready" && c.status == "True")
-      timeout: 10m
