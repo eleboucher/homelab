@@ -51,7 +51,7 @@ spec:
                   httpGet:
                     path: /
                     port: 5690
-                  initialDelaySeconds: 0
+                  initialDelaySeconds: 20
                   periodSeconds: 10
                   timeoutSeconds: 1
                   failureThreshold: 3
