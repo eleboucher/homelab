@@ -20,8 +20,7 @@ spec:
           app:
             image:
               repository: ghcr.io/eleboucher/github-exporter
-              tag: sha-a57c968
-              pullPolicy: Always
+              tag: 0.0.5
             env:
               GITHUB_USER: "eleboucher"
               GITHUB_TOKEN:
@@ -29,6 +28,7 @@ spec:
                   secretKeyRef:
                     name: ghexp-credentials
                     key: GITHUB_TOKEN
+              LOG_LEVEL: "debug"
             resources:
               requests:
                 cpu: 20m
@@ -59,6 +59,7 @@ spec:
       app:
         endpoints:
           - port: http
+            interval: 1m
 
     persistence:
       config:

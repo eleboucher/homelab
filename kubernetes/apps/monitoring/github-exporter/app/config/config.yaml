@@ -1,6 +1,4 @@
 ---
-scrape_interval: "30s"
-
 requests:
   - api_path: "/users/{{ .GITHUB_USER }}"
     metrics:
