@@ -14,15 +14,13 @@ spec:
     controllers:
       github-exporter:
         type: statefulset
-
         annotations:
           reloader.stakater.com/auto: "true"
-
         containers:
           app:
             image:
               repository: ghcr.io/eleboucher/github-exporter
-              tag: 0.0.4
+              tag: sha-a57c968
               pullPolicy: Always
             env:
               GITHUB_USER: "eleboucher"
