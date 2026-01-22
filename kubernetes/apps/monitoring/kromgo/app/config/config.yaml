@@ -33,13 +33,13 @@ metrics:
     query: sum(kube_pod_status_phase{phase="Running"})
     title: Pods
 
-  - name: gh_last_push_repo
+  - name: github_last_push_info
     query: label_replace(github_last_push_info, "short_repo", "$1", "repo", ".+/(.+)")
     label: short_repo
     title: Last Push
 
-  - name: gh_last_push_time
-    query: github_last_push_timestamp
+  - name: github_last_push_timestamp
+    query: github_last_push_info
     title: Last Push Age
 
   - name: gh_contributions_year
