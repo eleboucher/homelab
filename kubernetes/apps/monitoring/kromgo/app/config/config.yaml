@@ -33,6 +33,21 @@ metrics:
     query: sum(kube_pod_status_phase{phase="Running"})
     title: Pods
 
+  - name: cluster_latency_over_7d
+    query: histogram_quantile(0.99, sum(rate(envoy_cluster_upstream_rq_time_bucket[7d])) by (le))
+    title: Envoy Latency
+    suffix: "s"
+    colors:
+      - color: "green"
+        min: 0
+        max: 0.3
+      - color: "orange"
+        min: 0.31
+        max: 0.7
+      - color: "red"
+        min: 0.71
+        max: 9999
+
   - name: cluster_cpu_usage
     query: round(avg(instance:node_cpu_utilisation:rate5m) * 100, 0.1)
     title: CPU
