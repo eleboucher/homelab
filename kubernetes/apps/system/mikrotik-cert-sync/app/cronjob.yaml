@@ -53,7 +53,9 @@ spec:
                     /certificate remove [find where name~"router"]
                     /certificate import file-name=router.crt passphrase=""
                     /certificate import file-name=router.key passphrase=""
+                    :delay 1s
                     /ip service set www-ssl certificate=router.crt_0
+                    /ip service set api-ssl certificate=router.crt_0
                   '
                   echo "Certificate synced to Mikrotik"
               volumeMounts:
