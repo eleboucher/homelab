@@ -39,19 +39,9 @@ metrics:
     title: Last Push
 
   - name: gh_last_push_time
-    query: round((time() - github_last_push_timestamp_seconds), 0.1)
-    title: Ago
-    suffix: "h"
-    colors:
-      - color: "green"
-        min: 0
-        max: 24 # Green if < 24 hours
-      - color: "orange"
-        min: 24.1
-        max: 168 # Orange if < 1 week
-      - color: "red"
-        min: 168.1
-        max: 9999 # Red if older
+    query: github_last_push_timestamp
+    title: Last Push Age
+
   - name: gh_contributions_year
     query: avg (gh_contributions_year)
     title: GH Contributions (1y)
@@ -63,12 +53,12 @@ metrics:
     colors:
       - color: "green"
         min: 0
-        max: 0.3
+        max: 300
       - color: "orange"
-        min: 0.31
-        max: 0.7
+        min: 301
+        max: 700
       - color: "red"
-        min: 0.71
+        min: 701
         max: 9999
 
   - name: cluster_cpu_usage

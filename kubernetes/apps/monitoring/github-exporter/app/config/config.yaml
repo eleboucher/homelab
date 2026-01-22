@@ -29,14 +29,10 @@ requests:
 
   - api_path: "/users/{{ .GITHUB_USER }}/events/public"
     metrics:
-      - name: github_last_push_timestamp_seconds
+      - name: github_last_push_info
         path: '#(type=="PushEvent").created_at'
         help: "Timestamp of the last push event"
         value_type: "date"
-
-      - name: github_last_push_info
-        path: '#(type=="PushEvent").id'
-        help: "Information about the last push event"
         labels:
           repo: '#(type=="PushEvent").repo.name'
           type: '#(type=="PushEvent").type'
