@@ -20,7 +20,7 @@ spec:
           app:
             image:
               repository: ghcr.io/eleboucher/github-exporter
-              tag: 0.0.5
+              tag: 0.0.6
             env:
               GITHUB_USER: "eleboucher"
               GITHUB_TOKEN:
