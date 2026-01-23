@@ -10,3 +10,4 @@ resources:
   - bentopdf/ks.yaml
   - mealie/ks.yaml
   - hypermind/ks.yaml
+  - atuin/ks.yaml

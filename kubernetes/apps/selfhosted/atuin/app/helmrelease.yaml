@@ -1,0 +1,85 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: atuin
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: atuin
+  interval: 30m
+  values:
+    controllers:
+      atuin:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        pod:
+          securityContext:
+            fsGroup: 2000
+            fsGroupChangePolicy: OnRootMismatch
+            runAsGroup: 2000
+            runAsNonRoot: true
+            runAsUser: 2000
+        containers:
+          app:
+            image:
+              repository: ghcr.io/atuinsh/atuin
+              tag: v18.11.0
+            command:
+              - atuin
+            args:
+              - server
+              - start
+            env:
+              ATUIN_DB_URI: sqlite:///config/atuin.db
+              ATUIN_HOST: 0.0.0.0
+              ATUIN_PORT: &port 8888
+              ATUIN_OPEN_REGISTRATION: true
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /
+                    port: *port
+                  initialDelaySeconds: 0
+                  periodSeconds: 10
+                  timeoutSeconds: 1
+                  failureThreshold: 3
+              readiness: *probes
+            resources:
+              requests:
+                cpu: 10m
+                memory: 128Mi
+              limits:
+                memory: 256Mi
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - ALL
+    service:
+      app:
+        ports:
+          http:
+            port: *port
+    persistence:
+      config:
+        enabled: true
+        type: persistentVolumeClaim
+        storageClass: "longhorn"
+        accessMode: ReadWriteOnce
+        size: 5Gi
+        globalMounts:
+          - path: /config
+
+    route:
+      app:
+        hostnames:
+          - atuin.erwanleboucher.dev
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
