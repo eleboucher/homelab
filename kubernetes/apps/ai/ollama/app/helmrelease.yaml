@@ -22,7 +22,7 @@ spec:
 
             image:
               repository: ollama/ollama
-              tag: 0.14.3@sha256:a7471e7e503643d06767053fa4c825eaa7cafb1586f7256ce29080bcbf57bf5c
+              tag: 0.15.0@sha256:4e158ee038728a7ec7f2e57fadc8a870f4c30cf7cc336b0d3424514543db1528
             env:
               - name: OLLAMA_KEEP_ALIVE
                 value: "0"
