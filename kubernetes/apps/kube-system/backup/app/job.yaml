@@ -26,9 +26,8 @@ spec:
               repository: rclone/rclone
               tag: latest@sha256:0eb18825ac9732c21c11d654007170572bbd495352bb6dbb624f18e4f462c496
             env:
-              # Point to the secret mounted below
               - name: RCLONE_CONFIG
-                value: "/config/rclone.conf"
+                value: "/tmp/rclone.conf"
             command:
               - "/bin/sh"
               - "-c"
@@ -36,32 +35,41 @@ spec:
               - |
                 echo "🚀 Starting Offsite Sync to Google Drive..."
 
+                cp /config-ro/rclone.conf /tmp/rclone.conf
+                chmod 600 /tmp/rclone.conf
+
                 rclone sync /data/backups/longhorn-backups gdrive:longhorn-backups \
-                  --transfers 32 \
-                  --checkers 32 \
+                  --transfers 16 \
+                  --checkers 16 \
                   --fast-list \
-                  --delete-during
+                  --delete-after \
+                  --log-level INFO \
+                  --stats 1m \
+                  --retries 3
 
                 rclone sync /data/backups/homeassistant gdrive:homeassistant-backups \
-                  --transfers 32 \
-                  --checkers 32 \
+                  --transfers 16 \
+                  --checkers 16 \
                   --fast-list \
-                  --delete-during
+                  --delete-after \
+                  --log-level INFO \
+                  --stats 1m \
+                  --retries 3
                 echo "✅ Offsite Sync Complete!"
 
             resources:
               requests:
-                cpu: 100m
-                memory: 128Mi
+                cpu: 200m
+                memory: 256Mi
               limits:
-                memory: 1Gi
+                memory: 2Gi
 
     persistence:
       config:
         type: secret
         name: google-drive-backup
         globalMounts:
-          - path: /config
+          - path: /config-ro
 
       data:
         enabled: true
