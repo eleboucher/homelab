@@ -16,4 +16,5 @@ resources:
   - wizarr/ks.yaml
   - profilarr/ks.yaml
   - streamystats/ks.yaml
+  - lingarr/ks.yaml
   - namespace.yaml
