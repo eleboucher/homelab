@@ -24,7 +24,7 @@ spec:
         containers:
           app:
             image:
-              repository: ghcr.io/dictionarry-hub/profilarr
+              repository: santiagosayshey/profilarr
               tag: v1.1.4
             env:
               - name: TZ
