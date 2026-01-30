@@ -25,7 +25,7 @@ spec:
           app:
             image:
               repository: santiagosayshey/profilarr
-              tag: beta@sha256:864486f403195b2ae3277335ac46457db587de983c5a1814c93bb384a0d3252c
+              tag: beta
             env:
               - name: TZ
                 value: "Europe/Paris"

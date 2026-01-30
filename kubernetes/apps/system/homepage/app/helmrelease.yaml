@@ -21,7 +21,7 @@ spec:
           app:
             image:
               repository: ghcr.io/gethomepage/homepage
-              tag: latest@sha256:7fa7b07a26bd8d90a44bb975c6455b10d8dee467ce674b040750ffb4a0f486d6
+              tag: latest
             env:
               - name: TZ
                 value: "Europe/Paris"
