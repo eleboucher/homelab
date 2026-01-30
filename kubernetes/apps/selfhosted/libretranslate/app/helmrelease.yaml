@@ -1,0 +1,40 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: libretranslate
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: libretranslate
+  interval: 30m
+  values:
+    controllers:
+      libretranslate:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        containers:
+          app:
+            image:
+              repository: libretranslate/libretranslate
+              tag: v1.8.3
+            env:
+              LT_LOAD_ONLY: "en,uk,fr"
+            resources:
+              requests:
+                cpu: 10m
+                memory: 128Mi
+    service:
+      app:
+        ports:
+          http:
+            port: 5000
+
+    route:
+      app:
+        hostnames:
+          - translate.erwanleboucher.dev
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
