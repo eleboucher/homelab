@@ -24,8 +24,8 @@ spec:
         containers:
           app:
             image:
-              repository: santiagosayshey/profilarr
-              tag: beta
+              repository: ghcr.io/dictionarry-hub/profilarr
+              tag: v1.1.4
             env:
               - name: TZ
                 value: "Europe/Paris"
