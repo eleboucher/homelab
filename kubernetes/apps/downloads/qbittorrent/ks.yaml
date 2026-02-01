@@ -9,6 +9,7 @@ spec:
   components:
     - ../../../../components/nfs-media
     - ../../../../components/volsync
+    - ../../../../components/nfs-scaler
   interval: 1h
   path: ./kubernetes/apps/downloads/qbittorrent/app
   dependsOn:

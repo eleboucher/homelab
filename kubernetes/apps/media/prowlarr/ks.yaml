@@ -9,6 +9,7 @@ metadata:
 spec:
   components:
     - ../../../../components/volsync
+    - ../../../../components/nfs-scaler
   interval: 1h
   path: ./kubernetes/apps/media/prowlarr/app
   dependsOn:

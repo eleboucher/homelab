@@ -10,6 +10,7 @@ spec:
   interval: 1h
   components:
     - ../../../../components/volsync
+    - ../../../../components/nfs-scaler
   path: ./kubernetes/apps/media/jellyseerr/app
   dependsOn:
     - name: envoy-gateway

@@ -12,3 +12,4 @@ resources:
   - homepage/ks.yaml
   - mikrotik-cert-sync/ks.yaml
   - smtp-relay/ks.yaml
+  - keda/ks.yaml
