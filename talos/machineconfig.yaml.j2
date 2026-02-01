@@ -29,7 +29,11 @@ machine:
   files:
     - op: create
       path: /etc/cri/conf.d/20-customization.part
-      content: |
+      content: |-
+        [plugins]
+          [plugins."io.containerd.grpc.v1.cri"]
+            enable_unprivileged_ports = true
+            enable_unprivileged_icmp = true
         [plugins."io.containerd.cri.v1.images"]
           discard_unpacked_layers = false
         [plugins."io.containerd.cri.v1.runtime"]
@@ -41,11 +45,9 @@ machine:
       content: |
         [ NFSMount_Global_Options ]
         nfsvers=4.2
-        nconnect=16
         hard=True
-        timeo=100
-        retrans=5
         noatime=True
+        nconnect=16
   install:
     image: factory.talos.dev/installer/32b42eb82764eef4f5436256f9ba4c9ee067264cc05c907ca510d602114a87df:v1.12.2
     wipe: false
@@ -62,13 +64,6 @@ machine:
       - destination: /var/mnt/longhorn
         type: bind
         source: /var/mnt/longhorn
-        options:
-          - bind
-          - rshared
-          - rw
-      - destination: /var/mnt/media
-        type: bind
-        source: /var/mnt/media
         options:
           - bind
           - rshared

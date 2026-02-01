@@ -20,18 +20,14 @@ machine:
         vlans:
           # VLAN 10 - Main network (Management)
           - vlanId: 10
-            addresses:
-              - 192.168.1.41/24
-            routes:
-              - network: 0.0.0.0/0
-                gateway: 192.168.1.2
+            dhcp: true
             mtu: 1500
           # VLAN 20 - Storage network
           - vlanId: 20
             addresses:
               - 10.20.0.41/24
             mtu: 9000
-    disableSearchDomain: true
+    disableSearchDomain: false
   install:
     diskSelector:
       serial: 50026B73842F7F3C
