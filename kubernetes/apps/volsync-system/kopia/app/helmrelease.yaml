@@ -98,7 +98,7 @@ spec:
             subPath: repository.config
       repository:
         type: nfs
-        server: normandie.internal
+        server: 192.168.1.40
         path: /backups/volsync-kopia
         globalMounts:
           - path: /repository

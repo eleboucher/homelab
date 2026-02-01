@@ -7,6 +7,8 @@ metadata:
   name: prowlarr
   namespace: flux-system
 spec:
+  components:
+    - ../../../../components/volsync
   interval: 1h
   path: ./kubernetes/apps/media/prowlarr/app
   dependsOn:
@@ -14,10 +16,14 @@ spec:
       namespace: network
     - name: longhorn
       namespace: kube-system
+    - name: volsync
+      namespace: volsync-system
   postBuild:
     substitute:
       APP: prowlarr
       APP_NAMESPACE: media
+      VOLSYNC_CAPACITY: 5Gi
+      VOLSYNC_SCHEDULE: "10 1-23/2 * * *"
   prune: true
   sourceRef:
     kind: GitRepository

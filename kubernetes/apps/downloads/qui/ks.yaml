@@ -9,6 +9,7 @@ metadata:
 spec:
   components:
     - ../../../../components/nfs-media
+    - ../../../../components/volsync
   interval: 1h
   path: ./kubernetes/apps/downloads/qui/app
   dependsOn:
@@ -22,6 +23,8 @@ spec:
     substitute:
       APP: qui
       APP_NAMESPACE: downloads
+      VOLSYNC_CAPACITY: 2Gi
+      VOLSYNC_SCHEDULE: "20 1-23/2 * * *"
   prune: true
   sourceRef:
     kind: GitRepository

@@ -21,7 +21,7 @@ spec:
     - noatime
   csi:
     driver: nfs.csi.k8s.io
-    volumeHandle: normandie.internal#/#
+    volumeHandle: 192.168.1.40#/#
     volumeAttributes:
-      server: "normandie.internal"
+      server: "192.168.1.40"
       share: "/"

@@ -1,4 +1,3 @@
-# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
 ---
 # yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
@@ -7,6 +6,8 @@ metadata:
   name: autobrr
   namespace: flux-system
 spec:
+  components:
+    - ../../../../components/volsync
   interval: 1h
   path: ./kubernetes/apps/downloads/autobrr/app
   dependsOn:
@@ -18,6 +19,8 @@ spec:
     substitute:
       APP: autobrr
       APP_NAMESPACE: downloads
+      VOLSYNC_CAPACITY: 2Gi
+      VOLSYNC_SCHEDULE: "40 1-23/2 * * *"
   prune: true
   sourceRef:
     kind: GitRepository

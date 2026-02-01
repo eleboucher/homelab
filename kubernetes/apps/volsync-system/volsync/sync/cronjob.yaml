@@ -1,0 +1,94 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/batch/cronjob_v1.json
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: kopia-sync-gdrive
+spec:
+  schedule: "0 4 * * *" # Daily at 4 AM (after backups complete)
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 1
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      activeDeadlineSeconds: 10800 # 3 hours
+      backoffLimit: 5
+      template:
+        spec:
+          restartPolicy: OnFailure
+          serviceAccountName: default
+          securityContext:
+            fsGroup: 1000
+            runAsNonRoot: true
+            runAsUser: 1000
+          containers:
+            - name: kopia-sync
+              image: ghcr.io/perfectra1n/volsync:0.17.7
+              imagePullPolicy: IfNotPresent
+              command:
+                - /bin/sh
+                - -c
+                - |
+                  set -e -o pipefail
+
+                  # Set cache and log directories to writable location
+                  echo "Setting cache directory: ${KOPIA_CACHE_DIR}"
+                  export KOPIA_CACHE_DIRECTORY="${KOPIA_CACHE_DIR}"
+                  export KOPIA_LOG_DIR="${KOPIA_CACHE_DIR}/logs"
+                  export KOPIA_CHECK_FOR_UPDATES=false
+
+                  echo "Connecting to source Kopia repository: filesystem:///repository"
+                  kopia repository connect filesystem \
+                    --path /repository \
+                    --password "${KOPIA_PASSWORD}"
+
+                  echo "Starting Kopia synchronization to Google Drive: ${RCLONE_REMOTE_PATH}"
+                  kopia repository sync-to rclone \
+                    --remote-path "${RCLONE_REMOTE_PATH}" \
+                    --parallel=4 \
+                    --delete \
+                    --no-progress
+
+                  echo "Disconnecting from Kopia repository"
+                  kopia repository disconnect
+
+                  echo "✅ Synchronization to Google Drive completed successfully"
+              env:
+                - name: KOPIA_CHECK_FOR_UPDATES
+                  value: "false"
+                - name: KOPIA_CACHE_DIR
+                  value: /tmp/cache
+                - name: HOME
+                  value: /tmp
+                - name: RCLONE_REMOTE_PATH
+                  value: "gdrive:volsync-kopia"
+              envFrom:
+                - secretRef:
+                    name: kopia-sync-secret
+              securityContext:
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop:
+                    - ALL
+                privileged: false
+                readOnlyRootFilesystem: true
+                runAsNonRoot: true
+              volumeMounts:
+                - name: repository
+                  mountPath: /repository
+                  readOnly: true
+                - name: tmp
+                  mountPath: /tmp
+                - name: rclone-config
+                  mountPath: /config/rclone
+                  readOnly: true
+          volumes:
+            - name: repository
+              nfs:
+                server: 192.168.1.40
+                path: /backups/volsync-kopia
+            - name: tmp
+              emptyDir: {}
+            - name: rclone-config
+              secret:
+                secretName: google-drive-backup

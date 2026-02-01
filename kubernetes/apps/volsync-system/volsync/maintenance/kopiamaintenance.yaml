@@ -1,0 +1,12 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/volsync.backube/kopiamaintenance_v1alpha1.json
+apiVersion: volsync.backube/v1alpha1
+kind: KopiaMaintenance
+metadata:
+  name: kopia-daily-maintenance
+spec:
+  enabled: true
+  repository:
+    repository: volsync-maintenance-secret
+  trigger:
+    schedule: "30 3 * * *"

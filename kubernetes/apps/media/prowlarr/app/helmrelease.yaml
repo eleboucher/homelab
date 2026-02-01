@@ -73,11 +73,8 @@ spec:
           - prowlarr.erwanleboucher.dev
     persistence:
       config:
-        enabled: true
         type: persistentVolumeClaim
-        storageClass: "longhorn"
-        accessMode: ReadWriteOnce
-        size: 2Gi
+        existingClaim: "{{ .Release.Name }}"
         globalMounts:
           - path: /config
       tmp:
