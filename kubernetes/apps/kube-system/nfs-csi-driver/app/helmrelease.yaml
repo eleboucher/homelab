@@ -17,7 +17,7 @@ spec:
       create: true
       name: nfs-media
       parameters:
-        server: 192.168.1.40
+        server: normandie.internal
         share: /
       allowVolumeExpansion: true
       mountOptions:

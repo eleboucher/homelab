@@ -1,0 +1,175 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/admissionregistration.k8s.io/mutatingadmissionpolicybinding_v1beta1.json
+apiVersion: admissionregistration.k8s.io/v1beta1
+kind: MutatingAdmissionPolicyBinding
+metadata:
+  name: volsync-mover-jitter
+spec:
+  policyName: volsync-mover-jitter
+---
+# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/admissionregistration.k8s.io/mutatingadmissionpolicy_v1beta1.json
+apiVersion: admissionregistration.k8s.io/v1beta1
+kind: MutatingAdmissionPolicy
+metadata:
+  name: volsync-mover-jitter
+spec:
+  failurePolicy: Fail
+  matchConditions:
+    - name: has-volsync-job-name-prefix
+      expression: >-
+        object.metadata.name.startsWith("volsync-src-")
+    - name: has-volsync-created-by-labels
+      expression: >-
+        object.metadata.?labels["app.kubernetes.io/created-by"].orValue("") == "volsync"
+  matchConstraints:
+    resourceRules:
+      - apiGroups:
+          - batch
+        apiVersions:
+          - v1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - jobs
+  mutations:
+    - patchType: JSONPatch
+      jsonPatch:
+        expression: >-
+          [
+            JSONPatch{
+              op: "add", path: "/spec/template/spec/initContainers",
+              value: []
+            },
+            JSONPatch{
+              op: "add", path: "/spec/template/spec/initContainers/-",
+              value: Object.spec.template.spec.initContainers{
+                name: "jitter",
+                image: "ghcr.io/home-operations/busybox:1.37.0@sha256:026ed7273270ec08f6902b4ae8334c23b473e5394bec3bbbdbfe580c710d50bc",
+                imagePullPolicy: "IfNotPresent",
+                command: ["sh", "-c", "sleep $(shuf -i 0-30 -n 1)"]
+              }
+            }
+          ]
+  reinvocationPolicy: IfNeeded
+---
+# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/admissionregistration.k8s.io/mutatingadmissionpolicybinding_v1beta1.json
+apiVersion: admissionregistration.k8s.io/v1beta1
+kind: MutatingAdmissionPolicyBinding
+metadata:
+  name: volsync-mover-nfs
+spec:
+  policyName: volsync-mover-nfs
+---
+# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/admissionregistration.k8s.io/mutatingadmissionpolicy_v1beta1.json
+apiVersion: admissionregistration.k8s.io/v1beta1
+kind: MutatingAdmissionPolicy
+metadata:
+  name: volsync-mover-nfs
+spec:
+  failurePolicy: Fail
+  matchConditions:
+    - name: has-volsync-job-name-prefix
+      expression: >-
+        object.metadata.name.startsWith("volsync-")
+    - name: has-volsync-created-by-labels
+      expression: >-
+        object.metadata.?labels["app.kubernetes.io/created-by"].orValue("") == "volsync"
+    - name: repository-volume-does-not-exist
+      expression: >-
+        !has(object.spec.template.spec.volumes) ||
+        !object.spec.template.spec.volumes.exists(item, item.name == "repository")
+  matchConstraints:
+    resourceRules:
+      - apiGroups:
+          - batch
+        apiVersions:
+          - v1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - jobs
+  mutations:
+    - patchType: JSONPatch
+      jsonPatch:
+        expression: >-
+          [
+            JSONPatch{
+              op: "add", path: "/spec/template/spec/containers/0/volumeMounts/-",
+              value: Object.spec.template.spec.containers.volumeMounts{
+                name: "repository",
+                mountPath: "/repository"
+              }
+            },
+            JSONPatch{
+              op: "add", path: "/spec/template/spec/volumes/-",
+              value: Object.spec.template.spec.volumes{
+                name: "repository",
+                nfs: Object.spec.template.spec.volumes.nfs{
+                  server: "normandie.internal",
+                  path: "/backups/volsync-kopia"
+                }
+              }
+            }
+          ]
+  reinvocationPolicy: IfNeeded
+---
+# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/admissionregistration.k8s.io/mutatingadmissionpolicybinding_v1beta1.json
+apiVersion: admissionregistration.k8s.io/v1beta1
+kind: MutatingAdmissionPolicyBinding
+metadata:
+  name: kopia-maintenance-nfs
+spec:
+  policyName: kopia-maintenance-nfs
+---
+# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/admissionregistration.k8s.io/mutatingadmissionpolicy_v1beta1.json
+apiVersion: admissionregistration.k8s.io/v1beta1
+kind: MutatingAdmissionPolicy
+metadata:
+  name: kopia-maintenance-nfs
+spec:
+  failurePolicy: Fail
+  matchConditions:
+    - name: has-kopia-maint-job-name-prefix
+      expression: >-
+        object.metadata.name.startsWith("kopia-maint-")
+    - name: repository-volume-does-not-exist
+      expression: >-
+        !has(object.spec.template.spec.volumes) ||
+        !object.spec.template.spec.volumes.exists(item, item.name == "repository")
+  matchConstraints:
+    resourceRules:
+      - apiGroups:
+          - batch
+        apiVersions:
+          - v1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - jobs
+  mutations:
+    - patchType: JSONPatch
+      jsonPatch:
+        expression: >-
+          [
+            JSONPatch{
+              op: "add", path: "/spec/template/spec/volumes/-",
+              value: Object.spec.template.spec.volumes{
+                name: "repository",
+                nfs: Object.spec.template.spec.volumes.nfs{
+                  server: "normandie.internal",
+                  path: "/backups/volsync-kopia"
+                }
+              }
+            },
+            JSONPatch{
+              op: "add", path: "/spec/template/spec/containers/0/volumeMounts/-",
+              value: Object.spec.template.spec.containers.volumeMounts{
+                name: "repository",
+                mountPath: "/repository"
+              }
+            }
+          ]
+  reinvocationPolicy: IfNeeded
