@@ -43,11 +43,22 @@ spec:
                     --password "${KOPIA_PASSWORD}"
 
                   echo "Starting Kopia synchronization to Google Drive: ${RCLONE_REMOTE_PATH}"
-                  kopia repository sync-to rclone \
+
+                  # Try sync first, if it fails due to missing/incompatible repo, initialize
+                  if ! kopia repository sync-to rclone \
                     --remote-path "${RCLONE_REMOTE_PATH}" \
                     --parallel=4 \
                     --delete \
-                    --no-progress
+                    --no-progress 2>&1; then
+
+                    echo "Initial sync failed, trying with --initialize to create destination repository"
+                    kopia repository sync-to rclone \
+                      --remote-path "${RCLONE_REMOTE_PATH}" \
+                      --initialize \
+                      --parallel=4 \
+                      --delete \
+                      --no-progress
+                  fi
 
                   echo "Disconnecting from Kopia repository"
                   kopia repository disconnect
