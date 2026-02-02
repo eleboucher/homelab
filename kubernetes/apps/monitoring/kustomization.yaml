@@ -20,3 +20,4 @@ resources:
   - kromgo/ks.yaml
   - github-exporter/ks.yaml
   - blackbox-exporter/ks.yaml
+  - silence-operator/ks.yaml
