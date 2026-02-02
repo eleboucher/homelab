@@ -1,4 +1,3 @@
-# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
 ---
 # yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
@@ -31,6 +30,12 @@ spec:
         ref: "refs/heads/main"
         path: "kubernetes/flux/cluster"
         pullSecret: "flux-system"
+      resources:
+        limits:
+          memory: 1Gi
+        requests:
+          cpu: 100m
+          memory: 64Mi
       kustomize:
         patches:
           - # Increase the number of workers
@@ -57,6 +62,7 @@ spec:
                       - name: manager
                         resources:
                           limits:
+                            cpu: null
                             memory: 2Gi
             target:
               kind: Deployment
