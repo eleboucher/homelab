@@ -11,9 +11,12 @@ spec:
     kind: OCIRepository
     name: external-secrets
   values:
-    replicaCount: 2
     leaderElect: true
     webhook:
       replicaCount: 2
+    grafanaDashboard:
+      enabled: true
+    serviceMonitor:
+      enabled: true
     bitwarden-sdk-server:
       enabled: true

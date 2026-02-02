@@ -78,6 +78,7 @@ spec:
           parentRefs:
             - name: envoy-internal
               namespace: network
+
       prometheusSpec:
         externalUrl: https://prometheus.erwanleboucher.dev
         podMonitorSelectorNilUsesHelmValues: false
@@ -99,8 +100,6 @@ spec:
               resources:
                 requests:
                   storage: 50Gi
-    prometheus-node-exporter:
-      fullnameOverride: node-exporter
     kube-state-metrics:
       fullnameOverride: kube-state-metrics
     grafana:
