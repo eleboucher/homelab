@@ -69,12 +69,10 @@ spec:
     persistence:
       config:
         enabled: true
-        type: persistentVolumeClaim
-        storageClass: "longhorn"
-        accessMode: ReadWriteOnce
-        size: 5Gi
+        existingClaim: "{{ .Release.Name }}"
         globalMounts:
           - path: /config
+        type: persistentVolumeClaim
 
     route:
       app:

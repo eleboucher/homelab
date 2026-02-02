@@ -7,15 +7,19 @@ metadata:
   name: beszel
   namespace: flux-system
 spec:
-  interval: 1h
-  path: ./kubernetes/apps/monitoring/beszel/app
+  components:
+    - ../../../../components/volsync
   dependsOn:
     - name: longhorn
       namespace: kube-system
+  interval: 1h
+  path: ./kubernetes/apps/monitoring/beszel/app
   postBuild:
     substitute:
       APP: beszel
       APP_NAMESPACE: monitoring
+      VOLSYNC_CAPACITY: 2Gi
+      VOLSYNC_SCHEDULE: "0 1-23/2 * * *"
   prune: true
   sourceRef:
     kind: GitRepository

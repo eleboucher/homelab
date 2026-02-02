@@ -5,10 +5,9 @@ kind: Kustomization
 metadata:
   name: &app mealie
 spec:
-  interval: 1h
   components:
     - ../../../../components/cnpg
-  path: ./kubernetes/apps/selfhosted/mealie/app
+    - ../../../../components/volsync
   dependsOn:
     - name: envoy-gateway
       namespace: network
@@ -16,10 +15,15 @@ spec:
       namespace: kube-system
     - name: cloudnative-pg
       namespace: database
-  prune: true
+  interval: 1h
+  path: ./kubernetes/apps/selfhosted/mealie/app
   postBuild:
     substitute:
       APP: *app
+      APP_NAMESPACE: selfhosted
+      VOLSYNC_CAPACITY: 2Gi
+      VOLSYNC_SCHEDULE: "20 1-23/2 * * *"
+  prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
