@@ -25,7 +25,7 @@ spec:
     substitute:
       APP: jellyfin
       APP_NAMESPACE: media
-      VOLSYNC_CAPACITY: 10Gi
+      VOLSYNC_CAPACITY: 50Gi
       VOLSYNC_SCHEDULE: "50 1-23/2 * * *"
   prune: true
   sourceRef:
