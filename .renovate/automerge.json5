@@ -1,0 +1,54 @@
+{
+  $schema: "https://docs.renovatebot.com/renovate-schema.json",
+  packageRules: [
+    {
+      description: "Auto merge container digests",
+      matchDatasources: [
+        "docker"
+      ],
+      automerge: true,
+      matchUpdateTypes: [
+        "digest"
+      ],
+      matchPackagePrefixes: [
+        "ghcr.io/home-operations",
+        "ghcr.io/bjw-s-labs",
+      ],
+      ignoreTests: false,
+    },
+    {
+      description: "Auto merge minors and patches",
+      matchDatasources: [
+        "docker"
+      ],
+      automerge: true,
+      automergeType: "pr",
+      matchUpdateTypes: [
+        "minor",
+        "patch"
+      ],
+      matchPackageNames: [
+        "/kube-prometheus-stack/",
+        "ghcr.io/bjw-s-labs/wrangler",
+      ],
+      ignoreTests: false,
+    },
+    {
+      description: "Auto merge minors and patches after minimumReleaseAge",
+      matchDatasources: [
+        "docker"
+      ],
+      automerge: true,
+      automergeType: "pr",
+      matchUpdateTypes: [
+        "minor",
+        "patch"
+      ],
+      matchPackageNames: [
+        "ghcr.io/renovatebot/renovate",
+      ],
+      "minimumReleaseAge": "3 days",
+      ignoreTests: false,
+    },
+  ],
+}

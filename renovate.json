@@ -4,6 +4,7 @@
     "config:recommended",
     "docker:enableMajor",
     ":dependencyDashboard",
+    "github>eleboucher/mediaserver//.renovate/automerge.json5",
     "github>eleboucher/mediaserver//.renovate/customManagers.json5",
     "github>eleboucher/mediaserver//.renovate/groups.json5",
     "github>eleboucher/mediaserver//.renovate/overrides.json5",
