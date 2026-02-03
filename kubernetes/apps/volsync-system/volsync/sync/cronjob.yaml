@@ -44,17 +44,22 @@ spec:
 
                   echo "Starting Kopia synchronization to Google Drive: ${RCLONE_REMOTE_PATH}"
 
-                  # Try sync first, if it fails due to missing/incompatible repo, initialize
+                  # Try sync first
                   if ! kopia repository sync-to rclone \
                     --remote-path "${RCLONE_REMOTE_PATH}" \
                     --parallel=4 \
                     --delete \
                     --no-progress 2>&1; then
 
-                    echo "Initial sync failed, trying with --initialize to create destination repository"
+                    echo "❌ Sync failed - likely incompatible destination repository"
+                    echo "🧹 Cleaning up old destination repository in Google Drive"
+
+                    # Delete old incompatible repository
+                    rclone purge "${RCLONE_REMOTE_PATH}" || echo "Destination was already empty or doesn't exist"
+
+                    echo "♻️  Retrying sync to fresh destination"
                     kopia repository sync-to rclone \
                       --remote-path "${RCLONE_REMOTE_PATH}" \
-                      --initialize \
                       --parallel=4 \
                       --delete \
                       --no-progress
