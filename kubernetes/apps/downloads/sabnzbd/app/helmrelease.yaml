@@ -84,7 +84,10 @@ spec:
         existingClaim: shared-media
         globalMounts:
           - path: /data
-      incomplete:
+      tmpfs:
         type: emptyDir
         globalMounts:
+          - path: /config/logs
+          - path: /tmp
+          - path: /scripts
           - path: /incomplete-downloads
