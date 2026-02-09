@@ -51,9 +51,9 @@ spec:
     l2announcements:
       enabled: false
     loadBalancer:
+      acceleration: best-effort
       algorithm: maglev
       mode: dsr
-      serviceTopology: true
     localRedirectPolicies:
       enabled: true
     operator:
@@ -94,6 +94,8 @@ spec:
           - NET_ADMIN
           - SYS_ADMIN
           - SYS_RESOURCE
+          - PERFMON
+          - BPF
     socketLB:
       enabled: true
       hostNamespaceOnly: true
