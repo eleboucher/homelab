@@ -6,7 +6,6 @@ metadata:
   name: agentgateway-internal
   annotations:
     external-dns.alpha.kubernetes.io/target: &loadBalancerIP "192.168.69.10"
-    cert-manager.io/cluster-issuer: letsencrypt-production
     gatus.home-operations.com/endpoint: |-
       group: internal
       guarded: true
@@ -21,7 +20,6 @@ spec:
   infrastructure:
     annotations:
       external-dns.alpha.kubernetes.io/target: *loadBalancerIP
-      cert-manager.io/cluster-issuer: letsencrypt-production
       lbipam.cilium.io/ips: *loadBalancerIP
     parametersRef:
       name: agentgateway-params
