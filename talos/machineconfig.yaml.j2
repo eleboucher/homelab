@@ -49,7 +49,7 @@ machine:
         noatime=True
         nconnect=16
   install:
-    image: factory.talos.dev/installer/32b42eb82764eef4f5436256f9ba4c9ee067264cc05c907ca510d602114a87df:v1.12.3
+    image: factory.talos.dev/installer/b55fbf4fdc6aec0c43e108cc8bde16d5533fbdeec3cb114ff3913ed9e8d019ff:v1.12.3
     wipe: false
     grubUseUKICmdline: true
   kernel:
@@ -191,17 +191,6 @@ cluster:
   serviceAccount:
     key: {{ ENV.TALOS_CLUSTER_SERVICEACCOUNT_KEY }}
   {% endif %}
----
-apiVersion: v1alpha1
-kind: ExtensionServiceConfig
-name: tailscale
-environment:
-  - TS_AUTHKEY={{ ENV.TAILSCALE_AUTHKEY }}
-  {% if ENV.IS_CONTROLLER %}
-  - TS_ROUTES=192.168.1.0/24,10.42.0.0/16,10.96.0.0/12,192.168.69.0/24
-  - TS_EXTRA_ARGS=--advertise-exit-node
-  {% endif %}
-
 ---
 apiVersion: v1alpha1
 kind: WatchdogTimerConfig
