@@ -47,18 +47,18 @@ metrics:
     title: GH Contributions (1y)
 
   - name: cluster_latency_over_7d
-    query: histogram_quantile(0.99, sum(rate(agentgateway_request_duration_seconds_bucket[7d])) by (le))
+    query: round(histogram_quantile(0.99, sum(rate(agentgateway_request_duration_seconds_bucket[7d])) by (le)) * 1000)
     title: Gateway Latency
-    suffix: "s"
+    suffix: "ms"
     colors:
       - color: "green"
         min: 0
-        max: 0.3
+        max: 300
       - color: "orange"
-        min: 0.3
-        max: 0.7
+        min: 301
+        max: 700
       - color: "red"
-        min: 0.7
+        min: 701
         max: 9999
 
   - name: cluster_cpu_usage
