@@ -9,8 +9,3 @@ spec:
   kubernetes:
     # renovate: datasource=docker depName=ghcr.io/siderolabs/kubelet
     version: v1.35.1
-  healthChecks:
-    - apiVersion: v1
-      kind: Node
-      expr: status.conditions.exists(c, c.type == "Ready" && c.status == "True")
-      timeout: 10m
