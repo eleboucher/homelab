@@ -25,7 +25,7 @@ spec:
           app:
             image:
               repository: seerr/seerr
-              tag: develop
+              tag: v3.0.1
             env:
               - name: PUID
                 value: "1000"
