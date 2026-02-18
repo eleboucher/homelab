@@ -5,11 +5,12 @@ kind: GrafanaDashboard
 metadata:
   name: kgateway
 spec:
+  url: https://kgateway.dev/docs/envoy/latest/observability/kgateway.json
+  datasources:
+    - datasourceName: prometheus
+      inputName: DS_PROMETHEUS
+
   allowCrossNamespaceImport: true
   instanceSelector:
     matchLabels:
       grafana.internal/instance: grafana
-  datasources:
-    - datasourceName: prometheus
-      inputName: DS_PROMETHEUS
-  url: https://grafana.com/api/dashboards/17457/revisions/6/download
