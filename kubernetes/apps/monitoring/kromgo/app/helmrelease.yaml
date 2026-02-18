@@ -98,3 +98,6 @@ spec:
                     - "https://erwanleboucher.dev"
                     - "https://www.erwanleboucher.dev"
                   maxAge: 86400
+            backendRefs:
+              - name: kromgo
+                port: *port
