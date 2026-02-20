@@ -16,7 +16,7 @@ spec:
       APP: cloudflared
     substituteFrom:
       - kind: Secret
-        name: cloudflared-token
+        name: cloudflare-tunnel-id-secret
   prune: true
   sourceRef:
     kind: GitRepository

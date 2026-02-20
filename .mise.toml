@@ -4,7 +4,6 @@ pipx_uvx = true
 [env]
 MINIJINJA_CONFIG_FILE = "{{config_root}}/.minijinja.toml"
 JUST_UNSTABLE = "1"
-LEFTHOOK_OUTPUT = "false"
 
 [tools]
 "uv" = "latest"
@@ -13,3 +12,4 @@ LEFTHOOK_OUTPUT = "false"
 "aqua:google/yamlfmt" = ["latest"]
 "aqua:yannh/kubeconform" = "latest"
 prek = "latest"
+"helmfile" = "latest"

@@ -8,3 +8,4 @@ resources:
   - ./ocirepository.yaml
   - ./dnsendpoint.yaml
   - ./grafanadashboard.yaml
+  - ./externalsecret.yaml

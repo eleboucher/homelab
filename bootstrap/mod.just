@@ -8,7 +8,7 @@ controller := `talosctl config info -o yaml | yq -e '.endpoints[0]'`
 nodes := `talosctl config info -o yaml | yq -e '.nodes | join (" ")'`
 
 [private]
-default:  talos kube (kubeconfig "node") wait namespaces resources crds apps kubeconfig
+default: talos kube (kubeconfig "node") wait namespaces resources crds apps kubeconfig
 
 [doc('Install Talos')]
 talos:
@@ -72,6 +72,9 @@ namespaces:
 resources:
     just log info "Running stage..." "stage" "$0"
     if ! sops -d "{{ bootstrap_dir }}/secret.sops.yaml" | kubectl apply --server-side --field-manager bootstrap --force-conflicts -f -; then \
+        just log fatal "Failed to apply resources" "stage" "$0"; \
+    fi;
+    if ! just template "{{ bootstrap_dir }}/resources.yaml.j2" | kubectl apply --server-side --field-manager bootstrap --force-conflicts -f -; then \
         just log fatal "Failed to apply resources" "stage" "$0"; \
     fi;
 

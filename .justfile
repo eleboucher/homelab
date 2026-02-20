@@ -17,4 +17,4 @@ log lvl msg *args:
 
 [private]
 template file *args:
-    minijinja-cli --env "{{ file }}" {{ args }}
+  minijinja-cli "{{ file }}" {{ args }} | op inject

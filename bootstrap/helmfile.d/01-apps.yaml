@@ -99,6 +99,33 @@ releases:
         events:
           - presync
         showlogs: true
+  - name: onepassword
+    namespace: security
+    chart: oci://ghcr.io/bjw-s-labs/helm/app-template
+    version: 4.6.2
+    values:
+      - ./templates/values.yaml.gotmpl
+    hooks:
+      - # Wait for ExternalSecrets CRDs to be available
+        command: bash
+        args:
+          - -c
+          - until kubectl get crd clustersecretstores.external-secrets.io &>/dev/null; do sleep 5; done
+        events:
+          - postsync
+        showlogs: true
+      - # Apply ExternalSecret Resources
+        command: kubectl
+        args:
+          - apply
+          - --server-side
+          - --field-manager=kustomize-controller
+          - --filename=../../kubernetes/apps/security/onepassword/app/clustersecretstore.yaml
+        events:
+          - postsync
+        showlogs: true
+    needs:
+      - security/external-secrets
 
   - name: flux-operator
     namespace: flux-system
