@@ -53,7 +53,7 @@ spec:
                     port: 5690
                   initialDelaySeconds: 20
                   periodSeconds: 10
-                  timeoutSeconds: 1
+                  timeoutSeconds: 2
                   failureThreshold: 3
               readiness: *probes
     service:

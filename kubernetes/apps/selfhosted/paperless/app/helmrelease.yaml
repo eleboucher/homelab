@@ -78,6 +78,7 @@ spec:
                 spec:
                   failureThreshold: 30
                   periodSeconds: 10
+                  initialDelaySeconds: 5
             resources:
               requests:
                 cpu: 25m
