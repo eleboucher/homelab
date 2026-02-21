@@ -23,11 +23,7 @@ spec:
         - matchLabels:
             app.kubernetes.io/name: paperless
             app.kubernetes.io/instance: paperless
-            app.kubernetes.io/service: paperless-redis
-    - fromEndpoints:
-        - matchLabels:
-            app.kubernetes.io/name: postgresql
-            app.kubernetes.io/instance: postgres-paperless
+            app.kubernetes.io/controller: redis
 ---
 # yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/cilium.io/ciliumnetworkpolicy_v2.json
 apiVersion: cilium.io/v2
@@ -39,7 +35,7 @@ spec:
     matchLabels:
       app.kubernetes.io/name: paperless
       app.kubernetes.io/instance: paperless
-      app.kubernetes.io/service: paperless-redis
+      app.kubernetes.io/controller: redis
   ingress:
     - fromEndpoints:
         - matchLabels:
