@@ -11,5 +11,4 @@ resources:
   - bentopdf/ks.yaml
   - mealie/ks.yaml
   - atuin/ks.yaml
-  - fizzbuzz/ks.yaml
   - paperless/ks.yaml
