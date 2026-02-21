@@ -40,7 +40,7 @@ spec:
               PAPERLESS_TIME_ZONE: "Europe/Paris"
               PAPERLESS_TASK_WORKERS: "2"
               PAPERLESS_OCR_LANGUAGES: fra+eng
-              PAPERLESS_OCR_LANGUAGE: fra+eng
+              PAPERLESS_OCR_LANGUAGE: fra
               # Configure folders
               PAPERLESS_CONSUMPTION_DIR: /data/nas/paperless/incoming
               PAPERLESS_DATA_DIR: /data/local/data
