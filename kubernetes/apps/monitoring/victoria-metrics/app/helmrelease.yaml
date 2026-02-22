@@ -131,6 +131,51 @@ spec:
     grafana:
       enabled: false
       forceDeployDatasource: true
+    kubeApiServer:
+      vmScrape:
+        spec:
+          endpoints:
+            - bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+              port: https
+              scheme: https
+              tlsConfig:
+                caFile: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+                serverName: kubernetes
+              metricRelabelConfigs:
+                - action: drop
+                  source_labels:
+                    - __name__
+                  regex: (apiserver|etcd|rest_client)_request(|_sli|_slo)_duration_seconds_bucket
+                - action: drop
+                  source_labels:
+                    - __name__
+                  regex: (apiserver_request_body_size_bytes_bucket|apiserver_response_sizes_bucket|apiserver_watch_cache_read_wait_seconds_bucket|apiserver_watch_events_sizes_bucket|apiserver_watch_list_duration_seconds_bucket)
+    kubelet:
+      vmScrapes:
+        cadvisor:
+          spec:
+            metricRelabelConfigs:
+              - action: drop
+                source_labels:
+                  - __name__
+                regex: (container_tasks_state|container_memory_failures_total|container_blkio_device_usage_total)
+      vmScrape:
+        spec:
+          relabelConfigs:
+            - action: labelmap
+              regex: __meta_kubernetes_node_label_(.+)
+            # Drop noisy Node Feature Discovery and Talos extension labels (60+ labels per node)
+            - action: labeldrop
+              regex: feature_node_kubernetes_io_.*
+            - action: labeldrop
+              regex: beta_kubernetes_io_.*
+            - action: labeldrop
+              regex: extensions_talos_dev_.*
+            - sourceLabels:
+                - __metrics_path__
+              targetLabel: metrics_path
+            - targetLabel: job
+              replacement: kubelet
     kubeControllerManager:
       service:
         selector:
@@ -193,24 +238,6 @@ spec:
             namespace: network
         hostnames:
           - vmagent.erwanleboucher.dev
-    kubelet:
-      vmScrape:
-        spec:
-          relabelConfigs:
-            - action: labelmap
-              regex: __meta_kubernetes_node_label_(.+)
-            # Drop noisy Node Feature Discovery and Talos extension labels (60+ labels per node)
-            - action: labeldrop
-              regex: feature_node_kubernetes_io_.*
-            - action: labeldrop
-              regex: beta_kubernetes_io_.*
-            - action: labeldrop
-              regex: extensions_talos_dev_.*
-            - sourceLabels:
-                - __metrics_path__
-              targetLabel: metrics_path
-            - targetLabel: job
-              replacement: kubelet
     prometheus-node-exporter:
       enabled: false
     kube-state-metrics:
