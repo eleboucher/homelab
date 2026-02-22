@@ -10,6 +10,6 @@ spec:
     name: silence-operator
   interval: 30m
   values:
-    alertmanagerAddress: http://alertmanager-operated.monitoring.svc.cluster.local:9093
+    alertmanagerAddress: http://vmalertmanager-vm.monitoring.svc.cluster.local:9093
     networkPolicy:
       enabled: false

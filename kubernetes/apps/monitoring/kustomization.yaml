@@ -9,7 +9,7 @@ components:
 resources:
   - namespace.yaml
   - externalsecret.yaml
-  - kube-prometheus-stack/ks.yaml
+  # - kube-prometheus-stack/ks.yaml
   - gatus/ks.yaml
   - grafana/ks.yaml
   - fluent-bit/ks.yaml
@@ -22,3 +22,4 @@ resources:
   - silence-operator/ks.yaml
   - node-exporter/ks.yaml
   - kube-state-metrics/ks.yaml
+  - victoria-metrics/ks.yaml

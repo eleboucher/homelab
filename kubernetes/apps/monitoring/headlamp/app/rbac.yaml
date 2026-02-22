@@ -25,4 +25,4 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: headlamp-admin
-    namespace: observability
+    namespace: monitoring

@@ -7,7 +7,7 @@ metadata:
 spec:
   url: https://kgateway.dev/docs/envoy/latest/observability/kgateway.json
   datasources:
-    - datasourceName: prometheus
+    - datasourceName: VictoriaMetrics
       inputName: DS_PROMETHEUS
 
   allowCrossNamespaceImport: true

@@ -7,7 +7,7 @@ metadata:
 spec:
   url: https://grafana.com/api/dashboards/13679/revisions/23/download
   datasources:
-    - datasourceName: prometheus
+    - datasourceName: VictoriaMetrics
       inputName: DS_PROMETHEUS
 
   allowCrossNamespaceImport: true

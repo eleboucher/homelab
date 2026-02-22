@@ -1,0 +1,240 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: victoria-metrics
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: victoria-metrics
+  interval: 1h
+  values:
+    fullnameOverride: vm
+
+    vmsingle:
+      enabled: true
+      spec:
+        extraArgs:
+          maxLabelsPerTimeseries: "110"
+        replicaCount: 1
+        storage:
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: 60Gi
+        resources:
+          limits:
+            memory: 2Gi
+          requests:
+            cpu: 530m
+            memory: 1.2Gi
+      route:
+        enabled: true
+        parentRefs:
+          - name: kgateway-internal
+            namespace: network
+        hostnames:
+          - vm.erwanleboucher.dev
+
+    alertmanager:
+      enabled: true
+      useManagedConfig: true
+      spec:
+        externalURL: "https://vm-alert.erwanleboucher.dev"
+      route:
+        enabled: true
+        parentRefs:
+          - name: kgateway-internal
+            namespace: network
+        hostnames:
+          - vm-alert.erwanleboucher.dev
+      config:
+        route:
+          receiver: "blackhole"
+          group_by:
+            - "alertname"
+            - "severity"
+          group_wait: 30s
+          group_interval: 10m
+          repeat_interval: 12h
+          routes:
+            - matchers:
+                - alertname=~"WatchDog|InfoInhibitor|KubeMemoryOvercommit"
+              receiver: "blackhole"
+            - matchers:
+                - severity = "critical"
+              receiver: "discord"
+              group_by:
+                - "alertname"
+              group_wait: 10s
+              continue: false
+            - matchers:
+                - severity = "warning"
+              receiver: "discord"
+              group_by:
+                - "alertname"
+              continue: false
+        inhibit_rules:
+          - source_matchers:
+              - severity = "critical"
+            target_matchers:
+              - severity =~ "warning|info"
+            equal:
+              - "namespace"
+              - "alertname"
+          - source_matchers:
+              - severity = "warning"
+            target_matchers:
+              - severity = "info"
+            equal:
+              - "namespace"
+              - "alertname"
+          - source_matchers:
+              - alertname = "InfoInhibitor"
+            target_matchers:
+              - severity = "info"
+            equal:
+              - "namespace"
+          - target_matchers:
+              - alertname = "InfoInhibitor"
+        receivers:
+          - name: "blackhole"
+          - name: "discord"
+            discord_configs:
+              - webhook_url_secret:
+                  name: discord-webhook
+                  key: WEBHOOK_URL
+                send_resolved: true
+                title: '[{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ if eq .Status "firing" }}🔥{{ else }}✅{{ end }} {{ if ne .CommonAnnotations.summary ""}}{{ .CommonAnnotations.summary }}{{ else if ne .CommonAnnotations.message ""}}{{ .CommonAnnotations.message }}{{ else if ne .CommonAnnotations.description ""}}{{ .CommonAnnotations.description }}{{ else }}{{ .CommonLabels.alertname }}{{ end }}'
+                message: |-
+                  {{ range .Alerts -}}
+                  **Alert:** {{ .Annotations.title }}{{ if .Labels.severity }} - `{{ .Labels.severity }}`{{ end }}
+
+                  {{ if ne .Annotations.summary ""}}**Summary:** {{ .Annotations.summary }}{{ else if ne .Annotations.message ""}}**Message:** {{ .Annotations.message }}{{ else if ne .Annotations.description ""}}**Description:** {{ .Annotations.description }}{{ end }}
+
+                  🏷 **Labels:**
+                  {{ range .Labels.SortedPairs }} • {{ .Name }}: {{ .Value }}
+                  {{ end }}
+                  {{ end }}
+    defaultDashboards:
+      grafanaOperator:
+        enabled: true
+        spec:
+          allowCrossNamespaceImport: true
+    defaultDatasources:
+      grafanaOperator:
+        enabled: true
+        spec:
+          allowCrossNamespaceImport: true
+    grafana:
+      enabled: false
+      forceDeployDatasource: true
+    kubeControllerManager:
+      service:
+        selector:
+          component: kube-apiserver
+      vmScrape:
+        spec:
+          endpoints:
+            - bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+              port: http-metrics
+              scheme: https
+              tlsConfig:
+                insecureSkipVerify: true
+    kubeEtcd:
+      service:
+        selector:
+          component: kube-apiserver
+        port: 2381
+        targetPort: 2381
+      vmScrape:
+        spec:
+          endpoints:
+            - scheme: http
+    kubeScheduler:
+      service:
+        selector:
+          component: kube-apiserver
+      vmScrape:
+        spec:
+          endpoints:
+            - bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+              port: http-metrics
+              scheme: https
+              tlsConfig:
+                insecureSkipVerify: true
+    vmalert:
+      enabled: true
+      spec:
+        extraArgs:
+          external.url: "https://vmalert.erwanleboucher.dev"
+      route:
+        enabled: true
+        parentRefs:
+          - name: kgateway-internal
+            namespace: network
+        hostnames:
+          - vmalert.erwanleboucher.dev
+
+    vmagent:
+      enabled: true
+      spec:
+        scrapeInterval: 20s
+        externalLabels:
+          cluster: talos
+      ingress:
+        enabled: false
+      route:
+        enabled: true
+        parentRefs:
+          - name: kgateway-internal
+            namespace: network
+        hostnames:
+          - vmagent.erwanleboucher.dev
+    kubelet:
+      vmScrape:
+        spec:
+          relabelConfigs:
+            - action: labelmap
+              regex: __meta_kubernetes_node_label_(.+)
+            # Drop noisy Node Feature Discovery and Talos extension labels (60+ labels per node)
+            - action: labeldrop
+              regex: feature_node_kubernetes_io_.*
+            - action: labeldrop
+              regex: beta_kubernetes_io_.*
+            - action: labeldrop
+              regex: extensions_talos_dev_.*
+            - sourceLabels:
+                - __metrics_path__
+              targetLabel: metrics_path
+            - targetLabel: job
+              replacement: kubelet
+    prometheus-node-exporter:
+      enabled: false
+    kube-state-metrics:
+      enabled: false
+    additionalVictoriaMetricsMap:
+      dockerhub-rules:
+        create: true
+        groups:
+          - name: dockerhub
+            rules:
+              - alert: DockerhubRateLimitRisk
+                annotations:
+                  summary: There are {{ $value }} containers pulling from Dockerhub. This may lead to rate limiting.
+                expr: count(time() - container_last_seen{image=~"(docker.io).*",container!=""} < 30) > 100
+                labels:
+                  severity: critical
+      oom-rules:
+        create: true
+        groups:
+          - name: oom
+            rules:
+              - alert: OomKilled
+                annotations:
+                  summary: Container {{ $labels.container }} in pod {{ $labels.namespace }}/{{ $labels.pod }} has been OOMKilled {{ $value }} times in the last 10 minutes.
+                expr: (kube_pod_container_status_restarts_total - kube_pod_container_status_restarts_total offset 10m >= 1) and ignoring (reason) min_over_time(kube_pod_container_status_last_terminated_reason{reason="OOMKilled"}[10m]) == 1
+                labels:
+                  severity: critical
