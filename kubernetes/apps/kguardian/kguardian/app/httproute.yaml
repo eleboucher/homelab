@@ -1,0 +1,17 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/gateway.networking.k8s.io/httproute_v1.json
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: kguardian
+spec:
+  hostnames:
+    - kguardian.erwanleboucher.dev
+  parentRefs:
+    - name: kgateway-internal
+      namespace: network
+  rules:
+    - backendRefs:
+        - name: kguardian-frontend
+          namespace: kguardian
+          port: 5173
