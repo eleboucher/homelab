@@ -12,7 +12,7 @@ repos:
         entry: kubeconform -strict -ignore-missing-schemas -schema-location "https://k8s-schemas.erwanleboucher.dev/{{.Group}}/{{.ResourceKind}}_{{.ResourceAPIVersion}}.json"
         language: system
         files: ^kubernetes/.+\.ya?ml$
-        exclude: (/config/|\.sops\.ya?ml$|kustomization\.ya?ml$|namespace\.ya?ml$|/components/)
+        exclude: (/config/|\.sops\.ya?ml$|kustomization\.ya?ml$|namespace\.ya?ml$|/components/|hooks.ya?ml$)
       - id: yamllint
         name: YAML Lint
         entry: yamllint
