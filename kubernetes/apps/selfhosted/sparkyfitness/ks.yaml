@@ -1,0 +1,52 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: sparkyfitness
+spec:
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: sparkyfitness
+  components:
+    - ../../../../components/cnpg
+    - ../../../../components/volsync
+  dependsOn:
+    - name: longhorn
+      namespace: kube-system
+  interval: 1h
+  path: "./kubernetes/apps/selfhosted/sparkyfitness/server"
+  postBuild:
+    substitute:
+      APP: sparkyfitness
+      APP_UID: "1000"
+      VOLSYNC_CLAIM: sparkyfitness-data
+      VOLSYNC_CAPACITY: 15Gi
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+  targetNamespace: selfhosted
+  timeout: 5m
+  wait: false
+---
+# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: sparkyfitness-frontend
+spec:
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: sparkyfitness
+  interval: 1h
+  path: "./kubernetes/apps/selfhosted/sparkyfitness/app"
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+  targetNamespace: selfhosted
+  timeout: 5m
+  wait: false

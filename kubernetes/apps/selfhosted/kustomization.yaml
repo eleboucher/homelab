@@ -13,3 +13,4 @@ resources:
   - atuin/ks.yaml
   - paperless/ks.yaml
   - webhook/ks.yaml
+  - sparkyfitness/ks.yaml
