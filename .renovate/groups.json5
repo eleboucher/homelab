@@ -46,6 +46,19 @@
           }
         },
         {
+          description: "sparkyfitness group",
+          groupName: "sparkyfitness",
+          matchDatasources: [
+            "docker"
+          ],
+          matchPackageNames: [
+            "/sparkyfitness/"
+          ],
+          group: {
+            commitMessageTopic: "{{{groupName}}} group",
+          }
+        },
+        {
           description: "1Password Connect group",
           groupName: "1Password Connect",
           matchDatasources: [
