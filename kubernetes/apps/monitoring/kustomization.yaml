@@ -22,4 +22,4 @@ resources:
   - silence-operator/ks.yaml
   - node-exporter/ks.yaml
   - kube-state-metrics/ks.yaml
-  - victoria-metrics/ks.yaml
+  - kube-prometheus-stack/ks.yaml
