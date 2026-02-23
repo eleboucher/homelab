@@ -5,7 +5,6 @@ kind: Grafana
 metadata:
   name: grafana
   labels:
-    dashboards: grafana
     grafana.internal/instance: grafana
 spec:
   config:

@@ -10,6 +10,6 @@ spec:
     matchLabels:
       grafana.internal/instance: grafana
   datasources:
-    - datasourceName: VictoriaMetrics
+    - datasourceName: prometheus
       inputName: DS_PROMETHEUS
   url: https://raw.githubusercontent.com/kedacore/keda/refs/heads/main/config/grafana/keda-dashboard.json

@@ -9,7 +9,6 @@ components:
 resources:
   - namespace.yaml
   - externalsecret.yaml
-  # - kube-prometheus-stack/ks.yaml
   - gatus/ks.yaml
   - grafana/ks.yaml
   - fluent-bit/ks.yaml
