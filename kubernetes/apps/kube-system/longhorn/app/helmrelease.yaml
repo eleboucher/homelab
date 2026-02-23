@@ -34,8 +34,8 @@ spec:
       allowRecurringJobWhileVolumeDetached: true
       defaultReplicaCount: "2"
       replicaSoftAntiAffinity: true
-      replicaDiskSoftAntiAffinity: true
-      replicaZoneSoftAntiAffinity: true
+      replicaDiskSoftAntiAffinity: false
+      replicaZoneSoftAntiAffinity: false
       orphanResourceAutoDeletion: "replica-data;instance"
       backupCompressionMethod: "lz4"
 
