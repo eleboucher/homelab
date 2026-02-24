@@ -1,4 +1,3 @@
-# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/cert-manager.io/clusterissuer_v1.json
 ---
 # yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/cert-manager.io/clusterissuer_v1.json
 apiVersion: cert-manager.io/v1
@@ -7,15 +6,16 @@ metadata:
   name: letsencrypt-production
 spec:
   acme:
-    email: erwanleboucher@gmail.com
+    profile: shortlived
     privateKeySecretRef:
       name: letsencrypt-production
-    profile: shortlived
     server: https://acme-v02.api.letsencrypt.org/directory
     solvers:
       - dns01:
           cloudflare:
             apiTokenSecretRef:
-              name: cloudflare-api-token
-              key: token
-            email: erwanleboucher@gmail.com
+              name: cloudflare-issuer-secret
+              key: CLOUDFLARE_DNS_TOKEN
+        selector:
+          dnsZones:
+            - erwanleboucher.dev

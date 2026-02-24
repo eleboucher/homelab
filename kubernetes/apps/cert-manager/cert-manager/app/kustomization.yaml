@@ -7,7 +7,6 @@ resources:
   - helmrelease.yaml
   - externalsecret.yaml
   - clusterissuer.yaml
-  - clusterissuer-selfsigned.yaml
   - ocirepository.yaml
   - prometheusrule.yaml
   - ./grafanadashboard.yaml
