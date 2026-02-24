@@ -29,7 +29,7 @@ spec:
               TUNNEL_TRANSPORT_PROTOCOL: quic
             envFrom:
               - secretRef:
-                  name: "cloudflared-token"
+                  name: "cloudflare-tunnel-secret"
             args:
               - tunnel
               - run
