@@ -84,21 +84,6 @@ releases:
       - ./templates/values.yaml.gotmpl
     needs:
       - cert-manager/cert-manager
-    hooks:
-      - # Create Certificate and wait for secret
-        command: bash
-        args:
-          - -c
-          - |
-            # Apply Certificate
-            kubectl apply -f ../../kubernetes/apps/security/external-secrets/cert/certificate.yaml
-            # Wait for secret to be created
-            echo "Waiting for bitwarden-tls-certs secret..."
-            kubectl wait --for=condition=Ready certificate/bitwarden-sdk-server -n security --timeout=120s
-            kubectl get secret bitwarden-tls-certs -n security
-        events:
-          - presync
-        showlogs: true
   - name: onepassword
     namespace: security
     chart: oci://ghcr.io/bjw-s-labs/helm/app-template

@@ -25,11 +25,9 @@ spec:
       sync:
         interval: 1h
         kind: GitRepository
-        provider: github
         url: "https://github.com/eleboucher/mediaserver.git"
         ref: "refs/heads/main"
         path: "kubernetes/flux/cluster"
-        pullSecret: "flux-system"
       resources:
         limits:
           memory: 1Gi

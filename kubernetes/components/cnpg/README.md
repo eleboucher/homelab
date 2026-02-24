@@ -9,14 +9,14 @@ Minimal CloudNativePG cluster template for spawning lightweight PostgreSQL insta
 - Resource limits: 256Mi-1Gi RAM, 100m-1000m CPU
 - Pod monitoring enabled
 - Variable substitution for app name
-- All credentials managed via Bitwarden/ExternalSecrets (superuser + app user)
+- All credentials managed via onepassword/ExternalSecrets (superuser + app user)
 - Automatic database and owner creation via initdb
 - pgvector extensions (vchord + vector) for AI/ML workloads
 
 ## Prerequisites
 
-Ensure the following Bitwarden entry exists with these fields:
-- **Bitwarden item**: `cloudnative-pg`
+Ensure the following onepassword entry exists with these fields:
+- **onepassword item**: `cloudnative-pg`
   - `POSTGRES_SUPER_USER`: PostgreSQL superuser username
   - `POSTGRES_SUPER_PASS`: PostgreSQL superuser password
   - `POSTGRES_APP_USER`: Application user username (typically same as `${APP}`)
@@ -56,14 +56,14 @@ spec:
 ## What Gets Created
 
 ### Resources
-- **ExternalSecret**: `${APP}-cnpg-secret` - Syncs superuser credentials from Bitwarden
+- **ExternalSecret**: `${APP}-cnpg-secret` - Syncs superuser credentials from onepassword
 - **Cluster**: `postgres-${APP}` - PostgreSQL cluster
 - **Database**: `${APP}` - Application database
 - **User**: `${APP}` - Database owner
 - **Service**: `postgres-${APP}-rw` - Read-write service (port 5432)
 - **Service**: `postgres-${APP}-ro` - Read-only service (port 5432)
 
-### Secrets (Created from Bitwarden)
+### Secrets (Created from onepassword)
 
 **1. `${APP}-cnpg-secret`** (superuser credentials)
 - `username`: PostgreSQL superuser username
