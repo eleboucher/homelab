@@ -5,7 +5,7 @@ kind: Kustomization
 namespace: cert-manager
 resources:
   - helmrelease.yaml
-  - secret.sops.yaml
+  - externalsecret.yaml
   - clusterissuer.yaml
   - clusterissuer-selfsigned.yaml
   - ocirepository.yaml

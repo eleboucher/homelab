@@ -5,4 +5,4 @@ kind: Kustomization
 resources:
   - ./job.yaml
   - ./ocirepository.yaml
-  - ./secret.sops.yaml
+  - ./externalsecret.yaml

@@ -69,12 +69,10 @@ kubernetes/
 │   ├── cnpg/                # CloudNative PG patches
 │   ├── gpu/                 # GPU resource patches
 │   ├── nfs-media/           # NFS media mount patches
-│   └── sops/                # SOPS decryption patches
 └── flux/cluster/cluster.yaml    # Master Kustomization
 
 bootstrap/
 ├── helmfile.d/              # Helmfile for CRDs and core apps
-└── secret.sops.yaml         # Encrypted bootstrap secrets
 
 talos/
 ├── machineconfig.yaml.j2    # Base Talos machine config (Jinja2)
@@ -89,9 +87,9 @@ talos/
 - `ks.yaml` - Flux Kustomization CRD
 - `helmrelease.yaml` - Helm release config
 - `ocirepository.yaml` - OCI chart source
-- `*.sops.yaml` - Encrypted secrets (if needed)
+- `externalsecret.yaml` - External Secret config (if needed)
 
-**Secrets:** Use SOPS with Age encryption. Config in `.sops.yaml`. Encrypt sensitive data in `*.sops.yaml` files.
+**Secrets:** Use 1Password + External Secrets for all secrets. Store credentials in 1Password vault, sync to Kubernetes with External Secrets.
 
 **Templates:** Jinja2 templates (`.j2` files) processed with `minijinja-cli`. Used for Talos configs.
 
@@ -100,8 +98,7 @@ talos/
 ## Validation
 
 Pre-commit hooks enforce:
-- SOPS encryption validation
-- Kubernetes schema validation (kubeconform)
+- YAML schema validation (kubeconform)
 - YAML linting and formatting
 
 ## YAML Sorting Rules

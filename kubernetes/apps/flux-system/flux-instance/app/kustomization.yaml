@@ -5,8 +5,6 @@ kind: Kustomization
 resources:
   - repository.yaml
   - helmrelease.yaml
-  - secret.sops.yaml
-  - externalsecret.yaml
   - prometheusrule.yaml
   - alerts
   - receiver
