@@ -283,7 +283,7 @@ spec:
                   description: Torrent Downloader
                   widget:
                     type: qbittorrent
-                    url: http://qbittorrent.downloads:8080
+                    url: http://qbittorrent-app.downloads:8080
                     username: '{{ "{{" }}HOMEPAGE_VAR_QBIT_USER{{ "}}" }}'
                     password: '{{ "{{" }}HOMEPAGE_VAR_QBIT_PASS{{ "}}" }}'
               - Autobrr:
