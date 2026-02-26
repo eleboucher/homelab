@@ -35,7 +35,7 @@ spec:
       defaultReplicaCount: "2"
       replicaSoftAntiAffinity: true
       replicaDiskSoftAntiAffinity: false
-      replicaZoneSoftAntiAffinity: false
+      replicaZoneSoftAntiAffinity: true
       orphanResourceAutoDeletion: "replica-data;instance"
       backupCompressionMethod: "lz4"
 
