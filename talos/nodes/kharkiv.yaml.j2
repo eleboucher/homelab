@@ -20,14 +20,12 @@ machine:
         vlans:
           # VLAN 10 - Main network (Management)
           - vlanId: 10
-            dhcp: true
             mtu: 1500
           # VLAN 20 - Storage network
           - vlanId: 20
             addresses:
               - 10.20.0.41/24
             mtu: 9000
-    disableSearchDomain: false
   install:
     diskSelector:
       serial: 50026B73842F7F3C
@@ -40,9 +38,14 @@ cluster:
     certSANs:
       - 127.0.0.1
       - 192.168.1.41
+
+---
+apiVersion: v1alpha1
+kind: DHCPv4Config
+name: bond0.10
+clientIdentifier: mac
 ---
 apiVersion: v1alpha1
 kind: HostnameConfig
 auto: "off"
 hostname: kharkiv
-
