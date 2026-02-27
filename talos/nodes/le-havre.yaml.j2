@@ -2,18 +2,22 @@
 machine:
   type: worker
   network:
+    nameservers:
+      - 192.168.1.2
     interfaces:
+      # VLAN 10 - Main network (Management)
       - interface: ens18
+        addresses:
+          - 192.168.1.7/24
+        routes:
+          - network: 0.0.0.0/0
+            gateway: 192.168.1.2
+        mtu: 1500
+      # VLAN 20 - Storage network
+      - interface: ens19
+        addresses:
+          - 10.20.0.7/24
         mtu: 9000
-        vlans:
-          # VLAN 10 - Main network (Management)
-          - vlanId: 10
-            mtu: 1500
-          # VLAN 20 - Storage network
-          - vlanId: 20
-            addresses:
-              - 10.20.0.7/24
-            mtu: 9000
   install:
     disk: /dev/sda
 ---
@@ -21,8 +25,3 @@ apiVersion: v1alpha1
 kind: HostnameConfig
 auto: "off"
 hostname: le-havre
----
-apiVersion: v1alpha1
-kind: DHCPv4Config
-name: ens18.10
-clientIdentifier: mac

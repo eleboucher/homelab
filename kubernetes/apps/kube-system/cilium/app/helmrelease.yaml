@@ -32,7 +32,8 @@ spec:
       enabled: true
     devices:
       - bond0+
-      - ens18+
+      - ens18
+      - ens19
     enableIPv4BIGTCP: true
     endpointRoutes:
       enabled: true
