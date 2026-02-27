@@ -1,0 +1,23 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/gateway.envoyproxy.io/securitypolicy_v1alpha1.json
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: SecurityPolicy
+metadata:
+  name: kromgo
+  namespace: monitoring
+spec:
+  targetRef:
+    group: gateway.networking.k8s.io
+    kind: HTTPRoute
+    name: kromgo
+  cors:
+    allowOrigins:
+      - "http://localhost:5173"
+      - "https://erwanleboucher.dev"
+      - "https://www.erwanleboucher.dev"
+    allowMethods:
+      - GET
+      - OPTIONS
+    allowHeaders:
+      - "*"
+    maxAge: "24h"
