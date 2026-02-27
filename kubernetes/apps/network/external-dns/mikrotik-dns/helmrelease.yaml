@@ -17,6 +17,7 @@ spec:
     sources:
       - crd
       - gateway-httproute
+      - service
     txtOwnerId: default
     txtPrefix: k8s.
     domainFilters:
@@ -46,6 +47,8 @@ spec:
             value: "https://192.168.1.2:443"
           - name: MIKROTIK_SKIP_TLS_VERIFY
             value: "true"
+          - name: MIKROTIK_DEFAULT_TTL
+            value: "3600"
           - name: MIKROTIK_DEFAULT_COMMENT
             value: "Managed by ExternalDNS"
           - name: MIKROTIK_PASSWORD
@@ -59,8 +62,6 @@ spec:
                 name: mikrotik-credentials
                 key: username
         extraArgs:
-          - --crd-source-apiversion=externaldns.k8s.io/v1alpha1
-          - --crd-source-kind=DNSEndpoint
           - --gateway-name=envoy-internal
         resources:
           requests:
