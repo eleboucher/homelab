@@ -22,7 +22,7 @@ spec:
         hostnames:
           - victoria-logs.erwanleboucher.dev
         parentRefs:
-          - name: kgateway-internal
+          - name: envoy-internal
             namespace: network
         extraRules:
           - filters:

@@ -9,10 +9,8 @@ metadata:
 spec:
   interval: 6h
   path: ./kubernetes/apps/system/home-assistant/app
-  components:
-    - ../../../../components/kgateway-trafficpolicy
   dependsOn:
-    - name: kgateway-gateway
+    - name: envoy-gateway
       namespace: network
   postBuild:
     substitute:

@@ -130,7 +130,7 @@ spec:
     route:
       main:
         parentRefs:
-          - name: kgateway-external
+          - name: envoy-external
             namespace: network
         hostnames:
           - streamystats.erwanleboucher.dev

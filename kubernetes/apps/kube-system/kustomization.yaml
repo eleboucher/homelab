@@ -16,4 +16,3 @@ resources:
   - coredns/ks.yaml
   - metrics-server/ks.yaml
   - spegel/ks.yaml
-  - gateway-api-crds/ks.yaml

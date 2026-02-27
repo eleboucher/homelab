@@ -11,11 +11,10 @@ spec:
     - ../../../../components/gpu
     - ../../../../components/volsync
     - ../../../../components/nfs-scaler
-    - ../../../../components/kgateway-trafficpolicy
   interval: 1h
   path: ./kubernetes/apps/media/jellyfin/app
   dependsOn:
-    - name: kgateway-gateway
+    - name: envoy-gateway
       namespace: network
     - name: longhorn
       namespace: kube-system

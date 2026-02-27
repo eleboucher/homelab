@@ -68,7 +68,7 @@ spec:
     route:
       app:
         parentRefs:
-          - name: kgateway-internal
+          - name: envoy-internal
             namespace: network
         hostnames:
           - sabnzbd.erwanleboucher.dev

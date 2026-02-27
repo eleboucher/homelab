@@ -61,7 +61,7 @@ spec:
       hostnames:
         - grafana.erwanleboucher.dev
       parentRefs:
-        - name: kgateway-internal
+        - name: envoy-internal
           namespace: network
       rules:
         - backendRefs:

@@ -10,7 +10,7 @@ spec:
   interval: 1h
   path: ./kubernetes/apps/media/flaresolverr/app
   dependsOn:
-    - name: kgateway-gateway
+    - name: envoy-gateway
       namespace: network
     - name: longhorn
       namespace: kube-system

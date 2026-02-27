@@ -8,9 +8,9 @@ metadata:
   namespace: system
 spec:
   parentRefs:
-    - name: kgateway-external
+    - name: envoy-external
       namespace: network
-    - name: kgateway-internal
+    - name: envoy-internal
       namespace: network
   hostnames:
     - home.erwanleboucher.dev
