@@ -63,6 +63,7 @@ spec:
   infrastructure:
     annotations:
       external-dns.alpha.kubernetes.io/target: *hostname
+      lbipam.cilium.io/ips: 192.168.69.11
   listeners:
     - name: http
       protocol: HTTP
@@ -162,6 +163,9 @@ spec:
   targetSelectors:
     - group: gateway.networking.k8s.io
       kind: Gateway
+  timeout:
+    http:
+      idleTimeout: 60s
   tcpKeepalive: {}
   tls:
     minVersion: "1.2"
