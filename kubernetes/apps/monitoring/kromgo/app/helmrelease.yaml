@@ -83,21 +83,3 @@ spec:
         parentRefs:
           - name: envoy-external
             namespace: network
-        rules:
-          - filters:
-              - type: CORS
-                cors:
-                  allowHeaders:
-                    - "*"
-                  allowMethods:
-                    - GET
-                    - POST
-                    - OPTIONS
-                  allowOrigins:
-                    - "http://localhost:5173"
-                    - "https://erwanleboucher.dev"
-                    - "https://www.erwanleboucher.dev"
-                  maxAge: 86400
-            backendRefs:
-              - name: kromgo
-                port: *port
