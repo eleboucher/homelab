@@ -4,7 +4,7 @@
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: OCIRepository
 metadata:
-  name: cloudflare-tunnel
+  name: cloudflared
 spec:
   interval: 15m
   layerSelector:

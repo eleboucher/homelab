@@ -10,4 +10,4 @@ spec:
     - dnsName: external.erwanleboucher.dev
       recordType: CNAME
       targets:
-        - ${CLOUDFLARE_TUNNEL_ID}.cfargotunnel.com
+        - 14a3fbe0-f4e5-4a36-ac51-91ff75f38b59.cfargotunnel.com

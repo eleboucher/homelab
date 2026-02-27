@@ -22,7 +22,7 @@ spec:
     - advertisementType: Service
       service:
         addresses:
-          - LoadBalancerIP
+          - "LoadBalancerIP"
       selector:
         matchExpressions:
           - {key: somekey, operator: NotIn, values: ["never-used-value"]}
@@ -39,6 +39,11 @@ spec:
       advertisements:
         matchLabels:
           advertise: bgp
+  ebgpMultihop: 2
+  timers:
+    connectRetryTimeSeconds: 120
+    holdTimeSeconds: 90
+    keepAliveTimeSeconds: 60
 ---
 # yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/cilium.io/ciliumbgpclusterconfig_v2.json
 apiVersion: cilium.io/v2
