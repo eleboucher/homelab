@@ -5,11 +5,16 @@ kind: HelmRelease
 metadata:
   name: smtp-relay
 spec:
-  interval: 1h
   chartRef:
     kind: OCIRepository
     name: smtp-relay
+  interval: 1h
   values:
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
     controllers:
       smtp-relay:
         replicas: 2
@@ -40,11 +45,6 @@ spec:
                 cpu: 10m
               limits:
                 memory: 64Mi
-    defaultPodOptions:
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 1000
-        runAsGroup: 1000
     service:
       app:
         ports:

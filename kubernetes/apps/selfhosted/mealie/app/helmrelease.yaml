@@ -5,10 +5,10 @@ kind: HelmRelease
 metadata:
   name: mealie
 spec:
-  interval: 30m
   chartRef:
     kind: OCIRepository
     name: mealie
+  interval: 30m
   values:
     controllers:
       mealie:
@@ -72,7 +72,7 @@ spec:
 
     persistence:
       data:
+        type: persistentVolumeClaim
         existingClaim: "{{ .Release.Name }}"
         globalMounts:
           - path: /app/data
-        type: persistentVolumeClaim

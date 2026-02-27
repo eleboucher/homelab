@@ -6,17 +6,13 @@ metadata:
   name: sabnzbd
   namespace: downloads
 spec:
-  interval: 1h
   chartRef:
     kind: OCIRepository
     name: sabnzbd
+  interval: 1h
   values:
     controllers:
       sabnzbd:
-        annotations:
-          reloader.stakater.com/auto: "true"
-        type: deployment
-        replicas: 1
         pod:
           securityContext:
             fsGroup: 1000
@@ -24,6 +20,10 @@ spec:
             runAsGroup: 1000
             runAsNonRoot: true
             runAsUser: 1000
+        annotations:
+          reloader.stakater.com/auto: "true"
+        replicas: 1
+        type: deployment
         containers:
           app:
             image:
@@ -40,11 +40,6 @@ spec:
                 sabnzbd.downloads.svc.cluster,
                 sabnzbd.downloads.svc.cluster.local,
                 sabnzbd.erwanleboucher.dev
-            resources:
-              requests:
-                memory: 256Mi
-              limits:
-                memory: 8Gi
             probes:
               liveness: &probes
                 enabled: true
@@ -58,6 +53,11 @@ spec:
                   timeoutSeconds: 10
                   failureThreshold: 6
               readiness: *probes
+            resources:
+              requests:
+                memory: 256Mi
+              limits:
+                memory: 8Gi
     service:
       app:
         controller: sabnzbd

@@ -6,21 +6,21 @@ metadata:
   name: jellyseerr
   namespace: media
 spec:
-  interval: 1h
   chartRef:
     kind: OCIRepository
     name: jellyseerr
+  interval: 1h
   values:
     controllers:
       jellyseerr:
-        type: deployment
-        replicas: 1
-        annotations:
-          reloader.stakater.com/auto: "true"
         pod:
           securityContext:
             fsGroup: 1000
             fsGroupChangePolicy: "OnRootMismatch"
+        annotations:
+          reloader.stakater.com/auto: "true"
+        replicas: 1
+        type: deployment
         containers:
           app:
             image:
@@ -35,11 +35,6 @@ spec:
                 value: "debug"
               - name: TZ
                 value: "Europe/Paris"
-            resources:
-              requests:
-                memory: 256Mi
-              limits:
-                memory: 2Gi
             probes:
               liveness: &probes
                 enabled: true
@@ -53,6 +48,11 @@ spec:
                   timeoutSeconds: 1
                   failureThreshold: 3
               readiness: *probes
+            resources:
+              requests:
+                memory: 256Mi
+              limits:
+                memory: 2Gi
     service:
       app:
         controller: jellyseerr

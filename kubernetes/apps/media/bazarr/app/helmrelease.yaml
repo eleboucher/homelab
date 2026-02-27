@@ -6,17 +6,13 @@ metadata:
   name: bazarr
   namespace: media
 spec:
-  interval: 1h
   chartRef:
     kind: OCIRepository
     name: bazarr
+  interval: 1h
   values:
     controllers:
       bazarr:
-        annotations:
-          reloader.stakater.com/auto: "true"
-        type: deployment
-        replicas: 1
         pod:
           nodeSelector:
             kubernetes.io/hostname: kharkiv
@@ -24,29 +20,18 @@ spec:
             runAsGroup: 1000
             runAsNonRoot: true
             runAsUser: 1000
+        annotations:
+          reloader.stakater.com/auto: "true"
+        replicas: 1
+        type: deployment
         containers:
           app:
             image:
               repository: ghcr.io/home-operations/bazarr
               tag: 1.5.6
-            securityContext:
-              allowPrivilegeEscalation: false
-              capabilities:
-                drop:
-                  - ALL
-              readOnlyRootFilesystem: true
-              runAsGroup: 1000
-              runAsNonRoot: true
-              runAsUser: 1000
             env:
               - name: TZ
                 value: "Europe/Paris"
-            resources:
-              requests:
-                cpu: 15m
-                memory: 256Mi
-              limits:
-                memory: 512Mi
             probes:
               liveness: &probes
                 enabled: true
@@ -60,6 +45,21 @@ spec:
                   timeoutSeconds: 1
                   failureThreshold: 3
               readiness: *probes
+            resources:
+              requests:
+                cpu: 15m
+                memory: 256Mi
+              limits:
+                memory: 512Mi
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop:
+                  - ALL
+              readOnlyRootFilesystem: true
+              runAsGroup: 1000
+              runAsNonRoot: true
+              runAsUser: 1000
     service:
       app:
         controller: bazarr

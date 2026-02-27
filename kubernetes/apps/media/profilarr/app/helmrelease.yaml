@@ -6,21 +6,21 @@ metadata:
   name: profilarr
   namespace: media
 spec:
-  interval: 1h
   chartRef:
     kind: OCIRepository
     name: profilarr
+  interval: 1h
   values:
     controllers:
       profilarr:
-        type: deployment
-        replicas: 1
-        annotations:
-          reloader.stakater.com/auto: "true"
         pod:
           securityContext:
             fsGroup: 1000
             fsGroupChangePolicy: "OnRootMismatch"
+        annotations:
+          reloader.stakater.com/auto: "true"
+        replicas: 1
+        type: deployment
         containers:
           app:
             image:
@@ -29,12 +29,6 @@ spec:
             env:
               - name: TZ
                 value: "Europe/Paris"
-            resources:
-              requests:
-                cpu: 25m
-                memory: 64Mi
-              limits:
-                memory: 456Mi
             probes:
               startup:
                 enabled: true
@@ -57,6 +51,12 @@ spec:
                   periodSeconds: 30
                   timeoutSeconds: 5
                   failureThreshold: 3
+            resources:
+              requests:
+                cpu: 25m
+                memory: 64Mi
+              limits:
+                memory: 456Mi
     service:
       app:
         controller: profilarr

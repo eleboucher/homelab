@@ -10,6 +10,11 @@ spec:
     name: onepassword
   interval: 1h
   values:
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 999
+        runAsGroup: 999
     controllers:
       onepassword:
         strategy: RollingUpdate
@@ -101,11 +106,6 @@ spec:
                   failureThreshold: 3
             resources: *resources
             securityContext: *securityContext
-    defaultPodOptions:
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 999
-        runAsGroup: 999
     service:
       app:
         ports:

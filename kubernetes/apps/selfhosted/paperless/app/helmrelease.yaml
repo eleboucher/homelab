@@ -19,10 +19,9 @@ spec:
         fsGroupChangePolicy: OnRootMismatch
     controllers:
       paperless:
-        forceRename: paperless
         annotations:
           reloader.stakater.com/auto: "true"
-
+        forceRename: paperless
         containers:
           app:
             image:
@@ -101,12 +100,12 @@ spec:
 
     service:
       app:
-        forceRename: paperless
-        primary: true
         controller: paperless
+        forceRename: paperless
         ports:
           http:
             port: 8000
+        primary: true
       redis:
         controller: redis
         ports:
@@ -115,6 +114,7 @@ spec:
 
     persistence:
       data:
+        type: persistentVolumeClaim
         existingClaim: paperless
         advancedMounts:
           paperless:

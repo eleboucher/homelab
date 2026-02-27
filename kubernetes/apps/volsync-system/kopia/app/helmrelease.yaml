@@ -10,6 +10,13 @@ spec:
     name: kopia
   interval: 1h
   values:
+    defaultPodOptions:
+      securityContext:
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+        runAsGroup: 1000
+        runAsNonRoot: true
+        runAsUser: 1000
     controllers:
       kopia:
         annotations:
@@ -19,6 +26,8 @@ spec:
             image:
               repository: ghcr.io/home-operations/kopia
               tag: 0.22.3@sha256:17ab64542280197a5368247deaefadc3e3bbe15714ab666c2455a06824e86efd
+            args:
+              - --without-password
             env:
               KOPIA_WEB_ENABLED: "true"
               KOPIA_WEB_PORT: &port 80
@@ -26,8 +35,6 @@ spec:
             envFrom:
               - secretRef:
                   name: kopia-secret
-            args:
-              - --without-password
             probes:
               liveness: &probes
                 enabled: true
@@ -53,13 +60,6 @@ spec:
                 drop:
                   - ALL
               readOnlyRootFilesystem: true
-    defaultPodOptions:
-      securityContext:
-        fsGroup: 1000
-        fsGroupChangePolicy: OnRootMismatch
-        runAsGroup: 1000
-        runAsNonRoot: true
-        runAsUser: 1000
     service:
       app:
         controller: kopia

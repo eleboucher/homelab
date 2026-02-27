@@ -6,44 +6,29 @@ metadata:
   name: prowlarr
   namespace: media
 spec:
-  interval: 1h
   chartRef:
     kind: OCIRepository
     name: prowlarr
+  interval: 1h
   values:
     controllers:
       prowlarr:
-        type: deployment
-        replicas: 1
-        annotations:
-          reloader.stakater.com/auto: "true"
         pod:
           securityContext:
             fsGroup: 1000
             fsGroupChangePolicy: "OnRootMismatch"
+        annotations:
+          reloader.stakater.com/auto: "true"
+        replicas: 1
+        type: deployment
         containers:
           app:
             image:
               repository: ghcr.io/home-operations/prowlarr
               tag: 2.3.2
-            securityContext:
-              allowPrivilegeEscalation: false
-              capabilities:
-                drop:
-                  - ALL
-              readOnlyRootFilesystem: true
-              runAsGroup: 1000
-              runAsNonRoot: true
-              runAsUser: 1000
             env:
               - name: TZ
                 value: "Europe/Paris"
-            resources:
-              requests:
-                cpu: 18m
-                memory: 128Mi
-              limits:
-                memory: 512Mi
             probes:
               liveness: &probes
                 enabled: true
@@ -57,6 +42,21 @@ spec:
                   timeoutSeconds: 1
                   failureThreshold: 3
               readiness: *probes
+            resources:
+              requests:
+                cpu: 18m
+                memory: 128Mi
+              limits:
+                memory: 512Mi
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop:
+                  - ALL
+              readOnlyRootFilesystem: true
+              runAsGroup: 1000
+              runAsNonRoot: true
+              runAsUser: 1000
     service:
       app:
         controller: prowlarr

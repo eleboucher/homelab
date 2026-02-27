@@ -1,4 +1,3 @@
-# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
 ---
 # yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
@@ -7,10 +6,10 @@ metadata:
   name: cert-manager
   namespace: cert-manager
 spec:
-  interval: 1h
   chartRef:
     kind: OCIRepository
     name: cert-manager
+  interval: 1h
   values:
     crds:
       enabled: true

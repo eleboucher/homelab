@@ -6,23 +6,22 @@ metadata:
   name: autobrr
   namespace: downloads
 spec:
-  interval: 1h
   chartRef:
     kind: OCIRepository
     name: autobrr
+  interval: 1h
   values:
     controllers:
       autobrr:
-        annotations:
-          reloader.stakater.com/auto: "true"
-        type: deployment
-        replicas: 1
         pod:
           securityContext:
             fsGroup: 1000
             runAsUser: 1000
             runAsNonRoot: true
-
+        annotations:
+          reloader.stakater.com/auto: "true"
+        replicas: 1
+        type: deployment
         containers:
           app:
             image:
@@ -32,18 +31,6 @@ spec:
               AUTOBRR__HOST: 0.0.0.0
               AUTOBRR__PORT: &port 80
               AUTOBRR__CHECK_FOR_UPDATES: "false"
-            resources:
-              requests:
-                cpu: 10m
-                memory: 128Mi
-              limits:
-                memory: 256Mi
-            securityContext:
-              allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
-              capabilities:
-                drop:
-                  - ALL
             probes:
               liveness:
                 enabled: true
@@ -67,6 +54,18 @@ spec:
                   periodSeconds: 10
                   timeoutSeconds: 1
                   failureThreshold: 3
+            resources:
+              requests:
+                cpu: 10m
+                memory: 128Mi
+              limits:
+                memory: 256Mi
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - ALL
     service:
       app:
         ports:

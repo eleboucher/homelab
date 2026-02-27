@@ -6,18 +6,17 @@ metadata:
   name: jellyfin
   namespace: media
 spec:
-  interval: 1h
   chartRef:
     kind: OCIRepository
     name: jellyfin
+  interval: 1h
   values:
+    defaultPodOptions:
+      resourceClaims:
+        - name: gpu
+          resourceClaimTemplateName: jellyfin-gpu
     controllers:
       jellyfin:
-        annotations:
-          reloader.stakater.com/auto: "true"
-        type: deployment
-        replicas: 1
-        strategy: Recreate
         pod:
           nodeSelector:
             kubernetes.io/hostname: kharkiv
@@ -29,6 +28,11 @@ spec:
             supplementalGroups:
               - 44 # video group
               - 992 # render group for /dev/dri
+        annotations:
+          reloader.stakater.com/auto: "true"
+        replicas: 1
+        strategy: Recreate
+        type: deployment
         containers:
           app:
             image:
@@ -37,16 +41,6 @@ spec:
             env:
               - name: TZ
                 value: "Europe/Paris"
-            securityContext:
-              privileged: true
-            resources:
-              claims:
-                - name: gpu
-              requests:
-                cpu: 1
-                memory: 1Gi
-              limits:
-                memory: 10Gi
             probes:
               liveness: &probes
                 enabled: true
@@ -60,10 +54,16 @@ spec:
                   timeoutSeconds: 1
                   failureThreshold: 3
               readiness: *probes
-    defaultPodOptions:
-      resourceClaims:
-        - name: gpu
-          resourceClaimTemplateName: jellyfin-gpu
+            resources:
+              claims:
+                - name: gpu
+              requests:
+                cpu: 1
+                memory: 1Gi
+              limits:
+                memory: 10Gi
+            securityContext:
+              privileged: true
     service:
       app:
         controller: jellyfin

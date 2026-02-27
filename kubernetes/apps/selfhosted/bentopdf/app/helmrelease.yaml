@@ -5,10 +5,10 @@ kind: HelmRelease
 metadata:
   name: bentopdf
 spec:
-  interval: 1h
   chartRef:
     kind: OCIRepository
     name: bentopdf
+  interval: 1h
   values:
     controllers:
       bentopdf:

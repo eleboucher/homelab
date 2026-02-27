@@ -5,21 +5,20 @@ kind: HelmRelease
 metadata:
   name: ollama
 spec:
-  interval: 1h
   chartRef:
     kind: OCIRepository
     name: ollama
+  interval: 1h
   values:
     controllers:
       ollama:
         annotations:
           reloader.stakater.com/auto: "true"
-        type: deployment
         replicas: 1
         strategy: Recreate
+        type: deployment
         containers:
           app:
-
             image:
               repository: ollama/ollama
               tag: 0.17.4

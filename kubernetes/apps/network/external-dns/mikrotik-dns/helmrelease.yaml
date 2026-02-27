@@ -6,11 +6,10 @@ kind: HelmRelease
 metadata:
   name: external-dns-mikrotik
 spec:
-  interval: 30m
   chartRef:
     kind: OCIRepository
     name: external-dns-mikrotik
-
+  interval: 30m
   values:
     fullnameOverride: external-dns-mikrotik
     triggerLoopOnEvent: true

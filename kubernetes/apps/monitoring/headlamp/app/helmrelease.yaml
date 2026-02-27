@@ -5,10 +5,10 @@ kind: HelmRelease
 metadata:
   name: headlamp
 spec:
-  interval: 15m
   chartRef:
     kind: OCIRepository
     name: headlamp
+  interval: 15m
   values:
     replicaCount: 1
     config:

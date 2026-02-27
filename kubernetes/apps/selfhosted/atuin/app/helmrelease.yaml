@@ -66,10 +66,10 @@ spec:
     persistence:
       config:
         enabled: true
+        type: persistentVolumeClaim
         existingClaim: "{{ .Release.Name }}"
         globalMounts:
           - path: /config
-        type: persistentVolumeClaim
 
     route:
       app:

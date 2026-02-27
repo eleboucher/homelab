@@ -6,21 +6,21 @@ metadata:
   name: wizarr
   namespace: media
 spec:
-  interval: 1h
   chartRef:
     kind: OCIRepository
     name: wizarr
+  interval: 1h
   values:
     controllers:
       wizarr:
-        type: deployment
-        replicas: 1
-        annotations:
-          reloader.stakater.com/auto: "true"
         pod:
           securityContext:
             fsGroup: 1000
             fsGroupChangePolicy: "OnRootMismatch"
+        annotations:
+          reloader.stakater.com/auto: "true"
+        replicas: 1
+        type: deployment
         containers:
           app:
             image:
@@ -37,12 +37,6 @@ spec:
                 value: "Europe/Paris"
               - name: GUNICORN_WORKERS
                 value: "1"
-            resources:
-              requests:
-                cpu: 15m
-                memory: 200Mi
-              limits:
-                memory: 500Mi
             probes:
               liveness:
                 enabled: true
@@ -77,6 +71,12 @@ spec:
                   periodSeconds: 10
                   timeoutSeconds: 5
                   failureThreshold: 30
+            resources:
+              requests:
+                cpu: 15m
+                memory: 200Mi
+              limits:
+                memory: 500Mi
     service:
       app:
         controller: wizarr

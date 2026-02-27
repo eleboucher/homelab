@@ -6,42 +6,30 @@ metadata:
   name: sonarr
   namespace: media
 spec:
-  interval: 1h
   chartRef:
     kind: OCIRepository
     name: sonarr
+  interval: 1h
   values:
     controllers:
       sonarr:
-        type: deployment
-        replicas: 1
-        annotations:
-          reloader.stakater.com/auto: "true"
         pod:
           securityContext:
             runAsGroup: 1000
             runAsNonRoot: true
             runAsUser: 1000
+        annotations:
+          reloader.stakater.com/auto: "true"
+        replicas: 1
+        type: deployment
         containers:
           app:
             image:
               repository: ghcr.io/home-operations/sonarr
               tag: 4.0.16.2946
-            securityContext:
-              allowPrivilegeEscalation: false
-              capabilities:
-                drop:
-                  - ALL
-              readOnlyRootFilesystem: true
             env:
               - name: TZ
                 value: "Europe/Paris"
-            resources:
-              requests:
-                cpu: 20m
-                memory: 384Mi
-              limits:
-                memory: 2Gi
             probes:
               liveness: &probes
                 enabled: true
@@ -55,6 +43,18 @@ spec:
                   timeoutSeconds: 1
                   failureThreshold: 3
               readiness: *probes
+            resources:
+              requests:
+                cpu: 20m
+                memory: 384Mi
+              limits:
+                memory: 2Gi
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop:
+                  - ALL
+              readOnlyRootFilesystem: true
     service:
       app:
         controller: sonarr

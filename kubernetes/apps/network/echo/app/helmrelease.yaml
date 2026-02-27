@@ -10,6 +10,11 @@ spec:
     name: echo
   interval: 1h
   values:
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
     controllers:
       echo:
         strategy: RollingUpdate
@@ -45,11 +50,6 @@ spec:
                 cpu: 10m
               limits:
                 memory: 64Mi
-    defaultPodOptions:
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 1000
-        runAsGroup: 1000
     service:
       app:
         ports:

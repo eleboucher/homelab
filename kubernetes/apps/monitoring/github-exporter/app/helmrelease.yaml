@@ -6,12 +6,18 @@ kind: HelmRelease
 metadata:
   name: github-exporter
 spec:
-  interval: 10m
   chartRef:
     kind: OCIRepository
     name: github-exporter
-
+  interval: 10m
   values:
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
     controllers:
       github-exporter:
         type: statefulset
@@ -41,14 +47,6 @@ spec:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
               capabilities: {drop: ["ALL"]}
-
-    defaultPodOptions:
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 1000
-        runAsGroup: 1000
-        fsGroup: 1000
-        fsGroupChangePolicy: OnRootMismatch
 
     service:
       app:

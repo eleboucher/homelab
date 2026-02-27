@@ -11,6 +11,11 @@ spec:
     name: cloudflare-tunnel
   interval: 1h
   values:
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
     controllers:
       cloudflare-tunnel:
         replicas: 2
@@ -55,11 +60,6 @@ spec:
                 cpu: 10m
               limits:
                 memory: 256Mi
-    defaultPodOptions:
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 1000
-        runAsGroup: 1000
     service:
       app:
         ports:

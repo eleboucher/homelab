@@ -6,18 +6,13 @@ metadata:
   name: flaresolverr
   namespace: media
 spec:
-  interval: 1h
   chartRef:
     kind: OCIRepository
     name: flaresolverr
+  interval: 1h
   values:
     controllers:
       flaresolverr:
-        enabled: true
-        type: deployment
-
-        replicas: 2
-
         pod:
           securityContext:
             runAsUser: &context 1000
@@ -25,7 +20,8 @@ spec:
             fsGroup: *context
             fsGroupChangePolicy: "OnRootMismatch"
           dnsPolicy: ClusterFirst
-
+        replicas: 2
+        type: deployment
         containers:
           app:
             image:
@@ -35,28 +31,24 @@ spec:
             env:
               TZ: "Europe/Paris"
               LOG_LEVEL: info
-
             probes:
               liveness:
                 enabled: false
-
-            securityContext:
-              allowPrivilegeEscalation: false
-              capabilities:
-                drop:
-                  - ALL
-
             resources:
               requests:
                 cpu: 20m
                 memory: 128Mi
               limits:
                 memory: 1000Mi
-
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop:
+                  - ALL
     service:
       app:
-        primary: true
         controller: flaresolverr
         ports:
           http:
             port: 8191
+        primary: true

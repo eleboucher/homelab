@@ -6,17 +6,13 @@ metadata:
   name: qui
   namespace: downloads
 spec:
-  interval: 1h
   chartRef:
     kind: OCIRepository
     name: qui
+  interval: 1h
   values:
     controllers:
       qui:
-        annotations:
-          reloader.stakater.com/auto: "true"
-        type: deployment
-        replicas: 1
         pod:
           nodeSelector:
             kubernetes.io/hostname: kharkiv
@@ -24,6 +20,10 @@ spec:
             runAsGroup: 1000
             runAsNonRoot: true
             runAsUser: 1000
+        annotations:
+          reloader.stakater.com/auto: "true"
+        replicas: 1
+        type: deployment
         containers:
           app:
             image:
@@ -38,11 +38,6 @@ spec:
                 value: "/"
               - name: QUI__PORT
                 value: "8080"
-            resources:
-              requests:
-                cpu: 10m
-              limits:
-                memory: 512Mi
             probes:
               liveness: &probes
                 enabled: true
@@ -56,6 +51,11 @@ spec:
                   timeoutSeconds: 1
                   failureThreshold: 3
               readiness: *probes
+            resources:
+              requests:
+                cpu: 10m
+              limits:
+                memory: 512Mi
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
