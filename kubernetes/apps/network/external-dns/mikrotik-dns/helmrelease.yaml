@@ -15,7 +15,6 @@ spec:
     triggerLoopOnEvent: true
     policy: sync
     sources:
-      - crd
       - gateway-httproute
       - service
     txtOwnerId: default
@@ -61,8 +60,6 @@ spec:
               secretKeyRef:
                 name: mikrotik-credentials
                 key: username
-        extraArgs:
-          - --gateway-name=envoy-internal
         resources:
           requests:
             cpu: 20m
