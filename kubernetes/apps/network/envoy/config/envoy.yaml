@@ -1,4 +1,3 @@
-# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/gateway.envoyproxy.io/envoyproxy_v1alpha1.json
 ---
 # yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/gateway.envoyproxy.io/envoyproxy_v1alpha1.json
 apiVersion: gateway.envoyproxy.io/v1alpha1
@@ -16,10 +15,10 @@ spec:
         replicas: 2
         container:
           image: mirror.gcr.io/envoyproxy/envoy:v1.37.0
+          # imageRepository: mirror.gcr.io/envoyproxy/envoy
           resources:
             requests:
               cpu: 100m
-              memory: 256Mi
             limits:
               memory: 2Gi
       envoyService:
@@ -60,8 +59,8 @@ spec:
   gatewayClassName: envoy
   infrastructure:
     annotations:
-      external-dns.alpha.kubernetes.io/target: *hostname
-      lbipam.cilium.io/ips: 192.168.69.11
+      external-dns.alpha.kubernetes.io/hostname: *hostname
+      lbipam.cilium.io/ips: 192.168.69.126
   listeners:
     - name: http
       protocol: HTTP
@@ -98,7 +97,7 @@ spec:
   infrastructure:
     annotations:
       external-dns.alpha.kubernetes.io/hostname: *hostname
-      lbipam.cilium.io/ips: "192.168.69.10"
+      lbipam.cilium.io/ips: 192.168.69.121
   listeners:
     - name: http
       protocol: HTTP
