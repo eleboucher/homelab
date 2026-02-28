@@ -24,28 +24,25 @@ spec:
                 service: https://envoy-external.{{ .Release.Namespace }}.svc.cluster.local:443
               - service: http_status:404
     controllers:
-      cloudflared:
+      cloudflare-tunnel:
         replicas: 2
         strategy: RollingUpdate
-        pod:
-          securityContext:
-            runAsGroup: 1000
-            runAsNonRoot: true
-            runAsUser: 1000
+        annotations:
+          reloader.stakater.com/auto: "true"
         containers:
           app:
             image:
               repository: mirror.gcr.io/cloudflare/cloudflared
-              tag: 2026.2.0
-            args:
-              - tunnel
-              - run
+              tag: 2026.2.0@sha256:404528c1cd63c3eb882c257ae524919e4376115e6fe57befca8d603656a91a4c
             env:
-              NO_AUTOUPDATE: "true"
+              NO_AUTOUPDATE: true
               TUNNEL_METRICS: 0.0.0.0:8080
             envFrom:
               - secretRef:
-                  name: cloudflared-secret
+                  name: "{{ .Release.Name }}-secret"
+            args:
+              - tunnel
+              - run
             probes:
               liveness: &probes
                 enabled: true
@@ -59,24 +56,20 @@ spec:
                   timeoutSeconds: 1
                   failureThreshold: 3
               readiness: *probes
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: {drop: ["ALL"]}
             resources:
               requests:
                 cpu: 10m
               limits:
-                memory: 128Mi
-            securityContext:
-              allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
-              capabilities:
-                drop:
-                  - ALL
-    persistence:
-      config:
-        type: configMap
-        identifier: config
-        globalMounts:
-          - path: /etc/cloudflared/config.yaml
-            subPath: config.yaml
+                memory: 256Mi
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
     service:
       app:
         ports:
@@ -86,7 +79,3 @@ spec:
       app:
         endpoints:
           - port: http
-            scheme: http
-            path: /metrics
-            interval: 1m
-            scrapeTimeout: 30s
