@@ -1,6 +1,5 @@
 ---
 # yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/storage.k8s.io/storageclass_v1.json
-# StorageClass for Volsync snapshot copies - uses 1 replica for faster restores
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
@@ -16,7 +15,6 @@ reclaimPolicy: Delete
 volumeBindingMode: WaitForFirstConsumer
 ---
 # yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/storage.k8s.io/storageclass_v1.json
-# StorageClass for Volsync cache volumes - can be safely deleted
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
