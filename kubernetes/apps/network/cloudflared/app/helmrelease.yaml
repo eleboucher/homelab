@@ -18,7 +18,9 @@ spec:
               - hostname: "*.erwanleboucher.dev"
                 originRequest:
                   http2Origin: true
+                  keepAliveTimeout: 3600s
                   originServerName: external.erwanleboucher.dev
+                  tcpKeepAlive: 7200s
                 service: https://envoy-external.{{ .Release.Namespace }}.svc.cluster.local:443
               - service: http_status:404
     controllers:
@@ -27,13 +29,13 @@ spec:
         strategy: RollingUpdate
         pod:
           securityContext:
-            runAsGroup: 2000
+            runAsGroup: 1000
             runAsNonRoot: true
-            runAsUser: 2000
+            runAsUser: 1000
         containers:
           app:
             image:
-              repository: docker.io/cloudflare/cloudflared
+              repository: mirror.gcr.io/cloudflare/cloudflared
               tag: 2026.2.0
             args:
               - tunnel
@@ -41,8 +43,6 @@ spec:
             env:
               NO_AUTOUPDATE: "true"
               TUNNEL_METRICS: 0.0.0.0:8080
-              TUNNEL_POST_QUANTUM: true
-              TUNNEL_TRANSPORT_PROTOCOL: quic
             envFrom:
               - secretRef:
                   name: cloudflared-secret
