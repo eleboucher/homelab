@@ -5,3 +5,4 @@ kind: Component
 resources:
   - externalsecret.yaml
   - cluster.yaml
+  - ./schedulebackup.yaml

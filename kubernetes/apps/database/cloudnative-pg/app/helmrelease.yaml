@@ -12,6 +12,8 @@ spec:
   values:
     monitoring:
       podMonitorEnabled: true
+      grafanaDashboard:
+        create: true
     resources:
       requests:
         cpu: 100m
