@@ -79,3 +79,10 @@ spec:
       app:
         endpoints:
           - port: http
+    persistence:
+      config-file:
+        type: configMap
+        identifier: config
+        globalMounts:
+          - path: /etc/cloudflared/config.yaml
+            subPath: config.yaml
