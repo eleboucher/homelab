@@ -76,8 +76,6 @@ spec:
         parentRefs:
           - name: kgateway-external
             namespace: network
-          - name: kgateway-internal
-            namespace: network
         hostnames:
           - watch.erwanleboucher.dev
     persistence:

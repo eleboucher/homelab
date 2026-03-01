@@ -132,8 +132,6 @@ spec:
         parentRefs:
           - name: kgateway-external
             namespace: network
-          - name: envoy-internal
-            namespace: network
         hostnames:
           - streamystats.erwanleboucher.dev
         rules:
