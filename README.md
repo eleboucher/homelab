@@ -12,7 +12,7 @@
 [![Memory-Usage](https://kromgo.erwanleboucher.dev/cluster_memory_usage?format=badge)](https://github.com/kashalls/kromgo/)
 
 
-GitOps-managed Kubernetes homelab running a media server stack, home automation, and monitoring infrastructure using Flux.
+GitOps-managed Kubernetes homelab running a media server stack, home automation, and observability infrastructure using Flux.
 
 ## Cluster Nodes
 

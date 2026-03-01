@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-GitOps-managed Kubernetes homelab running a media server stack (Jellyfin, Sonarr, Radarr, etc.), home automation, and monitoring infrastructure. Two-node cluster using Talos Linux with Flux CD for GitOps.
+GitOps-managed Kubernetes homelab running a media server stack (Jellyfin, Sonarr, Radarr, etc.), home automation, and observability infrastructure. Two-node cluster using Talos Linux with Flux CD for GitOps.
 
 **Stack:** Talos Linux → Kubernetes v1.35 → Flux CD → Helm/Kustomize
 
@@ -62,7 +62,7 @@ kubernetes/
 │   ├── flux-system/         # Flux controllers
 │   ├── kube-system/         # Cilium, CoreDNS, Longhorn, metrics
 │   ├── media/               # Jellyfin, Sonarr, Radarr, Bazarr, Prowlarr
-│   ├── monitoring/          # Prometheus, Grafana, VictoriaLogs
+│   ├── observability/          # Prometheus, Grafana, VictoriaLogs
 │   ├── network/             # Envoy Gateway, External DNS, Cloudflared
 │   └── security/            # External Secrets
 ├── components/              # Reusable Kustomize components

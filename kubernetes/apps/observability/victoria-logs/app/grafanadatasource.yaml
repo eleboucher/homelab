@@ -1,0 +1,19 @@
+# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/grafana.integreatly.org/grafanadatasource_v1beta1.json
+---
+# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/grafana.integreatly.org/grafanadatasource_v1beta1.json
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDatasource
+metadata:
+  name: vl-datasource
+spec:
+  datasource:
+    access: proxy
+    type: victoriametrics-logs-datasource
+    name: VL
+    url: http://victoria-logs-server.observability.svc.cluster.local:9428
+  instanceSelector:
+    matchLabels:
+      grafana.internal/instance: grafana
+  plugins:
+    - name: victoriametrics-logs-datasource
+      version: "0.16.3"

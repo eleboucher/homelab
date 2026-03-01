@@ -111,7 +111,7 @@ spec:
             headerStyle: clean
             cardBlur: md
             layout:
-              Monitoring:
+              observability:
                 style: row
                 columns: 3
               Media:
@@ -161,14 +161,14 @@ spec:
                 labels: false
                 nodes: false
           services.yaml: |
-            - Monitoring:
+            - observability:
               - Gatus:
                   icon: gatus.png
                   href: https://status.erwanleboucher.dev
-                  description: Monitoring
+                  description: observability
                   widget:
                     type: gatus
-                    url: http://gatus.monitoring
+                    url: http://gatus.observability
                     slug: default
               - Prometheus:
                   icon: prometheus.png
@@ -176,7 +176,7 @@ spec:
                   description: Metrics
                   widget:
                     type: prometheus
-                    url: http://prometheus-operated.monitoring:9090
+                    url: http://prometheus-operated.observability:9090
               - Grafana:
                   icon: grafana.png
                   href: https://grafana.erwanleboucher.dev
@@ -184,7 +184,7 @@ spec:
                   widget:
                     type: grafana
                     version: 2
-                    url: http://grafana-service.monitoring:3000
+                    url: http://grafana-service.observability:3000
                     username: '{{ "{{" }}HOMEPAGE_VAR_GRAFANA_USER{{ "}}" }}'
                     password: '{{ "{{" }}HOMEPAGE_VAR_GRAFANA_PASS{{ "}}" }}'
               - Mikrotik:
