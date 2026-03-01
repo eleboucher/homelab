@@ -13,7 +13,7 @@ spec:
     - ../../../../components/nfs-scaler
   path: ./kubernetes/apps/media/profilarr/app
   dependsOn:
-    - name: envoy-gateway
+    - name: kgateway-gateway
       namespace: network
     - name: longhorn
       namespace: longhorn-system

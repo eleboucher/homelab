@@ -81,5 +81,5 @@ spec:
         hostnames:
           - kromgo.erwanleboucher.dev
         parentRefs:
-          - name: envoy-external
+          - name: kgateway-external
             namespace: network

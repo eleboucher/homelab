@@ -58,7 +58,7 @@ spec:
     route:
       app:
         parentRefs:
-          - name: envoy-internal
+          - name: kgateway-internal
             namespace: network
         hostnames:
           - pdf.erwanleboucher.dev

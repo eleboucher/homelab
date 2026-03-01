@@ -9,7 +9,7 @@ spec:
   interval: 1h
   path: ./kubernetes/apps/selfhosted/bentopdf/app
   dependsOn:
-    - name: envoy-gateway
+    - name: kgateway-gateway
       namespace: network
     - name: longhorn
       namespace: longhorn-system

@@ -12,7 +12,7 @@ spec:
     - ../../../../components/cnpg
   path: ./kubernetes/apps/media/streamystats/app
   dependsOn:
-    - name: envoy-gateway
+    - name: kgateway-gateway
       namespace: network
     - name: longhorn
       namespace: longhorn-system

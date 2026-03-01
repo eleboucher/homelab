@@ -3,13 +3,12 @@
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: OCIRepository
 metadata:
-  name: envoy-gateway
-  namespace: flux-system
+  name: kgateway
 spec:
   interval: 15m
   layerSelector:
     mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
     operation: copy
   ref:
-    tag: 1.7.0
-  url: oci://docker.io/envoyproxy/gateway-helm
+    tag: v2.2.1
+  url: oci://ghcr.io/kgateway-dev/charts/kgateway

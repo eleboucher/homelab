@@ -9,7 +9,7 @@ spec:
   hostnames:
     - renovate.erwanleboucher.dev
   parentRefs:
-    - name: envoy-internal
+    - name: kgateway-internal
       namespace: network
   rules:
     - backendRefs:

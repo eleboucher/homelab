@@ -130,7 +130,7 @@ spec:
     route:
       main:
         parentRefs:
-          - name: envoy-external
+          - name: kgateway-external
             namespace: network
           - name: envoy-internal
             namespace: network

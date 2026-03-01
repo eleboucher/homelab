@@ -9,7 +9,7 @@ spec:
     - ../../../../components/cnpg
     - ../../../../components/volsync
   dependsOn:
-    - name: envoy-gateway
+    - name: kgateway-gateway
       namespace: network
     - name: longhorn
       namespace: longhorn-system

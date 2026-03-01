@@ -21,7 +21,7 @@ spec:
                   keepAliveTimeout: 3600s
                   originServerName: external.erwanleboucher.dev
                   tcpKeepAlive: 7200s
-                service: https://envoy-external.{{ .Release.Namespace }}.svc.cluster.local:443
+                service: https://kgateway-external.{{ .Release.Namespace }}.svc.cluster.local:443
               - service: http_status:404
     controllers:
       cloudflare-tunnel:

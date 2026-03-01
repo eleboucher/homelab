@@ -10,7 +10,7 @@ spec:
   hostnames:
     - flux.erwanleboucher.dev
   parentRefs:
-    - name: envoy-internal
+    - name: kgateway-internal
       namespace: network
       sectionName: https
   rules:

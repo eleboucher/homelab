@@ -11,7 +11,7 @@ metadata:
       conditions: ["[STATUS] == 404"]
 spec:
   parentRefs:
-    - name: envoy-external
+    - name: kgateway-external
       namespace: network
       sectionName: https
   hostnames:
