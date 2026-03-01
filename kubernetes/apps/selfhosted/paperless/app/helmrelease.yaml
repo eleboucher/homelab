@@ -123,7 +123,7 @@ spec:
 
       nas:
         type: nfs
-        server: 192.168.1.40
+        server: normandie.internal
         path: /
         globalMounts:
           - path: /data/nas
