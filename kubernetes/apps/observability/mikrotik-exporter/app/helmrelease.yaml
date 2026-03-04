@@ -27,10 +27,10 @@ spec:
         containers:
           mktxp:
             image:
-              repository: ghcr.io/akpw/mktxp
-              tag: 1.2.17
+              repository: ghcr.io/eleboucher/mktxp
+              tag: main-523359e
             command:
-              - "mktxp"
+              - "/mktxp"
             args:
               - "--cfg-dir"
               - "/mktxp_config"
@@ -60,7 +60,7 @@ spec:
         endpoints:
           - port: http
             scheme: http
-            path: /
+            path: /metrics
             interval: 1m
             scrapeTimeout: 10s
 
@@ -69,10 +69,10 @@ spec:
         type: configMap
         name: mktxp-config
         globalMounts:
-          - path: /mktxp_config/mktxp.conf
-            subPath: mktxp.conf
-          - path: /mktxp_config/_mktxp.conf
-            subPath: _mktxp.conf
+          - path: /mktxp_config/mktxp.yaml
+            subPath: mktxp.yaml
+          - path: /mktxp_config/_mktxp.yaml
+            subPath: _mktxp.yaml
       credentials:
         type: secret
         name: mktxp-credentials

@@ -1,0 +1,99 @@
+---
+
+default:
+  port: 8729
+
+  use_ssl: true
+  no_ssl_certificate: false
+  ssl_certificate_verify: false
+  ssl_check_hostname: true
+  plaintext_login: true
+
+  health: true
+  installed_packages: true
+  dhcp: false
+  dhcp_lease: false
+
+  connections: true
+  connection_stats: false
+
+  interface: true
+
+  route: false
+  pool: false
+  firewall: false
+  neighbor: false
+  address_list: []
+  dns: false
+
+  ipv6_route: false
+  ipv6_pool: false
+  ipv6_firewall: false
+  ipv6_neighbor: false
+  ipv6_address_list: []
+
+  poe: false
+  monitor: true
+  netwatch: false
+  public_ip: false
+  wireless: false
+  wireless_clients: false
+  capsman: false
+  capsman_clients: false
+  w60g: false
+
+  eoip: false
+  gre: false
+  ipip: false
+  lte: false
+  ipsec: false
+  switch_port: true
+
+  kid_control_assigned: false
+  kid_control_dynamic: false
+
+  user: true
+  queue: true
+
+  bfd: false
+  bgp: false
+  routing_stats: false
+  certificate: false
+
+  container: false
+
+  interface_name_format: name
+  check_for_updates: true
+
+routers:
+  CRS310:
+    enabled: true
+    hostname: 192.168.1.2
+    credentials_file: /mktxp_credentials/crs310.yaml
+
+    # L3 routing metrics
+    connections: true
+    connection_stats: true
+    route: true
+    pool: true
+    firewall: true
+    neighbor: true
+    address_list: []
+
+    # DHCP/DNS services
+    dhcp: true
+    dhcp_lease: true
+    dns: true
+
+    # BGP routing
+    bgp: true
+    routing_stats: true
+    bfd: false
+
+    # Monitoring
+    monitor: true
+    netwatch: true
+    public_ip: true
+
+    # Switch-specific
+    switch_port: true
