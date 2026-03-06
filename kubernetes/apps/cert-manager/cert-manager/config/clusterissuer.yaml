@@ -12,10 +12,16 @@ spec:
     server: https://acme-v02.api.letsencrypt.org/directory
     solvers:
       - dns01:
-          cloudflare:
-            apiTokenSecretRef:
-              name: cloudflare-issuer-secret
-              key: CLOUDFLARE_DNS_TOKEN
+          webhook:
+            groupName: acme.erwanleboucher.dev
+            solverName: ovh
+            config:
+              endpoint: ovh-eu
+              applicationKey: "${applicationKey}"
+              applicationSecretRef:
+                key: applicationSecret
+                name: ovh-issuer-secret
+              consumerKey: "${consumerKey}"
         selector:
           dnsZones:
             - erwanleboucher.dev
