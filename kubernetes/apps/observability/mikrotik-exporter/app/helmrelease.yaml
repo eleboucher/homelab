@@ -28,7 +28,7 @@ spec:
           mktxp:
             image:
               repository: ghcr.io/eleboucher/mktxp
-              tag: 0.0.4
+              tag: 0.0.5
             command:
               - "/mktxp"
             args:
