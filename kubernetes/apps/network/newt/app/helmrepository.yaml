@@ -1,0 +1,10 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/source.toolkit.fluxcd.io/helmrepository_v1.json
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: fossorial
+  namespace: default # Ensure this matches your HelmRelease namespace
+spec:
+  interval: 30m
+  url: https://charts.fossorial.io
