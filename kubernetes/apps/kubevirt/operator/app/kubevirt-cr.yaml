@@ -1,0 +1,21 @@
+---
+apiVersion: kubevirt.io/v1
+kind: KubeVirt
+metadata:
+  name: kubevirt
+  namespace: kubevirt
+spec:
+  configuration:
+    developerConfiguration:
+      featureGates:
+        - LiveMigration
+        - NetworkBindingPlugins
+    smbios:
+      family: ccio
+      manufacturer: Talos Virtualization
+      product: talosvm
+      sku: TalosCloud
+      version: v0.1.0
+  workloadUpdateStrategy:
+    workloadUpdateMethods:
+      - LiveMigrate

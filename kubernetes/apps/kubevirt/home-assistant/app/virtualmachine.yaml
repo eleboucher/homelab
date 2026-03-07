@@ -1,0 +1,54 @@
+---
+apiVersion: kubevirt.io/v1
+kind: VirtualMachine
+metadata:
+  name: home-assistant
+  namespace: home-assistant
+spec:
+  runStrategy: Always
+  template:
+    metadata:
+      annotations:
+        kubevirt.io/allow-pod-bridge-network-live-migration: "true"
+      labels:
+        kubevirt.io/vm: home-assistant
+    spec:
+      evictionStrategy: LiveMigrate
+      nodeSelector:
+        kubernetes.io/hostname: le-havre
+      domain:
+        cpu:
+          cores: 2
+        devices:
+          disks:
+            - name: haos-disk
+              disk:
+                bus: virtio
+          interfaces:
+            - name: default
+              masquerade: {}
+        resources:
+          requests:
+            memory: 2Gi
+      networks:
+        - name: default
+          pod: {}
+      volumes:
+        - name: haos-disk
+          dataVolume:
+            name: haos-disk
+  dataVolumeTemplates:
+    - metadata:
+        name: haos-disk
+      spec:
+        source:
+          http:
+            # renovate: datasource=github-releases depName=home-assistant/operating-system
+            url: "https://github.com/home-assistant/operating-system/releases/download/17.1/haos_ova-17.1.qcow2.xz"
+        storage:
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: 32Gi
+          storageClassName: longhorn
