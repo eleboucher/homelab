@@ -12,6 +12,7 @@ spec:
   parentRefs:
     - name: kgateway-external
       namespace: network
+      sectionName: https
   rules:
     - matches:
         - path:
@@ -19,5 +20,4 @@ spec:
             value: /
       backendRefs:
         - name: home-assistant
-          namespace: home-assistant
           port: 8123
