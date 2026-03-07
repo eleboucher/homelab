@@ -28,8 +28,9 @@ spec:
             - deviceName: kubevirt.io/bluetooth
               name: bluetooth
           interfaces:
-            - name: default
+            - macAddress: "02:00:00:00:00:01"
               masquerade: {}
+              name: default
         resources:
           requests:
             memory: 2Gi
