@@ -1,0 +1,113 @@
+---
+- name: Install and configure Pangolin on VPS
+  hosts: all
+  become: true
+  gather_facts: false
+  vars:
+    ansible_user: root
+
+  tasks:
+    - name: Ping
+      ansible.builtin.ping:
+
+    - name: Install Docker
+      ansible.builtin.shell: curl -fsSL https://get.docker.com | sh
+      args:
+        executable: /bin/bash
+        creates: /usr/bin/docker
+
+    - name: Create Pangolin directory
+      ansible.builtin.file:
+        path: /opt/pangolin
+        state: directory
+        mode: "0755"
+
+    - name: Download Pangolin installer
+      ansible.builtin.shell: curl -fsSL https://static.pangolin.net/get-installer.sh | bash
+      args:
+        executable: /bin/bash
+        chdir: /opt/pangolin
+        creates: /opt/pangolin/installer
+
+    - name: Check if Gerbil is running
+      ansible.builtin.command: docker compose -f /opt/pangolin/docker-compose.yml ps -q gerbil
+      register: gerbil_running
+      ignore_errors: true
+
+    - name: Pause — run the installer manually
+      ansible.builtin.pause:
+        prompt: |
+          The Pangolin installer is ready. Run it interactively:
+
+            ssh root@{{ inventory_hostname }} -t 'cd /opt/pangolin && ./installer'
+
+          put Gerbil to Yes
+
+          Press Enter here when the installer has finished.
+      when: gerbil_running.stdout == ""
+
+    - name: Find Pangolin config file
+      ansible.builtin.find:
+        paths:
+          - /opt/pangolin
+        patterns: "config.yml"
+        recurse: true
+      register: config_search
+
+    - name: Fail if config not found
+      ansible.builtin.fail:
+        msg: "Pangolin config.yml not found — did the installer complete successfully?"
+      when: config_search.files | length == 0
+
+    - name: Read Pangolin config
+      ansible.builtin.slurp:
+        src: "{{ config_search.files[0].path }}"
+      register: config_raw
+
+    - name: Capture VPS IP
+      ansible.builtin.set_fact:
+        vps_ip: "{{ inventory_hostname }}"
+
+    - name: Parse Pangolin config
+      ansible.builtin.set_fact:
+        cfg: "{{ config_raw.content | b64decode | from_yaml }}"
+
+    - name: Derive URLs
+      ansible.builtin.set_fact:
+        dashboard_url: "{{ cfg.app.dashboard_url }}"
+        server_url: "{{ cfg.app.dashboard_url }}"
+
+    - name: Save VPS info to 1Password (edit existing item)
+      ansible.builtin.shell: >
+        op item edit pangolin --vault kubernetes
+        "server_url={{ server_url }}" "vps_ip={{ vps_ip }}"
+        "newt_id=" "newt_secret=" < /dev/null
+      delegate_to: localhost
+      become: false
+      ignore_errors: true
+      register: op_edit
+
+    - name: Create 1Password item if it did not exist
+      ansible.builtin.shell: >
+        op item create --vault kubernetes --category=login --title=pangolin
+        "server_url={{ server_url }}" "vps_ip={{ vps_ip }}"
+        "newt_id=" "newt_secret=" < /dev/null
+      delegate_to: localhost
+      become: false
+      when: op_edit is failed
+
+    - name: Display summary
+      ansible.builtin.debug:
+        msg:
+          - "=== Pangolin is ready ==="
+          - "VPS IP    : {{ vps_ip }}"
+          - "Server URL: {{ server_url }}"
+          - "Dashboard : {{ dashboard_url }}/auth/initial-setup"
+          - ""
+          - "server_url and vps_ip saved to 1Password item 'pangolin'."
+          - ""
+          - "Next steps:"
+          - "  1. Open {{ dashboard_url }}/auth/initial-setup to create your admin account"
+          - "  2. Create an organisation + site"
+          - "  3. Copy the NEWT_ID and NEWT_SECRET shown for the site"
+          - "  4. Run: just vps save-newt {{ vps_ip }} <newt_id> <newt_secret>"
