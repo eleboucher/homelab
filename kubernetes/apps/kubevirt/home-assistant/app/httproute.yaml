@@ -5,18 +5,19 @@ apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
   name: home-assistant
-  namespace: system
+  namespace: home-assistant
 spec:
+  hostnames:
+    - home.erwanleboucher.dev
   parentRefs:
     - name: kgateway-external
       namespace: network
-  hostnames:
-    - home.erwanleboucher.dev
   rules:
     - matches:
         - path:
             type: PathPrefix
             value: /
       backendRefs:
-        - name: home-assistant-external
+        - name: home-assistant
+          namespace: home-assistant
           port: 8123
