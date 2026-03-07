@@ -16,3 +16,4 @@ resources:
   - metrics-server/ks.yaml
   - spegel/ks.yaml
   - gateway-api-crds/ks.yaml
+  - multus/ks.yaml

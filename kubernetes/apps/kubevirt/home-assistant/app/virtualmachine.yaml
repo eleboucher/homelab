@@ -35,6 +35,9 @@ spec:
             - macAddress: "02:00:00:00:00:01"
               masquerade: {}
               name: default
+            - bridge: {}
+              macAddress: "02:00:00:00:00:02"
+              name: lan
         resources:
           limits:
             memory: 2Gi
@@ -44,6 +47,9 @@ spec:
       networks:
         - name: default
           pod: {}
+        - multus:
+            networkName: home-assistant-lan
+          name: lan
       volumes:
         - name: haos-disk
           dataVolume:

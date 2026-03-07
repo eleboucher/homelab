@@ -56,7 +56,7 @@ upgrade-node node *args:
 
 [private]
 machine-controller node:
-    just template "{{ talos_dir }}/nodes/{{ node }}.yaml.j2" | yq -e 'select(.machine) | (.machine.type == "controlplane") // ""'
+    just template "{{ talos_dir }}/nodes/{{ node }}.yaml.j2" | yq 'select(.machine) | select(.machine.type == "controlplane") | "true"'
 
 [private]
 machine-image:
