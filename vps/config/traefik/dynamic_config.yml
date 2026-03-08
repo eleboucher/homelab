@@ -15,7 +15,7 @@ http:
           crowdsecAppsecHost: crowdsec:7422
           crowdsecAppsecUnreachableBlock: true
           crowdsecLapiHost: crowdsec:8080
-          crowdsecLapiKey: PUT_YOUR_BOUNCER_KEY_HERE_OR_IT_WILL_NOT_WORK
+          crowdsecLapiKey: {{ env "CROWDSEC_API_KEY" }} # yamlint disable
           crowdsecLapiScheme: http
           crowdsecMode: live
           defaultDecisionSeconds: 15
