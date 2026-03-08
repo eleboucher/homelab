@@ -100,6 +100,17 @@ services:
       - ./config/letsencrypt:/letsencrypt
       - ./config/traefik/logs:/var/log/traefik
 
+  geoipupdate:
+    container_name: geoipupdate
+    image: ghcr.io/maxmind/geoipupdate
+    restart: unless-stopped
+    environment:
+      - GEOIPUPDATE_ACCOUNT_ID=${MAXMIND_ACCOUNT_ID}
+      - GEOIPUPDATE_LICENSE_KEY=${MAXMIND_LICENSE_KEY}
+      - GEOIPUPDATE_EDITION_IDS=GeoLite2-Country GeoLite2-ASN'
+      - GEOIPUPDATE_FREQUENCY=72'
+    volumes:
+      - './config/GeoLite2:/usr/share/GeoIP'
 networks:
   default:
     driver: bridge
@@ -127,7 +138,8 @@ configs:
               methods: ["GET", "POST", "PUT", "DELETE", "PATCH"]
               allowed_headers: ["X-CSRF-Token", "Content-Type"]
               credentials: false
-
+          maxmind_db_path: "./config/GeoLite2/GeoLite2-Country.mmdb"
+          maxmind_asn_path: "./config/GeoLite2/GeoLite2-ASN.mmdb"
       flags:
           require_email_verification: false
           disable_signup_without_invite: true

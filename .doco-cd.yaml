@@ -8,3 +8,5 @@ external_secrets:
   OVH_APPLICATION_SECRET: "op://kubernetes/ovh/OVH_APPLICATION_SECRET"
   OVH_CONSUMER_KEY: "op://kubernetes/ovh/OVH_CONSUMER_KEY"
   PANGOLIN_SECRET: "op://kubernetes/pangolin/server_secret"
+  MAXMIND_ACCOUNT_ID: "op://kubernetes/pangolin/maxmind_account_id"
+  MAXMIND_LICENSE_KEY: "op://kubernetes/pangolin/maxmind_key"
