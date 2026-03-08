@@ -45,6 +45,13 @@ spec:
               ssl: true
               full-domain: "external.erwanleboucher.dev"
               tls-server-name: external.erwanleboucher.dev
+              rules:
+                - action: deny
+                  match: country
+                  value: RU
+                - action: deny
+                  match: country
+                  value: IL
               targets:
                 - site: glistening-desert-rosy-boa
                   hostname: kgateway-external.network.svc.cluster.local
