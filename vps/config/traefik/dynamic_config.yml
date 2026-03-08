@@ -125,7 +125,10 @@ http:
       entryPoints:
         - websecure
       middlewares:
+        - badger
         - cors
+        - crowdsec
+        - security-headers
       priority: 1
       tls:
         certResolver: letsencrypt
