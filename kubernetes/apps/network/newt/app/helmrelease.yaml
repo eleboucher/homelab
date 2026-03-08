@@ -46,9 +46,22 @@ spec:
               full-domain: "external.erwanleboucher.dev"
               tls-server-name: external.erwanleboucher.dev
               rules:
+                # State-sponsored threat actors / sanctioned nations
                 - action: deny
                   match: country
                   value: RU
+                - action: deny
+                  match: country
+                  value: CN
+                - action: deny
+                  match: country
+                  value: KP
+                - action: deny
+                  match: country
+                  value: IR
+                - action: deny
+                  match: country
+                  value: BY
                 - action: deny
                   match: country
                   value: IL
