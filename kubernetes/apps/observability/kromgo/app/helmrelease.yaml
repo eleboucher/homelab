@@ -78,6 +78,14 @@ spec:
         annotations:
           gatus.home-operations.com/endpoint: |-
             conditions: ["[STATUS] == 200"]
+        filters:
+          - type: ResponseHeaderModifier
+            responseHeaderModifier:
+              add:
+                - name: Access-Control-Allow-Origin
+                  value: "*"
+                - name: Access-Control-Allow-Private-Network
+                  value: "true"
         hostnames:
           - kromgo.erwanleboucher.dev
         parentRefs:
