@@ -1,13 +1,17 @@
 ---
-- name: Bootstrap doco-cd on VPS
+- name: Bootstrap doco-cd and Pangolin on VPS
   hosts: all
   become: true
   gather_facts: false
   vars:
     ansible_user: root
-    # Pass via: just vps install <ip>
-    # Reads git_token and op_sa_token from 1Password on the local machine
     doco_cd_repo: "https://github.com/eleboucher/mediaserver.git"
+    pangolin_hostname: "pangolin.erwanleboucher.dev"
+    pangolin_org_id: "homelab"
+    pangolin_org_name: "Homelab"
+    pangolin_site_name: "k8s-cluster"
+    pangolin_org_subnet: "100.89.0.0/16"
+    pangolin_org_utility_subnet: "100.90.0.0/24"
 
   tasks:
     - name: Ping
@@ -19,27 +23,33 @@
         executable: /bin/bash
         creates: /usr/bin/docker
 
-    - name: Read GitHub deploy token from 1Password
-      ansible.builtin.shell: "op read 'op://kubernetes/doco-cd/github-token' < /dev/null"
+    - name: Read secrets from 1Password
+      ansible.builtin.shell: "op read 'op://kubernetes/{{ item.key }}' < /dev/null"
       delegate_to: localhost
       become: false
-      register: github_token
+      loop:
+        - {key: "doco-cd/github-token", var: "github_token"}
+        - {key: "doco-cd/credential", var: "op_sa_token"}
+        - {key: "pangolin/admin_email", var: "admin_email"}
+        - {key: "pangolin/admin_password", var: "admin_password"}
+      register: secrets_raw
 
-    - name: Read 1Password service account token from 1Password
-      ansible.builtin.shell: "op read 'op://kubernetes/doco-cd/credential' < /dev/null"
-      delegate_to: localhost
-      become: false
-      register: op_sa_token
+    - name: Set secret facts
+      ansible.builtin.set_fact:
+        github_token: "{{ secrets_raw.results[0].stdout }}"
+        op_sa_token: "{{ secrets_raw.results[1].stdout }}"
+        admin_email: "{{ secrets_raw.results[2].stdout }}"
+        admin_password: "{{ secrets_raw.results[3].stdout }}"
+
+    - name: Stop existing Pangolin stack if present
+      ansible.builtin.command: docker compose -f /opt/pangolin/docker-compose.yml down
+      ignore_errors: true
 
     - name: Create doco-cd directory
       ansible.builtin.file:
         path: /opt/doco-cd
         state: directory
         mode: "0700"
-
-    - name: Stop existing Pangolin stack if present
-      ansible.builtin.command: docker compose -f /opt/pangolin/docker-compose.yml down
-      ignore_errors: true
 
     - name: Deploy doco-cd compose file
       ansible.builtin.copy:
@@ -53,9 +63,9 @@
               restart: unless-stopped
               environment:
                 TZ: Europe/Paris
-                GIT_ACCESS_TOKEN: "{{ github_token.stdout }}"
+                GIT_ACCESS_TOKEN: "{{ github_token }}"
                 SECRET_PROVIDER: 1password
-                SECRET_PROVIDER_ACCESS_TOKEN: "{{ op_sa_token.stdout }}"
+                SECRET_PROVIDER_ACCESS_TOKEN: "{{ op_sa_token }}"
                 POLL_CONFIG: |
                   - url: {{ doco_cd_repo }}
                     reference: refs/heads/main
@@ -71,16 +81,134 @@
                 retries: 3
 
     - name: Start doco-cd
-      ansible.builtin.command: docker compose -f /opt/doco-cd/docker-compose.yml up -d
+      ansible.builtin.command: docker compose -f /opt/doco-cd/docker-compose.yml down && docker compose -f /opt/doco-cd/docker-compose.yml up -d
+
+    - name: Wait for Pangolin to become healthy
+      ansible.builtin.command: >
+        docker inspect --format="{{ '{{' }}.State.Health.Status{{ '}}' }}" pangolin
+      register: pangolin_health
+      until: pangolin_health.stdout == "healthy"
+      retries: 30
+      delay: 10
+
+    - name: Set Pangolin admin credentials
+      ansible.builtin.command: >
+        docker exec pangolin node /app/dist/cli.mjs set-admin-credentials
+        --email "{{ admin_email }}"
+        --password "{{ admin_password }}"
+
+    - name: Bootstrap Pangolin org and site
+      ansible.builtin.shell: |
+        docker exec -i pangolin node - << 'JSEOF'
+        const http = require('http');
+
+        const BASE = 'http://localhost:3000/api/v1';
+        const CSRF = 'x-csrf-protection';
+        let cookie = '';
+
+        function api(method, path, body) {
+          return new Promise((resolve, reject) => {
+            const data = body ? JSON.stringify(body) : null;
+            const opts = {
+              hostname: 'localhost', port: 3000,
+              path: '/api/v1' + path, method,
+              headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-Token': CSRF,
+                ...(cookie ? { Cookie: cookie } : {})
+              }
+            };
+            const req = http.request(opts, res => {
+              const sc = res.headers['set-cookie'];
+              if (sc) cookie = sc.map(c => c.split(';')[0]).join('; ');
+              let buf = '';
+              res.on('data', d => buf += d);
+              res.on('end', () => resolve(JSON.parse(buf)));
+            });
+            req.on('error', reject);
+            if (data) req.write(data);
+            req.end();
+          });
+        }
+
+        async function main() {
+          // Login
+          let r = await api('POST', '/auth/login',
+            { email: '{{ admin_email }}', password: '{{ admin_password }}' });
+          if (!r.success) { console.log('LOGIN_FAILED: ' + r.message); process.exit(1); }
+
+          // Create org (idempotent)
+          r = await api('PUT', '/org', {
+            orgId: '{{ pangolin_org_id }}', name: '{{ pangolin_org_name }}',
+            subnet: '{{ pangolin_org_subnet }}', utilitySubnet: '{{ pangolin_org_utility_subnet }}'
+          });
+          if (!r.success && !r.message.includes('already exists')) {
+            console.log('ORG_FAILED: ' + r.message); process.exit(1);
+          }
+
+          // Check if site already exists
+          const sites = await api('GET', '/org/{{ pangolin_org_id }}/sites');
+          const existing = (sites.data?.sites || []).find(s => s.name === '{{ pangolin_site_name }}');
+          if (existing) { console.log('SITE_EXISTS:' + existing.niceId); process.exit(0); }
+
+          // Pick site defaults
+          const defaults = await api('GET', '/org/{{ pangolin_org_id }}/pick-site-defaults');
+          if (!defaults.success) { console.log('DEFAULTS_FAILED: ' + defaults.message); process.exit(1); }
+
+          const newtId = defaults.data.newtId;
+          const newtSecret = defaults.data.newtSecret;
+
+          // Create site
+          r = await api('PUT', '/org/{{ pangolin_org_id }}/site', {
+            name: '{{ pangolin_site_name }}', type: 'newt',
+            newtId, secret: newtSecret
+          });
+          if (!r.success) { console.log('SITE_FAILED: ' + r.message); process.exit(1); }
+
+          console.log('NEWT_ID:' + newtId);
+          console.log('NEWT_SECRET:' + newtSecret);
+          console.log('SITE_NICE_ID:' + r.data.niceId);
+        }
+
+        main().catch(e => { console.log('ERROR: ' + e.message); process.exit(1); });
+        JSEOF
+      args:
+        executable: /bin/bash
+      register: pangolin_bootstrap
+
+    - name: Parse bootstrap output
+      ansible.builtin.set_fact:
+        newt_id: "{{ (pangolin_bootstrap.stdout | regex_search('NEWT_ID:(.+)', '\\1') or ['']) | first }}"
+        newt_secret: "{{ (pangolin_bootstrap.stdout | regex_search('NEWT_SECRET:(.+)', '\\1') or ['']) | first }}"
+        site_nice_id: "{{ (pangolin_bootstrap.stdout | regex_search('SITE_(?:NICE_ID|EXISTS):(.+)', '\\1') or ['']) | first }}"
+
+    - name: Fail if bootstrap returned an error
+      ansible.builtin.fail:
+        msg: "{{ pangolin_bootstrap.stdout }}"
+      when: "'_FAILED:' in pangolin_bootstrap.stdout"
+
+    - name: Save Newt credentials to 1Password
+      ansible.builtin.shell: >
+        op item edit pangolin --vault kubernetes
+        "newt_id={{ newt_id }}"
+        "newt_secret={{ newt_secret }}"
+        "vps_ip={{ inventory_hostname }}"
+        "server_url=https://{{ pangolin_hostname }}" < /dev/null
+      delegate_to: localhost
+      become: false
+      when: newt_id != ""
 
     - name: Display summary
       ansible.builtin.debug:
         msg:
-          - "=== doco-cd is running ==="
-          - "It will deploy Pangolin from {{ doco_cd_repo }} within ~60s."
+          - "=== Bootstrap complete ==="
+          - "VPS IP      : {{ inventory_hostname }}"
+          - "Dashboard   : https://{{ pangolin_hostname }}"
+          - "Org         : {{ pangolin_org_id }}"
+          - "Site niceId : {{ site_nice_id }}"
+          - "Newt ID     : {{ newt_id if newt_id != '' else '(already existed)' }}"
           - ""
-          - "Once Pangolin is up:"
-          - "  1. Open https://pangolin.erwanleboucher.dev/auth/initial-setup"
-          - "  2. Create an organisation + site"
-          - "  3. Create an External Gateway resource pointing to kgateway-external"
-          - "  4. Run: just vps save-newt {{ inventory_hostname }} <newt_id> <newt_secret> https://pangolin.erwanleboucher.dev"
+          - "Credentials saved to 1Password item 'pangolin'."
+          - ""
+          - "Next: update the site niceId in kubernetes/apps/network/newt/app/helmrelease.yaml"
+          - "  site: {{ site_nice_id }}"

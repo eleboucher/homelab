@@ -2,7 +2,7 @@
 name: pangolin
 services:
   pangolin:
-    image: docker.io/fosrl/pangolin:latest
+    image: docker.io/fosrl/pangolin:ee-1.16.2
     container_name: pangolin
     restart: unless-stopped
     deploy:
@@ -27,7 +27,7 @@ services:
       retries: 15
 
   gerbil:
-    image: docker.io/fosrl/gerbil:latest
+    image: docker.io/fosrl/gerbil:1.3.0
     container_name: gerbil
     restart: unless-stopped
     depends_on:

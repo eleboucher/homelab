@@ -60,7 +60,7 @@ http:
     # Wildcard catch-all: forward all *.erwanleboucher.dev to kgateway-external via Newt
     wildcard-subdomain-router:
       rule: "HostRegexp(`\\.erwanleboucher\\.dev$`)"
-      service: "2-External-Gateway-service@http"
+      service: "1-External-Gateway-service@http"
       entryPoints:
         - websecure
       priority: 1

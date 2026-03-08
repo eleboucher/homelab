@@ -46,7 +46,7 @@ spec:
               full-domain: "external.erwanleboucher.dev"
               tls-server-name: external.erwanleboucher.dev
               targets:
-                - site: dopey-mertenss-worm-lizard
+                - site: glistening-desert-rosy-boa
                   hostname: kgateway-external.network.svc.cluster.local
                   method: https
                   port: 443
