@@ -87,6 +87,7 @@ services:
       - OVH_APPLICATION_KEY=${OVH_APPLICATION_KEY}
       - OVH_APPLICATION_SECRET=${OVH_APPLICATION_SECRET}
       - OVH_CONSUMER_KEY=${OVH_CONSUMER_KEY}
+      - CROWDSEC_API_KEY=${CROWDSEC_API_KEY}
     network_mode: service:gerbil
     depends_on:
       crowdsec:
