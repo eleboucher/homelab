@@ -32,6 +32,7 @@
         - {key: "doco-cd/credential", var: "op_sa_token"}
         - {key: "pangolin/admin_email", var: "admin_email"}
         - {key: "pangolin/admin_password", var: "admin_password"}
+        - {key: "pangolin/CROWDSEC_API_KEY", var: "crowdsec_api_key"}
       register: secrets_raw
 
     - name: Set secret facts
@@ -40,6 +41,7 @@
         op_sa_token: "{{ secrets_raw.results[1].stdout }}"
         admin_email: "{{ secrets_raw.results[2].stdout }}"
         admin_password: "{{ secrets_raw.results[3].stdout }}"
+        crowdsec_api_key: "{{ secrets_raw.results[4].stdout }}"
 
     - name: Stop existing Pangolin stack if present
       ansible.builtin.command: docker compose -f /opt/pangolin/docker-compose.yml down
@@ -186,6 +188,16 @@
       ansible.builtin.fail:
         msg: "{{ pangolin_bootstrap.stdout }}"
       when: "'_FAILED:' in pangolin_bootstrap.stdout"
+
+    - name: Check if CrowdSec bouncer already registered
+      ansible.builtin.command: docker exec crowdsec cscli bouncers list -o json
+      register: crowdsec_bouncers
+      changed_when: false
+
+    - name: Register CrowdSec bouncer for Traefik
+      ansible.builtin.command: >
+        docker exec crowdsec cscli bouncers add traefik --key "{{ crowdsec_api_key }}"
+      when: "'traefik' not in crowdsec_bouncers.stdout"
 
     - name: Save Newt credentials to 1Password
       ansible.builtin.shell: >
