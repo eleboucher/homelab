@@ -26,7 +26,6 @@ spec:
         create: false
     resources:
       limits:
-        cpu: null
         memory: 1Gi
       requests:
         cpu: 100m

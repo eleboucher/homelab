@@ -32,8 +32,6 @@ spec:
               - --enable-httproute
               - --enable-service
             resources:
-              requests:
-                cpu: 10m
               limits:
                 memory: 64Mi
             restartPolicy: Always

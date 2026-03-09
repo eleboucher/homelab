@@ -32,10 +32,8 @@ spec:
                   name: homepage-secrets
             resources:
               requests:
-                cpu: 50m
                 memory: 128Mi
               limits:
-                cpu: 500m
                 memory: 512Mi
             probes:
               liveness:
