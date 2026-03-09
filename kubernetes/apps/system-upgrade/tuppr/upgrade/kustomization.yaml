@@ -5,4 +5,3 @@ kind: Kustomization
 resources:
   - ./kubeupgrade.yaml
   - ./talosupgrade.yaml
-  - ./prometheusrule.yaml
