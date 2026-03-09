@@ -36,7 +36,7 @@ spec:
           app:
             image:
               repository: fosrl/newt
-              tag: 1.10.1
+              tag: 1.10.2
             env:
               PANGOLIN_ENDPOINT:
                 valueFrom:
