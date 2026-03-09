@@ -54,6 +54,7 @@ services:
     volumes:
       - /opt/crowdsec/config:/etc/crowdsec
       - /opt/crowdsec/data:/var/lib/crowdsec/data
+      - ./config/crowdsec/acquis.d:/etc/crowdsec/acquis.d
       - ./config/traefik/logs:/var/log/traefik
 
   gerbil:
