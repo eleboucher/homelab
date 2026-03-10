@@ -1,4 +1,5 @@
 ---
+# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/kubevirt.io/virtualmachine_v1.json
 apiVersion: kubevirt.io/v1
 kind: VirtualMachine
 metadata:
@@ -42,7 +43,7 @@ spec:
           limits:
             memory: 2Gi
           requests:
-            cpu: "2"
+            cpu: "1"
             memory: 2Gi
       networks:
         - name: default

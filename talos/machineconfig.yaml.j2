@@ -59,6 +59,7 @@ machine:
     defaultRuntimeSeccompProfileEnabled: true
     disableManifestsDirectory: true
     extraConfig:
+      maxPods: 250
       serializeImagePulls: false
     extraMounts:
       - destination: /var/mnt/longhorn
