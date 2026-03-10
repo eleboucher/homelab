@@ -310,8 +310,17 @@ configs:
           matrix-well-known-redirect:
             redirectRegex:
               permanent: true
-              regex: "^http?s://erwanleboucher\\.dev(/.well-known/matrix/.*)$"
+              regex: "^https?://erwanleboucher\\.dev(/.well-known/matrix/.*)$"
               replacement: "https://matrix.erwanleboucher.dev$${1}"
+          matrix-cors:
+            headers:
+              accessControlAllowOriginList:
+                - "*"
+              accessControlAllowHeaders:
+                - "*"
+              accessControlAllowMethods:
+                - GET
+                - OPTIONS
           security-headers:
             headers:
               contentTypeNosniff: true
@@ -382,6 +391,7 @@ configs:
             entryPoints:
               - websecure
             middlewares:
+              - matrix-cors
               - matrix-well-known-redirect
             rule: "Host(`erwanleboucher.dev`) && PathPrefix(`/.well-known/matrix/`)"
             service: s3-erwanleboucher-dev
