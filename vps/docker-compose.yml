@@ -303,20 +303,7 @@ configs:
             plugin:
               badger:
                 disableForwardAuth: true
-          cors:
-            headers:
-              accessControlAllowOriginListRegex:
-                - "^https://([a-z0-9-]+\\.)?erwanleboucher\\.dev$"
-                - "^http://localhost:5173$"
-              accessControlAllowMethods:
-                - GET
-                - OPTIONS
-                - HEAD
-              accessControlAllowHeaders:
-                - "*"
-              accessControlMaxAge: 86400
-              customResponseHeaders:
-                Access-Control-Allow-Private-Network: "true"
+
           redirect-to-https:
             redirectScheme:
               scheme: https
@@ -324,7 +311,7 @@ configs:
             redirectRegex:
               permanent: true
               regex: "^https://erwanleboucher\\.dev(/.well-known/matrix/.*)$"
-              replacement: "https://continuwuity.erwanleboucher.dev${1}"
+              replacement: "https://continuwuity.erwanleboucher.dev$${1}"
           security-headers:
             headers:
               contentTypeNosniff: true
@@ -435,7 +422,7 @@ configs:
             loadBalancer:
               passHostHeader: false
               servers:
-                - url: "https://erwan-leboucher.dev.s3.rbx.io.cloud.ovh.net"
+                - url: "http://erwan-leboucher.dev.s3-website.rbx.io.cloud.ovh.net"
 
       tcp:
         serversTransports:
