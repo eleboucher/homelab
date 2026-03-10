@@ -128,7 +128,7 @@ spec:
           serve:
             app:
               - path: /usr/share/nginx/html
-                subPath: crdSchemas
+                subPath: data/crdSchemas
       tmpfs:
         type: emptyDir
         advancedMounts:
