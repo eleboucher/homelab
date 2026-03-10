@@ -6,12 +6,18 @@ kind: Kustomization
 metadata:
   name: k8s-schemas
 spec:
+  components:
+    - ../../../../components/volsync
   commonMetadata:
     labels:
       app.kubernetes.io/name: k8s-schemas
   interval: 1h
   path: "./kubernetes/apps/jobs/k8s-schemas/app"
   prune: true
+  postBuild:
+    substitute:
+      APP: k8s-schemas
+      VOLSYNC_CAPACITY: 1Gi
   sourceRef:
     kind: GitRepository
     name: flux-system

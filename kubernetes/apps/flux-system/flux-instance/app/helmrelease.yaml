@@ -20,6 +20,8 @@ spec:
         - kustomize-controller
         - helm-controller
         - notification-controller
+        - image-reflector-controller
+        - image-automation-controller
       cluster:
         networkPolicy: false
       sync:

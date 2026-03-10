@@ -54,9 +54,10 @@ services:
     volumes:
       - /opt/crowdsec/config:/etc/crowdsec
       - /opt/crowdsec/data:/var/lib/crowdsec/data
-      - ./config/crowdsec/acquis.d:/etc/crowdsec/acquis.d
       - ./config/traefik/logs:/var/log/traefik
-
+    configs:
+      - source: crowdsec_acquis
+        target: /etc/crowdsec/acquis.yaml
   gerbil:
     image: docker.io/fosrl/gerbil:1.3.0
     container_name: gerbil
@@ -98,10 +99,13 @@ services:
     command:
       - --configFile=/etc/traefik/traefik_config.yml
     volumes:
-      - ./config/traefik:/etc/traefik:ro
       - ./config/letsencrypt:/letsencrypt
       - ./config/traefik/logs:/var/log/traefik
-
+    configs:
+      - source: traefik_config
+        target: /etc/traefik/traefik_config.yml
+      - source: traefik_dynamic_config
+        target: /etc/traefik/dynamic_config.yml
   geoipupdate:
     container_name: geoipupdate
     image: ghcr.io/maxmind/geoipupdate:v7.1.1
@@ -112,7 +116,7 @@ services:
       - GEOIPUPDATE_EDITION_IDS=GeoLite2-Country GeoLite2-ASN
       - GEOIPUPDATE_FREQUENCY=72
     volumes:
-      - './config/GeoLite2:/usr/share/GeoIP'
+      - "./config/GeoLite2:/usr/share/GeoIP"
 
 networks:
   default:
@@ -134,6 +138,7 @@ configs:
       domains:
           domain1:
               base_domain: "erwanleboucher.dev"
+              cert_resolver: "letsencrypt"
       server:
           secret: "${PANGOLIN_SECRET}"
           cors:
@@ -149,3 +154,294 @@ configs:
           disable_user_create_org: false
           allow_raw_resources: true
           enable_integration_api: true
+  traefik_config:
+    content: |-
+      api:
+        insecure: true
+        dashboard: true
+
+      providers:
+        http:
+          endpoint: "http://pangolin:3001/api/v1/traefik-config"
+          pollInterval: "5s"
+        file:
+          filename: "/etc/traefik/dynamic_config.yml"
+
+      experimental:
+        plugins:
+          badger:
+            moduleName: "github.com/fosrl/badger"
+            version: "v1.3.1"
+          crowdsec:
+            moduleName: github.com/maxlerebourg/crowdsec-bouncer-traefik-plugin
+            version: v1.4.4
+      log:
+        level: "INFO"
+        format: "common"
+        maxSize: 100
+        maxBackups: 3
+        maxAge: 3
+        compress: true
+
+      certificatesResolvers:
+        letsencrypt:
+          acme:
+            dnsChallenge:
+              provider: ovh
+            email: "erwanleboucher@gmail.com"
+            storage: "/letsencrypt/acme.json"
+            caServer: "https://acme-v02.api.letsencrypt.org/directory"
+
+      entryPoints:
+        web:
+          address: ":80"
+        websecure:
+          address: ":443"
+          transport:
+            respondingTimeouts:
+              readTimeout: "30m"
+          http:
+            tls:
+              certResolver: "letsencrypt"
+            encodedCharacters:
+              allowEncodedSlash: true
+              allowEncodedQuestionMark: true
+
+      serversTransport:
+        insecureSkipVerify: true
+
+      ping:
+        entryPoint: "web"
+
+      accessLog:
+        bufferingSize: 100
+        fields:
+          defaultMode: drop
+          headers:
+            defaultMode: drop
+            names:
+              Authorization: redact
+              Content-Type: keep
+              Cookie: redact
+              User-Agent: keep
+              X-Forwarded-For: keep
+              X-Forwarded-Proto: keep
+              X-Real-Ip: keep
+          names:
+            ClientAddr: keep
+            ClientHost: keep
+            DownstreamContentSize: keep
+            DownstreamStatus: keep
+            Duration: keep
+            RequestMethod: keep
+            RequestPath: keep
+            RequestProtocol: keep
+            RetryAttempts: keep
+            ServiceName: keep
+            StartUTC: keep
+            TLSCipher: keep
+            TLSVersion: keep
+        filePath: /var/log/traefik/access.log
+        filters:
+          minDuration: 100ms
+          retryAttempts: true
+          statusCodes:
+            - 200-299
+            - 400-499
+            - 500-599
+        format: json
+  crowdsec_acquis:
+    content: |
+      source: file
+      filenames:
+        - /var/log/traefik/access.log
+      labels:
+        type: traefik
+      ---
+      source: appsec
+      listen_addr: 0.0.0.0:7422
+      path: /
+      appsec_config: crowdsecurity/virtual-patching
+      labels:
+        type: appsec
+  traefik_dynamic_config:
+    content: |-
+      http:
+        middlewares:
+          crowdsec:
+            plugin:
+              crowdsec:
+                clientTrustedIPs:
+                  - 10.0.0.0/8
+                  - 172.16.0.0/12
+                  - 192.168.0.0/16
+                  - 100.89.137.0/20
+                crowdsecAppsecBodyLimit: 10485760
+                crowdsecAppsecEnabled: true
+                crowdsecAppsecFailureBlock: true
+                crowdsecAppsecHost: crowdsec:7422
+                crowdsecAppsecUnreachableBlock: true
+                crowdsecLapiHost: crowdsec:8080
+                crowdsecLapiKey: {{ env "CROWDSEC_API_KEY" }}
+                crowdsecLapiScheme: http
+                crowdsecMode: live
+                defaultDecisionSeconds: 15
+                enabled: true
+                forwardedHeadersTrustedIPs:
+                  - 0.0.0.0/0
+                httpTimeoutSeconds: 10
+                logLevel: INFO
+                updateIntervalSeconds: 15
+                updateMaxFailure: 0
+          default-whitelist:
+            ipWhiteList:
+              sourceRange:
+                - 10.0.0.0/8
+                - 192.168.0.0/16
+                - 172.16.0.0/12
+          badger:
+            plugin:
+              badger:
+                disableForwardAuth: true
+          cors:
+            headers:
+              accessControlAllowOriginListRegex:
+                - "^https://([a-z0-9-]+\\.)?erwanleboucher\\.dev$"
+                - "^http://localhost:5173$"
+              accessControlAllowMethods:
+                - GET
+                - OPTIONS
+                - HEAD
+              accessControlAllowHeaders:
+                - "*"
+              accessControlMaxAge: 86400
+              customResponseHeaders:
+                Access-Control-Allow-Private-Network: "true"
+          redirect-to-https:
+            redirectScheme:
+              scheme: https
+          matrix-well-known-redirect:
+            redirectRegex:
+              permanent: true
+              regex: "^https://erwanleboucher\\.dev(/.well-known/matrix/.*)$"
+              replacement: "https://continuwuity.erwanleboucher.dev${1}"
+          security-headers:
+            headers:
+              contentTypeNosniff: true
+              customFrameOptionsValue: SAMEORIGIN
+              customResponseHeaders:
+                Server: ""
+                X-Forwarded-Proto: https
+                X-Powered-By: ""
+              forceSTSHeader: true
+              hostsProxyHeaders:
+                - X-Forwarded-Host
+              referrerPolicy: strict-origin-when-cross-origin
+              sslProxyHeaders:
+                X-Forwarded-Proto: https
+              stsIncludeSubdomains: true
+              stsPreload: true
+              stsSeconds: 63072000
+        routers:
+          # HTTP to HTTPS redirect router
+          main-app-router-redirect:
+            rule: "Host(`pangolin.erwanleboucher.dev`)"
+            service: next-service
+            entryPoints:
+              - web
+            middlewares:
+              - redirect-to-https
+              - badger
+
+          # Next.js router (handles everything except API and WebSocket paths)
+          next-router:
+            rule: "Host(`pangolin.erwanleboucher.dev`) && !PathPrefix(`/api/v1`)"
+            service: next-service
+            entryPoints:
+              - websecure
+            middlewares:
+              - badger
+            tls:
+              certResolver: letsencrypt
+              domains:
+                - main: "erwanleboucher.dev"
+                  sans:
+                    - "*.erwanleboucher.dev"
+
+          # API router (handles /api/v1 paths)
+          api-router:
+            rule: "Host(`pangolin.erwanleboucher.dev`) && PathPrefix(`/api/v1`)"
+            service: api-service
+            entryPoints:
+              - websecure
+            middlewares:
+              - badger
+            tls:
+              certResolver: letsencrypt
+
+          # WebSocket router
+          ws-router:
+            rule: "Host(`pangolin.erwanleboucher.dev`)"
+            service: api-service
+            entryPoints:
+              - websecure
+            middlewares:
+              - badger
+            tls:
+              certResolver: letsencrypt
+
+          # 301 redirect /.well-known/matrix/* → continuwuity subdomain
+          matrix-well-known:
+            entryPoints:
+              - websecure
+            middlewares:
+              - matrix-well-known-redirect
+            rule: "Host(`erwanleboucher.dev`) && PathPrefix(`/.well-known/matrix/`)"
+            service: s3-erwanleboucher-dev
+            tls:
+              certResolver: letsencrypt
+
+          erwanleboucher-dev-redirect:
+            entryPoints:
+              - web
+            middlewares:
+              - redirect-to-https
+            rule: "Host(`erwanleboucher.dev`)"
+            service: s3-erwanleboucher-dev
+
+          erwanleboucher-dev:
+            entryPoints:
+              - websecure
+            middlewares:
+              - crowdsec
+              - security-headers
+            rule: "Host(`erwanleboucher.dev`)"
+            service: s3-erwanleboucher-dev
+            tls:
+              certResolver: letsencrypt
+
+        services:
+          next-service:
+            loadBalancer:
+              servers:
+                - url: "http://pangolin:3002"
+
+          api-service:
+            loadBalancer:
+              servers:
+                - url: "http://pangolin:3000"
+
+          s3-erwanleboucher-dev:
+            loadBalancer:
+              passHostHeader: false
+              servers:
+                - url: "https://erwan-leboucher.dev.s3.rbx.io.cloud.ovh.net"
+
+      tcp:
+        serversTransports:
+          pp-transport-v1:
+            proxyProtocol:
+              version: 1
+          pp-transport-v2:
+            proxyProtocol:
+              version: 2

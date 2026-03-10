@@ -14,3 +14,11 @@ spec:
       recordType: A
       targets:
         - ${VPS_IP}
+    - dnsName: erwanleboucher.dev
+      recordType: A
+      targets:
+        - ${VPS_IP}
+    - dnsName: www.erwanleboucher.dev
+      recordType: A
+      targets:
+        - ${VPS_IP}

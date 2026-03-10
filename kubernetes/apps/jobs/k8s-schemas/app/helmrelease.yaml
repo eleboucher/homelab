@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: publish-k8s-schemas
+  name: k8s-schemas
 spec:
   chartRef:
     kind: OCIRepository
@@ -11,22 +11,22 @@ spec:
   interval: 30m
   values:
     controllers:
-      publish-k8s-schemas:
-        type: cronjob
-        cronjob:
-          backoffLimit: 4
-          concurrencyPolicy: Forbid
-          failedJobsHistory: 1
-          schedule: "0 */4 * * *"
-          successfulJobsHistory: 1
+      extract:
         pod:
           restartPolicy: OnFailure
           securityContext:
             runAsGroup: 65534
             runAsNonRoot: true
             runAsUser: 65534
-        initContainers:
-          generate-schemas:
+        cronjob:
+          backoffLimit: 4
+          concurrencyPolicy: Forbid
+          failedJobsHistory: 1
+          schedule: "0 */4 * * *"
+          successfulJobsHistory: 1
+        type: cronjob
+        containers:
+          app:
             image:
               repository: ghcr.io/bjw-s-labs/k8s-crd-extractor
               tag: 2025.12.22
@@ -38,56 +38,37 @@ spec:
                 memory: 2Gi
             securityContext:
               allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
               capabilities:
                 drop:
                   - ALL
+              readOnlyRootFilesystem: true
+      serve:
+        pod:
+          securityContext:
+            runAsGroup: 101
+            runAsNonRoot: true
+            runAsUser: 101
+        replicas: 1
+        type: deployment
         containers:
           app:
             image:
-              repository: ghcr.io/bjw-s-labs/wrangler
-              tag: 4.71.0
-            envFrom:
-              - secretRef:
-                  name: publish-k8s-schemas-secret
-            args:
-              - pages
-              - deploy
-              - /data/crdSchemas
-              - --project-name
-              - k8s-schemas
+              repository: docker.io/nginxinc/nginx-unprivileged
+              tag: alpine
+            probes:
+              liveness:
+                enabled: true
+              readiness:
+                enabled: true
             resources:
               requests:
                 cpu: 10m
-                memory: 128Mi
+                memory: 32Mi
               limits:
-                memory: 1Gi
-            securityContext:
-              allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
-              capabilities:
-                drop:
-                  - ALL
-    persistence:
-      tmpfs:
-        type: emptyDir
-        advancedMounts:
-          publish-k8s-schemas:
-            generate-schemas:
-              - path: /config/.datree
-                subPath: data
-              - path: /tmp
-                subPath: tmp
-            app:
-              - path: /config
-                subPath: config
-              - path: /data
-                subPath: data
-    serviceAccount:
-      publish-k8s-schemas: {}
+                memory: 128Mi
     rbac:
       roles:
-        publish-k8s-schemas:
+        extract:
           type: ClusterRole
           rules:
             - apiGroups:
@@ -109,9 +90,45 @@ spec:
                 - list
                 - watch
       bindings:
-        publish-k8s-schemas:
+        extract:
           type: ClusterRoleBinding
           roleRef:
-            identifier: publish-k8s-schemas
+            identifier: extract
           subjects:
-            - identifier: publish-k8s-schemas
+            - identifier: extract
+    route:
+      app:
+        parentRefs:
+          - name: kgateway-external
+            namespace: network
+        hostnames:
+          - k8s-schemas.erwanleboucher.dev
+    service:
+      app:
+        controller: serve
+        ports:
+          http:
+            port: 8080
+    serviceAccount:
+      extract: {}
+    persistence:
+      schemas:
+        type: persistentVolumeClaim
+        existingClaim: "{{ .Release.Name }}"
+        advancedMounts:
+          extract:
+            app:
+              - path: /data
+          serve:
+            app:
+              - path: /usr/share/nginx/html
+                subPath: crdSchemas
+      tmpfs:
+        type: emptyDir
+        advancedMounts:
+          extract:
+            app:
+              - path: /config/.datree
+                subPath: data
+              - path: /tmp
+                subPath: tmp
