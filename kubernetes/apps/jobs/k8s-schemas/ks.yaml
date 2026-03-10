@@ -18,6 +18,7 @@ spec:
     substitute:
       APP: k8s-schemas
       VOLSYNC_CAPACITY: 1Gi
+      VOLSYNC_ACCESSMODES: ReadWriteMany
   sourceRef:
     kind: GitRepository
     name: flux-system

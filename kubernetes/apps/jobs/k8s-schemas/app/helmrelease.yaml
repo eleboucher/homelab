@@ -18,6 +18,8 @@ spec:
             runAsGroup: 65534
             runAsNonRoot: true
             runAsUser: 65534
+        serviceAccount:
+          identifier: extract
         cronjob:
           backoffLimit: 4
           concurrencyPolicy: Forbid
@@ -30,6 +32,9 @@ spec:
             image:
               repository: ghcr.io/bjw-s-labs/k8s-crd-extractor
               tag: 2025.12.22
+            env:
+              - name: OUTPUT_DIR
+                value: /data/crdSchemas
             resources:
               requests:
                 cpu: 10m
@@ -48,6 +53,8 @@ spec:
             runAsGroup: 101
             runAsNonRoot: true
             runAsUser: 101
+        serviceAccount:
+          identifier: serve
         replicas: 1
         type: deployment
         containers:
@@ -99,7 +106,7 @@ spec:
     route:
       app:
         parentRefs:
-          - name: kgateway-external
+          - name: kgateway-internal
             namespace: network
         hostnames:
           - k8s-schemas.erwanleboucher.dev
@@ -111,6 +118,7 @@ spec:
             port: 8080
     serviceAccount:
       extract: {}
+      serve: {}
     persistence:
       schemas:
         type: persistentVolumeClaim
