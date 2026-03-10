@@ -1,0 +1,21 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/gateway.kgateway.dev/trafficpolicy_v1alpha1.json
+apiVersion: gateway.kgateway.dev/v1alpha1
+kind: TrafficPolicy
+metadata:
+  name: continuwuity
+  namespace: selfhosted
+spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      name: continuwuity
+  compression:
+    responseCompression: {}
+  retry:
+    attempts: 2
+    retryOn:
+      - reset
+  timeouts:
+    request: 0s
+    streamIdle: 0s

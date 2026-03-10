@@ -10,7 +10,6 @@ spec:
       app.kubernetes.io/name: continuwuity
   components:
     - ../../../../components/volsync
-    - ../../../../components/kgateway-trafficpolicy
   dependsOn:
     - name: longhorn
       namespace: longhorn-system
