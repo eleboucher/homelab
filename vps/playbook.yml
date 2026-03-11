@@ -42,11 +42,52 @@
         admin_email: "{{ secrets_raw.results[2].stdout }}"
         admin_password: "{{ secrets_raw.results[3].stdout }}"
         crowdsec_api_key: "{{ secrets_raw.results[4].stdout }}"
+    - name: ssh
+      block:
+        - name: ssh | Harden sshd_config
+          ansible.builtin.copy:
+            dest: /etc/ssh/sshd_config.d/99-hardening.conf
+            content: |
+              PermitRootLogin no
+              PasswordAuthentication no
+              MaxAuthTries 3
+              LoginGraceTime 20
+            owner: root
+            group: root
+            mode: "0644"
+          notify: Restart ssh.socket
 
-    # - name: Stop existing Pangolin stack if present
-    #   ansible.builtin.command: docker compose -f /opt/pangolin/docker-compose.yml down
-    #   ignore_errors: true
+    - name: firewall
+      block:
+        - name: firewall | Install ufw
+          ansible.builtin.apt:
+            name: ufw
+            state: present
+            update_cache: false
 
+        - name: "firewall | Allow ports"
+          community.general.ufw:
+            rule: allow
+            port: "{{ item.port }}"
+            proto: "{{ item.protocol | default('tcp') }}"
+          loop:
+            - name: SSH
+              port: 22
+            - name: HTTP
+              port: 80
+            - name: HTTPS
+              port: 443
+            - name: Wireguard
+              port: 51820
+              protocol: udp
+            - name: Gerbil
+              port: 21820
+              protocol: udp
+
+        - name: firewall | Enable UFW
+          community.general.ufw:
+            state: enabled
+            policy: deny
     - name: Create doco-cd directory
       ansible.builtin.file:
         path: /opt/doco-cd
@@ -224,3 +265,9 @@
           - ""
           - "Next: update the site niceId in kubernetes/apps/network/newt/app/helmrelease.yaml"
           - "  site: {{ site_nice_id }}"
+
+  handlers:
+    - name: Restart ssh.socket
+      ansible.builtin.service:
+        name: ssh.socket
+        state: restarted
