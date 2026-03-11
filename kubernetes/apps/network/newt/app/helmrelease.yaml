@@ -18,6 +18,8 @@ spec:
     controllers:
       newt:
         replicas: 2
+        annotations:
+          reloader.stakater.com/auto: "true"
         initContainers:
           newt-sidecar:
             image:
