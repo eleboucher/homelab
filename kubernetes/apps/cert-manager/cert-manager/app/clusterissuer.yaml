@@ -17,11 +17,16 @@ spec:
             solverName: ovh
             config:
               endpoint: ovh-eu
-              applicationKey: "${applicationKey}"
+              authenticationMethod: application
+              applicationKeyRef:
+                key: applicationKey
+                name: ovh-issuer-secret
               applicationSecretRef:
                 key: applicationSecret
                 name: ovh-issuer-secret
-              consumerKey: "${consumerKey}"
+              applicationConsumerKeyRef:
+                key: consumerKey
+                name: ovh-issuer-secret
         selector:
           dnsZones:
             - erwanleboucher.dev

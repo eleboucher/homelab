@@ -30,28 +30,3 @@ spec:
   targetNamespace: cert-manager
   timeout: 10m
   wait: true
----
-# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: cert-manager-issuer
-  namespace: flux-system
-spec:
-  dependsOn:
-    - name: cert-manager
-    - name: cert-manager-webhook-ovh
-  interval: 12h
-  path: ./kubernetes/apps/cert-manager/cert-manager/config
-  postBuild:
-    substituteFrom:
-      - kind: Secret
-        name: ovh-issuer-secret
-  prune: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-    namespace: flux-system
-  targetNamespace: cert-manager
-  timeout: 5m
-  wait: true

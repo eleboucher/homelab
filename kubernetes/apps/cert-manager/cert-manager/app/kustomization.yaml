@@ -9,3 +9,4 @@ resources:
   - ocirepository.yaml
   - prometheusrule.yaml
   - ./grafanadashboard.yaml
+  - ./clusterissuer.yaml
