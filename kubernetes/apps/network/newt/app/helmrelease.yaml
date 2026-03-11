@@ -17,7 +17,7 @@ spec:
         runAsGroup: 1000
     controllers:
       newt:
-        replicas: 2
+        replicas: 1
         annotations:
           reloader.stakater.com/auto: "true"
         initContainers:
