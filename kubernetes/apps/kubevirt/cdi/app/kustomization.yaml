@@ -7,3 +7,4 @@ resources:
   # renovate: datasource=github-releases depName=kubevirt/containerized-data-importer
   - https://github.com/kubevirt/containerized-data-importer/releases/download/v1.61.0/cdi-operator.yaml
   - cdi-cr.yaml
+  - storageprofile.yaml

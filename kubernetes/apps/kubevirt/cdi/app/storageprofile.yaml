@@ -1,0 +1,15 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/cdi.kubevirt.io/storageprofile_v1beta1.json
+apiVersion: cdi.kubevirt.io/v1beta1
+kind: StorageProfile
+metadata:
+  name: longhorn
+spec:
+  claimPropertySets:
+    - accessModes:
+        - ReadWriteOnce
+      volumeMode: Filesystem
+    - accessModes:
+        - ReadWriteOnce
+      volumeMode: Block
+  cloneStrategy: snapshot
