@@ -25,7 +25,7 @@ spec:
               tag: main-5026d38
             args:
               - --gateway-name=kgateway-external
-              - --site-id=glistening-desert-rosy-boa
+              - --site-id=obese-rough-earth-snake
               - --target-hostname=kgateway-external.network.svc.cluster.local
               - --deny-countries=RU,CN,KP,IR,BY,IL
             restartPolicy: Always

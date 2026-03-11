@@ -4,7 +4,7 @@
   become: true
   gather_facts: false
   vars:
-    ansible_user: root
+    ansible_user: debian
     doco_cd_repo: "https://github.com/eleboucher/mediaserver.git"
     pangolin_hostname: "pangolin.erwanleboucher.dev"
     pangolin_org_id: "homelab"
@@ -43,9 +43,9 @@
         admin_password: "{{ secrets_raw.results[3].stdout }}"
         crowdsec_api_key: "{{ secrets_raw.results[4].stdout }}"
 
-    - name: Stop existing Pangolin stack if present
-      ansible.builtin.command: docker compose -f /opt/pangolin/docker-compose.yml down
-      ignore_errors: true
+    # - name: Stop existing Pangolin stack if present
+    #   ansible.builtin.command: docker compose -f /opt/pangolin/docker-compose.yml down
+    #   ignore_errors: true
 
     - name: Create doco-cd directory
       ansible.builtin.file:
@@ -71,7 +71,7 @@
                 POLL_CONFIG: |
                   - url: {{ doco_cd_repo }}
                     reference: refs/heads/main
-                    interval: 60
+                    interval: 300
               volumes:
                 - /var/run/docker.sock:/var/run/docker.sock
                 - /opt/pangolin:/data
@@ -83,7 +83,7 @@
                 retries: 3
 
     - name: Start doco-cd
-      ansible.builtin.command: docker compose -f /opt/doco-cd/docker-compose.yml down && docker compose -f /opt/doco-cd/docker-compose.yml up -d
+      ansible.builtin.shell: docker compose -f /opt/doco-cd/docker-compose.yml down && docker compose -f /opt/doco-cd/docker-compose.yml up -d
 
     - name: Wait for Pangolin to become healthy
       ansible.builtin.command: >
