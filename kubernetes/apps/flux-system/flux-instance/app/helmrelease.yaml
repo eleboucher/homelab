@@ -27,7 +27,7 @@ spec:
       sync:
         interval: 1h
         kind: GitRepository
-        url: "https://github.com/eleboucher/mediaserver.git"
+        url: "https://github.com/eleboucher/homelab.git"
         ref: "refs/heads/main"
         path: "kubernetes/flux/cluster"
       resources:

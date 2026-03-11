@@ -68,7 +68,7 @@ spec:
             - Development:
               - GitHub:
                   - icon: github.png
-                    href: https://github.com/erwanleboucher/mediaserver
+                    href: https://github.com/erwanleboucher/homelab
                     description: Repository
               - Cloudflare:
                   - icon: cloudflare.png

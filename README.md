@@ -1,6 +1,6 @@
 <div align="center">
 
-# Mediaserver K8s
+# homelab K8s
 
 ### 🏠 A GitOps-managed Homelab
 

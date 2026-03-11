@@ -5,7 +5,7 @@
   gather_facts: false
   vars:
     ansible_user: debian
-    doco_cd_repo: "https://github.com/eleboucher/mediaserver.git"
+    doco_cd_repo: "https://github.com/eleboucher/homelab.git"
     pangolin_hostname: "pangolin.erwanleboucher.dev"
     pangolin_org_id: "homelab"
     pangolin_org_name: "Homelab"

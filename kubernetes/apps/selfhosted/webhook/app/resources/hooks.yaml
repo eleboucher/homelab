@@ -4,7 +4,7 @@
   pass-arguments-to-command:
     - # job name
       source: string
-      name: mediaserver
+      name: homelab
     - # namespace
       source: string
       name: automation

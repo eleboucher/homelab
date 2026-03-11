@@ -40,7 +40,7 @@ spec:
 apiVersion: renovate-operator.mogenius.com/v1alpha1
 kind: RenovateJob
 metadata:
-  name: mediaserver
+  name: homelab
   namespace: renovate
 spec:
   discoveryFilter: eleboucher/*

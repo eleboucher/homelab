@@ -63,6 +63,6 @@ ui:
     - name: Github
       link: https://github.com/eleboucher
     - name: Homelab
-      link: https://github.com/eleboucher/mediaserver
+      link: https://github.com/eleboucher/homelab
 web:
   port: ${GATUS_WEB_PORT}
