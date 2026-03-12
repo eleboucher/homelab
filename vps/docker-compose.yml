@@ -393,27 +393,9 @@ configs:
             middlewares:
               - matrix-cors
               - matrix-well-known-redirect
+            priority: 99
             rule: "Host(`erwanleboucher.dev`) && PathPrefix(`/.well-known/matrix/`)"
-            service: s3-erwanleboucher-dev
-            tls:
-              certResolver: letsencrypt
-
-          erwanleboucher-dev-redirect:
-            entryPoints:
-              - web
-            middlewares:
-              - redirect-to-https
-            rule: "Host(`erwanleboucher.dev`)"
-            service: s3-erwanleboucher-dev
-
-          erwanleboucher-dev:
-            entryPoints:
-              - websecure
-            middlewares:
-              - crowdsec
-              - security-headers
-            rule: "Host(`erwanleboucher.dev`)"
-            service: s3-erwanleboucher-dev
+            service: "11-erwanleboucher-dev-service@http" # hack to get active services docker exec -it 7ebee498bb7e wget -qO- http://localhost:8080/api/http/services
             tls:
               certResolver: letsencrypt
 
@@ -427,12 +409,6 @@ configs:
             loadBalancer:
               servers:
                 - url: "http://pangolin:3000"
-
-          s3-erwanleboucher-dev:
-            loadBalancer:
-              passHostHeader: false
-              servers:
-                - url: "http://erwan-leboucher.dev.s3-website.rbx.io.cloud.ovh.net"
 
       tcp:
         serversTransports:
