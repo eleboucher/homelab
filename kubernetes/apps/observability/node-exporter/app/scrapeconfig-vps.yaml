@@ -8,8 +8,11 @@ metadata:
 spec:
   staticConfigs:
     - targets:
-        - newt-node-exporter.network.svc.cluster.local:9100
+        - newt.network.svc.cluster.local:9100
   relabelings:
+    - action: replace
+      replacement: node-exporter
+      targetLabel: job
     - action: replace
       replacement: vps.internal:9100
       targetLabel: instance
