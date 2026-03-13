@@ -26,7 +26,7 @@ spec:
           kromgo:
             image:
               repository: ghcr.io/eleboucher/kromgo
-              tag: main
+              tag: main@sha256:fa81ca0d48c51831a7d34b7ce21a7b5db6259e1344ce9fb78bfb4ea05422fc0b
             env:
               PROMETHEUS_URL: http://prometheus-operated.observability.svc.cluster.local:9090
               SERVER_HOST: 0.0.0.0
