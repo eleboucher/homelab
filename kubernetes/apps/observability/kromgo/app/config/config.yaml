@@ -65,7 +65,7 @@ metrics:
       maxDuration: "0"
 
   - name: cluster_latency_over_7d
-    query: histogram_quantile(0.99, avg(rate(envoy_cluster_upstream_rq_time_bucket[7d])) by (le))
+    query: quantile(0.99, gatus_results_duration_seconds)
     title: Gateway Latency
     suffix: "s"
     history:
