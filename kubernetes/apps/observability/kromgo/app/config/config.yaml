@@ -49,6 +49,9 @@ metrics:
   - name: github_followers
     query: github_followers
     title: Followers
+    history:
+      enabled: true
+      maxDuration: "0"
 
   - name: github_public_repos
     query: github_public_repos
@@ -65,6 +68,9 @@ metrics:
     query: histogram_quantile(0.99, sum(rate(envoy_cluster_upstream_rq_time_bucket[7d])) by (le))
     title: Gateway Latency
     suffix: "s"
+    history:
+      enabled: true
+      maxDuration: "7d"
     colors:
       - color: "green"
         min: 0
@@ -98,6 +104,9 @@ metrics:
     query: round(sum(node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes) / sum(node_memory_MemTotal_bytes) * 100, 0.1)
     title: Memory
     suffix: "%"
+    history:
+      enabled: true
+      maxDuration: "7d"
     colors:
       - color: "green"
         min: 0
