@@ -25,8 +25,8 @@ spec:
         containers:
           kromgo:
             image:
-              repository: ghcr.io/kashalls/kromgo
-              tag: v0.8.2
+              repository: ghcr.io/eleboucher/kromgo
+              tag: main
             env:
               PROMETHEUS_URL: http://prometheus-operated.observability.svc.cluster.local:9090
               SERVER_HOST: 0.0.0.0

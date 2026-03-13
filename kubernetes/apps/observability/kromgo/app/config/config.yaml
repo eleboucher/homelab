@@ -57,6 +57,9 @@ metrics:
   - name: github_stars_total
     query: github_stars_total
     title: Stars
+    history:
+      enabled: true
+      maxDuration: "0"
 
   - name: cluster_latency_over_7d
     query: histogram_quantile(0.99, sum(rate(envoy_cluster_upstream_rq_time_bucket[7d])) by (le))
@@ -77,6 +80,9 @@ metrics:
     query: round(avg(instance:node_cpu_utilisation:rate5m) * 100, 0.1)
     title: CPU
     suffix: "%"
+    history:
+      enabled: true
+      maxDuration: "7d"
     colors:
       - color: "green"
         min: 0
