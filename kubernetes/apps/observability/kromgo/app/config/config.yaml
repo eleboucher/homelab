@@ -171,6 +171,9 @@ metrics:
       * 100
     title: SLA (7d)
     suffix: "%"
+    history:
+      enabled: true
+      maxDuration: "7d"
     colors:
       - color: "green"
         min: 99.9
