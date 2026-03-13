@@ -110,10 +110,9 @@ services:
     image: quay.io/prometheus/node-exporter:v1.9.1
     container_name: node-exporter
     restart: unless-stopped
-    # Shares Gerbil's network namespace so node_exporter is accessible
-    # at the Gerbil WireGuard IP (100.89.128.1) on port 9100
-    network_mode: service:gerbil
-    pid: host
+    # Host network mode so node_exporter is accessible at the Docker bridge
+    # gateway (172.19.0.1:9100) from other containers, and has real host NIC metrics
+    network_mode: host
     command:
       - --path.procfs=/host/proc
       - --path.sysfs=/host/sys
