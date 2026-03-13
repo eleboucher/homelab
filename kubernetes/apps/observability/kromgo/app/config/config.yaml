@@ -57,7 +57,7 @@ metrics:
     title: Followers
     history:
       enabled: true
-      maxDuration: "0"
+      maxDuration: "0s"
 
   - name: github_public_repos
     query: github_public_repos
@@ -68,7 +68,7 @@ metrics:
     title: Stars
     history:
       enabled: true
-      maxDuration: "0"
+      maxDuration: "0s"
 
   - name: cluster_latency_over_7d
     query: quantile(0.99, gatus_results_duration_seconds)
