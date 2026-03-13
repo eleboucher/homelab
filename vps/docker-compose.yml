@@ -106,6 +106,27 @@ services:
         target: /etc/traefik/traefik_config.yml
       - source: traefik_dynamic_config
         target: /etc/traefik/dynamic_config.yml
+  node-exporter:
+    image: quay.io/prometheus/node-exporter:v1.9.1
+    container_name: node-exporter
+    restart: unless-stopped
+    # Shares Gerbil's network namespace so node_exporter is accessible
+    # at the Gerbil WireGuard IP (100.89.128.1) on port 9100
+    network_mode: service:gerbil
+    pid: host
+    command:
+      - --path.procfs=/host/proc
+      - --path.sysfs=/host/sys
+      - --path.rootfs=/host/root
+      - --web.listen-address=:9100
+    volumes:
+      - /proc:/host/proc:ro,rslave
+      - /sys:/host/sys:ro,rslave
+      - /:/host/root:ro,rslave
+    depends_on:
+      gerbil:
+        condition: service_started
+
   geoipupdate:
     container_name: geoipupdate
     image: ghcr.io/maxmind/geoipupdate:v7.1.1
