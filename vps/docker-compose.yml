@@ -107,7 +107,7 @@ services:
       - source: traefik_dynamic_config
         target: /etc/traefik/dynamic_config.yml
   node-exporter:
-    image: quay.io/prometheus/node-exporter:v1.9.1
+    image: quay.io/prometheus/node-exporter:v1.10.2
     container_name: node-exporter
     restart: unless-stopped
     # Shares Gerbil's network namespace so node_exporter is accessible
