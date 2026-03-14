@@ -329,9 +329,11 @@ configs:
                 - localhost:9100
           relabel_configs:
             - target_label: job
-              replacement: node_exporter
+              replacement: node-exporter
             - target_label: instance
               replacement: pangolin-vps
+            - target_label: nodename
+              replacement: vps
   traefik_dynamic_config:
     content: |-
       http:
