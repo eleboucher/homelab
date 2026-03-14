@@ -6,4 +6,4 @@ namespace: jobs
 
 resources:
   - namespace.yaml
-  - k8s-schemas/ks.yaml
+  # - k8s-schemas/ks.yaml
