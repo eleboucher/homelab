@@ -7,9 +7,15 @@ metadata:
 spec:
   interval: 1h
   path: ./kubernetes/apps/observability/prometheus-remote-write
+  dependsOn:
+    - name: external-secrets
+      namespace: security
   postBuild:
     substitute:
       APP: *app
+    substituteFrom:
+      - kind: Secret
+        name: prometheus-remote-write-token
   prune: true
   retryInterval: 2m
   sourceRef:
