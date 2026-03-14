@@ -3,6 +3,8 @@
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
+  annotations:
+    newt-sidecar/rules: '[{"action":"allow","match":"ip","value":"127.0.0.1"},{"action":"deny","match":"cidr","value":"0.0.0.0/0"}]'
   name: prometheus-remote-write
 spec:
   hostnames:
@@ -10,6 +12,7 @@ spec:
   parentRefs:
     - name: kgateway-external
       namespace: network
+      sectionName: https
   rules:
     - matches:
         - path:
@@ -17,5 +20,5 @@ spec:
             value: /api/v1/write
       backendRefs:
         - name: kube-prometheus-stack-prometheus
-          namespace: monitoring
+          namespace: observability
           port: 9090
