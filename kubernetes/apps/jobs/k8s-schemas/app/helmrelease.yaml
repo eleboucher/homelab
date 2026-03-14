@@ -118,8 +118,9 @@ spec:
       serve: {}
     persistence:
       schemas:
-        type: persistentVolumeClaim
-        existingClaim: "{{ .Release.Name }}"
+        type: hostPath
+        hostPath: /var/lib/k8s-schemas
+        hostPathType: DirectoryOrCreate
         advancedMounts:
           extract:
             app:
