@@ -9,3 +9,4 @@ resources:
   - virtualmachine.yaml
   - service.yaml
   - httproute.yaml
+  - storageprofile.yaml
