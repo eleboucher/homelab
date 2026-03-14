@@ -35,24 +35,6 @@ spec:
               limits:
                 memory: 64Mi
         containers:
-          # Proxies Prometheus scrape requests from the cluster to the VPS
-          # node_exporter via the WireGuard tunnel (Gerbil WireGuard server IP: 100.89.128.1/24)
-          node-exporter-proxy:
-            image:
-              repository: docker.io/alpine/socat
-              tag: 1.8.0.0
-            args:
-              - TCP-LISTEN:9100,fork,reuseaddr
-              - TCP:100.89.128.1:9100
-            securityContext:
-              allowPrivilegeEscalation: false
-              capabilities: {drop: ["ALL"]}
-              readOnlyRootFilesystem: true
-            resources:
-              requests:
-                cpu: 5m
-              limits:
-                memory: 16Mi
           app:
             image:
               repository: fosrl/newt
@@ -83,12 +65,7 @@ spec:
                 cpu: 10m
               limits:
                 memory: 256Mi
-    service:
-      node-exporter:
-        controller: newt
-        ports:
-          metrics:
-            port: 9100
+
     rbac:
       roles:
         newt:

@@ -110,9 +110,10 @@ services:
     image: quay.io/prometheus/node-exporter:v1.9.1
     container_name: node-exporter
     restart: unless-stopped
-    # Host network mode so node_exporter is accessible at the Docker bridge
-    # gateway (172.19.0.1:9100) from other containers, and has real host NIC metrics
-    network_mode: host
+    # Shares Gerbil's network namespace so node_exporter is accessible
+    # at the Gerbil WireGuard IP (100.89.128.1) on port 9100
+    network_mode: service:gerbil
+    pid: host
     command:
       - --path.procfs=/host/proc
       - --path.sysfs=/host/sys
@@ -126,6 +127,23 @@ services:
       gerbil:
         condition: service_started
 
+  prometheus-agent:
+    image: prom/prometheus:v3.10.0
+    container_name: prometheus-agent
+    restart: unless-stopped
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --agent
+      - --storage.agent.path=/prometheus
+    depends_on:
+      - node-exporter
+    network_mode: service:gerbil
+    configs:
+      - source: prometheus_agent_config
+        target: /etc/prometheus/prometheus.yml
+    volumes:
+      - prometheus-data:/prometheus
+
   geoipupdate:
     container_name: geoipupdate
     image: ghcr.io/maxmind/geoipupdate:v7.1.1
@@ -137,6 +155,9 @@ services:
       - GEOIPUPDATE_FREQUENCY=72
     volumes:
       - "./config/GeoLite2:/usr/share/GeoIP"
+
+volumes:
+  prometheus-data:
 
 networks:
   default:
@@ -284,6 +305,33 @@ configs:
       appsec_config: crowdsecurity/virtual-patching
       labels:
         type: appsec
+  prometheus_agent_config:
+    content: |-
+      global:
+        scrape_interval: 30s
+        external_labels:
+          instance: pangolin-vps
+          location: ovh
+
+      remote_write:
+        - url: https://prometheus-rw.erwanleboucher.dev/api/v1/write
+          tls_config:
+            insecure_skip_verify: false
+          queue_config:
+            max_samples_per_send: 1000
+            max_shards: 5
+            capacity: 2500
+
+      scrape_configs:
+        - job_name: node_exporter
+          static_configs:
+            - targets:
+                - localhost:9100
+          relabel_configs:
+            - target_label: job
+              replacement: node_exporter
+            - target_label: instance
+              replacement: pangolin-vps
   traefik_dynamic_config:
     content: |-
       http:

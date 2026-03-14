@@ -20,3 +20,4 @@ resources:
   - node-exporter/ks.yaml
   - kube-state-metrics/ks.yaml
   - kube-prometheus-stack/ks.yaml
+  - prometheus-remote-write/ks.yaml
