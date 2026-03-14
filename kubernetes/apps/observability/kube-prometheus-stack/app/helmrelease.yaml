@@ -82,8 +82,7 @@ spec:
               namespace: network
 
       prometheusSpec:
-        enableFeatures:
-          - remote-write-receiver
+        enableRemoteWriteReceiver: true
         externalUrl: https://prometheus.erwanleboucher.dev
         podMonitorSelectorNilUsesHelmValues: false
         probeSelectorNilUsesHelmValues: false

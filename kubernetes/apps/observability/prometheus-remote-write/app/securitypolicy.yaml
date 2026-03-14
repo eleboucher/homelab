@@ -3,13 +3,13 @@
 apiVersion: gateway.kgateway.dev/v1alpha1
 kind: TrafficPolicy
 metadata:
-  name: prometheus-remote-write-ip-allowlist
+  name: prometheus-remote-write-auth
 spec:
   rbac:
     action: Allow
     policy:
       matchExpressions:
-        - "source.address.startsWith('100.89.128.1')"
+        - "request.headers['authorization'] == 'Bearer ${token}'"
   targetRefs:
     - group: gateway.networking.k8s.io
       kind: HTTPRoute
