@@ -21,7 +21,7 @@ spec:
             image:
               # renovate: datasource=docker depName=ghcr.io/codewithcj/sparkyfitness-server
               repository: ghcr.io/codewithcj/sparkyfitness-server
-              tag: v0.16.5.0
+              tag: v0.16.5.1
             env:
               # Configure application
               SPARKY_FITNESS_DB_NAME:
