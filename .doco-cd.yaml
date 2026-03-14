@@ -11,4 +11,3 @@ external_secrets:
   MAXMIND_ACCOUNT_ID: "op://kubernetes/pangolin/maxmind_account_id"
   MAXMIND_LICENSE_KEY: "op://kubernetes/pangolin/maxmind_key"
   CROWDSEC_API_KEY: "op://kubernetes/pangolin/crowdsec_api_key"
-  PROMETHEUS_REMOTE_WRITE_TOKEN: "op://kubernetes/prometheus-remote-write/token"

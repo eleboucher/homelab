@@ -315,9 +315,6 @@ configs:
 
       remote_write:
         - url: https://prometheus-rw.erwanleboucher.dev/api/v1/write
-          authorization:
-            type: Bearer
-            credentials: ${PROMETHEUS_REMOTE_WRITE_TOKEN}
           tls_config:
             insecure_skip_verify: false
           queue_config:
