@@ -7,7 +7,7 @@ JUST_UNSTABLE = "1"
 
 [tools]
 "uv" = "latest"
-kustomize = "5.6.0"
+kustomize = "5.8.1"
 "pipx:flux-local" = "latest"
 "aqua:opentofu/opentofu" = "1"
 "aqua:google/yamlfmt" = ["latest"]
