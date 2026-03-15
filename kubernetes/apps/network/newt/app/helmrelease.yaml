@@ -31,6 +31,19 @@ spec:
               - --target-hostname=kgateway-external.network.svc.cluster.local
               - --deny-countries=RU,CN,KP,IR,BY,IL
             restartPolicy: Always
+            probes:
+              startup:
+                enabled: true
+                custom: true
+                spec:
+                  exec:
+                    command:
+                      - test
+                      - -f
+                      - /etc/newt/blueprint.yaml
+                  initialDelaySeconds: 2
+                  periodSeconds: 2
+                  failureThreshold: 30
             resources:
               limits:
                 memory: 64Mi
