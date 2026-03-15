@@ -9,16 +9,6 @@ spec:
     - name: http
       port: 8123
       targetPort: 8123
+  selector:
+    kubevirt.io/vm: home-assistant
   type: ClusterIP
----
-apiVersion: v1
-kind: Endpoints
-metadata:
-  name: home-assistant
-  namespace: home-assistant
-subsets:
-  - addresses:
-      - ip: 192.168.1.153
-    ports:
-      - name: http
-        port: 8123
