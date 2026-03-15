@@ -4,6 +4,7 @@ apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
   annotations:
+    gatus.home-operations.com/enabled: "false"
     newt-sidecar/rules: '[{"action":"allow","match":"ip","value":"172.19.0.1"},{"action":"deny","match":"cidr","value":"0.0.0.0/0"}]'
   name: prometheus-remote-write
 spec:
