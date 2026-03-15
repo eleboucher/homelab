@@ -53,7 +53,7 @@ spec:
       endpointURL: https://729991681d6b2d5c8f17351d354f4a92.r2.cloudflarestorage.com
       # Note: serverName version needs to be incremented
       # when recovering from an existing cnpg cluster
-      serverName: postgres-${APP}-v1
+      serverName: postgres-${APP}-v2
       s3Credentials:
         accessKeyId:
           name: ${APP}-cnpg-secret
