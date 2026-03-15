@@ -31,22 +31,22 @@ spec:
               - --target-hostname=kgateway-external.network.svc.cluster.local
               - --deny-countries=RU,CN,KP,IR,BY,IL
             restartPolicy: Always
-            probes:
-              startup:
-                enabled: true
-                custom: true
-                spec:
-                  exec:
-                    command:
-                      - /bin/sh
-                      - -c
-                      - test -f /etc/newt/blueprint.yaml
-                  initialDelaySeconds: 2
-                  periodSeconds: 2
-                  failureThreshold: 30
             resources:
               limits:
                 memory: 64Mi
+          wait-blueprint:
+            image:
+              repository: ghcr.io/home-operations/busybox
+              tag: latest@sha256:441b70c7c0a18c2a179b5e1368998654ea58c421fdba01cbc14e0b0257c99455
+            command:
+              - /bin/sh
+              - -c
+              - until test -f /etc/newt/blueprint.yaml; do sleep 1; done
+            resources:
+              requests:
+                cpu: 10m
+              limits:
+                memory: 16Mi
         containers:
           app:
             image:
