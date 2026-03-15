@@ -1,0 +1,91 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: nfs-server
+  namespace: nfs
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: nfs-server
+  interval: 1h
+  values:
+    controllers:
+      nfs-server:
+        pod:
+          annotations:
+            k8s.v1.cni.cncf.io/networks: nfs-lan
+          nodeSelector:
+            kubernetes.io/hostname: le-havre
+          priorityClassName: system-cluster-critical
+          securityContext:
+            runAsUser: 0
+            runAsGroup: 0
+            runAsNonRoot: false
+          terminationGracePeriodSeconds: 60
+        containers:
+          app:
+            image:
+              repository: quay.io/aminvakil/alpine-nfs-server
+              tag: latest@sha256:37fb7d894aebb66fe4d6bbd1899854bccb11b8e3257f69b562ecda0b741d014d
+            env:
+              EXPORTS_MOUNTED: "true"
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  exec:
+                    command:
+                      - sh
+                      - -c
+                      - showmount -e localhost | grep -q /mnt/media
+                  initialDelaySeconds: 30
+                  periodSeconds: 30
+                  failureThreshold: 3
+              readiness: *probes
+            resources:
+              requests:
+                cpu: 50m
+                memory: 64Mi
+              limits:
+                memory: 256Mi
+            securityContext:
+              capabilities:
+                add:
+                  - DAC_READ_SEARCH
+                  - NET_BIND_SERVICE
+                  - SYS_ADMIN
+    service:
+      app:
+        controller: nfs-server
+        type: ClusterIP
+        ports:
+          nfs:
+            port: 2049
+            protocol: TCP
+          mountd:
+            port: 20048
+            protocol: TCP
+          rpcbind:
+            port: 111
+            protocol: TCP
+    persistence:
+      exports:
+        type: configMap
+        name: nfs-server-config
+        globalMounts:
+          - path: /etc/exports
+            subPath: exports
+      lib-modules:
+        type: hostPath
+        hostPath: /lib/modules
+        globalMounts:
+          - path: /lib/modules
+            readOnly: true
+      media:
+        type: hostPath
+        hostPath: /var/mnt/media
+        globalMounts:
+          - path: /mnt/media

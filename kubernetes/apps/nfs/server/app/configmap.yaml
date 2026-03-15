@@ -1,0 +1,9 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nfs-server-config
+  namespace: nfs
+data:
+  exports: |-
+    /mnt/media *(rw,async,no_subtree_check,no_root_squash,insecure,fsid=0)

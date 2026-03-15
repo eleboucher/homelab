@@ -2,26 +2,51 @@
 machine:
   type: worker
   install:
-    disk: /dev/sda
+    diskSelector:
+      serial: 2526511B4465
+---
+apiVersion: v1alpha1
+kind: BondConfig
+name: bond1
+hardwareAddr: 6c:1f:f7:6b:4c:04
+mtu: 9000
+links:
+  - enp0s13f0u1
+  - enp0s13f0u2
+bondMode: 802.3ad
+lacpRate: fast
+xmitHashPolicy: layer3+4
+miimon: 100
 ---
 apiVersion: v1alpha1
 kind: BridgeConfig
 name: bond0
+mtu: 9000
 links:
-  - ens18
+  - bond1
 stp:
   enabled: false
-addresses:
-  - address: 192.168.1.7/24
-routes:
-  - gateway: 192.168.1.2
 ---
 apiVersion: v1alpha1
-kind: LinkConfig
-name: ens19
+kind: DHCPv4Config
+name: bond0
+clientIdentifier: mac
+---
+apiVersion: v1alpha1
+kind: VLANConfig
+name: bond1.20
+vlanID: 20
+parent: bond1
+mtu: 9000
 addresses:
   - address: 10.20.0.7/24
-mtu: 9000
+---
+apiVersion: v1alpha1
+kind: ExistingVolumeConfig
+name: media
+discovery:
+  volumeSelector:
+    match: disk.transport == "usb"
 ---
 apiVersion: v1alpha1
 kind: ResolverConfig

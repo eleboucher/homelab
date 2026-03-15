@@ -51,10 +51,11 @@ machine:
         rsize=1048576
         wsize=1048576
   install:
-    image: factory.talos.dev/installer/8323e5428d4e79aaf98bcaff7be1bcea3bc42423abd5686ccec38b4ca48de00b:v1.12.5
+    image: factory.talos.dev/installer/a85bd4939f02cf5c36f930a98a755ca8660a589fee1aa9f7543916d87aeae3e5:v1.12.5
   kernel:
     modules:
       - name: nbd
+      - name: nfsd
   kubelet:
     defaultRuntimeSeccompProfileEnabled: true
     disableManifestsDirectory: true
