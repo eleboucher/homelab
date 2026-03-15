@@ -37,7 +37,7 @@ spec:
           wait-blueprint:
             image:
               repository: ghcr.io/home-operations/busybox
-              tag: latest@sha256:441b70c7c0a18c2a179b5e1368998654ea58c421fdba01cbc14e0b0257c99455
+              tag: 1.37.0@sha256:026ed7273270ec08f6902b4ae8334c23b473e5394bec3bbbdbfe580c710d50bc
             command:
               - /bin/sh
               - -c
