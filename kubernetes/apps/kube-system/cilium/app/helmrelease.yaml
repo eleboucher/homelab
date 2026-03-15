@@ -28,14 +28,16 @@ spec:
     cni:
       exclusive: false
     dashboards:
+      annotations:
+        grafana_folder: Cilium
       enabled: true
-    devices:
-      - bond0+
-      - ens+
+    devices: bond+
     enableIPv4BIGTCP: true
     endpointRoutes:
       enabled: true
     envoy:
+      enabled: false
+    gatewayAPI:
       enabled: false
     hubble:
       enabled: false
@@ -55,12 +57,14 @@ spec:
       enabled: true
     operator:
       dashboards:
+        annotations:
+          grafana_folder: Cilium
         enabled: true
       prometheus:
         enabled: true
         serviceMonitor:
           enabled: true
-      replicas: 1
+      replicas: 2
       rollOutPods: true
     pmtuDiscovery:
       enabled: true
@@ -91,6 +95,8 @@ spec:
           - NET_ADMIN
           - SYS_ADMIN
           - SYS_RESOURCE
+          - PERFMON
+          - BPF
     socketLB:
       enabled: true
       hostNamespaceOnly: true
