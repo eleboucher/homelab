@@ -38,9 +38,9 @@ spec:
                 spec:
                   exec:
                     command:
-                      - test
-                      - -f
-                      - /etc/newt/blueprint.yaml
+                      - /bin/sh
+                      - -c
+                      - test -f /etc/newt/blueprint.yaml
                   initialDelaySeconds: 2
                   periodSeconds: 2
                   failureThreshold: 30
