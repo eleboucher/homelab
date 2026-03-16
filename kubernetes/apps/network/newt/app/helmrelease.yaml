@@ -26,7 +26,7 @@ spec:
               tag: 0.1.2
             args:
               - --gateway-name=kgateway-external
-              - --site-id=buttery-deinagkistrodon
+              - --site-id=some-roses-rain-frog
               - --target-hostname=kgateway-external.network.svc.cluster.local
               - --deny-countries=RU,CN,KP,IR,BY,IL
             restartPolicy: Always
