@@ -22,7 +22,7 @@ spec:
     bgpControlPlane:
       enabled: true
     cgroup:
-      automount:
+      autoMount:
         enabled: false
       hostRoot: /sys/fs/cgroup
     cni:
@@ -31,7 +31,7 @@ spec:
       annotations:
         grafana_folder: Cilium
       enabled: true
-    devices: bond+
+    devices: bond0
     enableIPv4BIGTCP: true
     endpointRoutes:
       enabled: true
