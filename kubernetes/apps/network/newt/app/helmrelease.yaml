@@ -10,20 +10,39 @@ spec:
     name: newt
   interval: 1h
   values:
-    defaultPodOptions:
-      securityContext:
-        runAsUser: 1000
-        runAsGroup: 1000
-    controllers:
-      newt:
-        replicas: 1
-        annotations:
-          reloader.stakater.com/auto: "true"
+    global:
+      deploymentAnnotations:
+        reloader.stakater.com/auto: "true"
+      image:
+        tag: "1.10.2"
+      nativeMode:
+        enabled: true
+
+    rbac:
+      clusterRole: true
+
+    serviceAccount:
+      automountServiceAccountToken: true
+      name: newt
+
+    newtInstances:
+      - name: main-tunnel
+        enabled: true
+        auth:
+          existingSecretName: newt-secret
+          keys:
+            endpointKey: NEWT_SERVER_URL
+        extraEnv:
+          BLUEPRINT_FILE: /etc/newt/blueprint.yaml
+        extraVolumeMounts:
+          - name: blueprint
+            mountPath: /etc/newt
+        extraVolumes:
+          - name: blueprint
+            emptyDir: {}
         initContainers:
-          newt-sidecar:
-            image:
-              repository: ghcr.io/home-operations/newt-sidecar
-              tag: 0.1.2
+          - name: newt-sidecar
+            image: ghcr.io/home-operations/newt-sidecar:0.1.2
             args:
               - --gateway-name=kgateway-external
               - --site-id=some-roses-rain-frog
@@ -33,10 +52,11 @@ spec:
             resources:
               limits:
                 memory: 128Mi
-          wait-blueprint:
-            image:
-              repository: ghcr.io/home-operations/busybox
-              tag: 1.37.0@sha256:026ed7273270ec08f6902b4ae8334c23b473e5394bec3bbbdbfe580c710d50bc
+            volumeMounts:
+              - name: blueprint
+                mountPath: /etc/newt
+          - name: wait-blueprint
+            image: ghcr.io/home-operations/busybox:1.37.0@sha256:026ed7273270ec08f6902b4ae8334c23b473e5394bec3bbbdbfe580c710d50bc
             command:
               - /bin/sh
               - -c
@@ -46,94 +66,10 @@ spec:
                 cpu: 10m
               limits:
                 memory: 16Mi
-        containers:
-          app:
-            image:
-              repository: fosrl/newt
-              tag: 1.10.2
-            env:
-              PANGOLIN_ENDPOINT:
-                valueFrom:
-                  secretKeyRef:
-                    name: newt-secret
-                    key: NEWT_SERVER_URL
-              NEWT_ID:
-                valueFrom:
-                  secretKeyRef:
-                    name: newt-secret
-                    key: NEWT_ID
-              NEWT_SECRET:
-                valueFrom:
-                  secretKeyRef:
-                    name: newt-secret
-                    key: NEWT_SECRET
-              BLUEPRINT_FILE: /etc/newt/blueprint.yaml
-              NEWT_METRICS_PROMETHEUS_ENABLED: "true"
-              NEWT_ADMIN_ADDR: "0.0.0.0:2112"
-              PING_INTERVAL: 60s
-            args:
-              - --native
-            probes:
-              liveness: &probes
-                enabled: true
-                custom: true
-                spec:
-                  httpGet:
-                    path: /healthz
-                    port: &metricsPort 2112
-                  initialDelaySeconds: 0
-                  periodSeconds: 10
-                  timeoutSeconds: 1
-                  failureThreshold: 3
-              readiness: *probes
-            securityContext:
-              allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
-              runAsUser: 0
-              capabilities:
-                drop:
-                  - "ALL"
-                add:
-                  - "NET_ADMIN"
-            resources:
-              requests:
-                cpu: 10m
-              limits:
-                memory: 384Mi
-
-    rbac:
-      roles:
-        newt:
-          type: ClusterRole
-          rules:
-            - apiGroups:
-                - gateway.networking.k8s.io
-              resources:
-                - httproutes
-              verbs:
-                - get
-                - watch
-                - list
-      bindings:
-        newt:
-          type: ClusterRoleBinding
-          roleRef:
-            identifier: newt
-          subjects:
-            - identifier: newt
-    serviceAccount:
-      newt: {}
-    persistence:
-      blueprint:
-        type: emptyDir
-        globalMounts:
-          - path: /etc/newt
-    service:
-      app:
-        ports:
-          metrics:
-            port: *metricsPort
-    serviceMonitor:
-      app:
-        endpoints:
-          - port: metrics
+            volumeMounts:
+              - name: blueprint
+                mountPath: /etc/newt
+        pingInterval: 60s
+        service:
+          enabled: false
+        useNativeInterface: true
