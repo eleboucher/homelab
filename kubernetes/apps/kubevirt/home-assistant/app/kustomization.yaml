@@ -8,5 +8,6 @@ resources:
   - networkattachmentdefinition.yaml
   - virtualmachine.yaml
   - service.yaml
+  - endpointslice.yaml
   - httproute.yaml
   - storageprofile.yaml
