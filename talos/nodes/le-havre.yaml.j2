@@ -6,40 +6,16 @@ machine:
       serial: 2526511B4465
 ---
 apiVersion: v1alpha1
-kind: BondConfig
-name: bond1
-hardwareAddr: 6c:1f:f7:6b:4c:04
-mtu: 9000
-links:
-  - enp0s13f0u1
-  - enp0s13f0u2
-bondMode: 802.3ad
-lacpRate: fast
-xmitHashPolicy: layer3+4
-miimon: 100
+kind: LinkAliasConfig
+name: lan0
+selector:
+  match: mac(link.permanent_addr) == "6c:1f:f7:6b:4c:04"
 ---
 apiVersion: v1alpha1
-kind: BridgeConfig
-name: bond0
-mtu: 9000
-links:
-  - bond1
-stp:
-  enabled: false
----
-apiVersion: v1alpha1
-kind: DHCPv4Config
-name: bond0
-clientIdentifier: mac
----
-apiVersion: v1alpha1
-kind: VLANConfig
-name: bond1.20
-vlanID: 20
-parent: bond1
-mtu: 9000
-addresses:
-  - address: 10.20.0.7/24
+kind: LinkAliasConfig
+name: lan1
+selector:
+  match: mac(link.permanent_addr) == "6c:1f:f7:5c:03:94"
 ---
 apiVersion: v1alpha1
 kind: ExistingVolumeConfig
