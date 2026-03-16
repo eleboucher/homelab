@@ -45,7 +45,7 @@ machine:
       content: |
         [ NFSMount_Global_Options ]
         nfsvers=4.2
-        hard=True
+        softerr=True
         nconnect=8
         noatime=True
         rsize=1048576
@@ -190,6 +190,32 @@ cluster:
   serviceAccount:
     key: op://kubernetes/talos/CLUSTER_SERVICEACCOUNT_KEY
   {% endif %}
+---
+apiVersion: v1alpha1
+kind: BondConfig
+name: lacp0
+mtu: 9000
+links:
+  - lan0
+  - lan1
+bondMode: 802.3ad
+lacpRate: fast
+xmitHashPolicy: layer3+4
+miimon: 100
+---
+apiVersion: v1alpha1
+kind: BridgeConfig
+name: bond0
+mtu: 9000
+links:
+  - lacp0
+stp:
+  enabled: false
+---
+apiVersion: v1alpha1
+kind: DHCPv4Config
+name: bond0
+clientIdentifier: mac
 ---
 apiVersion: v1alpha1
 kind: WatchdogTimerConfig

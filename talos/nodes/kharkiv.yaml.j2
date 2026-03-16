@@ -13,31 +13,16 @@ machine:
       - SUBSYSTEM=="drm", KERNEL=="renderD*", GROUP="992", MODE="0660"
 ---
 apiVersion: v1alpha1
-kind: BondConfig
-name: bond0
-hardwareAddr: 38:05:25:35:3B:9A
-mtu: 9000
-links:
-  - enp3s0
-  - enp2s0
-bondMode: 802.3ad
-lacpRate: fast
-xmitHashPolicy: layer3+4
-miimon: 100
+kind: LinkAliasConfig
+name: lan0
+selector:
+  match: mac(link.permanent_addr) == "38:05:25:35:3b:9a"
 ---
 apiVersion: v1alpha1
-kind: VLANConfig
-name: bond0.20
-vlanID: 20
-parent: bond0
-mtu: 9000
-addresses:
-  - address: 10.20.0.41/24
----
-apiVersion: v1alpha1
-kind: DHCPv4Config
-name: bond0
-clientIdentifier: mac
+kind: LinkAliasConfig
+name: lan1
+selector:
+  match: mac(link.permanent_addr) == "38:05:25:35:3b:9b"
 ---
 apiVersion: v1alpha1
 kind: HostnameConfig
