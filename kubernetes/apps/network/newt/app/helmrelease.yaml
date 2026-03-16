@@ -28,12 +28,15 @@ spec:
     newtInstances:
       - name: main-tunnel
         enabled: true
+        replicas: 2
         auth:
           existingSecretName: newt-secret
           keys:
             endpointKey: NEWT_SERVER_URL
         extraEnv:
           BLUEPRINT_FILE: /etc/newt/blueprint.yaml
+          NEWT_ADMIN_ADDR: "0.0.0.0:2112"
+          NEWT_METRICS_PROMETHEUS_ENABLED: "true"
         extraVolumeMounts:
           - name: blueprint
             mountPath: /etc/newt
@@ -69,6 +72,13 @@ spec:
             volumeMounts:
               - name: blueprint
                 mountPath: /etc/newt
+        metrics:
+          port: 2112
+          service:
+            enabled: true
+            port: 2112
+          serviceMonitor:
+            enabled: true
         pingInterval: 60s
         service:
           enabled: false
