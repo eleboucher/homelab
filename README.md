@@ -40,8 +40,8 @@ My cluster is a hybrid setup running on bare metal and virtualized nodes.
 
 | Node | OS | Hardware | Specs | Role | Storage |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **kharkiv** | Talos Linux | Intel i5 12th Gen | 8C / 16T / 32GB | `control-plane` | USB HDD (`/srv/media`) |
-| **le-havre**| Talos (Proxmox) | Intel N150 | 4C / 4T / 32GB | `worker` | - |
+| **kharkiv** | Talos Linux | Intel i5 12th Gen | 8C / 16T / 32GB | `control-plane` |  |
+| **le-havre**| Talos Linux | Intel N150 | 4C / 4T / 32GB | `worker` | USB HDD (`/mnt/media`) |
 
 ---
 ## 🧩 Core Components
