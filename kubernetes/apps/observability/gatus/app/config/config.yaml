@@ -26,6 +26,15 @@ endpoints:
     conditions:
       - "[CONNECTED] == true"
 
+  - name: erwanleboucher.dev
+    group: external
+    url: https://erwanleboucher.dev
+    interval: 1m
+    client:
+      dns-resolver: tcp://1.1.1.1:53
+    conditions:
+      - "[STATUS] == 200"
+
 metrics: true
 
 storage:
