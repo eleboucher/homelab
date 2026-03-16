@@ -12,7 +12,6 @@ spec:
   values:
     defaultPodOptions:
       securityContext:
-        runAsNonRoot: true
         runAsUser: 1000
         runAsGroup: 1000
     controllers:
@@ -69,10 +68,33 @@ spec:
                     name: newt-secret
                     key: NEWT_SECRET
               BLUEPRINT_FILE: /etc/newt/blueprint.yaml
+              NEWT_METRICS_PROMETHEUS_ENABLED: "true"
+              NEWT_ADMIN_ADDR: "0.0.0.0:2112"
+              PING_INTERVAL: 60s
+            args:
+              - --native
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /healthz
+                    port: &metricsPort 2112
+                  initialDelaySeconds: 0
+                  periodSeconds: 10
+                  timeoutSeconds: 1
+                  failureThreshold: 3
+              readiness: *probes
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
-              capabilities: {drop: ["ALL"]}
+              runAsUser: 0
+              capabilities:
+                drop:
+                  - "ALL"
+                add:
+                  - "NET_ADMIN"
             resources:
               requests:
                 cpu: 10m
@@ -106,3 +128,12 @@ spec:
         type: emptyDir
         globalMounts:
           - path: /etc/newt
+    service:
+      app:
+        ports:
+          metrics:
+            port: *metricsPort
+    serviceMonitor:
+      app:
+        endpoints:
+          - port: metrics
