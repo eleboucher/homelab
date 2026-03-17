@@ -8,4 +8,3 @@ resources:
   - ./externalsecret.yaml
   - ./helmrelease.yaml
   - ./ocirepository.yaml
-  - ./vps-node-exporter-service.yaml

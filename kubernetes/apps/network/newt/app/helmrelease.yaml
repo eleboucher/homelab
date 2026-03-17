@@ -72,17 +72,6 @@ spec:
             volumeMounts:
               - name: blueprint
                 mountPath: /etc/newt
-        extraContainers:
-          - name: vps-node-exporter-proxy
-            image: alpine/socat:1.8.0.0
-            args:
-              - TCP-LISTEN:9100,fork,reuseaddr
-              - TCP:100.89.128.1:9100
-            resources:
-              requests:
-                cpu: 5m
-              limits:
-                memory: 16Mi
         metrics:
           port: 2112
           service:
