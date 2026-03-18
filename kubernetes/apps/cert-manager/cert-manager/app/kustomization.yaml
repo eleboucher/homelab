@@ -10,3 +10,5 @@ resources:
   - prometheusrule.yaml
   - ./grafanadashboard.yaml
   - ./clusterissuer.yaml
+  - ./postgres.yaml
+  - ./selfsigned.yaml

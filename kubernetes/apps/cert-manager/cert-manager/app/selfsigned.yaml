@@ -1,0 +1,56 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/cert-manager.io/clusterissuer_v1.json
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: selfsigned
+spec:
+  selfSigned: {}
+---
+# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/cert-manager.io/certificate_v1.json
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: &name cluster-ca
+spec:
+  isCA: true
+  commonName: *name
+  subject:
+    countries:
+      - FR
+    organizations:
+      - homelab
+  usages:
+    - cert sign
+    - crl sign
+  nameConstraints:
+    critical: true
+    permitted:
+      dnsDomains: &domains
+        - .svc.cluster.local
+        - .cluster.local
+        - .svc
+        - postgres-rw
+        - postgres-ro
+        - postgres-r
+      uriDomains: *domains
+  duration: 87660h # 10 years
+  privateKey:
+    algorithm: ECDSA
+    size: 384
+    encoding: PKCS8
+    rotationPolicy: Never
+  issuerRef:
+    name: selfsigned
+    kind: ClusterIssuer
+    group: cert-manager.io
+  secretName: root-ca
+---
+# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/cert-manager.io/clusterissuer_v1.json
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: cluster-ca
+spec:
+  ca:
+    secretName: root-ca
