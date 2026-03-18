@@ -17,3 +17,4 @@ resources:
   - spegel/ks.yaml
   - gateway-api-crds/ks.yaml
   - multus/ks.yaml
+  - ksgate/ks.yaml
