@@ -10,7 +10,7 @@ spec:
       app.kubernetes.io/name: sparkyfitness
   components:
     - ../../../../components/cnpg
-    - ../../../../components/volsync
+    - ../../../../components/postgres/cert
   dependsOn:
     - name: longhorn
       namespace: longhorn-system

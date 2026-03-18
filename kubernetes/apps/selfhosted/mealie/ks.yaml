@@ -6,7 +6,7 @@ metadata:
   name: &app mealie
 spec:
   components:
-    - ../../../../components/cnpg
+    - ../../../../components/postgres/cert
     - ../../../../components/volsync
   dependsOn:
     - name: kgateway-gateway
@@ -22,7 +22,6 @@ spec:
       APP: *app
       APP_NAMESPACE: selfhosted
       VOLSYNC_CAPACITY: 2Gi
-      VOLSYNC_SCHEDULE: "20 1-23/2 * * *"
   prune: true
   sourceRef:
     kind: GitRepository

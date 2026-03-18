@@ -1,0 +1,14 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/postgresql.cnpg.io/scheduledbackup_v1.json
+apiVersion: postgresql.cnpg.io/v1
+kind: ScheduledBackup
+metadata:
+  name: postgres-backup
+spec:
+  schedule: "6 30 0 * * *" # 6h30 everyday
+  backupOwnerReference: self
+  cluster:
+    name: postgres
+  method: plugin
+  pluginConfiguration:
+    name: barman-cloud.cloudnative-pg.io

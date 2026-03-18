@@ -1,0 +1,15 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/cert-manager.io/certificate_v1.json
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: postgres-${APP}-cert
+spec:
+  secretName: postgres-${APP}-cert
+  usages:
+    - client auth
+  commonName: ${DATABASE_OWNER:=${APP}}
+  issuerRef:
+    name: postgres-client-ca
+    kind: ClusterIssuer
+    group: cert-manager.io

@@ -1,0 +1,58 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/kustomization
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+patches:
+  - target:
+      kind: HelmRelease
+      group: helm.toolkit.fluxcd.io
+      version: v2
+    patch: |-
+      apiVersion: helm.toolkit.fluxcd.io/v2
+      kind: HelmRelease
+      metadata:
+        name: not-used
+      spec:
+        values:
+          defaultPodOptions:
+            annotations:
+              k8s.ksgate.org/postgres-ready: |
+                {
+                  "apiVersion": "postgresql.cnpg.io/v1",
+                  "kind": "Cluster",
+                  "name": "postgres",
+                  "namespace": "database",
+                  "expression": "resource.status.readyInstances >= 1"
+                }
+              k8s.ksgate.org/postgres-service: |
+                {
+                  "apiVersion": "v1",
+                  "kind": "Service",
+                  "name": "pooler-rw",
+                  "namespace": "database"
+                }
+              k8s.ksgate.org/database-applied: |
+                {
+                  "apiVersion": "postgresql.cnpg.io/v1",
+                  "kind": "Database",
+                  "name": "postgres-${APP}",
+                  "namespace": "database",
+                  "expression": "resource.status.applied"
+                }
+            schedulingGates:
+              - name: k8s.ksgate.org/postgres-ready
+              - name: k8s.ksgate.org/postgres-service
+              - name: k8s.ksgate.org/database-applied
+          persistence:
+            postgres-certs:
+              type: secret
+              name: "postgres-{{ .Release.Name }}-cert"
+              defaultMode: 0600
+              globalMounts:
+                - path: /var/run/secrets/postgresql
+            root-ca:
+              type: secret
+              name: "root-ca"
+              defaultMode: 0440
+              globalMounts:
+                - path: /var/run/secrets/root-ca

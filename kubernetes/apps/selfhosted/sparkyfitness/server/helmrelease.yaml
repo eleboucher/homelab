@@ -26,17 +26,17 @@ spec:
               # Configure application
               SPARKY_FITNESS_DB_NAME:
                 secretKeyRef:
-                  name: postgres-sparkyfitness-app
+                  name: postgres-sparkyfitness
                   key: dbname
               SPARKY_FITNESS_APP_DB_USER:
                 secretKeyRef:
-                  name: postgres-sparkyfitness-app
+                  name: postgres-sparkyfitness
                   key: username
               SPARKY_FITNESS_APP_DB_PASSWORD:
                 secretKeyRef:
-                  name: postgres-sparkyfitness-app
+                  name: postgres-sparkyfitness
                   key: password
-              SPARKY_FITNESS_DB_HOST: postgres-sparkyfitness-rw
+              SPARKY_FITNESS_DB_HOST: pooler-rw.database.svc
               SPARKY_FITNESS_FRONTEND_URL: fitness.erwanleboucher.dev
               SPARKY_FITNESS_DISABLE_SIGNUP: false
               NODE_ENV: "production"

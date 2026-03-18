@@ -1,0 +1,48 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/cert-manager.io/certificate_v1.json
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: &name postgres-server-ca
+spec:
+  isCA: true
+  commonName: postgres-ca
+  subject:
+    countries:
+      - PL
+    organizations:
+      - homelab-cluster
+    organizationalUnits:
+      - postgres
+  usages:
+    - cert sign
+    - crl sign
+  nameConstraints:
+    critical: true
+    permitted:
+      dnsDomains:
+        - .postgres.svc.cluster.local
+        - .postgres.svc
+        - postgres-rw
+        - postgres-ro
+        - postgres-r
+  duration: 8766h # 1 year
+  privateKey:
+    algorithm: ECDSA
+    size: 384
+    encoding: PKCS8
+    rotationPolicy: Always
+  issuerRef:
+    name: cluster-ca
+    kind: ClusterIssuer
+    group: cert-manager.io
+  secretName: *name
+---
+# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/cert-manager.io/issuer_v1.json
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: &name postgres-server-ca
+spec:
+  ca:
+    secretName: *name

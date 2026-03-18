@@ -1,0 +1,22 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/barmancloud.cnpg.io/objectstore_v1.json
+apiVersion: barmancloud.cnpg.io/v1
+kind: ObjectStore
+metadata:
+  name: r2-store
+spec:
+  configuration:
+    destinationPath: s3://postgres/
+    endpointURL: ${S3_ENDPOINT}
+    s3Credentials:
+      accessKeyId:
+        name: barman-r2
+        key: R2_ACCESS_KEY_ID
+      secretAccessKey:
+        name: barman-r2
+        key: R2_SECRET_ACCESS_KEY
+    wal:
+      compression: zstd
+    data:
+      compression: gzip
+  retentionPolicy: "30d"

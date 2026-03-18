@@ -11,7 +11,7 @@ spec:
   components:
     - ../../../../components/volsync
     - ../../../../components/cnpg
-    - ../../../../components/nfs-scaler
+    - ../../../../components/postgres/cert
   dependsOn:
     - name: longhorn
       namespace: longhorn-system

@@ -14,13 +14,3 @@ spec:
       podMonitorEnabled: true
       grafanaDashboard:
         create: true
-        mode: GrafanaOperator
-        grafanaOperator:
-          matchLabels:
-            grafana.internal/instance: grafana
-    resources:
-      requests:
-        cpu: 100m
-        memory: 128Mi
-      limits:
-        memory: 256Mi

@@ -1,4 +1,3 @@
-# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/source.toolkit.fluxcd.io/ocirepository_v1.json
 ---
 # yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/source.toolkit.fluxcd.io/ocirepository_v1.json
 apiVersion: source.toolkit.fluxcd.io/v1

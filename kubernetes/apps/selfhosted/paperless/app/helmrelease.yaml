@@ -29,17 +29,11 @@ spec:
               tag: 2.20.11
             env:
               # Configure application
-              PAPERLESS_SECRET_KEY:
-                valueFrom:
-                  secretKeyRef:
-                    name: paperless-secret
-                    key: PAPERLESS_SECRET_KEY
               PAPERLESS_URL: https://paperless.erwanleboucher.dev
               PAPERLESS_PORT: "8000"
               PAPERLESS_TIME_ZONE: "Europe/Paris"
               PAPERLESS_TASK_WORKERS: "2"
-              PAPERLESS_OCR_LANGUAGES: fra+eng
-              PAPERLESS_OCR_LANGUAGE: fra
+              PAPERLESS_OCR_LANGUAGE: fra+eng
               # Configure folders
               PAPERLESS_CONSUMPTION_DIR: /data/nas/paperless/incoming
               PAPERLESS_DATA_DIR: /data/local/data
@@ -54,19 +48,14 @@ spec:
               # Configure user permissions
               USERMAP_GID: "1000"
               # Configure admin user
-              PAPERLESS_DBPASS:
-                secretKeyRef:
-                  name: postgres-paperless-app
-                  key: password
-              PAPERLESS_DBUSER:
-                secretKeyRef:
-                  name: postgres-paperless-app
-                  key: username
-              PAPERLESS_DBNAME:
-                secretKeyRef:
-                  name: postgres-paperless-app
-                  key: dbname
-              PAPERLESS_DBHOST: postgres-paperless-rw
+              PAPERLESS_DBHOST: pooler-rw.database.svc
+              PGSSLROOTCERT: /var/run/secrets/root-ca/ca.crt
+              PGSSLCERT: /var/run/secrets/postgresql/tls.crt
+              PGSSLKEY: /var/run/secrets/postgresql/tls.key
+              PGSSLMODE: verify-full
+              envFrom:
+                - secretRef:
+                    name: paperless
             probes:
               liveness:
                 enabled: true
