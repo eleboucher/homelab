@@ -18,6 +18,11 @@ spec:
       namespace: cnpg-system
   path: ./kubernetes/apps/database/postgres/cluster
   prune: true
+  postBuild:
+    substituteFrom:
+      - kind: Secret
+        name: barman-r2
+        optional: true
   sourceRef:
     kind: GitRepository
     name: flux-system

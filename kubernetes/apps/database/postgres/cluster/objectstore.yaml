@@ -6,7 +6,7 @@ metadata:
   name: r2-store
 spec:
   configuration:
-    destinationPath: s3://postgres/
+    destinationPath: s3://cloudnative-pg/
     endpointURL: ${S3_ENDPOINT}
     s3Credentials:
       accessKeyId:
