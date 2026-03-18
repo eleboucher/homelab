@@ -9,9 +9,9 @@ spec:
   commonName: postgres-ca
   subject:
     countries:
-      - PL
+      - FR
     organizations:
-      - homelab-cluster
+      - homelab
     organizationalUnits:
       - postgres
   usages:
@@ -21,8 +21,8 @@ spec:
     critical: true
     permitted:
       dnsDomains:
-        - .postgres.svc.cluster.local
-        - .postgres.svc
+        - .database.svc.cluster.local
+        - .database.svc
         - postgres-rw
         - postgres-ro
         - postgres-r

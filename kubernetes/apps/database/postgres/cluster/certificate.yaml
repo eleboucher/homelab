@@ -10,15 +10,15 @@ spec:
     - postgres-rw
     - postgres-ro
     - postgres-r
-    - postgres-rw.postgres.svc
-    - postgres-ro.postgres.svc
-    - postgres-r.postgres.svc
-    - postgres-rw.postgres.svc.cluster.local
-    - postgres-ro.postgres.svc.cluster.local
-    - postgres-r.postgres.svc.cluster.local
+    - postgres-rw.database.svc
+    - postgres-ro.database.svc
+    - postgres-r.database.svc
+    - postgres-rw.database.svc.cluster.local
+    - postgres-ro.database.svc.cluster.local
+    - postgres-r.database.svc.cluster.local
   subject:
     countries:
-      - PL
+      - FR
     organizations:
       - homelab-cluster
   usages:
@@ -42,19 +42,19 @@ spec:
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: &name postgres-client-cert
+  name: &name postgres-replication-cert
 spec:
-  secretName: *name
+  commonName: streaming_replica
+  usages:
+    - client auth
   secretTemplate:
     labels:
       cnpg.io/reload: ""
-  usages:
-    - client auth
-  commonName: streaming_replica
   issuerRef:
     name: postgres-client-ca
     kind: ClusterIssuer
     group: cert-manager.io
+  secretName: *name
 ---
 # yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/cert-manager.io/certificate_v1.json
 apiVersion: cert-manager.io/v1
@@ -64,11 +64,11 @@ metadata:
 spec:
   commonName: pooler
   dnsNames:
-    - pooler-rw.postgres.svc
-    - pooler-rw.postgres.svc.cluster.local
+    - pooler-rw.database.svc
+    - pooler-rw.database.svc.cluster.local
   subject:
     countries:
-      - PL
+      - FR
     organizations:
       - homelab-cluster
   usages:
@@ -94,14 +94,14 @@ kind: Certificate
 metadata:
   name: &name pooler-client-cert
 spec:
-  secretName: *name
+  commonName: pooler-rw
+  usages:
+    - client auth
   secretTemplate:
     labels:
       cnpg.io/reload: ""
-  usages:
-    - client auth
-  commonName: pooler-rw
   issuerRef:
     name: postgres-client-ca
     kind: ClusterIssuer
     group: cert-manager.io
+  secretName: *name
