@@ -1,0 +1,31 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/trust.cert-manager.io/bundle_v1alpha1.json
+apiVersion: trust.cert-manager.io/v1alpha1
+kind: Bundle
+metadata:
+  name: root-ca
+spec:
+  sources:
+    - secret:
+        name: "root-ca"
+        key: "tls.crt"
+  target:
+    secret:
+      key: "ca.crt"
+---
+# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/trust.cert-manager.io/bundle_v1alpha1.json
+apiVersion: trust.cert-manager.io/v1alpha1
+kind: Bundle
+metadata:
+  name: postgres-client-ca
+spec:
+  sources:
+    - secret:
+        name: postgres-client-ca
+        key: "tls.crt"
+  target:
+    secret:
+      key: "ca.crt"
+      metadata:
+        labels:
+          cnpg.io/reload: ""
