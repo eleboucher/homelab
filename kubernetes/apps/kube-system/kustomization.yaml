@@ -18,3 +18,4 @@ resources:
   - gateway-api-crds/ks.yaml
   - multus/ks.yaml
   - ksgate/ks.yaml
+  - reflector/ks.yaml
