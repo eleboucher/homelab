@@ -24,7 +24,7 @@ metadata:
   name: plugin-barman-cloud
 spec:
   dependsOn:
-    - name: cnpg
+    - name: cloudnative-pg
   interval: 1h
   path: ./kubernetes/apps/cnpg-system/cloudnative-pg/plugin-barman-cloud
   prune: true

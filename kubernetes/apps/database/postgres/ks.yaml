@@ -12,7 +12,7 @@ spec:
       namespace: database
   interval: 1h
   dependsOn:
-    - name: cnpg
+    - name: cloudnative-pg
       namespace: cnpg-system
     - name: plugin-barman-cloud
       namespace: cnpg-system
