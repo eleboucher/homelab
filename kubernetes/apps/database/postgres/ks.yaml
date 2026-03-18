@@ -11,6 +11,11 @@ spec:
       name: postgres
       namespace: database
   interval: 1h
+  dependsOn:
+    - name: cnpg
+      namespace: cnpg-system
+    - name: plugin-barman-cloud
+      namespace: cnpg-system
   path: ./kubernetes/apps/database/postgres/cluster
   prune: true
   sourceRef:
