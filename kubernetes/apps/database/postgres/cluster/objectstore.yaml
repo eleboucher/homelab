@@ -3,18 +3,18 @@
 apiVersion: barmancloud.cnpg.io/v1
 kind: ObjectStore
 metadata:
-  name: r2-store
+  name: ovh-store
 spec:
   configuration:
-    destinationPath: s3://cloudnative-pg/
+    destinationPath: s3://homelab-postgres/
     endpointURL: ${S3_ENDPOINT}
     s3Credentials:
       accessKeyId:
-        name: barman-r2
-        key: R2_ACCESS_KEY_ID
+        name: barman-ovh
+        key: OVH_ACCESS_KEY_ID
       secretAccessKey:
-        name: barman-r2
-        key: R2_SECRET_ACCESS_KEY
+        name: barman-ovh
+        key: OVH_SECRET_ACCESS_KEY
     wal:
       compression: zstd
     data:
