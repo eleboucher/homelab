@@ -78,3 +78,13 @@ spec:
         login: true
         superuser: false
         disablePassword: true
+      - name: sparkyfitness
+        ensure: present
+        login: true
+        superuser: false
+        disablePassword: true
+      - name: mealie
+        ensure: present
+        login: true
+        superuser: false
+        disablePassword: true
