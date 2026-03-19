@@ -45,7 +45,7 @@ spec:
             emptyDir: {}
         initContainers:
           - name: newt-sidecar
-            image: ghcr.io/home-operations/newt-sidecar:0.1.2
+            image: ghcr.io/home-operations/newt-sidecar:0.2.0
             args:
               - --gateway-name=kgateway-external
               - --site-id=some-roses-rain-frog
