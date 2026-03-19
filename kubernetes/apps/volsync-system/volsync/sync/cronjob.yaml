@@ -86,7 +86,7 @@ spec:
           volumes:
             - name: repository
               nfs:
-                server: normandie.internal
+                server: 10.43.1.200
                 path: /backups/volsync-kopia
             - name: tmp
               emptyDir: {}

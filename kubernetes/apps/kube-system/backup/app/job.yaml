@@ -64,7 +64,7 @@ spec:
 
       data:
         type: nfs
-        server: normandie.internal
+        server: 10.43.1.200
         path: /
         globalMounts:
           - path: /data

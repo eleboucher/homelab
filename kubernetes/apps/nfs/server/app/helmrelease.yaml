@@ -61,6 +61,7 @@ spec:
       app:
         controller: nfs-server
         type: ClusterIP
+        clusterIP: 10.43.1.200
         ports:
           nfs:
             port: 2049

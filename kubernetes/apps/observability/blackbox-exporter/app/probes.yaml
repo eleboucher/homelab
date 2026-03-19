@@ -13,7 +13,6 @@ spec:
       static:
         - le-havre.k8s.internal
         - kharkiv.k8s.internal
-        - normandie.internal
 ---
 # yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/monitoring.coreos.com/probe_v1.json
 apiVersion: monitoring.coreos.com/v1
@@ -27,4 +26,4 @@ spec:
   targets:
     staticConfig:
       static:
-        - normandie.internal:2049
+        - 10.43.1.200:2049

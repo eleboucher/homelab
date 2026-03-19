@@ -24,7 +24,7 @@ spec:
         volumeSource:
           nfs:
             path: /backups/volsync-kopia
-            server: normandie.internal
+            server: 10.43.1.200
     retain:
       hourly: 24
       daily: 7

@@ -16,7 +16,7 @@ spec:
       defaultDataLocality: best-effort
       disableRevisionCounter: "true"
     defaultBackupStore:
-      backupTarget: "nfs://normandie.internal:/backups/longhorn-backups"
+      backupTarget: "nfs://10.43.1.200:/backups/longhorn-backups"
       backupTargetCredentialSecret: ""
     defaultSettings:
       defaultDataPath: /var/mnt/longhorn
