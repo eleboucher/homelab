@@ -10,7 +10,6 @@ spec:
       app.kubernetes.io/name: paperless
   components:
     - ../../../../components/volsync
-    - ../../../../components/cnpg
     - ../../../../components/postgres/cert
   dependsOn:
     - name: longhorn

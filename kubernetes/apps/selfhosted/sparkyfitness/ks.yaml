@@ -9,7 +9,7 @@ spec:
     labels:
       app.kubernetes.io/name: sparkyfitness
   components:
-    - ../../../../components/cnpg
+    - ../../../../components/volsync
     - ../../../../components/postgres/cert
   dependsOn:
     - name: longhorn

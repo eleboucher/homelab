@@ -52,7 +52,7 @@ patches:
                 - path: /var/run/secrets/postgresql
             root-ca:
               type: secret
-              name: "root-ca"
+              name: root-ca
               defaultMode: 0440
               globalMounts:
                 - path: /var/run/secrets/root-ca

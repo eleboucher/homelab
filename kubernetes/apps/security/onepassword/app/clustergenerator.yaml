@@ -1,0 +1,14 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/generators.external-secrets.io/clustergenerator_v1alpha1.json
+apiVersion: generators.external-secrets.io/v1alpha1
+kind: ClusterGenerator
+metadata:
+  name: pw
+spec:
+  kind: Password
+  generator:
+    passwordSpec:
+      length: 32
+      symbols: 0
+      noUpper: false
+      allowRepeat: true

@@ -1,0 +1,15 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/fluxcd.controlplane.io/resourcesetinputprovider_v1.json
+apiVersion: fluxcd.controlplane.io/v1
+kind: ResourceSetInputProvider
+metadata:
+  name: postgres-${APP}
+  annotations:
+    fluxcd.controlplane.io/reconcile: "enabled"
+    fluxcd.controlplane.io/reconcileEvery: "5m"
+  labels:
+    postgresql.cnpg.io/role: "true"
+spec:
+  type: Static
+  defaultValues:
+    role: ${OWNER}

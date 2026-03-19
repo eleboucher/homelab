@@ -107,7 +107,18 @@ spec:
           paperless:
             app:
               - path: /data/local
-
+      tmp:
+        type: emptyDir
+        globalMounts:
+          - path: /tmp
+            subPath: tmp
+        advancedMounts:
+          paperless:
+            app:
+              - path: /run
+                subPath: run
+              - path: /var/lib/apt
+                subPath: apt
       nas:
         type: nfs
         server: normandie.internal

@@ -13,8 +13,6 @@ spec:
       namespace: network
     - name: longhorn
       namespace: longhorn-system
-    - name: cloudnative-pg
-      namespace: database
   interval: 1h
   path: ./kubernetes/apps/selfhosted/mealie/app
   postBuild:

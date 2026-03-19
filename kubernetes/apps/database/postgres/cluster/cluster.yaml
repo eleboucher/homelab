@@ -82,8 +82,14 @@ spec:
         ensure: present
         login: true
         superuser: false
-        disablePassword: true
+        disablePassword: false
       - name: mealie
+        ensure: present
+        login: true
+        superuser: false
+        disablePassword: true
+
+      - name: pooler-rw
         ensure: present
         login: true
         superuser: false

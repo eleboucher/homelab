@@ -9,17 +9,11 @@ metadata:
 spec:
   interval: 1h
   components:
-    - ../../../../components/cnpg
+    - ../../../../components/postgres/pass
   path: ./kubernetes/apps/media/streamystats/app
   dependsOn:
     - name: kgateway-gateway
       namespace: network
-    - name: longhorn
-      namespace: longhorn-system
-    - name: external-secrets
-      namespace: security
-    - name: cloudnative-pg
-      namespace: database
   prune: true
   postBuild:
     substitute:

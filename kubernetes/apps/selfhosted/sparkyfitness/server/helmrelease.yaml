@@ -10,6 +10,13 @@ spec:
     name: sparkyfitness
   interval: 30m
   values:
+    defaultPodOptions:
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        runAsNonRoot: true
+        fsGroup: 1000
+        fsGroupChangePolicy: "OnRootMismatch"
     controllers:
       main:
         forceRename: sparkyfitness
@@ -24,19 +31,17 @@ spec:
               tag: v0.16.5.4
             env:
               # Configure application
-              SPARKY_FITNESS_DB_NAME:
-                secretKeyRef:
-                  name: postgres-sparkyfitness
-                  key: dbname
-              SPARKY_FITNESS_APP_DB_USER:
-                secretKeyRef:
-                  name: postgres-sparkyfitness
-                  key: username
-              SPARKY_FITNESS_APP_DB_PASSWORD:
-                secretKeyRef:
-                  name: postgres-sparkyfitness
-                  key: password
+              SPARKY_FITNESS_DB_NAME: sparkyfitness
+              SPARKY_FITNESS_DB_USER: sparkyfitness
+              SPARKY_FITNESS_DB_PASSWORD: sparkyfitness
+              SPARKY_FITNESS_APP_DB_USER: sparkyfitness
+              SPARKY_FITNESS_APP_DB_PASSWORD: sparkyfitness
               SPARKY_FITNESS_DB_HOST: pooler-rw.database.svc
+              PGSSLROOTCERT: /var/run/secrets/root-ca/ca.crt
+              PGSSLCERT: /var/run/secrets/postgresql/tls.crt
+              PGSSLKEY: /var/run/secrets/postgresql/tls.key
+              PGSSLMODE: verify-full
+              NODE_EXTRA_CA_CERTS: /var/run/secrets/root-ca/ca.crt
               SPARKY_FITNESS_FRONTEND_URL: fitness.erwanleboucher.dev
               SPARKY_FITNESS_DISABLE_SIGNUP: false
               NODE_ENV: "production"
@@ -56,4 +61,18 @@ spec:
         type: persistentVolumeClaim
         existingClaim: "{{ .Release.Name }}"
         globalMounts:
-          - path: /uploads
+          - path: /app/SparkyFitnessServer/uploads
+
+      backup:
+        storageClass: "longhorn"
+        accessMode: ReadWriteOnce
+        size: 5Gi
+        globalMounts:
+          - path: /app/SparkyFitnessServer/backup
+      tmp:
+        type: emptyDir
+        globalMounts:
+          - path: /tmp
+            subPath: tmp
+          - path: /app/SparkyFitnessServer/temp_uploads
+            subPath: temp_uploads

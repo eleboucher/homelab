@@ -1,31 +1,87 @@
 ---
-# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
+# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/fluxcd.controlplane.io/resourceset_v1.json
+apiVersion: fluxcd.controlplane.io/v1
+kind: ResourceSet
 metadata:
-  name: postgres-cluster
+  name: cnpg-cluster
+  annotations:
+    fluxcd.controlplane.io/reconcile: "enabled"
+    fluxcd.controlplane.io/reconcileEvery: "30m"
+    fluxcd.controlplane.io/reconcileTimeout: "5m"
 spec:
-  healthChecks:
-    - apiVersion: postgresql.cnpg.io/v1
-      kind: Cluster
-      name: postgres
-      namespace: database
-  interval: 1h
-  dependsOn:
-    - name: cloudnative-pg
-      namespace: cnpg-system
-    - name: plugin-barman-cloud
-      namespace: cnpg-system
-  path: ./kubernetes/apps/database/postgres/cluster
-  prune: true
-  postBuild:
-    substituteFrom:
-      - kind: Secret
-        name: barman-ovh
-        optional: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-    namespace: flux-system
-  targetNamespace: database
-  wait: false
+  inputStrategy:
+    name: Permute
+  inputs:
+    - role: pooler-rw
+  inputsFrom:
+    - apiVersion: fluxcd.controlplane.io/v1
+      kind: ResourceSetInputProvider
+      selector:
+        matchLabels:
+          postgresql.cnpg.io/role: "true"
+  resourcesTemplate: |-
+    apiVersion: kustomize.toolkit.fluxcd.io/v1
+    kind: Kustomization
+    metadata:
+      name: &app cnpg-cluster
+      namespace: &namespace database
+    spec:
+      commonMetadata:
+        labels:
+          app.kubernetes.io/name: *app
+      healthChecks:
+        - apiVersion: postgresql.cnpg.io/v1
+          kind: Cluster
+          name: postgres
+          namespace: database
+      interval: 1h
+      path: ./kubernetes/apps/database/postgres/cluster
+      prune: true
+      retryInterval: 2m
+      postBuild:
+        substituteFrom:
+          - kind: Secret
+            name: barman-ovh
+            optional: true
+      sourceRef:
+        kind: GitRepository
+        name: flux-system
+        namespace: flux-system
+      targetNamespace: *namespace
+      timeout: 5m
+      patches:
+        - target:
+            kind: Cluster
+            group: postgresql.cnpg.io
+            version: v1
+          patch: |-
+            apiVersion: postgresql.cnpg.io/v1
+            kind: Cluster
+            metadata:
+              name: not-used
+            spec:
+              managed:
+                roles:
+                  <<- $roleNames := list >>
+                  <<- range $k, $in := inputs >>
+                  <<-   if kindIs "map" $in >>
+                  <<-     $r := index $in "role" >>
+                  <<-     if $r >>
+                  <<-       $roleNames = concat $roleNames (list $r) >>
+                  <<-     end >>
+                  <<-   end >>
+                  <<- end >>
+                  <<- $roleNames = $roleNames | compact | uniq | sortAlpha >>
+
+                  <<- $roleObjs := list >>
+                  <<- range $r := $roleNames >>
+                  <<-   $roleObjs = concat $roleObjs (list (dict
+                        "name" $r
+                        "ensure" "present"
+                        "login" true
+                        "superuser" false
+                        "disablePassword" true
+                      )) >>
+                  <<- end >>
+
+                  <<- toYaml $roleObjs | nindent 18 >>

@@ -10,6 +10,13 @@ spec:
     name: mealie
   interval: 30m
   values:
+    defaultPodOptions:
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        runAsNonRoot: true
+        fsGroup: 1000
+        fsGroupChangePolicy: "OnRootMismatch"
     controllers:
       mealie:
         annotations:
@@ -23,19 +30,11 @@ spec:
               TZ: "Europe/Paris"
               BASE_URL: https://mealie.erwanleboucher.dev
               DB_ENGINE: postgres
-              POSTGRES_SERVER: pooler-rw.database.svc
-              POSTGRES_PASSWORD:
-                secretKeyRef:
-                  name: postgres-mealie
-                  key: password
-              POSTGRES_USER:
-                secretKeyRef:
-                  name: postgres-mealie
-                  key: username
-              POSTGRES_DB:
-                secretKeyRef:
-                  name: postgres-mealie
-                  key: dbname
+              POSTGRES_URL_OVERRIDE:
+                valueFrom:
+                  secretKeyRef:
+                    name: mealie-postgres
+                    key: url
               SMTP_HOST: smtp-relay.system.svc.cluster.local
               SMTP_PORT: 25
               SMTP_FROM_NAME: Mealie
@@ -44,9 +43,6 @@ spec:
               SMTP_USER: mealie@erwanleboucher.dev
               OPENAI_BASE_URL: http://ollama.ai:11434/v1
               OPENAI_API_KEY: mealie
-            envFrom:
-              - secretRef:
-                  name: postgres-mealie
             resources:
               requests:
                 memory: 250Mi
