@@ -14,9 +14,14 @@ spec:
       deploymentAnnotations:
         reloader.stakater.com/auto: "true"
       image:
-        tag: "1.10.2"
+        # renovate: datasource=github-releases depName=fosrl/newt
+        tag: "1.10.3"
       nativeMode:
         enabled: false
+      networkPolicy:
+        enabled: false
+      prometheusRule:
+        enabled: true
 
     rbac:
       clusterRole: true
@@ -29,10 +34,9 @@ spec:
       - name: main-tunnel
         enabled: true
         replicas: 1
+        pingInterval: 60s
         auth:
           existingSecretName: newt-secret
-          keys:
-            endpointKey: NEWT_SERVER_URL
         extraEnv:
           BLUEPRINT_FILE: /etc/newt/blueprint.yaml
           NEWT_ADMIN_ADDR: "0.0.0.0:2112"
@@ -79,7 +83,5 @@ spec:
             port: 2112
           serviceMonitor:
             enabled: true
-        pingInterval: 60s
         service:
           enabled: false
-        useNativeInterface: false
