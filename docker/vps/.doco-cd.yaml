@@ -1,8 +1,11 @@
 ---
 name: pangolin
 reference: refs/heads/main
-working_dir: vps
-force_image_pull: true
+working_dir: ./docker/vps
+auto_discover: true
+auto_discover_opts:
+  depth: 1
+  delete: true
 external_secrets:
   OVH_APPLICATION_KEY: "op://kubernetes/ovh/OVH_APPLICATION_KEY"
   OVH_APPLICATION_SECRET: "op://kubernetes/ovh/OVH_APPLICATION_SECRET"
