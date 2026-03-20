@@ -6,7 +6,7 @@ set shell := ['bash', '-euo', 'pipefail', '-c']
 mod bootstrap "bootstrap"
 mod kube "kubernetes"
 mod talos "talos"
-mod vps 'vps/mod.just'
+mod ansible 'ansible'
 
 [private]
 default:
