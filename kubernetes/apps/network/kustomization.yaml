@@ -5,10 +5,10 @@ kind: Kustomization
 namespace: network
 
 resources:
-  - namespace.yaml
-  - kgateway/ks.yaml
-  - external-dns/ks.yaml
   # - cloudflared/ks.yaml
-  - newt/ks.yaml
   - echo/ks.yaml
+  - external-dns/ks.yaml
+  - kgateway/ks.yaml
+  - namespace.yaml
   - newt-wg/ks.yaml
+  - newt/ks.yaml

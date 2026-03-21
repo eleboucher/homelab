@@ -5,6 +5,6 @@ kind: Kustomization
 namespace: flux-system
 
 resources:
-  - flux-operator/ks.yaml
   - flux-instance/app
+  - flux-operator/ks.yaml
   - namespace.yaml

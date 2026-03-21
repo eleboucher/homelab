@@ -5,17 +5,17 @@ kind: Kustomization
 namespace: kube-system
 
 resources:
-  - intel-gpu-resource-driver/ks.yaml
-  - node-feature-discovery/ks.yaml
   - backup/ks.yaml
-  - snapshot-controller/ks.yaml
-  - reloader/ks.yaml
-  - descheduler/ks.yaml
   - cilium/ks.yaml
   - coredns/ks.yaml
-  - metrics-server/ks.yaml
-  - spegel/ks.yaml
+  - descheduler/ks.yaml
   - gateway-api-crds/ks.yaml
-  - multus/ks.yaml
+  - intel-gpu-resource-driver/ks.yaml
   - ksgate/ks.yaml
+  - metrics-server/ks.yaml
+  - multus/ks.yaml
+  - node-feature-discovery/ks.yaml
   - reflector/ks.yaml
+  - reloader/ks.yaml
+  - snapshot-controller/ks.yaml
+  - spegel/ks.yaml

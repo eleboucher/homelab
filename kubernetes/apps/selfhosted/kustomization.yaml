@@ -5,11 +5,11 @@ kind: Kustomization
 namespace: selfhosted
 
 resources:
-  - namespace.yaml
-  - bentopdf/ks.yaml
-  - mealie/ks.yaml
   - atuin/ks.yaml
-  - paperless/ks.yaml
-  - webhook/ks.yaml
-  - sparkyfitness/ks.yaml
+  - bentopdf/ks.yaml
   - continuwuity/ks.yaml
+  - mealie/ks.yaml
+  - namespace.yaml
+  - paperless/ks.yaml
+  - sparkyfitness/ks.yaml
+  - webhook/ks.yaml

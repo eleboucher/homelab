@@ -5,7 +5,7 @@ kind: Kustomization
 namespace: kubevirt
 
 resources:
-  - namespace.yaml
-  - operator/ks.yaml
   - cdi/ks.yaml
   - home-assistant/ks.yaml
+  - namespace.yaml
+  - operator/ks.yaml

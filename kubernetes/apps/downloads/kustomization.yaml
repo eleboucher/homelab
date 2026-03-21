@@ -5,8 +5,8 @@ kind: Kustomization
 namespace: downloads
 
 resources:
+  - autobrr/ks.yaml
   - namespace.yaml
-  - sabnzbd/ks.yaml
   - qbittorrent/ks.yaml
   - qui/ks.yaml
-  - autobrr/ks.yaml
+  - sabnzbd/ks.yaml

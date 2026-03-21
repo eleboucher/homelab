@@ -5,6 +5,6 @@ kind: Kustomization
 namespace: volsync-system
 
 resources:
+  - ./kopia/ks.yaml
   - ./namespace.yaml
   - ./volsync/ks.yaml
-  - ./kopia/ks.yaml
