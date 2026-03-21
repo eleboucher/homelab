@@ -110,7 +110,7 @@ spec:
         dashboardsConfigMapRefEnabled: true
         folder: Kubernetes
         matchLabels:
-          grafana.internal/instance: grafana
+          dashboards: grafana
     additionalPrometheusRulesMap:
       dockerhub-rules:
         groups:
