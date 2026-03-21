@@ -1,0 +1,42 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: &app gotosocial
+spec:
+  components:
+    - ../../../../components/postgres/cert
+    - ../../../../components/volsync
+  interval: 1h
+  path: ./kubernetes/apps/selfhosted/gotosocial/server
+  postBuild:
+    substitute:
+      APP: *app
+      APP_NAMESPACE: selfhosted
+      VOLSYNC_CAPACITY: 10Gi
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+  targetNamespace: selfhosted
+  timeout: 5m
+  wait: false
+---
+# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: &app phanpy
+spec:
+  interval: 1h
+  path: ./kubernetes/apps/selfhosted/gotosocial/phanpy
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+  targetNamespace: selfhosted
+  timeout: 5m
+  wait: false

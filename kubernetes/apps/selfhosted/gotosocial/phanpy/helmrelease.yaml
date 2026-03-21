@@ -1,0 +1,40 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: phanpy
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: phanpy
+  interval: 30m
+  values:
+    controllers:
+      phanpy:
+        containers:
+          main:
+            image:
+              repository: "ghcr.io/jjgadgets/phanpy"
+              tag: 2025.01.26.24f03f5
+            resources:
+              requests:
+                cpu: 10m
+              limits:
+                memory: 512Mi
+            env:
+              PHANPY_WEBSITE: "phanpy.erwanleboucher.dev"
+              PHANPY_DEFAULT_INSTANCE: "gts.erwanleboucher.dev"
+    service:
+      main:
+        controller: phanpy
+        ports:
+          http:
+            port: 8080
+    route:
+      app:
+        parentRefs:
+          - name: kgateway-internal
+            namespace: network
+        hostnames:
+          - phanpy.erwanleboucher.dev
