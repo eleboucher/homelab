@@ -12,6 +12,7 @@ resources:
   - github-exporter/ks.yaml
   - grafana/ks.yaml
   - headlamp/ks.yaml
+  - keda/ks.yaml
   - kromgo/ks.yaml
   - kube-prometheus-stack/ks.yaml
   - kube-state-metrics/ks.yaml

@@ -8,8 +8,10 @@ resources:
   - atuin/ks.yaml
   - bentopdf/ks.yaml
   - continuwuity/ks.yaml
+  - homepage/ks.yaml
   - mealie/ks.yaml
   - namespace.yaml
   - paperless/ks.yaml
+  - smtp-relay/ks.yaml
   - sparkyfitness/ks.yaml
   - webhook/ks.yaml
