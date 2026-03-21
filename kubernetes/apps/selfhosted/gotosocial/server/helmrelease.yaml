@@ -1,0 +1,64 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: gotosocial
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: gotosocial
+  interval: 30m
+  values:
+    controllers:
+      gts:
+        type: deployment
+        pod:
+          securityContext:
+            fsGroup: 1000
+        containers:
+          gts:
+            image:
+              repository: docker.io/superseriousbusiness/gotosocial
+              tag: "0.21.2"
+            env:
+              TZ: Europe/Paris
+              GTS_HOST: gts.erwanleboucher.dev
+              GTS_ACCOUNT_DOMAIN: erwanleboucher.dev
+              GTS_ADVANCED_RATE_LIMIT_REQUESTS: 0
+              GTS_STORAGE_LOCAL_BASE_PATH: /storage
+              GTS_SEMAPHORE_URL: https://phanpy.erwanleboucher.dev
+              GTS_LANDING_PAGE_USER: "me"
+              GTS_DB_TYPE: postgres
+              GTS_DB_POSTGRES_CONNECTION_STRING:
+                valueFrom:
+                  secretKeyRef:
+                    name: gotosocial-postgres
+                    key: url
+            resources:
+              requests:
+                cpu: 10m
+              limits:
+                memory: 1024Mi
+
+    persistence:
+      storage:
+        type: persistentVolumeClaim
+        existingClaim: "{{ .Release.Name }}"
+        globalMounts:
+          - subPath: data
+            path: /storage
+    service:
+      main:
+        controller: gts
+        ports:
+          http:
+            port: 8080
+
+    route:
+      app:
+        parentRefs:
+          - name: kgateway-internal
+            namespace: network
+        hostnames:
+          - gts.erwanleboucher.dev
