@@ -4,15 +4,18 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: mikrotik-cert-sync
-  namespace: flux-system
+  name: smtp-relay
 spec:
   interval: 6h
-  path: ./kubernetes/apps/system/mikrotik-cert-sync/app
+  path: ./kubernetes/apps/selfhosted/smtp-relay/app
+  postBuild:
+    substitute:
+      APP: smtp-relay
   prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
     namespace: flux-system
+  targetNamespace: selfhosted
   timeout: 5m
   wait: false
