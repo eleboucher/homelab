@@ -11,7 +11,7 @@ spec:
       inputName: DS_PROMETHEUS
   instanceSelector:
     matchLabels:
-      grafana.internal/instance: grafana
+      dashboards: grafana
   url: https://grafana.com/api/dashboards/15761/revisions/20/download
 ---
 # yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/grafana.integreatly.org/grafanadashboard_v1beta1.json
@@ -26,7 +26,7 @@ spec:
       inputName: DS_PROMETHEUS
   instanceSelector:
     matchLabels:
-      grafana.internal/instance: grafana
+      dashboards: grafana
   url: https://grafana.com/api/dashboards/15762/revisions/22/download
 ---
 # yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/grafana.integreatly.org/grafanadashboard_v1beta1.json
@@ -41,7 +41,7 @@ spec:
       inputName: DS_PROMETHEUS
   instanceSelector:
     matchLabels:
-      grafana.internal/instance: grafana
+      dashboards: grafana
   url: https://grafana.com/api/dashboards/15757/revisions/43/download
 ---
 # yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/grafana.integreatly.org/grafanadashboard_v1beta1.json
@@ -56,7 +56,7 @@ spec:
       inputName: DS_PROMETHEUS
   instanceSelector:
     matchLabels:
-      grafana.internal/instance: grafana
+      dashboards: grafana
   url: https://grafana.com/api/dashboards/15758/revisions/44/download
 ---
 # yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/grafana.integreatly.org/grafanadashboard_v1beta1.json
@@ -71,7 +71,7 @@ spec:
       inputName: DS_PROMETHEUS
   instanceSelector:
     matchLabels:
-      grafana.internal/instance: grafana
+      dashboards: grafana
   url: https://grafana.com/api/dashboards/15759/revisions/40/download
 ---
 # yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/grafana.integreatly.org/grafanadashboard_v1beta1.json
@@ -86,7 +86,7 @@ spec:
       inputName: DS_PROMETHEUS
   instanceSelector:
     matchLabels:
-      grafana.internal/instance: grafana
+      dashboards: grafana
   url: https://grafana.com/api/dashboards/15760/revisions/39/download
 ---
 # yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/grafana.integreatly.org/grafanadashboard_v1beta1.json
@@ -101,5 +101,5 @@ spec:
       inputName: DS_PROMETHEUS
   instanceSelector:
     matchLabels:
-      grafana.internal/instance: grafana
+      dashboards: grafana
   url: https://grafana.com/api/dashboards/11454/revisions/14/download
