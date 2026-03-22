@@ -47,7 +47,7 @@
                     name: issue.state
               - match:
                   type: value
-                  value: Renovate Dashboard
+                  value: Dependency Dashboard
                   parameter:
                     source: payload
                     name: issue.title
