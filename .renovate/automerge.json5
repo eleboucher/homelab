@@ -30,7 +30,6 @@
       matchPackageNames: [
         "/kube-prometheus-stack/",
         "ghcr.io/mogenius/helm-charts/renovate-operator",
-        "ghcr.io/bjw-s-labs/wrangler",
       ],
       ignoreTests: false,
     },
