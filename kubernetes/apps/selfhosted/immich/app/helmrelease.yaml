@@ -1,0 +1,77 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app immich
+spec:
+  interval: 1h
+  chartRef:
+    kind: OCIRepository
+    name: *app
+  values:
+    controllers:
+      main:
+        containers:
+          main:
+            image:
+              # renovate: datasource=github-releases depName=immich-app/immich
+              tag: v2.5.6
+            env:
+              DB_URL:
+                valueFrom:
+                  secretKeyRef:
+                    name: "{{ .Release.Name }}-postgres"
+                    key: url
+              REDIS_URL: "redis://dragonfly.database.svc:6379/3"
+
+    immich:
+      metrics:
+        enabled: true
+      persistence:
+        library:
+          existingClaim: immich-library
+          globalMounts:
+            - path: /library
+              subPath: library
+
+    server:
+      controllers:
+        main:
+          pod:
+            securityContext:
+              fsGroup: 1000
+              fsGroupChangePolicy: OnRootMismatch
+
+          containers:
+            main:
+              resources:
+                requests:
+                  cpu: 11m
+      persistence:
+        metadata:
+          forceRename: immich-metadata
+          size: 30Gi
+          storageClass: longhorn
+          accessMode: ReadWriteOnce
+          globalMounts:
+            - path: /data/thumbs
+              subPath: thumbs
+            - path: /data/encoded-video
+              subPath: encoded-video
+
+    machine-learning:
+      controllers:
+        main:
+          strategy: Recreate
+
+          containers:
+            main:
+              resources:
+                requests:
+                  cpu: 10m
+      persistence:
+        cache:
+          type: persistentVolumeClaim
+          size: 10Gi
+          accessMode: ReadWriteOnce
