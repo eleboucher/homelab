@@ -7,6 +7,7 @@ namespace: selfhosted
 resources:
   - atuin/ks.yaml
   - bentopdf/ks.yaml
+  - bluesky/ks.yaml
   - continuwuity/ks.yaml
   - gotosocial/ks.yaml
   - homepage/ks.yaml
