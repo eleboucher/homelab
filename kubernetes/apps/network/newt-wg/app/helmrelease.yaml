@@ -22,11 +22,6 @@ spec:
         enabled: false
       prometheusRule:
         enabled: true
-      updownScripts:
-        enable-forwarding: |
-          #!/bin/sh
-          sysctl -w net.ipv4.ip_forward=1
-          iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
 
     rbac:
       clusterRole: true
@@ -56,11 +51,6 @@ spec:
               subnet: 10.42.0.0/16
             - name: cluster-services
               subnet: 10.96.0.0/12
-        updown:
-          enabled: true
-          script: "enable-forwarding"
-          mountPath: "/opt/newt/updown"
-          fileName: "updown.sh"
         extraEnv:
           NEWT_ADMIN_ADDR: "0.0.0.0:2112"
           NEWT_METRICS_PROMETHEUS_ENABLED: "true"
