@@ -35,7 +35,7 @@ spec:
                   secretKeyRef:
                     name: mealie-postgres
                     key: url
-              SMTP_HOST: smtp-relay.system.svc.cluster.local
+              SMTP_HOST: smtp-relay.selfhosted.svc.cluster.local
               SMTP_PORT: 25
               SMTP_FROM_NAME: Mealie
               SMTP_FROM_EMAIL: noreply@erwanleboucher.dev

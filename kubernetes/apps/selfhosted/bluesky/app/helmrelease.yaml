@@ -1,0 +1,110 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app bluesky
+spec:
+  interval: 1h
+  chartRef:
+    kind: OCIRepository
+    name: bluesky
+  values:
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+
+    controllers:
+      bluesky:
+        containers:
+          app:
+            image:
+              repository: ghcr.io/bluesky-social/pds
+              tag: 0.4.208
+            env:
+              TZ: "Europe/Paris"
+              PDS_PORT: &port 3000
+              PDS_HOSTNAME: &host bluesky.erwanleboucher.dev
+              PDS_DATA_DIRECTORY: &pvc /pds
+              PDS_BLOBSTORE_DISK_LOCATION: /pds/blocks
+              PDS_INVITE_REQUIRED: "true"
+              LOG_ENABLED: "true"
+              PDS_RATE_LIMITS_ENABLED: "true"
+              LOG_LEVEL: "info"
+              PDS_CRAWLERS: "https://bsky.network"
+              PDS_REPORT_SERVICE_URL: "https://mod.bsky.app"
+              PDS_REPORT_SERVICE_DID: "did:plc:ar7c4by46qjdydhdevvrndac"
+              PDS_BSKY_APP_VIEW_URL: "https://api.bsky.app"
+              PDS_BSKY_APP_VIEW_DID: "did:web:api.bsky.app"
+              PDS_DID_PLC_URL: "https://plc.directory"
+              PDS_EMAIL_SMTP_URL: "smtp://smtp-relay.selfhosted.svc.cluster.local:25"
+              PDS_EMAIL_FROM_ADDRESS: "bluesky@erwanleboucher.dev"
+            envFrom:
+              - secretRef:
+                  name: bluesky-secret
+            securityContext:
+              readOnlyRootFilesystem: true
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop:
+                  - "ALL"
+            resources:
+              requests:
+                cpu: "10m"
+              limits:
+                memory: "512Mi"
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /xrpc/_health
+                    port: *port
+                  initialDelaySeconds: 0
+                  periodSeconds: 10
+                  timeoutSeconds: 1
+                  failureThreshold: 3
+              readiness: *probes
+    service:
+      app:
+        controller: bluesky
+        ports:
+          http:
+            port: *port
+    route:
+      app:
+        hostnames:
+          - "bluesky.erwanleboucher.dev"
+          - "*.bluesky.erwanleboucher.dev"
+        parentRefs:
+          - name: kgateway-external
+            namespace: network
+        rules:
+          - filters:
+              - type: CORS
+                cors:
+                  allowOrigins:
+                    - "*"
+                  allowMethods:
+                    - "*"
+                  allowHeaders:
+                    - "*"
+                  maxAge: 86400
+            backendRefs:
+              - name: bluesky
+                port: *port
+    persistence:
+      data:
+        enabled: true
+        type: persistentVolumeClaim
+        existingClaim: "{{ .Release.Name }}"
+        advancedMounts:
+          bluesky:
+            app:
+              - subPath: data
+                path: *pvc
