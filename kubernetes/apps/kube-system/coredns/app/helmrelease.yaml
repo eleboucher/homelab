@@ -42,7 +42,7 @@ spec:
             parameters: "@kubernetes"
           - name: hosts
             configBlock: |-
-              10.43.1.200 normandie.internal normandie
+              192.168.1.40 normandie.internal normandie
               fallthrough
           - name: forward
             parameters: . /etc/resolv.conf
