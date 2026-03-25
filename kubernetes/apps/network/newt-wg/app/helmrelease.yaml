@@ -41,16 +41,6 @@ spec:
         mtu: 1380
         auth:
           existingSecretName: newt-wg-secret
-        blueprintData: |
-          networks:
-            - name: cluster-nodes
-              subnet: 192.168.1.0/24
-            - name: cluster-lb-pool
-              subnet: 192.168.69.0/24
-            - name: cluster-pods
-              subnet: 10.42.0.0/16
-            - name: cluster-services
-              subnet: 10.96.0.0/12
         extraEnv:
           NEWT_ADMIN_ADDR: "0.0.0.0:2112"
           NEWT_METRICS_PROMETHEUS_ENABLED: "true"
