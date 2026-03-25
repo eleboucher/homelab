@@ -9,6 +9,7 @@ spec:
   dnsNames:
     - "erwanleboucher.dev"
     - "*.erwanleboucher.dev"
+    - "*.bluesky.erwanleboucher.dev"
   duration: 160h
   privateKey:
     algorithm: ECDSA
