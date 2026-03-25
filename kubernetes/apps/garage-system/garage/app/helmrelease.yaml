@@ -24,7 +24,7 @@ spec:
               TZ: Europe/Paris
             envFrom:
               - secretRef:
-                  name: garage
+                  name: garage-secret
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
