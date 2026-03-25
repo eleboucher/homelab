@@ -20,23 +20,47 @@ spec:
 
     controllers:
       bluesky:
+        initContainers:
+          init-keys:
+            image:
+              repository: ghcr.io/haileyok/cocoon
+              tag: latest
+            command:
+              - /bin/sh
+              - -c
+              - |
+                [ -f /keys/rotation.key ] || /cocoon create-rotation-key --out /keys/rotation.key
+                [ -f /keys/jwk.key ] || /cocoon create-private-jwk --out /keys/jwk.key
+            env: &env
+              COCOON_CONTACT_EMAIL: "erwan@erwanleboucher.dev"
+              COCOON_DID: "did:web:bluesky.erwanleboucher.dev"
+              COCOON_HOSTNAME: "bluesky.erwanleboucher.dev"
+              COCOON_JWK_PATH: /keys/jwk.key
+              COCOON_RELAYS: "https://bsky.network"
+              COCOON_ROTATION_KEY_PATH: /keys/rotation.key
+            envFrom: &envFrom
+              - secretRef:
+                  name: bluesky-secret
+            securityContext: &securityContext
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop:
+                  - ALL
+              readOnlyRootFilesystem: true
         containers:
           app:
             image:
               repository: ghcr.io/haileyok/cocoon
               tag: latest
             env:
+              !!merge <<: *env
               TZ: "Europe/Paris"
-              COCOON_CONTACT_EMAIL: "erwan@erwanleboucher.dev"
               COCOON_DATABASE_URL:
                 valueFrom:
                   secretKeyRef:
                     name: bluesky-postgres
                     key: url
               COCOON_DB_TYPE: postgres
-              COCOON_DID: "did:web:bluesky.erwanleboucher.dev"
-              COCOON_HOSTNAME: "bluesky.erwanleboucher.dev"
-              COCOON_RELAYS: "https://bsky.network"
               COCOON_S3_BLOBSTORE_ENABLED: "true"
               COCOON_S3_BUCKET: bluesky
               COCOON_S3_ENDPOINT: "http://garage.garage-system.svc.cluster.local:3900"
@@ -44,9 +68,7 @@ spec:
               COCOON_SMTP_EMAIL: "bluesky@erwanleboucher.dev"
               COCOON_SMTP_HOST: "smtp-relay.selfhosted.svc.cluster.local"
               COCOON_SMTP_PORT: "25"
-            envFrom:
-              - secretRef:
-                  name: bluesky-secret
+            envFrom: *envFrom
             probes:
               liveness: &probes
                 enabled: true
@@ -65,12 +87,7 @@ spec:
                 cpu: 10m
               limits:
                 memory: 512Mi
-            securityContext:
-              allowPrivilegeEscalation: false
-              capabilities:
-                drop:
-                  - ALL
-              readOnlyRootFilesystem: true
+            securityContext: *securityContext
 
     persistence:
       data:
@@ -80,6 +97,9 @@ spec:
         advancedMounts:
           bluesky:
             app:
+              - path: /keys
+                subPath: keys
+            init-keys:
               - path: /keys
                 subPath: keys
       tmp:
