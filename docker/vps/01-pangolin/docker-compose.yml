@@ -250,6 +250,7 @@ configs:
 
       serversTransport:
         insecureSkipVerify: true
+        disableHTTP2: true
 
       ping:
         entryPoint: "web"
