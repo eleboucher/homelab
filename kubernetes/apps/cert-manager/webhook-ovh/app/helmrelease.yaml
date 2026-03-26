@@ -12,3 +12,40 @@ spec:
   interval: 1h
   values:
     groupName: acme.erwanleboucher.dev
+    issuers:
+      - name: letsencrypt-production
+        create: true
+        kind: ClusterIssuer
+        acmeServerUrl: https://acme-v02.api.letsencrypt.org/directory
+        email: admin@erwanleboucher.dev
+        ovhEndpointName: ovh-eu
+        ovhAuthenticationMethod: application
+        ovhAuthenticationRef:
+          applicationKeyRef:
+            name: ovh-issuer-secret
+            key: applicationKey
+          applicationSecretRef:
+            name: ovh-issuer-secret
+            key: applicationSecret
+          applicationConsumerKeyRef:
+            name: ovh-issuer-secret
+            key: consumerKey
+        profile: shortlived
+      - name: letsencrypt-staging
+        create: true
+        kind: ClusterIssuer
+        acmeServerUrl: https://acme-staging-v02.api.letsencrypt.org/directory
+        email: admin@erwanleboucher.dev
+        ovhEndpointName: ovh-eu
+        ovhAuthenticationMethod: application
+        ovhAuthenticationRef:
+          applicationKeyRef:
+            name: ovh-issuer-secret
+            key: applicationKey
+          applicationSecretRef:
+            name: ovh-issuer-secret
+            key: applicationSecret
+          applicationConsumerKeyRef:
+            name: ovh-issuer-secret
+            key: consumerKey
+        profile: shortlived

@@ -66,8 +66,7 @@ spec:
               COCOON_S3_ENDPOINT: "http://garage.garage-system.svc.cluster.local:3900"
               COCOON_S3_REGION: us-east-1
               COCOON_SMTP_EMAIL: "bluesky@erwanleboucher.dev"
-              COCOON_SMTP_HOST: "smtp-relay.selfhosted.svc.cluster.local"
-              COCOON_SMTP_PORT: "25"
+              COCOON_SMTP_PORT: "587"
             envFrom: *envFrom
             probes:
               liveness: &probes
