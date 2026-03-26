@@ -9,7 +9,6 @@ resources:
   - cilium/ks.yaml
   - coredns/ks.yaml
   - descheduler/ks.yaml
-  - gateway-api-crds/ks.yaml
   - intel-gpu-resource-driver/ks.yaml
   - ksgate/ks.yaml
   - metrics-server/ks.yaml

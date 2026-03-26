@@ -79,7 +79,7 @@ spec:
         hostnames:
           - "matrix.erwanleboucher.dev"
         parentRefs:
-          - name: kgateway-external
+          - name: envoy-external
             namespace: network
         rules:
           - backendRefs:

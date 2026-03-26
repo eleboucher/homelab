@@ -18,7 +18,7 @@ spec:
           hostnames:
             - alertmanager.erwanleboucher.dev
           parentRefs:
-            - name: kgateway-internal
+            - name: envoy-internal
               namespace: network
       alertmanagerSpec:
         alertmanagerConfiguration:
@@ -78,7 +78,7 @@ spec:
           hostnames:
             - prometheus.erwanleboucher.dev
           parentRefs:
-            - name: kgateway-internal
+            - name: envoy-internal
               namespace: network
 
       prometheusSpec:

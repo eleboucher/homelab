@@ -3,16 +3,17 @@
 apiVersion: monitoring.coreos.com/v1
 kind: PodMonitor
 metadata:
-  name: kgateway
+  name: envoy
 spec:
-  jobLabel: kgateway
+  jobLabel: envoy-proxy
   namespaceSelector:
     matchNames:
       - network
   podMetricsEndpoints:
     - port: metrics
-      path: /metrics
+      path: /stats/prometheus
       honorLabels: true
   selector:
     matchLabels:
-      app.kubernetes.io/name: kgateway
+      app.kubernetes.io/component: proxy
+      app.kubernetes.io/name: envoy

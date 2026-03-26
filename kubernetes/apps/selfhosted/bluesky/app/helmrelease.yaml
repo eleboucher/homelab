@@ -112,12 +112,10 @@ spec:
 
     route:
       app:
-        annotations:
-          newt-sidecar/enabled: "false"
         hostnames:
           - "bluesky.erwanleboucher.dev"
         parentRefs:
-          - name: kgateway-external
+          - name: envoy-external
             namespace: network
         rules:
           - backendRefs:
@@ -136,10 +134,6 @@ spec:
 
     service:
       app:
-        annotations:
-          newt-sidecar/enabled: "true"
-          newt-sidecar/full-domain: "bluesky.erwanleboucher.dev"
-          newt-sidecar/name: "Bluesky PDS"
         controller: bluesky
         ports:
           http:

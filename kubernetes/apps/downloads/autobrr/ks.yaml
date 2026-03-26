@@ -12,7 +12,7 @@ spec:
   interval: 1h
   path: ./kubernetes/apps/downloads/autobrr/app
   dependsOn:
-    - name: kgateway-gateway
+    - name: envoy-gateway
       namespace: network
     - name: longhorn
       namespace: longhorn-system

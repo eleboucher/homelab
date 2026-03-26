@@ -67,5 +67,5 @@ spec:
         hostnames:
           - "{{ .Release.Name }}.erwanleboucher.dev"
         parentRefs:
-          - name: kgateway-external
+          - name: envoy-external
             namespace: network

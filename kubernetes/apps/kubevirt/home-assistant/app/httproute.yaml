@@ -10,7 +10,7 @@ spec:
   hostnames:
     - home.erwanleboucher.dev
   parentRefs:
-    - name: kgateway-external
+    - name: envoy-external
       namespace: network
       sectionName: https
   rules:

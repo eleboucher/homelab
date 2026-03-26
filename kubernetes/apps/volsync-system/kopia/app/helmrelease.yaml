@@ -70,7 +70,7 @@ spec:
         hostnames:
           - kopia.erwanleboucher.dev
         parentRefs:
-          - name: kgateway-internal
+          - name: envoy-internal
             namespace: network
     configMaps:
       config:

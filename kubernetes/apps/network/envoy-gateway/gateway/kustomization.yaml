@@ -3,11 +3,9 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - ./gatewayparams.yaml
   - ./certificate.yaml
-  - ./internal.yaml
-  - ./httplistenerpolicy.yaml
-  - ./listenerpolicy.yaml
+  - ./envoy.yaml
   - ./external.yaml
   - ./https-redirect.yaml
-  - ./trafficpolicy.yaml
+  - ./internal.yaml
+  - ./podmonitor.yaml

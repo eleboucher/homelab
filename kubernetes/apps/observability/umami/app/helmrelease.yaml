@@ -80,7 +80,7 @@ spec:
         hostnames:
           - stats.erwanleboucher.dev
         parentRefs:
-          - name: kgateway-external
+          - name: envoy-external
             namespace: network
     persistence:
       tmp:

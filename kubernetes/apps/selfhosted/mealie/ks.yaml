@@ -9,8 +9,6 @@ spec:
     - ../../../../components/postgres/cert
     - ../../../../components/volsync
   dependsOn:
-    - name: kgateway-gateway
-      namespace: network
     - name: longhorn
       namespace: longhorn-system
   interval: 1h

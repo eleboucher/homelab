@@ -3,7 +3,7 @@
 apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
 metadata:
-  name: kgateway-external
+  name: envoy-external
   annotations:
     external-dns.alpha.kubernetes.io/target: &hostname external.erwanleboucher.dev
     gatus.home-operations.com/endpoint: |-
@@ -11,15 +11,11 @@ metadata:
         dns-resolver: tcp://1.1.1.1:53
       group: external
 spec:
-  gatewayClassName: kgateway
+  gatewayClassName: envoy
   infrastructure:
     annotations:
       external-dns.alpha.kubernetes.io/hostname: *hostname
       lbipam.cilium.io/ips: 192.168.69.126
-    parametersRef:
-      name: kgateway-params
-      group: gateway.kgateway.dev
-      kind: GatewayParameters
   listeners:
     - name: http
       protocol: HTTP
@@ -30,7 +26,6 @@ spec:
     - name: https
       protocol: HTTPS
       port: 443
-      hostname: "*.erwanleboucher.dev"
       allowedRoutes:
         namespaces:
           from: All
@@ -38,21 +33,3 @@ spec:
         certificateRefs:
           - kind: Secret
             name: erwanleboucher-dev-tls
----
-# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/monitoring.coreos.com/podmonitor_v1.json
-apiVersion: monitoring.coreos.com/v1
-kind: PodMonitor
-metadata:
-  name: kgateway-external
-spec:
-  jobLabel: kgateway-external
-  namespaceSelector:
-    matchNames:
-      - network
-  podMetricsEndpoints:
-    - port: http-monitoring
-      path: /metrics
-      honorLabels: true
-  selector:
-    matchLabels:
-      app.kubernetes.io/name: kgateway-external

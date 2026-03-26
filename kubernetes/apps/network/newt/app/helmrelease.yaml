@@ -51,8 +51,8 @@ spec:
           - name: newt-sidecar
             image: ghcr.io/home-operations/newt-sidecar:0.2.0
             args:
-              - --gateway-name=kgateway-external
-              - --target-hostname=kgateway-external.network.svc.cluster.local
+              - --gateway-name=envoy-external
+              - --target-hostname=envoy-external.network.svc.cluster.local
               - --deny-countries=RU,CN,KP,IR,BY,IL
               - --enable-service
             env:

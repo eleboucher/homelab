@@ -12,7 +12,7 @@ spec:
     - ../../../../components/postgres/pass
   path: ./kubernetes/apps/media/streamystats/app
   dependsOn:
-    - name: kgateway-gateway
+    - name: envoy-gateway
       namespace: network
   prune: true
   postBuild:
