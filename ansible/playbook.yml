@@ -30,6 +30,7 @@
       loop:
         - {key: "doco-cd/github-token", var: "github_token"}
         - {key: "doco-cd/credential", var: "op_sa_token"}
+        - {key: "doco-cd/api_secret", var: "api_secret"}
         - {key: "pangolin/admin_email", var: "admin_email"}
         - {key: "pangolin/admin_password", var: "admin_password"}
         - {key: "pangolin/CROWDSEC_API_KEY", var: "crowdsec_api_key"}
@@ -39,9 +40,10 @@
       ansible.builtin.set_fact:
         github_token: "{{ secrets_raw.results[0].stdout }}"
         op_sa_token: "{{ secrets_raw.results[1].stdout }}"
-        admin_email: "{{ secrets_raw.results[2].stdout }}"
-        admin_password: "{{ secrets_raw.results[3].stdout }}"
-        crowdsec_api_key: "{{ secrets_raw.results[4].stdout }}"
+        api_secret: "{{ secrets_raw.results[2].stdout }}"
+        admin_email: "{{ secrets_raw.results[3].stdout }}"
+        admin_password: "{{ secrets_raw.results[4].stdout }}"
+        crowdsec_api_key: "{{ secrets_raw.results[5].stdout }}"
     - name: ssh
       block:
         - name: ssh | Harden sshd_config
@@ -124,6 +126,8 @@
           loop:
             - name: 1pw_token
               content: "{{ op_sa_token }}"
+            - name: api_secret
+              content: "{{ api_secret }}"
         - name: doco-cd | Run docker-compose
           community.docker.docker_compose_v2:
             project_src: "{{ dococd_config_dir }}"

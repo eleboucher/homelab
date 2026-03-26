@@ -2,10 +2,13 @@
 secrets:
   1pw_token:
     file: /opt/doco-cd/1pw_token
+  api_secret:
+    file: /opt/doco-cd/api_secret
 services:
   app:
     container_name: doco-cd
     environment:
+      API_SECRET_FILE: /run/secrets/api_secret
       DEPLOY_CONFIG_BASE_DIR: ./docker/vps/
       LOG_LEVEL: info
       POLL_CONFIG: |-
@@ -28,6 +31,7 @@ services:
     restart: unless-stopped
     secrets:
       - 1pw_token
+      - api_secret
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - data:/data
