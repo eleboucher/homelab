@@ -33,3 +33,14 @@ spec:
         certificateRefs:
           - kind: Secret
             name: erwanleboucher-dev-tls
+    - name: ssh
+      protocol: TCP
+      port: 22
+      allowedRoutes:
+        namespaces:
+          from: Selector
+          selector:
+            matchLabels:
+              kubernetes.io/metadata.name: forgejo
+        kinds:
+          - kind: TCPRoute

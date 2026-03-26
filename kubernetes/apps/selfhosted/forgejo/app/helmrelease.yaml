@@ -1,0 +1,124 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app forgejo
+spec:
+  interval: 1h
+  chartRef:
+    kind: OCIRepository
+    name: *app
+  values:
+    httpRoute:
+      enabled: true
+      hostnames:
+        - "git.erwanleboucher.dev"
+      parentRefs:
+        - name: envoy-external
+          namespace: network
+      matches:
+        timeouts:
+          request: 300s
+    image:
+      rootless: true
+      registry: code.forgejo.org
+      repository: forgejo/forgejo
+      tag: 14.0.2-rootless
+    gitea:
+      admin:
+        existingSecret: forgejo-secret
+      config:
+        database:
+          DB_TYPE: postgres
+
+          HOST: pooler-rw.database.svc:5432
+          USER: forgejo
+          NAME: forgejo
+          SSL_MODE: verify-full
+
+        server:
+          APP_DATA_PATH: /data/gitea
+          ROOT_URL: https://git.erwanleboucher.dev
+          SSH_DOMAIN: ssh.git.erwanleboucher.dev
+          START_SSH_SERVER: true
+          SSH_SERVER_HOST_KEYS: ssh/ssh_host_ed25519_key
+        indexer:
+          ISSUE_INDEXER_TYPE: bleve
+          REPO_INDEXER_ENABLED: true
+        service:
+          DISABLE_REGISTRATION: true
+          SHOW_REGISTRATION_BUTTON: false
+          ENABLE_NOTIFY_MAIL: true
+        queue:
+          TYPE: redis
+          CONN_STR: redis://dragonfly.database.svc:6379?pool_size=100&idle_timeout=180s
+        session:
+          PROVIDER: redis
+          PROVIDER_CONFIG: redis://dragonfly.database.svc:6379?pool_size=100&idle_timeout=180s
+        cache:
+          ENABLED: true
+          ADAPTER: redis
+          HOST: redis://dragonfly.database.svc:6379?pool_size=100&idle_timeout=180s
+        actions:
+          ENABLED: true
+        mailer:
+          ENABLED: true
+          FROM: Forgejo <forgejo@erwanleboucher.dev>
+          PROTOCOL: smtp
+          SMTP_ADDR: smtp-relay.selfhosted.svc.cluster.local
+          SMTP_PORT: 25
+
+    deployment:
+      env:
+        - name: PGSSLROOTCERT
+          value: /var/run/secrets/root-ca/ca.crt
+        - name: PGSSLCERT
+          value: /var/run/secrets/postgresql/tls.crt
+        - name: PGSSLKEY
+          value: /var/run/secrets/postgresql/tls.key
+    service:
+      ssh:
+        type: LoadBalancer
+        port: 22
+        annotations:
+          external-dns.alpha.kubernetes.io/hostname: ssh.git.erwanleboucher.dev
+          lbipam.cilium.io/ips: 192.168.69.125
+
+    valkey-cluster:
+      enabled: false
+    postgresql-ha:
+      enabled: false
+
+    persistence:
+      create: false
+      claimName: ${APP}
+
+    extraVolumes:
+      - name: postgres-forgejo
+        secret:
+          defaultMode: 0600
+          secretName: postgres-forgejo-cert
+      - name: root-ca
+        secret:
+          defaultMode: 0600
+          secretName: root-ca
+
+      - name: forgejo-ssh
+        secret:
+          secretName: forgejo-secret
+
+    extraInitVolumeMounts:
+      - name: postgres-forgejo
+        mountPath: "/var/run/secrets/postgresql"
+      - name: root-ca
+        mountPath: "/var/run/secrets/root-ca"
+    extraContainerVolumeMounts:
+      - name: postgres-forgejo
+        mountPath: "/var/run/secrets/postgresql"
+      - name: root-ca
+        mountPath: "/var/run/secrets/root-ca"
+
+      - name: forgejo-ssh
+        mountPath: "/data/gitea/ssh/ssh_host_ed25519_key"
+        subPath: ssh_host_ed25519_key

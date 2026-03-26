@@ -9,6 +9,7 @@ resources:
   - bentopdf/ks.yaml
   - bluesky/ks.yaml
   - continuwuity/ks.yaml
+  - forgejo/ks.yaml
   - gotosocial/ks.yaml
   - homepage/ks.yaml
   - immich/ks.yaml

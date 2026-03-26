@@ -1,0 +1,33 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: forgejo
+spec:
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: forgejo
+  components:
+    - ../../../../components/postgres/cert
+    - ../../../../components/volsync
+  dependsOn:
+    - name: garage
+      namespace: garage-system
+    - name: longhorn
+      namespace: longhorn-system
+  interval: 1h
+  path: "./kubernetes/apps/selfhosted/forgejo/app"
+  postBuild:
+    substitute:
+      APP: forgejo
+      APP_NAMESPACE: selfhosted
+      VOLSYNC_CAPACITY: 20Gi
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+  targetNamespace: selfhosted
+  timeout: 5m
+  wait: false

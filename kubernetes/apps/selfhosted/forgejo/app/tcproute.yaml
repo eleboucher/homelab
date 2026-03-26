@@ -1,0 +1,15 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/gateway.networking.k8s.io/tcproute_v1alpha2.json
+apiVersion: gateway.networking.k8s.io/v1alpha2
+kind: TCPRoute
+metadata:
+  name: forgejo-ssh
+spec:
+  parentRefs:
+    - name: envoy-external
+      namespace: network
+      sectionName: ssh
+  rules:
+    - backendRefs:
+        - name: forgejo-ssh
+          port: 22
