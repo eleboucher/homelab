@@ -116,7 +116,6 @@ spec:
           newt-sidecar/enabled: "false"
         hostnames:
           - "bluesky.erwanleboucher.dev"
-          - "*.bluesky.erwanleboucher.dev"
         parentRefs:
           - name: kgateway-external
             namespace: network
