@@ -52,6 +52,7 @@ spec:
             image:
               repository: ghcr.io/haileyok/cocoon
               tag: latest
+            workingDir: /data/cocoon
             env:
               !!merge <<: *env
               TZ: "Europe/Paris"
@@ -97,6 +98,8 @@ spec:
         advancedMounts:
           bluesky:
             app:
+              - path: /data/cocoon
+                subPath: data
               - path: /keys
                 subPath: keys
             init-keys:
@@ -105,13 +108,12 @@ spec:
       tmp:
         type: emptyDir
         globalMounts:
-          - path: /data
-            subPath: data
           - path: /tmp
-            subPath: tmp
 
     route:
       app:
+        annotations:
+          newt-sidecar/ssl: "true"
         hostnames:
           - "bluesky.erwanleboucher.dev"
           - "*.bluesky.erwanleboucher.dev"

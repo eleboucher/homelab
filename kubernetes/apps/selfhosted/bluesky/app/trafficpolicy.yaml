@@ -10,8 +10,6 @@ spec:
     - group: gateway.networking.k8s.io
       kind: HTTPRoute
       name: bluesky
-  compression:
-    responseCompression: {}
   retry:
     attempts: 2
     retryOn:

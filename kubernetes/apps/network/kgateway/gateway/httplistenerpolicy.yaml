@@ -13,7 +13,4 @@ spec:
       kind: Gateway
       name: kgateway-external
   streamIdleTimeout: 0s
-  upgradeConfig:
-    enabledUpgrades:
-      - websocket
   xffNumTrustedHops: 1
