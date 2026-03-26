@@ -67,6 +67,7 @@ spec:
               COCOON_S3_REGION: us-east-1
               COCOON_SMTP_EMAIL: "bluesky@erwanleboucher.dev"
               COCOON_SMTP_PORT: "587"
+              COCOON_SMTP_NAME: "Bluesky"
             envFrom: *envFrom
             probes:
               liveness: &probes
