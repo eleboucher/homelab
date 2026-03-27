@@ -4,9 +4,7 @@ name: Mirror to GitHub
 on:
   push:
     branches:
-      - "**"
-    tags:
-      - "**"
+      - main
 
 jobs:
   mirror:
@@ -21,6 +19,5 @@ jobs:
         env:
           GH_MIRROR_TOKEN: ${{ secrets.GH_MIRROR_TOKEN }}
         run: |-
-          git push --prune "https://${GH_MIRROR_TOKEN}@github.com/eleboucher/homelab.git" \
-            '+refs/remotes/origin/*:refs/heads/*' \
-            'refs/tags/*:refs/tags/*'
+          git push "https://${GH_MIRROR_TOKEN}@github.com/eleboucher/homelab.git" \
+            'HEAD:refs/heads/main'
