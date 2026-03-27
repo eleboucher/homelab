@@ -1,0 +1,22 @@
+---
+name: Mirror to GitHub
+
+on:
+  push:
+    branches:
+      - "**"
+    tags:
+      - "**"
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Mirror to GitHub
+        run: |-
+          git push --mirror "https://${{ secrets.GITHUB_MIRROR_TOKEN }}@github.com/eleboucher/homelab.git"
