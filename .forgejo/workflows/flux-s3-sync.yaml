@@ -15,22 +15,16 @@ jobs:
       AWS_ACCESS_KEY_ID: ${{ secrets.OVH_FLUX_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.OVH_FLUX_SECRET_ACCESS_KEY }}
       AWS_DEFAULT_REGION: rbx
-      FORGEJO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      SERVER_URL: ${{ github.server_url }}
-      REPOSITORY: ${{ github.repository }}
     steps:
+      - name: Check out the repository
+        uses: https://data.forgejo.org/actions/checkout@v4
+
       - name: Install AWS CLI
         run: |
           apt-get install -y -qq curl unzip
           curl -fsSL "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o /tmp/awscliv2.zip
           unzip -q /tmp/awscliv2.zip -d /tmp
           /tmp/aws/install
-
-      - name: Checkout
-        run: |
-          server_host="${SERVER_URL#*://}"
-          git clone --depth=1 --single-branch \
-            "https://oauth2:${FORGEJO_TOKEN}@${server_host}/${REPOSITORY}.git" .
 
       - name: Sync kubernetes manifests to OVH S3
         run: |-
