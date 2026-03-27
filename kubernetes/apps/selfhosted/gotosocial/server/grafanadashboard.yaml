@@ -1,0 +1,12 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/grafana.integreatly.org/grafanadashboard_v1beta1.json
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: gotosocial
+spec:
+  allowCrossNamespaceImport: true
+  instanceSelector:
+    matchLabels:
+      dashboards: grafana
+  url: https://codeberg.org/superseriousbusiness/gotosocial/raw/branch/main/example/metrics/gotosocial_grafana_dashboard.json

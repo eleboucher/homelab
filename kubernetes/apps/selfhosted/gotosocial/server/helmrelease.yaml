@@ -29,6 +29,10 @@ spec:
               GTS_STORAGE_LOCAL_BASE_PATH: /storage
               GTS_SEMAPHORE_URL: https://phanpy.erwanleboucher.dev
               GTS_LANDING_PAGE_USER: "me"
+              GTS_METRICS_ENABLED: "true"
+              OTEL_EXPORTER_PROMETHEUS_HOST: 0.0.0.0
+              OTEL_METRICS_PRODUCERS: prometheus
+              OTEL_METRICS_EXPORTER: prometheus
               GTS_DB_TYPE: postgres
               GTS_DB_POSTGRES_CONNECTION_STRING:
                 valueFrom:
@@ -54,6 +58,8 @@ spec:
         ports:
           http:
             port: 8080
+          metrics:
+            port: 9464
 
     route:
       app:
@@ -76,3 +82,9 @@ spec:
                     - "*"
                   maxAge: 86400
                 type: CORS
+    serviceMonitor:
+      app:
+        endpoints:
+          - port: metrics
+            interval: 30s
+            path: /metrics
