@@ -65,3 +65,17 @@ spec:
             namespace: network
         hostnames:
           - gts.erwanleboucher.dev
+        rules:
+          - backendRefs:
+              - name: gotosocial
+                port: 8080
+            filters:
+              - cors:
+                  allowHeaders:
+                    - "*"
+                  allowMethods:
+                    - "*"
+                  allowOrigins:
+                    - "*"
+                  maxAge: 86400
+                type: CORS
