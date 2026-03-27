@@ -382,6 +382,11 @@ configs:
               permanent: true
               regex: "^https?://erwanleboucher\\.dev(/.well-known/matrix/.*)$"
               replacement: "https://matrix.erwanleboucher.dev$${1}"
+          gotosocial-well-known-redirect:
+            redirectRegex:
+              permanent: true
+              regex: "^https?://erwanleboucher\\.dev(/.well-known/(webfinger|host-meta|nodeinfo).*)$"
+              replacement: "https://gts.erwanleboucher.dev$${1}"
           matrix-cors:
             headers:
               accessControlAllowOriginList:
@@ -464,6 +469,18 @@ configs:
               - matrix-cors
               - matrix-well-known-redirect
             rule: "Host(`erwanleboucher.dev`) && PathPrefix(`/.well-known/matrix/`)"
+            priority: 1000
+            service: noop@internal
+            tls:
+              certResolver: letsencrypt
+
+          # 301 redirect /.well-known/webfinger|host-meta|nodeinfo → social subdomain
+          gotosocial-well-known:
+            entryPoints:
+              - websecure
+            middlewares:
+              - gotosocial-well-known-redirect
+            rule: "Host(`erwanleboucher.dev`) && (PathPrefix(`/.well-known/webfinger`) || PathPrefix(`/.well-known/host-meta`) || PathPrefix(`/.well-known/nodeinfo`))"
             priority: 1000
             service: noop@internal
             tls:
