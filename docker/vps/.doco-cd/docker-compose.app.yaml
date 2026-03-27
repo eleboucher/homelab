@@ -12,12 +12,15 @@ services:
       DEPLOY_CONFIG_BASE_DIR: ./docker/vps/
       LOG_LEVEL: info
       POLL_CONFIG: |-
-        - url: https://github.com/eleboucher/homelab.git
+        - url: https://git.erwanleboucher.dev/eleboucher/homelab.git
           reference: main
           interval: 3600
       SECRET_PROVIDER: 1password
       SECRET_PROVIDER_ACCESS_TOKEN_FILE: /run/secrets/1pw_token
       TZ: Europe/Paris
+    ports:
+      - "8080:80"
+      - "9120:9120"
     healthcheck:
       test:
         - CMD
