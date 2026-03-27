@@ -27,7 +27,7 @@ spec:
   prune: true
   retryInterval: 2m
   sourceRef:
-    kind: GitRepository
+    kind: Bucket
     name: flux-system
     namespace: flux-system
   targetNamespace: *namespace
