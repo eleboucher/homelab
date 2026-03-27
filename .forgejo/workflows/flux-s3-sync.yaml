@@ -1,0 +1,26 @@
+---
+name: Sync Flux manifests to OVH S3
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - kubernetes/**
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Sync kubernetes manifests to OVH S3
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.OVH_FLUX_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.OVH_FLUX_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: rbx
+        run: |-
+          aws s3 sync ./kubernetes/ s3://homelab-flux/kubernetes/ \
+            --delete \
+            --endpoint-url https://s3.rbx.io.cloud.ovh.net

@@ -15,3 +15,12 @@ metadata:
   namespace: network
 stringData:
   CLOUDFLARE_TUNNEL_ID: op://kubernetes/cloudflare/CLOUDFLARE_TUNNEL_ID
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: flux-s3-secret
+  namespace: flux-system
+stringData:
+  accesskey: op://kubernetes/ovh-k8s-schema-s3/accessKey
+  secretkey: op://kubernetes/ovh-k8s-schema-s3/secretKey

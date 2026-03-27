@@ -1,0 +1,16 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/source.toolkit.fluxcd.io/bucket_v1.json
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: Bucket
+metadata:
+  name: flux-system
+  namespace: flux-system
+spec:
+  bucketName: homelab-flux
+  endpoint: s3.rbx.io.cloud.ovh.net
+  interval: 5m
+  provider: generic
+  region: rbx
+  secretRef:
+    name: flux-s3-secret
+  timeout: 60s
