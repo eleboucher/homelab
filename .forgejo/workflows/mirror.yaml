@@ -12,11 +12,14 @@ jobs:
   mirror:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
       - name: Mirror to GitHub
+        env:
+          FORGEJO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_MIRROR_TOKEN: ${{ secrets.GH_MIRROR_TOKEN }}
+          SERVER_URL: ${{ github.server_url }}
+          REPOSITORY: ${{ github.repository }}
         run: |-
-          git push --mirror "https://${{ secrets.GH_MIRROR_TOKEN }}@github.com/eleboucher/homelab.git"
+          server_host="${SERVER_URL#*://}"
+          git clone --mirror "https://oauth2:${FORGEJO_TOKEN}@${server_host}/${REPOSITORY}.git" repo.git
+          cd repo.git
+          git push --mirror "https://${GH_MIRROR_TOKEN}@github.com/eleboucher/homelab.git"
