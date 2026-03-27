@@ -44,7 +44,7 @@ spec:
             name: barman-ovh
             optional: true
       sourceRef:
-        kind: GitRepository
+        kind: Bucket
         name: flux-system
         namespace: flux-system
       targetNamespace: *namespace
