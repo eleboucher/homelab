@@ -27,6 +27,7 @@ spec:
       sync:
         interval: 5m
         kind: GitRepository
+        path: kubernetes/flux/cluster
         url: "https://github.com/eleboucher/homelab.git"
         ref: "refs/heads/main"
         # pullSecret: "flux-s3-secret"
