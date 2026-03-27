@@ -17,7 +17,7 @@ spec:
   path: ./kubernetes/apps/observability/silence-operator/app
   prune: true
   sourceRef:
-    kind: GitRepository
+    kind: Bucket
     name: flux-system
     namespace: flux-system
   targetNamespace: observability
@@ -39,7 +39,7 @@ spec:
   path: ./kubernetes/apps/observability/silence-operator/silences
   prune: true
   sourceRef:
-    kind: GitRepository
+    kind: Bucket
     name: flux-system
     namespace: flux-system
   targetNamespace: observability

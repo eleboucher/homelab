@@ -19,7 +19,7 @@ spec:
       APP_NAMESPACE: garage-system
   prune: true
   sourceRef:
-    kind: GitRepository
+    kind: Bucket
     name: flux-system
     namespace: flux-system
   targetNamespace: garage-system

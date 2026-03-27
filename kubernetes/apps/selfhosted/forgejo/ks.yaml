@@ -25,7 +25,7 @@ spec:
       VOLSYNC_CAPACITY: 20Gi
   prune: true
   sourceRef:
-    kind: GitRepository
+    kind: Bucket
     name: flux-system
     namespace: flux-system
   targetNamespace: selfhosted
@@ -47,7 +47,7 @@ spec:
   path: "./kubernetes/apps/selfhosted/forgejo/runner"
   prune: true
   sourceRef:
-    kind: GitRepository
+    kind: Bucket
     name: flux-system
     namespace: flux-system
   targetNamespace: selfhosted

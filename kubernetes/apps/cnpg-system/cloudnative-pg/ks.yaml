@@ -10,7 +10,7 @@ spec:
   path: ./kubernetes/apps/cnpg-system/cloudnative-pg/app
   prune: true
   sourceRef:
-    kind: GitRepository
+    kind: Bucket
     name: flux-system
     namespace: flux-system
   targetNamespace: cnpg-system
@@ -29,7 +29,7 @@ spec:
   path: ./kubernetes/apps/cnpg-system/cloudnative-pg/plugin-barman-cloud
   prune: true
   sourceRef:
-    kind: GitRepository
+    kind: Bucket
     name: flux-system
     namespace: flux-system
   targetNamespace: cnpg-system

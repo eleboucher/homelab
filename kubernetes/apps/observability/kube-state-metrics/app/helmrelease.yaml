@@ -130,7 +130,7 @@ spec:
             - groupVersionKind:
                 group: source.toolkit.fluxcd.io
                 version: v1
-                kind: GitRepository
+                kind: Bucket
               metricNamePrefix: gotk
               metrics:
                 - name: resource_info

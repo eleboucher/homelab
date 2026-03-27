@@ -17,7 +17,7 @@ spec:
       namespace: longhorn-system
   prune: true
   sourceRef:
-    kind: GitRepository
+    kind: Bucket
     name: flux-system
     namespace: flux-system
   targetNamespace: longhorn-system
@@ -36,7 +36,7 @@ spec:
     - name: longhorn
   prune: true
   sourceRef:
-    kind: GitRepository
+    kind: Bucket
     name: flux-system
     namespace: flux-system
   targetNamespace: longhorn-system

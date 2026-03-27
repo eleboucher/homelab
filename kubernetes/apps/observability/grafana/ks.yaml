@@ -9,7 +9,7 @@ spec:
   path: ./kubernetes/apps/observability/grafana/app
   prune: true
   sourceRef:
-    kind: GitRepository
+    kind: Bucket
     name: flux-system
     namespace: flux-system
   targetNamespace: observability
@@ -29,7 +29,7 @@ spec:
   path: ./kubernetes/apps/observability/grafana/instance
   prune: true
   sourceRef:
-    kind: GitRepository
+    kind: Bucket
     name: flux-system
     namespace: flux-system
   targetNamespace: observability
