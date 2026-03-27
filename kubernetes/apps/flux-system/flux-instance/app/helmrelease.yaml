@@ -26,11 +26,10 @@ spec:
         networkPolicy: false
       sync:
         interval: 5m
-        kind: GitRepository
-        path: kubernetes/flux/cluster
-        url: "https://github.com/eleboucher/homelab.git"
-        ref: "refs/heads/main"
-        # pullSecret: "flux-s3-secret"
+        kind: Bucket
+        url: "s3.rbx.io.cloud.ovh.net"
+        ref: "homelab-flux"
+        pullSecret: "flux-s3-secret"
       resources:
         limits:
           memory: 1Gi
