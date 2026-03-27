@@ -1,41 +1,5 @@
 ---
-# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/generators.external-secrets.io/githubaccesstoken_v1alpha1.json
-apiVersion: generators.external-secrets.io/v1alpha1
-kind: GithubAccessToken
-metadata:
-  name: github-auth-token
-spec:
-  appID: "2594290"
-  installID: "102625202"
-  auth:
-    privateKey:
-      secretRef:
-        name: owl-bot-pem # reference secret from step 1.
-        key: private_key_pem
----
-# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/external-secrets.io/externalsecret_v1.json
-apiVersion: external-secrets.io/v1
-kind: ExternalSecret
-metadata:
-  name: github-auth-token
-spec:
-  refreshInterval: 1h
-  target:
-    name: renovate-secret
-    template:
-      type: Opaque
-      engineVersion: v2
-      data:
-        GITHUB_COM_TOKEN: "{{ .token }}"
-        GITHUB_COM_USER: ZWxlYm91Y2hlcgo=
-        RENOVATE_TOKEN: "{{ .token }}"
-  dataFrom:
-    - sourceRef:
-        generatorRef:
-          apiVersion: generators.external-secrets.io/v1alpha1
-          kind: GithubAccessToken
-          name: github-auth-token
----
+
 # yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/renovate-operator.mogenius.com/renovatejob_v1alpha1.json
 apiVersion: renovate-operator.mogenius.com/v1alpha1
 kind: RenovateJob
@@ -44,7 +8,8 @@ metadata:
 spec:
   discoveryFilter: eleboucher/*
   provider:
-    name: github
+    name: forgejo
+    endpoint: https://git.erwanleboucher.dev/api/v1
   extraEnv:
     - name: LOG_LEVEL
       value: debug
