@@ -17,4 +17,4 @@ steps:
       MIRROR_TOKEN:
         from_secret: GH_MIRROR_TOKEN
     commands:
-      - git push "https://$${MIRROR_TOKEN}@github.com/eleboucher/homelab.git" HEAD:refs/heads/main
+      - git push --force-with-lease --force-if-includes "https://$${MIRROR_TOKEN}@github.com/eleboucher/homelab.git" HEAD:refs/heads/main
