@@ -1,0 +1,26 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: woodpecker
+spec:
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: woodpecker
+  components:
+    - ../../../../components/postgres/cert
+  interval: 1h
+  path: "./kubernetes/apps/woodpecker/woodpecker/app"
+  postBuild:
+    substitute:
+      APP: woodpecker
+      APP_NAMESPACE: woodpecker
+  prune: true
+  sourceRef:
+    kind: Bucket
+    name: flux-system
+    namespace: flux-system
+  targetNamespace: woodpecker
+  timeout: 5m
+  wait: false

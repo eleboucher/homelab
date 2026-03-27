@@ -1,0 +1,13 @@
+---
+when:
+  - branch: main
+    event: push
+
+steps:
+  - name: Mirror to GitHub
+    image: alpine/git:latest
+    environment:
+      GH_MIRROR_TOKEN:
+        from_secret: GH_MIRROR_TOKEN
+    commands:
+      - git push "https://${GH_MIRROR_TOKEN}@github.com/eleboucher/homelab.git" HEAD:refs/heads/main

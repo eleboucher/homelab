@@ -1,0 +1,34 @@
+---
+when:
+  - branch: main
+    event: push
+    path: kubernetes/**
+
+steps:
+  - name: Sync kubernetes manifests to OVH S3
+    image: amazon/aws-cli:latest
+    environment:
+      AWS_ACCESS_KEY_ID:
+        from_secret: OVH_FLUX_ACCESS_KEY_ID
+      AWS_SECRET_ACCESS_KEY:
+        from_secret: OVH_FLUX_SECRET_ACCESS_KEY
+      AWS_DEFAULT_REGION: rbx
+    commands:
+      - aws s3 sync ./kubernetes/ s3://homelab-flux/kubernetes/ --delete --endpoint-url https://s3.rbx.io.cloud.ovh.net
+
+  - name: Trigger Flux reconciliation
+    image: alpine/curl:latest
+    environment:
+      FLUX_WEBHOOK_TOKEN:
+        from_secret: FLUX_WEBHOOK_TOKEN
+      FLUX_WEBHOOK_URL:
+        from_secret: FLUX_WEBHOOK_URL
+    commands:
+      - apk add --no-cache openssl
+      - PAYLOAD='{}'
+      - SIGNATURE=$(printf '%s' "$PAYLOAD" | openssl dgst -sha256 -r -hmac "$FLUX_WEBHOOK_TOKEN" | awk '{print $1}')
+      - |-
+        curl -s --fail -X POST "$FLUX_WEBHOOK_URL" \
+          -H "Content-Type: application/json" \
+          -H "X-Signature: sha256=${SIGNATURE}" \
+          -d "$PAYLOAD"
