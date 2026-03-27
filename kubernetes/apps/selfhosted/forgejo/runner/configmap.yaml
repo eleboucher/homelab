@@ -16,6 +16,8 @@ data:
       capacity: 2
       file: /persistent/.runner
       labels:
+        - ubuntu-latest:k8spod:/config/podspec-default.yaml
+        - ubuntu-22.04:k8spod:/config/podspec-default.yaml
         - default:k8spod:/config/podspec-default.yaml
       timeout: 3h
   podspec-default.yaml: |-
@@ -23,7 +25,7 @@ data:
       - env:
           - name: DEBIAN_FRONTEND
             value: noninteractive
-        image: node:20-bookworm
+        image: node:22-bookworm
         imagePullPolicy: IfNotPresent
         name: main
         resources:
