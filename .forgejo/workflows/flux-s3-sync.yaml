@@ -11,15 +11,24 @@ on:
 jobs:
   sync:
     runs-on: ubuntu-latest
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.OVH_FLUX_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.OVH_FLUX_SECRET_ACCESS_KEY }}
+      AWS_DEFAULT_REGION: rbx
+      FORGEJO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      SERVER_URL: ${{ github.server_url }}
+      REPOSITORY: ${{ github.repository }}
     steps:
+      - name: Install AWS CLI
+        run: apt-get update -qq && apt-get install -y -qq awscli
+
       - name: Checkout
-        uses: actions/checkout@v4
+        run: |
+          server_host="${SERVER_URL#*://}"
+          git clone --depth=1 --single-branch \
+            "https://oauth2:${FORGEJO_TOKEN}@${server_host}/${REPOSITORY}.git" .
 
       - name: Sync kubernetes manifests to OVH S3
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.OVH_FLUX_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.OVH_FLUX_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: rbx
         run: |-
           aws s3 sync ./kubernetes/ s3://homelab-flux/kubernetes/ \
             --delete \
