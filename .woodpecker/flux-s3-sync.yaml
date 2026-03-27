@@ -1,4 +1,10 @@
 ---
+clone:
+  git:
+    image: woodpeckerci/plugin-git
+    settings:
+      skip-verify: true
+
 when:
   - branch: main
     event: push
@@ -19,16 +25,16 @@ steps:
   - name: Trigger Flux reconciliation
     image: alpine/curl:latest
     environment:
-      FLUX_WEBHOOK_TOKEN:
+      WEBHOOK_TOKEN:
         from_secret: FLUX_WEBHOOK_TOKEN
-      FLUX_WEBHOOK_URL:
+      WEBHOOK_URL:
         from_secret: FLUX_WEBHOOK_URL
     commands:
       - apk add --no-cache openssl
       - PAYLOAD='{}'
-      - SIGNATURE=$(printf '%s' "$PAYLOAD" | openssl dgst -sha256 -r -hmac "$FLUX_WEBHOOK_TOKEN" | awk '{print $1}')
+      - SIGNATURE=$(printf '%s' "$PAYLOAD" | openssl dgst -sha256 -r -hmac "$${WEBHOOK_TOKEN}" | awk '{print $1}')
       - |-
-        curl -s --fail -X POST "$FLUX_WEBHOOK_URL" \
+        curl -s --fail -X POST "$${WEBHOOK_URL}" \
           -H "Content-Type: application/json" \
           -H "X-Signature: sha256=${SIGNATURE}" \
           -d "$PAYLOAD"

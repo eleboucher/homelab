@@ -31,25 +31,3 @@ spec:
   targetNamespace: selfhosted
   timeout: 5m
   wait: false
----
-# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: forgejo-runner
-spec:
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: forgejo-runner
-  dependsOn:
-    - name: forgejo
-  interval: 1h
-  path: "./kubernetes/apps/selfhosted/forgejo/runner"
-  prune: true
-  sourceRef:
-    kind: Bucket
-    name: flux-system
-    namespace: flux-system
-  targetNamespace: selfhosted
-  timeout: 5m
-  wait: true
