@@ -23,7 +23,7 @@ data:
       - env:
           - name: DEBIAN_FRONTEND
             value: noninteractive
-        image: node:20-bookworm
+        image: node:24-bookworm
         imagePullPolicy: IfNotPresent
         name: main
         resources:
