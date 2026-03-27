@@ -19,7 +19,7 @@ spec:
     substitute:
       APP: *app
   sourceRef:
-    kind: GitRepository
+    kind: Bucket
     name: flux-system
     namespace: flux-system
   targetNamespace: media

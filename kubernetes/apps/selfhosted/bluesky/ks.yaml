@@ -25,7 +25,7 @@ spec:
       VOLSYNC_CAPACITY: 5Gi
   prune: true
   sourceRef:
-    kind: GitRepository
+    kind: Bucket
     name: flux-system
     namespace: flux-system
   targetNamespace: selfhosted

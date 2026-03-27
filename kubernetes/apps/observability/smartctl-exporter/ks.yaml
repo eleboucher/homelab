@@ -12,7 +12,7 @@ spec:
   path: "./kubernetes/apps/observability/smartctl-exporter/app"
   prune: true
   sourceRef:
-    kind: GitRepository
+    kind: Bucket
     name: flux-system
     namespace: flux-system
   targetNamespace: observability

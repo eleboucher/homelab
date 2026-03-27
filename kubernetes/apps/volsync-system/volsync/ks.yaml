@@ -19,7 +19,7 @@ spec:
       namespace: volsync
   prune: true
   sourceRef:
-    kind: GitRepository
+    kind: Bucket
     name: flux-system
     namespace: flux-system
   targetNamespace: volsync-system
@@ -38,7 +38,7 @@ spec:
   path: ./kubernetes/apps/volsync-system/volsync/maintenance
   prune: true
   sourceRef:
-    kind: GitRepository
+    kind: Bucket
     name: flux-system
     namespace: flux-system
   targetNamespace: volsync-system
@@ -56,7 +56,7 @@ spec:
   path: ./kubernetes/apps/volsync-system/volsync/sync
   prune: true
   sourceRef:
-    kind: GitRepository
+    kind: Bucket
     name: flux-system
     namespace: flux-system
   targetNamespace: volsync-system

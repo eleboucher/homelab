@@ -14,7 +14,7 @@
 #       APP_NAMESPACE: network
 #   prune: true
 #   sourceRef:
-#     kind: GitRepository
+#     kind: Bucket
 #     name: flux-system
 #     namespace: flux-system
 #   targetNamespace: network
@@ -35,7 +35,7 @@ spec:
       APP_NAMESPACE: network
   prune: true
   sourceRef:
-    kind: GitRepository
+    kind: Bucket
     name: flux-system
     namespace: flux-system
   targetNamespace: network
@@ -56,7 +56,7 @@ spec:
       APP_NAMESPACE: network
   prune: true
   sourceRef:
-    kind: GitRepository
+    kind: Bucket
     name: flux-system
     namespace: flux-system
   targetNamespace: network
