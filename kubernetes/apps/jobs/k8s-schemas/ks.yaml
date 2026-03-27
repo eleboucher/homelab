@@ -13,7 +13,7 @@ spec:
   path: "./kubernetes/apps/jobs/k8s-schemas/app"
   prune: true
   sourceRef:
-    kind: GitRepository
+    kind: Bucket
     name: flux-system
     namespace: flux-system
   targetNamespace: jobs

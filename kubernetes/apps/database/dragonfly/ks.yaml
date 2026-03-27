@@ -17,7 +17,7 @@ spec:
   path: ./kubernetes/apps/database/dragonfly/cluster
   prune: true
   sourceRef:
-    kind: GitRepository
+    kind: Bucket
     name: flux-system
     namespace: flux-system
   targetNamespace: database

@@ -24,7 +24,7 @@ spec:
       VOLSYNC_CAPACITY: 15Gi
   prune: true
   sourceRef:
-    kind: GitRepository
+    kind: Bucket
     name: flux-system
     namespace: flux-system
   targetNamespace: selfhosted
@@ -44,7 +44,7 @@ spec:
   path: "./kubernetes/apps/selfhosted/sparkyfitness/app"
   prune: true
   sourceRef:
-    kind: GitRepository
+    kind: Bucket
     name: flux-system
     namespace: flux-system
   targetNamespace: selfhosted

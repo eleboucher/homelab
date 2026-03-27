@@ -24,7 +24,7 @@ spec:
       VOLSYNC_SCHEDULE: "10 1-23/2 * * *"
   prune: true
   sourceRef:
-    kind: GitRepository
+    kind: Bucket
     name: flux-system
     namespace: flux-system
   targetNamespace: media

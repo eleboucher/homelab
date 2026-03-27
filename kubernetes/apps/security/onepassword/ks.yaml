@@ -21,7 +21,7 @@ spec:
   path: ./kubernetes/apps/security/onepassword/app
   prune: true
   sourceRef:
-    kind: GitRepository
+    kind: Bucket
     name: flux-system
     namespace: flux-system
   targetNamespace: security

@@ -9,7 +9,7 @@ spec:
   path: ./kubernetes/apps/observability/kromgo/app
   prune: true
   sourceRef:
-    kind: GitRepository
+    kind: Bucket
     name: flux-system
     namespace: flux-system
   targetNamespace: observability
