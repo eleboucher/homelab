@@ -2,10 +2,8 @@
 # yaml-language-server: $schema=https://json.schemastore.org/kustomization
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-namespace: security
-
 resources:
-  - external-secrets/ks.yaml
-  - kanidm/ks.yaml
-  - onepassword/ks.yaml
-  - namespace.yaml
+  - ./certificate.yaml
+  - ./ocirepository.yaml
+  - ./helmrelease.yaml
+  - ./backendtlspolicy.yaml
