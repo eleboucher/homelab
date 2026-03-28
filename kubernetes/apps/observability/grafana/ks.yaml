@@ -28,6 +28,24 @@ spec:
   interval: 1h
   path: ./kubernetes/apps/observability/grafana/instance
   prune: true
+  components:
+    - ../../../../components/oidc
+  postBuild:
+    substitute:
+      APP: grafana
+      APP_NAMESPACE: &namespace observability
+      OIDC_DISPLAY_NAME: Grafana
+      OIDC_CALLBACK: /login/generic_oauth
+      OIDC_GROUP: admins
+      OIDC_CLAIM_MAPS: |
+        {
+          "grafana_role": {
+            "joinType": "array",
+            "valuesByGroup": {
+              "admins@idm.erwanleboucher.dev": ["GrafanaAdmin"]
+            }
+          }
+        }
   sourceRef:
     kind: Bucket
     name: flux-system
