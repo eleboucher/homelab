@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: kanidm
+  name: &app kanidm
 spec:
   chartRef:
     kind: OCIRepository
@@ -15,8 +15,6 @@ spec:
         replicas: 1
         type: statefulset
         pod:
-          annotations:
-            reloader.stakater.com/auto: "true"
           securityContext:
             fsGroup: 1000
             fsGroupChangePolicy: OnRootMismatch
@@ -30,11 +28,11 @@ spec:
               tag: 1.9.2
             env:
               KANIDM_ADMIN_BIND_PATH: /var/run/kanidmd.sock
-              KANIDM_DOMAIN: idm.erwanleboucher.dev
-              KANIDM_ORIGIN: https://idm.erwanleboucher.dev
               KANIDM_BINDADDRESS: "[::]:8443"
-              KANIDM_LDAPBINDADDRESS: "[::]:3636"
               KANIDM_DB_PATH: /data/kanidm.db
+              KANIDM_DOMAIN: idm.erwanleboucher.dev
+              KANIDM_LDAPBINDADDRESS: "[::]:3636"
+              KANIDM_ORIGIN: https://idm.erwanleboucher.dev
               KANIDM_TLS_CHAIN: /certs/tls.crt
               KANIDM_TLS_KEY: /certs/tls.key
             resources:
@@ -74,14 +72,12 @@ spec:
               limits:
                 memory: 100Mi
             securityContext:
-              allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
               capabilities:
                 drop:
                   - ALL
     persistence:
       data:
-        existingClaim: kanidm
+        existingClaim: "{{ .Release.Name }}"
         advancedMounts:
           kanidm:
             app:
@@ -95,20 +91,54 @@ spec:
           kanidm:
             app:
               - path: /certs
-      tmpfs:
+      empty:
         type: emptyDir
-        advancedMounts:
-          kanidm:
-            app:
-              - path: /var/run
+        globalMounts:
+          - path: /var/run
       icon-cache:
-        type: persistentVolumeClaim
         accessMode: ReadWriteOnce
         size: 1Gi
+        suffix: icon-cache
         advancedMounts:
           provision:
             app:
               - path: /data/icons
+    rbac:
+      roles:
+        kanidm-write-secret:
+          type: ClusterRole
+          rules:
+            - apiGroups:
+                - ""
+              resources:
+                - "secrets"
+              verbs:
+                - "create"
+                - "patch"
+        kanidm-read-cm:
+          type: ClusterRole
+          rules:
+            - apiGroups:
+                - ""
+              resources:
+                - "configmaps"
+              verbs:
+                - "get"
+                - "list"
+                - "watch"
+      bindings:
+        kanidm-write-secret:
+          type: ClusterRoleBinding
+          roleRef:
+            identifier: kanidm-write-secret
+          subjects:
+            - identifier: kanidm
+        kanidm-read-cm:
+          type: ClusterRoleBinding
+          roleRef:
+            identifier: kanidm-read-cm
+          subjects:
+            - identifier: kanidm
     route:
       app:
         hostnames:
@@ -124,3 +154,5 @@ spec:
             port: 8443
           ldap:
             port: 3636
+    serviceAccount:
+      kanidm: {}

@@ -1,0 +1,60 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kanidm-${APP}-oidc
+  namespace: security
+  labels:
+    kanidm_config: "1"
+data:
+  targetNamespace: "${NAMESPACE}"
+  state.json: |
+    {
+      "systems": {
+        "oauth2": {
+          "${APP}": {
+            "displayName": "${DISPLAY_NAME}",
+            "originUrl": ["${DOMAIN:=https://${SUBDOMAIN}.${SECRET_DOMAIN}}${CALLBACK}"],
+            "originLanding": "${DOMAIN:=https://${SUBDOMAIN}.${SECRET_DOMAIN}}${ORIGIN}",
+            "removeOrphanedClaimMaps": true,
+            "public": ${PUBLIC},
+            "preferShortUsername": ${SHORT_USERNAME},
+            "enableLocalhostRedirects": ${LOCALHOST},
+            "enableLegacyCrypto": ${LEGACY_CRYPTO},
+            "allowInsecureClientDisablePkce": ${DISABLE_PKCE},
+            "scopeMaps": {
+              "${GROUP}": ${SCOPES:=${defaultScopes}}
+            },
+            "supplementaryScopeMaps": ${SUP_SCOPE_MAPS:=${emptyState}},
+            "claimMaps": ${CLAIM_MAPS:=${emptyState}}
+          }
+        }
+      }
+    }
+  extra.json: |
+    {
+      "systems": {
+        "oauth2": {
+          "${APP}": {
+            "k8s": { "clientIdKey": "${CLIENT_ID_KEY}", "clientSecretKey": "${CLIENT_SECRET_KEY}", "imageUrl": "${IMAGE_URL:=}" },
+            "originUrl": ${EXTRA_CALLBACKS:=${emptyArray}},
+            "scopeMaps": ${SCOPE_MAPS:=${emptyState}}
+          }
+        }
+      }
+    }
+  custom.json: |
+    ${CUSTOM_STATE:=${emptyState}}
+  default.json: |-
+    {
+      "systems": {
+        "oauth2": {
+          "${APP}": {
+            "scopeMaps": {
+              "users": [],
+              "admins": []
+            }
+          }
+        }
+      }
+    }
