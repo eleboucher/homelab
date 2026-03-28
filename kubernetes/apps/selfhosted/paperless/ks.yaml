@@ -10,6 +10,7 @@ spec:
       app.kubernetes.io/name: paperless
   components:
     - ../../../../components/volsync
+    - ../../../../components/oidc
     - ../../../../components/postgres/cert
   dependsOn:
     - name: longhorn
@@ -19,10 +20,14 @@ spec:
   postBuild:
     substitute:
       APP: paperless
+      APP_NAMESPACE: selfhosted
       APP_UID: "1000"
       APP_GID: "65542"
       VOLSYNC_CLAIM: paperless-data
       VOLSYNC_CAPACITY: 15Gi
+      OIDC_DISPLAY_NAME: "Paperless"
+      OIDC_CALLBACK: /accounts/oidc/kanidm/login/callback/
+      OIDC_IMAGE_NAME: paperless-ngx
   prune: true
   sourceRef:
     kind: Bucket
