@@ -7,8 +7,8 @@
 After first deployment, recover both built-in accounts:
 
 ```bash
-kubectl exec -n security -it deploy/kanidm -- kanidmd recover-account admin -c /data/server.toml
-kubectl exec -n security -it deploy/kanidm -- kanidmd recover-account idm_admin -c /data/server.toml
+kubectl exec -n security -it statefulset/kanidm -- kanidmd recover-account admin 
+kubectl exec -n security -it statefulset/kanidm -- kanidmd recover-account idm_admin
 ```
 
 Log in with each recovery token and set a real password via the web UI at `https://idm.erwanleboucher.dev/ui/reset`.
