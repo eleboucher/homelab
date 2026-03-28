@@ -27,6 +27,7 @@ spec:
       VOLSYNC_CAPACITY: 15Gi
       OIDC_DISPLAY_NAME: "Paperless"
       OIDC_CALLBACK: /accounts/oidc/kanidm/login/callback/
+      OIDC_DISABLE_PKCE: "true"
       OIDC_IMAGE_NAME: paperless-ngx
   prune: true
   sourceRef:

@@ -57,8 +57,8 @@ spec:
               PAPERLESS_TIKA_GOTENBERG_ENDPOINT: http://localhost:3000
               PAPERLESS_TIKA_ENDPOINT: http://localhost:9998
               PAPERLESS_APPS: allauth.socialaccount.providers.openid_connect
-              PAPERLESS_DISABLE_REGULAR_LOGIN: 1
-              PAPERLESS_REDIRECT_LOGIN_TO_SSO: 1
+              # PAPERLESS_DISABLE_REGULAR_LOGIN: 1
+              # PAPERLESS_REDIRECT_LOGIN_TO_SSO: 1
             envFrom:
               - secretRef:
                   name: paperless
