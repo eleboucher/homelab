@@ -57,7 +57,7 @@ spec:
         containers:
           app:
             image:
-              repository: ghcr.io/eleboucher/kanidm-provision
+              repository: ghcr.io/m00nwtchr/kanidm-provision
               tag: 1.3.0
             env:
               KANIDM_INSTANCE: https://idm.erwanleboucher.dev
