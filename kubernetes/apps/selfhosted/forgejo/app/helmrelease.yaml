@@ -28,6 +28,11 @@ spec:
     gitea:
       admin:
         existingSecret: forgejo-secret
+        oauth:
+          - name: kanidm
+            provider: openidConnect
+            existingSecret: kanidm-forgejo-oidc
+            autoDiscoverUrl: "https://idm.erwanleboucher.dev/oauth2/openid/forgejo/.well-known/openid-configuration"
       config:
         database:
           DB_TYPE: postgres
@@ -47,9 +52,14 @@ spec:
           ISSUE_INDEXER_TYPE: bleve
           REPO_INDEXER_ENABLED: true
         service:
-          DISABLE_REGISTRATION: true
+          ALLOW_ONLY_EXTERNAL_REGISTRATION: true
+          ENABLE_INTERNAL_SIGNIN: false
           SHOW_REGISTRATION_BUTTON: false
+          ENABLE_PASSWORD_SIGNIN_FORM: false
           ENABLE_NOTIFY_MAIL: true
+        openid:
+          ENABLE_OPENID_SIGNIN: false
+          ENABLE_OPENID_SIGNUP: false
         queue:
           TYPE: redis
           CONN_STR: redis://dragonfly.database.svc:6379?pool_size=100&idle_timeout=180s

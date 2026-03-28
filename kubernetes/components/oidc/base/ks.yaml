@@ -1,0 +1,59 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: kanidm-${APP}-oidc
+spec:
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: &app ${APP}
+  dependsOn:
+    - name: kanidm
+      namespace: security
+  interval: 1h
+  path: ./kubernetes/components/oidc/base/kanidm
+  postBuild:
+    substitute:
+      APP: *app
+      APP_NAMESPACE: ${APP_NAMESPACE}
+      SUBDOMAIN: ${SUBDOMAIN:=${APP}}
+      DOMAIN: ${q:="}${DOMAIN}${q:="}
+
+      PUBLIC: ${q:="}${OIDC_PUBLIC_CLIENT:=false}${q:="}
+      DISPLAY_NAME: ${OIDC_DISPLAY_NAME:=${NAME:=${APP}}}
+      CALLBACK: ${OIDC_CALLBACK:=/oauth2/callback}
+
+      ORIGIN: ${OIDC_ORIGIN:=/}
+      EXTRA_CALLBACKS: ${q:='}${OIDC_EXTRA_CALLBACKS}${q:='}
+      SHORT_USERNAME: ${q:="}${OIDC_SHORT_USERNAME:=false}${q:="}
+
+      LOCALHOST: ${q:="}${OIDC_LOCALHOST:=false}${q:="}
+      LEGACY_CRYPTO: ${q:="}${OIDC_LEGACY_CRYPTO:=false}${q:="}
+      DISABLE_PKCE: ${q:="}${OIDC_DISABLE_PKCE:=false}${q:="}
+
+      GROUP: "${OIDC_GROUP:=users}"
+      SCOPES: ${q:='}${OIDC_SCOPES}${q:='}
+
+      SCOPE_MAPS: ${q:='}${OIDC_SCOPE_MAPS}${q:='}
+      SUP_SCOPE_MAPS: ${q:='}${OIDC_SUP_SCOPE_MAPS}${q:='}
+      CLAIM_MAPS: ${q:='}${OIDC_CLAIM_MAPS}${q:='}
+
+      CLIENT_ID_KEY: ${OIDC_CLIENT_ID_KEY:=client-id}
+      CLIENT_SECRET_KEY: ${OIDC_CLIENT_SECRET_KEY:=client-secret}
+
+      IMAGE_URL: ${OIDC_IMAGE_URL:=${OIDC_IMAGE_HOST:=https://cdn.jsdelivr.net/gh/selfhst/icons/svg}/${OIDC_IMAGE_NAME:=${APP}}.svg}
+
+      CUSTOM_STATE: ${q:='}${OIDC_CUSTOM_STATE}${q:='}
+      emptyState: "{}"
+      emptyArray: "[]"
+      defaultScopes: '["openid", "profile", "email", "groups"]'
+  prune: true
+  retryInterval: 2m
+  sourceRef:
+    kind: Bucket
+    name: flux-system
+    namespace: flux-system
+  targetNamespace: security
+  timeout: 5m
+  wait: false

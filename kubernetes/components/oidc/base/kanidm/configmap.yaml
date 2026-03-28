@@ -7,15 +7,15 @@ metadata:
   labels:
     kanidm_config: "1"
 data:
-  targetNamespace: "${NAMESPACE}"
+  targetNamespace: "${APP_NAMESPACE}"
   state.json: |
     {
       "systems": {
         "oauth2": {
           "${APP}": {
             "displayName": "${DISPLAY_NAME}",
-            "originUrl": ["${DOMAIN:=https://${SUBDOMAIN}.${SECRET_DOMAIN}}${CALLBACK}"],
-            "originLanding": "${DOMAIN:=https://${SUBDOMAIN}.${SECRET_DOMAIN}}${ORIGIN}",
+            "originUrl": ["${DOMAIN:=https://${SUBDOMAIN}.erwanleboucher.dev}${CALLBACK}"],
+            "originLanding": "${DOMAIN:=https://${SUBDOMAIN}.erwanleboucher.dev}${ORIGIN}",
             "removeOrphanedClaimMaps": true,
             "public": ${PUBLIC},
             "preferShortUsername": ${SHORT_USERNAME},

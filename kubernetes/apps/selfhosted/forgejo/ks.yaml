@@ -11,6 +11,7 @@ spec:
   components:
     - ../../../../components/postgres/cert
     - ../../../../components/volsync
+    - ../../../../components/oidc
   dependsOn:
     - name: garage
       namespace: garage-system
@@ -23,6 +24,11 @@ spec:
       APP: forgejo
       APP_NAMESPACE: selfhosted
       VOLSYNC_CAPACITY: 20Gi
+      OIDC_CALLBACK: /user/oauth2/kanidm/callback
+      OIDC_DISABLE_PKCE: "true"
+      OIDC_SCOPES: '["openid", "profile", "email", "groups", "ssh_publickeys"]'
+      OIDC_CLIENT_ID_KEY: key
+      OIDC_CLIENT_SECRET_KEY: secret
   prune: true
   sourceRef:
     kind: Bucket
