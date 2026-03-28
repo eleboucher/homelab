@@ -25,6 +25,7 @@ spec:
       APP_NAMESPACE: selfhosted
       VOLSYNC_CAPACITY: 20Gi
       OIDC_CALLBACK: /user/oauth2/kanidm/callback
+      SUBDOMAIN: git
       OIDC_DISABLE_PKCE: "true"
       OIDC_SCOPES: '["openid", "profile", "email", "groups", "ssh_publickeys"]'
       OIDC_CLIENT_ID_KEY: key

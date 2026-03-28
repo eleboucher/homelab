@@ -28,11 +28,11 @@ spec:
     gitea:
       admin:
         existingSecret: forgejo-secret
-        oauth:
-          - name: kanidm
-            provider: openidConnect
-            existingSecret: kanidm-forgejo-oidc
-            autoDiscoverUrl: "https://idm.erwanleboucher.dev/oauth2/openid/forgejo/.well-known/openid-configuration"
+      oauth:
+        - name: kanidm
+          provider: openidConnect
+          existingSecret: kanidm-forgejo-oidc
+          autoDiscoverUrl: "https://idm.erwanleboucher.dev/oauth2/openid/forgejo/.well-known/openid-configuration"
       config:
         database:
           DB_TYPE: postgres
