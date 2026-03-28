@@ -9,4 +9,7 @@ spec:
   instanceSelector:
     matchLabels:
       dashboards: grafana
+  datasources:
+    - datasourceName: prometheus
+      inputName: DS_PROMETHEUS
   url: https://codeberg.org/superseriousbusiness/gotosocial/raw/branch/main/example/metrics/gotosocial_grafana_dashboard.json
