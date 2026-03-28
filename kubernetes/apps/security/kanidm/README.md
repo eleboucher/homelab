@@ -23,11 +23,21 @@ kanidm service-account api-token generate --readwrite kanidm-provision provision
 
 Store the token in 1Password as item `kanidm-provision` → field `token`.
 
-### 3. Create your personal account
+### 3. Create groups
+
+```bash
+kanidm group create users --url https://idm.erwanleboucher.dev -D idm_admin
+kanidm group create admins --url https://idm.erwanleboucher.dev -D idm_admin
+```
+
+### 4. Create your personal account
 
 ```bash
 kanidm person create <username> "<Display Name>" -D idm_admin
+kanidm person update <username> --mail "<email>" -D idm_admin
+kanidm group add-members users <username> -D idm_admin
 kanidm group add-members admins <username> -D idm_admin
+kanidm group add-members idm_admins <username> -D idm_admin
 kanidm person credential create-reset-token <username> -D idm_admin
 ```
 
