@@ -9,6 +9,7 @@ metadata:
 spec:
   components:
     - ../../../../components/gpu
+    - ../../../../components/oidc
     - ../../../../components/volsync
     - ../../../../components/nfs-scaler
   interval: 1h
@@ -21,22 +22,14 @@ spec:
   postBuild:
     substitute:
       APP: jellyfin
+      APP_NAMESPACE: media
       VOLSYNC_CAPACITY: 10Gi
       VOLSYNC_SCHEDULE: "50 1-23/2 * * *"
       OIDC_DISPLAY_NAME: "Jellyfin"
+      SUBDOMAIN: "watch"
       OIDC_CALLBACK: /sso/OID/redirect/kanidm
-      OIDC_EXTRA_CALLBACKS: '["https://jellyfin.erwanleboucher.dev/sso/OID/r/kanidm"]'
       OIDC_ORIGIN: /sso/OID/start/kanidm
       OIDC_SHORT_USERNAME: "true"
-      OIDC_GROUP: media_users
-      OIDC_CUSTOM_STATE: |
-        {
-          "groups": {
-            "media_users": {
-              "members": ["users"]
-            }
-          }
-        }
       OIDC_CLAIM_MAPS: |
         {
           "roles": {
