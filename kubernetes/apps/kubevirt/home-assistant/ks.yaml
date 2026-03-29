@@ -19,8 +19,8 @@ spec:
       APP_NAMESPACE: home-assistant
       SUBDOMAIN: home
       OIDC_DISPLAY_NAME: "Home Assistant"
-      OIDC_CALLBACK: /auth/oidc/callback
-      OIDC_ORIGIN: /auth/oidc/welcome
+      OIDC_CALLBACK: /auth/openid/callback
+      OIDC_ORIGIN: /auth/openid/welcome
       OIDC_SHORT_USERNAME: "true"
   sourceRef:
     kind: Bucket
