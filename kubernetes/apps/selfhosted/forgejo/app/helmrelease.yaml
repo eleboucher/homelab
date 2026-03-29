@@ -45,12 +45,12 @@ spec:
       config:
         database:
           DB_TYPE: postgres
-
           HOST: pooler-rw.database.svc:5432
           USER: forgejo
           NAME: forgejo
           SSL_MODE: verify-full
-
+        lfs:
+          PATH: /data/git/lfs
         server:
           APP_DATA_PATH: /data/gitea
           ROOT_URL: https://git.erwanleboucher.dev
@@ -67,6 +67,12 @@ spec:
           SHOW_REGISTRATION_BUTTON: false
           ENABLE_PASSWORD_SIGNIN_FORM: false
           ENABLE_NOTIFY_MAIL: true
+        repository:
+          DEFAULT_REPO_UNITS: repo.code,repo.releases,repo.issues,repo.pulls
+          DISABLED_REPO_UNITS: repo.ext_wiki,repo.ext_issues
+        repository.pull-request:
+          DEFAULT_DELETE_BRANCH_AFTER_MERGE: true
+          DEFAULT_MERGE_STYLE: squash
         openid:
           ENABLE_OPENID_SIGNIN: false
           ENABLE_OPENID_SIGNUP: false
