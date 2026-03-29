@@ -21,7 +21,7 @@ spec:
       OIDC_DISPLAY_NAME: "Home Assistant"
       OIDC_CALLBACK: /auth/openid/callback
       OIDC_DISABLE_PKCE: "true"
-      OIDC_ORIGIN: /auth/openid/welcome
+      OIDC_ORIGIN: /
       OIDC_SHORT_USERNAME: "true"
   sourceRef:
     kind: Bucket
