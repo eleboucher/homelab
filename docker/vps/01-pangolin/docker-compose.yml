@@ -79,6 +79,7 @@ services:
       - 21820:21820/udp
       - 443:443
       - 80:80
+      - 2222:2222
 
   traefik:
     image: docker.io/traefik:v3.6

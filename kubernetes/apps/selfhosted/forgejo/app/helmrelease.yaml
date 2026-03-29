@@ -46,6 +46,7 @@ spec:
           APP_DATA_PATH: /data/gitea
           ROOT_URL: https://git.erwanleboucher.dev
           SSH_DOMAIN: ssh.git.erwanleboucher.dev
+          SSH_PORT: 2222
           START_SSH_SERVER: true
           SSH_SERVER_HOST_KEYS: ssh/ssh_host_ed25519_key
         indexer:
@@ -90,10 +91,13 @@ spec:
     service:
       ssh:
         type: LoadBalancer
-        port: 22
+        port: 2222
         annotations:
           external-dns.alpha.kubernetes.io/hostname: ssh.git.erwanleboucher.dev
           lbipam.cilium.io/ips: 192.168.69.125
+          newt-sidecar/enabled: "true"
+          newt-sidecar/name: Forgejo SSH
+          newt-sidecar/protocol: tcp
 
     valkey-cluster:
       enabled: false
