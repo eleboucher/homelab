@@ -1,12 +1,13 @@
 ---
-# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/newt-sidecar.home-operations.com/publicresource_v1alpha1.json
-apiVersion: newt-sidecar.home-operations.com/v1alpha1
+# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/pangolin.home-operations.com/publicresource_v1alpha1.json
+apiVersion: pangolin.home-operations.com/v1alpha1
 kind: PublicResource
 metadata:
   name: forgejo-ssh
   namespace: selfhosted
 spec:
   name: Forgejo SSH
+  siteRef: homelab
   protocol: tcp
   proxyPort: 2222
   ssl: false
