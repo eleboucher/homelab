@@ -14,6 +14,10 @@ spec:
       recordType: A
       targets:
         - ${VPS_IP}
+    - dnsName: api.erwanleboucher.dev
+      recordType: A
+      targets:
+        - ${VPS_IP}
     - dnsName: bluesky.erwanleboucher.dev
       recordType: A
       targets:

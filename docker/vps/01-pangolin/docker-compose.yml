@@ -453,12 +453,10 @@ configs:
             tls:
               certResolver: letsencrypt
           int-api-router:
-            rule: "Host(`api.pangolin.erwanleboucher.dev`)"
+            rule: "Host(`api.erwanleboucher.dev`)"
             service: int-api-service
             entryPoints:
               - websecure
-            middlewares:
-              - badger
             tls:
               certResolver: letsencrypt
           # WebSocket router

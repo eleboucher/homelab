@@ -16,3 +16,10 @@ spec:
       tag: main-23a151f
     pangolin:
       existingSecret: pangolin-operator-secret
+    resources:
+      limits:
+        cpu: null
+        memory: 256Mi
+      requests:
+        cpu: 10m
+        memory: 64Mi
