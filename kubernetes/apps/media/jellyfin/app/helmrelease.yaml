@@ -84,6 +84,16 @@ spec:
         existingClaim: "{{ .Release.Name }}"
         globalMounts:
           - path: /config
+      metadata:
+        size: 10Gi
+        accessMode: ReadWriteOnce
+        suffix: "metadata"
+        globalMounts:
+          - path: /metadata
+            subPath: metadata
+          - path: /config/data/introskipper
+            subPath: introskipper
+
       data:
         type: nfs
         server: normandie.internal
