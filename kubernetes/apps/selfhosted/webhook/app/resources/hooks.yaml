@@ -1,6 +1,6 @@
 ---
-- id: github-renovate
-  execute-command: /config/github-renovate-operator.sh
+- id: renovate
+  execute-command: /config/renovate-operator.sh
   pass-arguments-to-command:
     - # job name
       source: string
@@ -8,98 +8,16 @@
     - # namespace
       source: string
       name: automation
-    - # project
-      source: payload
-      name: repository.full_name
     - # Renovate Operator webhook URL
       source: string
       name: http://renovate-operator.automation.svc.cluster.local:8082
   trigger-rule:
     and:
-      - # Validate the webhook secret
+      - # Validate the HMAC-SHA256 signature
         match:
-          type: payload-hmac-sha1
+          type: payload-hmac-sha256
           secret: >-
-            {{ getenv "GITHUB_WEBHOOK_SECRET" }}
+            {{ getenv "WEBHOOK_SECRET" }}
           parameter:
             source: header
-            name: x-hub-signature
-      - or:
-          - # Trigger on GitHub Issue edits
-            and:
-              - match:
-                  type: value
-                  value: issues
-                  parameter:
-                    source: header
-                    name: x-github-event
-              - match:
-                  type: value
-                  value: edited
-                  parameter:
-                    source: payload
-                    name: action
-              - match:
-                  type: value
-                  value: open
-                  parameter:
-                    source: payload
-                    name: issue.state
-              - match:
-                  type: value
-                  value: Dependency Dashboard
-                  parameter:
-                    source: payload
-                    name: issue.title
-          - # Trigger on GitHub Pull Request edits
-            and:
-              - match:
-                  type: value
-                  value: pull_request
-                  parameter:
-                    source: header
-                    name: x-github-event
-              - match:
-                  type: value
-                  value: edited
-                  parameter:
-                    source: payload
-                    name: action
-              - match:
-                  type: value
-                  value: open
-                  parameter:
-                    source: payload
-                    name: pull_request.state
-              - match:
-                  type: value
-                  value: bot-owl[bot]
-                  parameter:
-                    source: payload
-                    name: pull_request.user.login
-          - # Trigger on GitHub Pull Request merge
-            and:
-              - match:
-                  type: value
-                  value: pull_request
-                  parameter:
-                    source: header
-                    name: x-github-event
-              - match:
-                  type: value
-                  value: closed
-                  parameter:
-                    source: payload
-                    name: action
-              - match:
-                  type: value
-                  value: true
-                  parameter:
-                    source: payload
-                    name: pull_request.merged
-              - match:
-                  type: value
-                  value: bot-owl[bot]
-                  parameter:
-                    source: payload
-                    name: pull_request.user.login
+            name: X-Forgejo-Signature

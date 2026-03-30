@@ -6,7 +6,6 @@ kind: RenovateJob
 metadata:
   name: homelab
 spec:
-  discoveryFilter: eleboucher/*
   provider:
     name: forgejo
     endpoint: https://git.erwanleboucher.dev/api/v1
@@ -31,3 +30,13 @@ spec:
     enabled: true
     authentication:
       enabled: false
+    forgejo:
+      sync:
+        enabled: true
+        webhookURL: https://webhook.erwanleboucher.dev/hooks/renovate
+        tokenSecretRef:
+          name: renovate-secret
+          key: RENOVATE_TOKEN
+        authTokenSecretRef:
+          name: renovate-secret
+          key: RENOVATE_WEBHOOK_TOKEN
