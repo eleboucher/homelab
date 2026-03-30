@@ -452,6 +452,13 @@ configs:
               - badger
             tls:
               certResolver: letsencrypt
+          int-api-router-redirect:
+            rule: "Host(`api.erwanleboucher.dev`)"
+            service: int-api-service
+            entryPoints:
+              - web
+            middlewares:
+              - redirect-to-https
           int-api-router:
             rule: "Host(`api.erwanleboucher.dev`)"
             service: int-api-service
