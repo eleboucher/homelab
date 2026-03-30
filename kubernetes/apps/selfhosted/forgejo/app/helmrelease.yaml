@@ -73,6 +73,15 @@ spec:
         repository.pull-request:
           DEFAULT_DELETE_BRANCH_AFTER_MERGE: true
           DEFAULT_MERGE_STYLE: squash
+        repository.signing:
+          FORMAT: ssh
+          SIGNING_KEY: /data/signing/ed25519.pub
+          SIGNING_NAME: git.bjw-s.dev Instance
+          SIGNING_EMAIL: noreply@git.bjw-s.dev
+          INITIAL_COMMIT: always
+          CRUD_ACTIONS: always
+          MERGES: always
+          WIKI: always
         openid:
           ENABLE_OPENID_SIGNIN: false
           ENABLE_OPENID_SIGNUP: false
@@ -126,21 +135,30 @@ spec:
           defaultMode: 0600
           secretName: root-ca
 
+      - name: signing-key
+        secret:
+          secretName: forgejo-signing-key
+          defaultMode: 0400
       - name: forgejo-ssh
         secret:
           secretName: forgejo-secret
-
+          defaultMode: 0400
     extraInitVolumeMounts:
       - name: postgres-forgejo
         mountPath: "/var/run/secrets/postgresql"
       - name: root-ca
         mountPath: "/var/run/secrets/root-ca"
+      - name: signing-key
+        mountPath: /data/signing
+        readOnly: true
     extraContainerVolumeMounts:
       - name: postgres-forgejo
         mountPath: "/var/run/secrets/postgresql"
       - name: root-ca
         mountPath: "/var/run/secrets/root-ca"
-
+      - name: signing-key
+        mountPath: /data/signing
+        readOnly: true
       - name: forgejo-ssh
         mountPath: "/data/gitea/ssh/ssh_host_ed25519_key"
         subPath: ssh_host_ed25519_key
