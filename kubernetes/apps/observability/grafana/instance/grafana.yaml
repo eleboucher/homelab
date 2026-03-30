@@ -36,6 +36,8 @@ spec:
       mode: console
     metrics:
       enabled: "true"
+    plugins:
+      plugin_admin_enabled: "false"
     news:
       news_feed_enabled: "false"
     security:
@@ -52,6 +54,11 @@ spec:
           containers:
             - name: grafana
               env:
+                - name: GF_SECURITY_ADMIN_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: grafana-admin-password-secret
+                      key: GF_SECURITY_ADMIN_PASSWORD
                 - name: GF_AUTH_GENERIC_OAUTH_CLIENT_SECRET
                   valueFrom:
                     secretKeyRef:
