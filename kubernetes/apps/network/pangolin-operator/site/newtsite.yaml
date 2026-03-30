@@ -17,3 +17,5 @@ spec:
     gatewayName: envoy-external
     gatewayNamespace: network
     ssl: true
+    enableRouteDiscovery: true
+    enableServiceDiscovery: true

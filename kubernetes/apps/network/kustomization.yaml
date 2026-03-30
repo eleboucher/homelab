@@ -8,6 +8,5 @@ resources:
   - echo/ks.yaml
   - external-dns/ks.yaml
   - envoy-gateway/ks.yaml
-  - newt/ks.yaml
   - pangolin-operator/ks.yaml
   - namespace.yaml

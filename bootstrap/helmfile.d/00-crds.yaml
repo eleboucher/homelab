@@ -28,8 +28,3 @@ releases:
     namespace: observability
     chart: oci://ghcr.io/prometheus-community/charts/kube-prometheus-stack
     version: 82.15.1
-
-  - name: newt-sidecar
-    namespace: network
-    chart: oci://ghcr.io/home-operations/charts/newt-sidecar
-    version: 0.2.1

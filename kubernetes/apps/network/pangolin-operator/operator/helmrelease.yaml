@@ -13,7 +13,7 @@ spec:
     image:
       repository: ghcr.io/eleboucher/pangolin-operator
       pullPolicy: IfNotPresent
-      tag: main-34bfded
+      tag: main-657e19a
     pangolin:
       existingSecret: pangolin-operator-secret
     resources:
