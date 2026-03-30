@@ -1,24 +1,11 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:recommended",
-    "docker:enableMajor",
-    ":dependencyDashboard",
-    "github>eleboucher/homelab//.renovate/automerge.json5",
-    "github>eleboucher/homelab//.renovate/customManagers.json5",
-    "github>eleboucher/homelab//.renovate/groups.json5",
-    "github>eleboucher/homelab//.renovate/overrides.json5",
-    "github>eleboucher/homelab//.renovate/grafanaDashboard.json5",
-    "github>eleboucher/homelab//.renovate/labels.json5",
-    "github>eleboucher/homelab//.renovate/semanticCommits.json5",
-    ":automergeBranch",
-    ":disableRateLimiting",
-    ":semanticCommits",
-    ":skipStatusChecks",
-    ":timezone(Europe/Paris)"
+    "local>eleboucher/renovate-config",
+    "local>eleboucher/homelab//.renovate/automerge.json5",
+    "local>eleboucher/homelab//.renovate/groups.json5",
+    "local>eleboucher/homelab//.renovate/overrides.json5"
   ],
-  "timezone": "Europe/Paris",
-  "labels": ["dependencies"],
   "flux": {
     "managerFilePatterns": ["/\\.yaml(?:\\.j2)?$/"]
   },
