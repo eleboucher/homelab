@@ -7,8 +7,18 @@ metadata:
   name: renovate-operator
   namespace: flux-system
 spec:
+  components:
+    - ../../../../components/oidc
   interval: 1h
   path: ./kubernetes/apps/automation/renovate-operator/app
+  postBuild:
+    substitute:
+      APP: renovate-operator
+      APP_NAMESPACE: automation
+      SUBDOMAIN: renovate
+      OIDC_DISPLAY_NAME: Renovate
+      OIDC_CALLBACK: /auth/callback
+      OIDC_GROUP: admins
   prune: true
   healthChecks:
     - apiVersion: helm.toolkit.fluxcd.io/v2
