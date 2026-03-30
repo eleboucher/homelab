@@ -15,7 +15,7 @@ spec:
   targets:
     - hostname: erwanleboucher.dev.s3-website.rbx.io.cloud.ovh.net
       port: 80
-      method: https
+      method: http
 ---
 # yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/pangolin.home-operations.com/publicresource_v1alpha1.json
 apiVersion: pangolin.home-operations.com/v1alpha1
@@ -33,4 +33,4 @@ spec:
   targets:
     - hostname: k8s-schemas.s3-website.rbx.io.cloud.ovh.net
       port: 80
-      method: https
+      method: http

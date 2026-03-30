@@ -10,10 +10,6 @@ spec:
     name: pangolin-operator
   interval: 1h
   values:
-    image:
-      repository: ghcr.io/eleboucher/pangolin-operator
-      pullPolicy: IfNotPresent
-      tag: main-657e19a
     pangolin:
       existingSecret: pangolin-operator-secret
     resources:
@@ -22,3 +18,7 @@ spec:
       requests:
         cpu: 10m
         memory: 64Mi
+    controller:
+      pprof:
+        enabled: true
+        port: 6060

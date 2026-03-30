@@ -11,6 +11,7 @@ spec:
     # renovate: datasource=github-releases depName=fosrl/newt
     tag: "1.10.4"
     mtu: 1380
+
   autoDiscover:
     annotationPrefix: pangolin-operator
     denyCountries: RU,CN,KP,IR,BY,IL
