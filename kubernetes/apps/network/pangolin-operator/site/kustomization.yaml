@@ -5,3 +5,7 @@ kind: Kustomization
 namespace: network
 resources:
   - ./newtsite.yaml
+  - ./dnsendpoint.yaml
+  - ./privresources.yaml
+  - ./publicresources.yaml
+  - ./localsite.yaml

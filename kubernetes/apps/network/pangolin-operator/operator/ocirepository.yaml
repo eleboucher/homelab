@@ -11,5 +11,5 @@ spec:
     operation: copy
   ref:
     tag: 0.0.0
-    digest: sha256:c54254c4f6d9de3e369579b31c153f8ea856b7e3ae1e235c245ae4f7accf94b4
+    digest: sha256:c42e9d81f7c61d879586c13ff4db300f49c047fdb341fb62dca8f1a2328a0c33
   url: oci://ghcr.io/eleboucher/charts/pangolin-operator
