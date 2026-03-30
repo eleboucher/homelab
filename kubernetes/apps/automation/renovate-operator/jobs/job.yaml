@@ -33,13 +33,3 @@ spec:
       secretRef:
         name: renovate-secret
         key: RENOVATE_WEBHOOK_TOKEN
-    forgejo:
-      sync:
-        enabled: true
-        webhookURL: https://renovate-webhook.erwanleboucher.dev/webhook/v1/forgejo
-        tokenSecretRef:
-          name: renovate-secret
-          key: RENOVATE_TOKEN
-        authTokenSecretRef:
-          name: renovate-secret
-          key: RENOVATE_WEBHOOK_TOKEN
