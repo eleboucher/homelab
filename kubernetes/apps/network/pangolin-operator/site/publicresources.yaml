@@ -8,7 +8,6 @@ metadata:
 spec:
   name: erwanleboucher.dev
   siteRef: local
-  siteNamespace: network
   fullDomain: erwanleboucher.dev
   hostHeader: erwanleboucher.dev.s3-website.rbx.io.cloud.ovh.net
   protocol: http
@@ -26,7 +25,6 @@ metadata:
 spec:
   name: k8s-schemas
   siteRef: local
-  siteNamespace: network
   fullDomain: k8s-schemas.erwanleboucher.dev
   hostHeader: k8s-schemas.s3-website.rbx.io.cloud.ovh.net
   protocol: http

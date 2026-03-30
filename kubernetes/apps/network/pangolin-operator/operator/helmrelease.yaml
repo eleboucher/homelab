@@ -14,11 +14,7 @@ spec:
       existingSecret: pangolin-operator-secret
     resources:
       limits:
-        memory: 256Mi
+        memory: 128Mi
       requests:
         cpu: 10m
         memory: 64Mi
-    controller:
-      pprof:
-        enabled: true
-        port: 6060
