@@ -11,6 +11,13 @@
     - # Renovate Operator webhook URL
       source: string
       name: http://renovate-operator.automation.svc.cluster.local:8082
+    - # Forgejo event type header
+      source: header
+      name: X-Forgejo-Event
+  pass-file-to-command:
+    - # Entire request payload written to a temp file
+      source: entire-payload
+      envname: WEBHOOK_PAYLOAD_FILE
   trigger-rule:
     and:
       - # Validate the HMAC-SHA256 signature
