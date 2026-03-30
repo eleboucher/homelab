@@ -18,6 +18,7 @@ spec:
       SUBDOMAIN: renovate
       OIDC_DISPLAY_NAME: Renovate
       OIDC_CALLBACK: /auth/callback
+      OIDC_DISABLE_PKCE: "true"
       OIDC_GROUP: admins
   prune: true
   healthChecks:
