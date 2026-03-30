@@ -12,13 +12,11 @@ spec:
   extraEnv:
     - name: LOG_LEVEL
       value: debug
-    - name: RENOVATE_ALLOWED_COMMANDS
-      value: '["pnpm run bundle"]'
     - name: RENOVATE_PLATFORM_COMMIT
       value: "true"
     - name: RENOVATE_REDIS_URL
       value: "redis://dragonfly.database.svc:6379/2"
-  image: ghcr.io/renovatebot/renovate:43.86.0
+  image: ghcr.io/renovatebot/renovate:43.101.1
   parallelism: 5
   resources:
     requests:
