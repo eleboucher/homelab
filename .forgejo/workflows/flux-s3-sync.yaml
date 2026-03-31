@@ -1,0 +1,41 @@
+name: Sync kubernetes manifests to S3 and trigger Flux
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - kubernetes/**
+
+jobs:
+  sync:
+    runs-on: docker
+    container:
+      image: amazon/aws-cli:latest
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.OVH_FLUX_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.OVH_FLUX_SECRET_ACCESS_KEY }}
+      AWS_DEFAULT_REGION: rbx
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Sync kubernetes manifests to OVH S3
+        run: aws s3 sync ./kubernetes/ s3://homelab-flux/kubernetes/ --delete --endpoint-url https://s3.rbx.io.cloud.ovh.net
+
+  reconcile:
+    runs-on: docker
+    needs: sync
+    container:
+      image: alpine:latest
+    steps:
+      - name: Trigger Flux reconciliation
+        env:
+          WEBHOOK_TOKEN: ${{ secrets.FLUX_WEBHOOK_TOKEN }}
+          WEBHOOK_URL: ${{ secrets.FLUX_WEBHOOK_URL }}
+        run: |
+          apk add --no-cache curl openssl
+          SIGNATURE=$(printf '{}' | openssl dgst -sha256 -r -hmac "${WEBHOOK_TOKEN}" | awk '{print $1}')
+          HTTP_STATUS=$(curl -s -o /dev/null -w '%{http_code}' -X POST "${WEBHOOK_URL}" -H 'Content-Type: application/json' -H "X-Signature: sha256=${SIGNATURE}" -d '{}')
+          echo "Flux webhook response: HTTP ${HTTP_STATUS}"
+          test "${HTTP_STATUS}" = "200"
