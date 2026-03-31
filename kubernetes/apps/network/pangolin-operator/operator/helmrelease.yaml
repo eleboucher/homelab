@@ -10,6 +10,11 @@ spec:
     name: pangolin-operator
   interval: 1h
   values:
+    image:
+      repository: ghcr.io/home-operations/pangolin-operator
+      pullPolicy: IfNotPresent
+      tag: main-cfcf55e
+
     pangolin:
       existingSecret: pangolin-operator-secret
     resources:
@@ -18,3 +23,5 @@ spec:
       requests:
         cpu: 10m
         memory: 64Mi
+    controller:
+      logLevel: debug
