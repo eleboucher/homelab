@@ -34,7 +34,7 @@ spec:
         enabled: true
         annotations:
           gatus.home-operations.com/endpoint: |-
-            conditions: ["[STATUS] == 404"]
+            conditions: ["[STATUS] == 401"]
         hostnames:
           - renovate-webhook.erwanleboucher.dev
         parentRefs:
