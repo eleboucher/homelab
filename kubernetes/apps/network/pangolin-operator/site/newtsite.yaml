@@ -4,7 +4,6 @@ apiVersion: pangolin.home-operations.com/v1alpha1
 kind: NewtSite
 metadata:
   name: homelab
-  namespace: network
 spec:
   name: homelab
   newt:

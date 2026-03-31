@@ -35,6 +35,5 @@ spec:
     kind: Bucket
     name: flux-system
     namespace: flux-system
-  targetNamespace: network
   timeout: 5m
   wait: false

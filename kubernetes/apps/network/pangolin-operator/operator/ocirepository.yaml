@@ -10,5 +10,6 @@ spec:
     mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
     operation: copy
   ref:
-    tag: 0.0.4
+    tag: 0.0.0
+    digest: sha256:2d92d121518566dcf20b44845be16e19c15c9565db641db769e583e7dd7776b4
   url: oci://ghcr.io/home-operations/charts/pangolin-operator
