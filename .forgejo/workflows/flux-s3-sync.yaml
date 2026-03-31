@@ -7,7 +7,7 @@ on:
 
 jobs:
   sync:
-    runs-on: ubuntu
+    runs-on: default
     container:
       image: amazon/aws-cli:latest
     env:
