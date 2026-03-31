@@ -9,7 +9,7 @@ on:
 
 jobs:
   sync:
-    runs-on: docker
+    runs-on: ubuntu
     container:
       image: amazon/aws-cli:latest
     env:
