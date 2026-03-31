@@ -10,8 +10,8 @@ jobs:
   sync:
     runs-on: ubuntu-latest
     env:
-      AWS_ACCESS_KEY_ID: ${{ secrets.OVH_FLUX_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.OVH_FLUX_SECRET_ACCESS_KEY }}
+      AWS_ACCESS_KEY_ID: ${{ secrets.OVH_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.OVH_SECRET_ACCESS_KEY }}
       AWS_DEFAULT_REGION: rbx
     steps:
       - name: Check out the repository
