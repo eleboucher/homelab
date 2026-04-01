@@ -10,11 +10,6 @@ spec:
     name: pangolin-operator
   interval: 1h
   values:
-    image:
-      repository: ghcr.io/home-operations/pangolin-operator
-      pullPolicy: IfNotPresent
-      tag: main-dd85725
-
     pangolin:
       existingSecret: pangolin-operator-secret
     resources:
