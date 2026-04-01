@@ -145,6 +145,24 @@ services:
     volumes:
       - prometheus-data:/prometheus
 
+  anubis-website:
+    image: ghcr.io/techarohq/anubis:v1.25.0
+    container_name: anubis-website
+    restart: unless-stopped
+    network_mode: service:gerbil
+    environment:
+      BIND: ":8083"
+      DIFFICULTY: "4"
+      ED25519_PRIVATE_KEY_HEX: ${ANUBIS_ED25519_PRIVATE_KEY_HEX}
+      METRICS_BIND: ":9091"
+      OG_EXPIRY_TIME: "24h"
+      OG_PASSTHROUGH: "true"
+      SERVE_ROBOTS_TXT: "true"
+      TARGET: "http://localhost:8082"
+    depends_on:
+      gerbil:
+        condition: service_started
+
   geoipupdate:
     container_name: geoipupdate
     image: ghcr.io/maxmind/geoipupdate:v7.1.1
@@ -250,6 +268,8 @@ configs:
               allowEncodedQuestionMark: true
         tcp-2222:
           address: ":2222"
+        s3-passthrough:
+          address: ":8082"
 
       serversTransport:
         insecureSkipVerify: true
@@ -380,6 +400,11 @@ configs:
           redirect-to-https:
             redirectScheme:
               scheme: https
+          www-to-root:
+            redirectRegex:
+              permanent: true
+              regex: "^https://www\\.erwanleboucher\\.dev(.*)"
+              replacement: "https://erwanleboucher.dev$${1}"
           matrix-well-known-redirect:
             redirectRegex:
               permanent: true
@@ -502,6 +527,35 @@ configs:
             tls:
               certResolver: letsencrypt
 
+          www-redirect:
+            entryPoints:
+              - websecure
+            middlewares:
+              - www-to-root
+            priority: 999
+            rule: "Host(`www.erwanleboucher.dev`)"
+            service: noop@internal
+            tls:
+              certResolver: letsencrypt
+
+          website:
+            entryPoints:
+              - websecure
+            middlewares:
+              - crowdsec
+              - security-headers
+            rule: "Host(`erwanleboucher.dev`)"
+            service: anubis-website-svc
+            tls:
+              certResolver: letsencrypt
+
+          website-s3-backend:
+            entryPoints:
+              - s3-passthrough
+            priority: 1
+            rule: "PathPrefix(`/`)"
+            service: ovh-s3-website
+
         services:
           next-service:
             loadBalancer:
@@ -516,6 +570,17 @@ configs:
             loadBalancer:
               servers:
                 - url: "http://pangolin:3003"
+
+          anubis-website-svc:
+            loadBalancer:
+              servers:
+                - url: "http://localhost:8083"
+
+          ovh-s3-website:
+            loadBalancer:
+              passHostHeader: false
+              servers:
+                - url: "http://erwanleboucher.dev.s3-website.rbx.io.cloud.ovh.net"
       tcp:
         serversTransports:
           pp-transport-v1:

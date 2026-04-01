@@ -3,23 +3,6 @@
 apiVersion: pangolin.home-operations.com/v1alpha1
 kind: PublicResource
 metadata:
-  name: erwanleboucher.dev
-  namespace: network
-spec:
-  name: erwanleboucher.dev
-  siteRef: local
-  fullDomain: erwanleboucher.dev
-  hostHeader: erwanleboucher.dev.s3-website.rbx.io.cloud.ovh.net
-  protocol: http
-  targets:
-    - hostname: erwanleboucher.dev.s3-website.rbx.io.cloud.ovh.net
-      port: 80
-      method: http
----
-# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/pangolin.home-operations.com/publicresource_v1alpha1.json
-apiVersion: pangolin.home-operations.com/v1alpha1
-kind: PublicResource
-metadata:
   name: k8s-schemas
   namespace: network
 spec:

@@ -6,6 +6,7 @@ auto_discover: true
 auto_discover_opts:
   depth: 1
   delete: true
+force_recreate: true
 external_secrets:
   OVH_APPLICATION_KEY: "op://kubernetes/ovh/OVH_APPLICATION_KEY"
   OVH_APPLICATION_SECRET: "op://kubernetes/ovh/OVH_APPLICATION_SECRET"
@@ -14,3 +15,4 @@ external_secrets:
   MAXMIND_ACCOUNT_ID: "op://kubernetes/pangolin/maxmind_account_id"
   MAXMIND_LICENSE_KEY: "op://kubernetes/pangolin/maxmind_key"
   CROWDSEC_API_KEY: "op://kubernetes/pangolin/crowdsec_api_key"
+  ANUBIS_ED25519_PRIVATE_KEY_HEX: "op://kubernetes/anubis/ED25519_PRIVATE_KEY_HEX"

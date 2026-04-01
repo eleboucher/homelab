@@ -9,6 +9,7 @@ spec:
     labels:
       app.kubernetes.io/name: forgejo
   components:
+    - ../../../../components/anubis
     - ../../../../components/postgres/cert
     - ../../../../components/volsync
     - ../../../../components/oidc
@@ -22,6 +23,7 @@ spec:
   postBuild:
     substitute:
       APP: forgejo
+      ANUBIS_TARGET: "http://forgejo-http.selfhosted.svc:3000"
       APP_NAMESPACE: selfhosted
       VOLSYNC_CAPACITY: 20Gi
       OIDC_CALLBACK: /user/oauth2/kanidm/callback
