@@ -13,7 +13,7 @@ spec:
     image:
       repository: ghcr.io/home-operations/pangolin-operator
       pullPolicy: IfNotPresent
-      tag: main-9ffe373
+      tag: main-dd85725
 
     pangolin:
       existingSecret: pangolin-operator-secret
