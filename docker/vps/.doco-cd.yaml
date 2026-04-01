@@ -6,7 +6,6 @@ auto_discover: true
 auto_discover_opts:
   depth: 1
   delete: true
-force_recreate: true
 external_secrets:
   OVH_APPLICATION_KEY: "op://kubernetes/ovh/OVH_APPLICATION_KEY"
   OVH_APPLICATION_SECRET: "op://kubernetes/ovh/OVH_APPLICATION_SECRET"
