@@ -218,6 +218,7 @@ configs:
     content: |-
       api:
         dashboard: false
+        insecure: false
 
       providers:
         http:
