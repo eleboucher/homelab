@@ -11,15 +11,7 @@ spec:
     name: *app
   values:
     httpRoute:
-      enabled: true
-      hostnames:
-        - "git.erwanleboucher.dev"
-      parentRefs:
-        - name: envoy-external
-          namespace: network
-      matches:
-        timeouts:
-          request: 300s
+      enabled: false
     tcpRoute:
       enabled: true
       parentRefs:
