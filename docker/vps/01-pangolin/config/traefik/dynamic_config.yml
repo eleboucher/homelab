@@ -15,7 +15,7 @@ http:
           crowdsecAppsecHost: crowdsec:7422
           crowdsecAppsecUnreachableBlock: true
           crowdsecLapiHost: crowdsec:8080
-          crowdsecLapiKey: '{{ env "CROWDSEC_API_KEY" }}'
+          crowdsecLapiKey: {{ env "CROWDSEC_API_KEY" }}
           crowdsecLapiScheme: http
           crowdsecMode: live
           defaultDecisionSeconds: 15
