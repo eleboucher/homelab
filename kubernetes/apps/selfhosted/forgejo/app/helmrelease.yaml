@@ -76,7 +76,7 @@ spec:
         repository.signing:
           FORMAT: ssh
           SIGNING_KEY: /data/signing/ed25519.pub
-          SIGNING_NAME: Forgejo
+          SIGNING_NAME: git.erwanleboucher.dev Instance
           SIGNING_EMAIL: noreply@git.erwanleboucher.dev
           INITIAL_COMMIT: pubkey
           CRUD_ACTIONS: pubkey, parentsigned
