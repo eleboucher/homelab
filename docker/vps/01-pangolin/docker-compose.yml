@@ -188,12 +188,9 @@ services:
     configs:
       - source: anubis_bot_policy
         target: /data/cfg/botPolicy.yaml
-    volumes:
-      - anubis-data:/var/lib/anubis
 
 volumes:
   prometheus-data:
-  anubis-data:
 
 networks:
   default:
@@ -394,10 +391,6 @@ configs:
         - name: main-site-browser
           user_agent_regex: "Mozilla|Opera"
           action: CHALLENGE
-      store:
-        backend: bbolt
-        parameters:
-          path: /var/lib/anubis/anubis.bdb
       status_codes:
         CHALLENGE: 200
         DENY: 403
