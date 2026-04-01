@@ -388,6 +388,10 @@ configs:
           expression: |
             "Host" in headers && headers["Host"] == "watch.erwanleboucher.dev"
           action: ALLOW
+        - name: kromgo
+          expression: |
+            "Host" in headers && headers["Host"] == "kromgo.erwanleboucher.dev"
+          action: ALLOW
         - name: main-site-browser
           user_agent_regex: "Mozilla|Opera"
           action: CHALLENGE
