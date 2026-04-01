@@ -379,22 +379,19 @@ configs:
         - import: (data)/meta/ai-block-aggressive.yaml
         - import: (data)/crawlers/_allow-good.yaml
         - import: (data)/common/keep-internet-working.yaml
-        - name: pangolin-api
+        # Whitelist: only challenge browsers on these specific hosts
+        - name: protect-erwanleboucher-dev
           expression: |
-            "Host" in headers && headers["Host"] == "api.erwanleboucher.dev"
-          action: ALLOW
-        # Jellyfin — skip challenge to avoid overhead on media streaming
-        - name: jellyfin
-          expression: |
-            "Host" in headers && headers["Host"] == "watch.erwanleboucher.dev"
-          action: ALLOW
-        - name: kromgo
-          expression: |
-            "Host" in headers && headers["Host"] == "kromgo.erwanleboucher.dev"
-          action: ALLOW
-        - name: main-site-browser
-          user_agent_regex: "Mozilla|Opera"
+            "Host" in headers && headers["Host"] == "erwanleboucher.dev"
           action: CHALLENGE
+        - name: protect-git
+          expression: |
+            "Host" in headers && headers["Host"] == "git.erwanleboucher.dev"
+          action: CHALLENGE
+        # Allow everything else through without challenge
+        - name: allow-all-other
+          user_agent_regex: ".*"
+          action: ALLOW
       status_codes:
         CHALLENGE: 200
         DENY: 403
