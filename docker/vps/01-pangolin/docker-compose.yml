@@ -157,8 +157,43 @@ services:
     volumes:
       - "./config/GeoLite2:/usr/share/GeoIP"
 
+  anubis:
+    image: ghcr.io/techarohq/anubis:latest
+    container_name: anubis
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 256m
+        reservations:
+          memory: 64m
+    environment:
+      - BIND=:8080
+      - "TARGET= "
+      - REDIRECT_DOMAINS=*.erwanleboucher.dev,erwanleboucher.dev
+      - PUBLIC_URL=https://anubis.erwanleboucher.dev
+      - COOKIE_DOMAIN=erwanleboucher.dev
+      - DIFFICULTY=4
+      - METRICS_BIND=:9090
+      - SERVE_ROBOTS_TXT=true
+      - OG_PASSTHROUGH=true
+      - OG_EXPIRY_TIME=24h
+      - POLICY_FNAME=/data/cfg/botPolicy.yaml
+    healthcheck:
+      test: ["CMD", "anubis", "--healthcheck"]
+      interval: 5s
+      timeout: 30s
+      retries: 5
+      start_period: 500ms
+    configs:
+      - source: anubis_bot_policy
+        target: /data/cfg/botPolicy.yaml
+    volumes:
+      - anubis-data:/var/lib/anubis
+
 volumes:
   prometheus-data:
+  anubis-data:
 
 networks:
   default:
@@ -190,6 +225,9 @@ configs:
               credentials: false
           maxmind_db_path: "./config/GeoLite2/GeoLite2-Country.mmdb"
           maxmind_asn_path: "./config/GeoLite2/GeoLite2-ASN.mmdb"
+      traefik:
+          additional_middlewares:
+              - "anubis@file"
       flags:
           require_email_verification: false
           disable_signup_without_invite: true
@@ -337,6 +375,64 @@ configs:
               replacement: pangolin-vps
             - target_label: nodename
               replacement: vps
+  anubis_bot_policy:
+    content: |-
+      bots:
+        - import: (data)/bots/_deny-pathological.yaml
+        - import: (data)/meta/ai-block-aggressive.yaml
+        - import: (data)/crawlers/_allow-good.yaml
+        - import: (data)/common/keep-internet-working.yaml
+        - name: pangolin-api
+          expression: |
+            "Host" in headers && headers["Host"] == "api.erwanleboucher.dev"
+          action: ALLOW
+        # Jellyfin — skip challenge to avoid overhead on media streaming
+        - name: jellyfin
+          expression: |
+            "Host" in headers && headers["Host"] == "watch.erwanleboucher.dev"
+          action: ALLOW
+        - name: main-site-browser
+          user_agent_regex: "Mozilla|Opera"
+          action: CHALLENGE
+      store:
+        backend: bbolt
+        parameters:
+          path: /var/lib/anubis/anubis.bdb
+      status_codes:
+        CHALLENGE: 200
+        DENY: 403
+      openGraph:
+        enabled: true
+        considerHost: true
+        ttl: 24h
+      thresholds:
+        - name: minimal-suspicion
+          expression: weight <= 0
+          action: ALLOW
+        - name: mild-suspicion
+          expression:
+            all:
+              - weight > 0
+              - weight < 10
+          action: CHALLENGE
+          challenge:
+            algorithm: metarefresh
+            difficulty: 1
+        - name: moderate-suspicion
+          expression:
+            all:
+              - weight >= 10
+              - weight < 20
+          action: CHALLENGE
+          challenge:
+            algorithm: fast
+            difficulty: 2
+        - name: extreme-suspicion
+          expression: weight >= 20
+          action: CHALLENGE
+          challenge:
+            algorithm: fast
+            difficulty: 6
   traefik_dynamic_config:
     content: |-
       http:
@@ -366,6 +462,10 @@ configs:
                 logLevel: INFO
                 updateIntervalSeconds: 15
                 updateMaxFailure: 0
+          anubis:
+            forwardAuth:
+              address: "http://anubis:8080/.within.website/x/cmd/anubis/api/check"
+              trustForwardHeader: true
           default-whitelist:
             ipWhiteList:
               sourceRange:
@@ -417,6 +517,28 @@ configs:
               stsPreload: true
               stsSeconds: 63072000
         routers:
+          # Anubis challenge page (HTTP redirect)
+          anubis-challenge-redirect:
+            rule: "Host(`anubis.erwanleboucher.dev`)"
+            service: anubis-service
+            entryPoints:
+              - web
+            middlewares:
+              - redirect-to-https
+
+          # Anubis challenge page (HTTPS)
+          anubis-challenge:
+            rule: "Host(`anubis.erwanleboucher.dev`)"
+            service: anubis-service
+            entryPoints:
+              - websecure
+            tls:
+              certResolver: letsencrypt
+              domains:
+                - main: "erwanleboucher.dev"
+                  sans:
+                    - "*.erwanleboucher.dev"
+
           # HTTP to HTTPS redirect router
           main-app-router-redirect:
             rule: "Host(`pangolin.erwanleboucher.dev`)"
@@ -516,6 +638,10 @@ configs:
             loadBalancer:
               servers:
                 - url: "http://pangolin:3003"
+          anubis-service:
+            loadBalancer:
+              servers:
+                - url: "http://anubis:8080"
       tcp:
         serversTransports:
           pp-transport-v1:
