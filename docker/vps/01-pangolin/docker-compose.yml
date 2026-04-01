@@ -158,7 +158,7 @@ services:
       - "./config/GeoLite2:/usr/share/GeoIP"
 
   anubis:
-    image: ghcr.io/techarohq/anubis:latest
+    image: ghcr.io/techarohq/anubis:v1.25.0
     container_name: anubis
     restart: unless-stopped
     deploy:
