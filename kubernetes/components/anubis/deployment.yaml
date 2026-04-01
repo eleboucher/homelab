@@ -23,7 +23,7 @@ spec:
             - name: BIND
               value: ":8080"
             - name: DIFFICULTY
-              value: "${ANUBIS_DIFFICULTY:=4}"
+              value: "${ANUBIS_DIFFICULTY:=\"4\"}"
             - name: ED25519_PRIVATE_KEY_HEX
               valueFrom:
                 secretKeyRef:
