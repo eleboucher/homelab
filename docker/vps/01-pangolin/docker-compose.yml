@@ -129,7 +129,7 @@ services:
         condition: service_started
 
   prometheus-agent:
-    image: prom/prometheus:v3.10.0
+    image: prom/prometheus:v3.11.0
     container_name: prometheus-agent
     restart: unless-stopped
     command:
