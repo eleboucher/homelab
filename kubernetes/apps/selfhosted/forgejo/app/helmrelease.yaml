@@ -96,13 +96,6 @@ spec:
           SMTP_ADDR: smtp-relay.selfhosted.svc.cluster.local
           SMTP_PORT: 25
 
-    initPreScript: |
-      mkdir -p /data/signing
-      cp /tmp/signing/ed25519 /data/signing/ed25519
-      cp /tmp/signing/ed25519.pub /data/signing/ed25519.pub
-      chmod 600 /data/signing/ed25519
-      chmod 644 /data/signing/ed25519.pub
-
     deployment:
       env:
         - name: PGSSLROOTCERT
@@ -137,7 +130,7 @@ spec:
       - name: signing-key
         secret:
           secretName: forgejo-signing-key
-          defaultMode: 0440
+          defaultMode: 0400
       - name: forgejo-ssh
         secret:
           secretName: forgejo-secret
