@@ -31,11 +31,19 @@ prune-pods:
     done
 
 
-[doc('Sync ExternalSecrets')]
-sync-es:
-    kubectl get es --no-headers -A | while read -r ns name _; do \
-        kubectl -n "$ns" annotate --field-manager flux-client-side-apply --overwrite es "$name" force-sync="$(date +%s)"; \
-    done
+[doc('Sync ExternalSecrets (optionally: just kube sync-es <ns> <name>)')]
+sync-es ns="" name="":
+    #!/usr/bin/env bash
+    set -euo pipefail
+    if [ -n "{{ ns }}" ] && [ -n "{{ name }}" ]; then
+        kubectl -n "{{ ns }}" annotate --field-manager flux-client-side-apply --overwrite es "{{ name }}" \
+            force-sync="$(date +%s)"
+    else
+        kubectl get es --no-headers -A | while read -r ns name _; do
+            kubectl -n "$ns" annotate --field-manager flux-client-side-apply --overwrite es "$name" \
+                force-sync="$(date +%s)"
+        done
+    fi
 
 [doc('Sync GitRepositories')]
 sync-git:
@@ -43,23 +51,47 @@ sync-git:
         kubectl -n "$ns" annotate --field-manager flux-client-side-apply --overwrite gitrepo "$name" reconcile.fluxcd.io/requestedAt="$(date +%s)"; \
     done
 
-[doc('Sync HelmReleases')]
-sync-hr:
-    kubectl get hr --no-headers -A | while read -r ns name _; do \
-        kubectl -n "$ns" annotate --field-manager flux-client-side-apply --overwrite hr "$name" reconcile.fluxcd.io/requestedAt="$(date +%s)" reconcile.fluxcd.io/forceAt="$(date +%s)"; \
-    done
+[doc('Sync HelmReleases (optionally: just kube sync-hr <ns> <name>)')]
+sync-hr ns="" name="":
+    #!/usr/bin/env bash
+    set -euo pipefail
+    if [ -n "{{ ns }}" ] && [ -n "{{ name }}" ]; then
+        kubectl -n "{{ ns }}" annotate --field-manager flux-client-side-apply --overwrite hr "{{ name }}" \
+            reconcile.fluxcd.io/requestedAt="$(date +%s)" reconcile.fluxcd.io/forceAt="$(date +%s)"
+    else
+        kubectl get hr --no-headers -A | while read -r ns name _; do
+            kubectl -n "$ns" annotate --field-manager flux-client-side-apply --overwrite hr "$name" \
+                reconcile.fluxcd.io/requestedAt="$(date +%s)" reconcile.fluxcd.io/forceAt="$(date +%s)"
+        done
+    fi
 
-[doc('Sync Kustomizations')]
-sync-ks:
-    kubectl get ks --no-headers -A | while read -r ns name _; do \
-        kubectl -n "$ns" annotate --field-manager flux-client-side-apply --overwrite ks "$name" reconcile.fluxcd.io/requestedAt="$(date +%s)"; \
-    done
+[doc('Sync Kustomizations (optionally: just kube sync-ks <ns> <name>)')]
+sync-ks ns="" name="":
+    #!/usr/bin/env bash
+    set -euo pipefail
+    if [ -n "{{ ns }}" ] && [ -n "{{ name }}" ]; then
+        kubectl -n "{{ ns }}" annotate --field-manager flux-client-side-apply --overwrite ks "{{ name }}" \
+            reconcile.fluxcd.io/requestedAt="$(date +%s)"
+    else
+        kubectl get ks --no-headers -A | while read -r ns name _; do
+            kubectl -n "$ns" annotate --field-manager flux-client-side-apply --overwrite ks "$name" \
+                reconcile.fluxcd.io/requestedAt="$(date +%s)"
+        done
+    fi
 
-[doc('Sync OCIRepositories')]
-sync-oci:
-    kubectl get ocirepo --no-headers -A | while read -r ns name _; do \
-        kubectl -n "$ns" annotate --field-manager flux-client-side-apply --overwrite ocirepo "$name" reconcile.fluxcd.io/requestedAt="$(date +%s)"; \
-    done
+[doc('Sync OCIRepositories (optionally: just kube sync-oci <ns> <name>)')]
+sync-oci ns="" name="":
+    #!/usr/bin/env bash
+    set -euo pipefail
+    if [ -n "{{ ns }}" ] && [ -n "{{ name }}" ]; then
+        kubectl -n "{{ ns }}" annotate --field-manager flux-client-side-apply --overwrite ocirepo "{{ name }}" \
+            reconcile.fluxcd.io/requestedAt="$(date +%s)"
+    else
+        kubectl get ocirepo --no-headers -A | while read -r ns name _; do
+            kubectl -n "$ns" annotate --field-manager flux-client-side-apply --overwrite ocirepo "$name" \
+                reconcile.fluxcd.io/requestedAt="$(date +%s)"
+        done
+    fi
 
 [doc('View a secret')]
 view-secret namespace secret:

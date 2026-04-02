@@ -95,16 +95,14 @@ spec:
           PROTOCOL: smtp
           SMTP_ADDR: smtp-relay.selfhosted.svc.cluster.local
           SMTP_PORT: 25
-
     initPreScript: |
+      #!/bin/sh
+      set -e
       mkdir -p /data/signing
-
-      cp /tmp/signing/ed25519 /data/signing/ed25519
-      cp /tmp/signing/ed25519.pub /data/signing/ed25519.pub
+      rm -f /data/signing/ed25519 /data/signing/ed25519.pub
+      install -m 600 /tmp/signing/ed25519 /data/signing/ed25519
       echo "" >> /data/signing/ed25519
-      chmod 600 /data/signing/ed25519
-      chmod 644 /data/signing/ed25519.pub
-
+      install -m 644 /tmp/signing/ed25519.pub /data/signing/ed25519.pub
     deployment:
       env:
         - name: PGSSLROOTCERT
