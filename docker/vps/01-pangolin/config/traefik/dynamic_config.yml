@@ -44,17 +44,17 @@ http:
       redirectRegex:
         permanent: true
         regex: "^https://www\\.erwanleboucher\\.dev(.*)"
-        replacement: "https://erwanleboucher.dev$${1}"
+        replacement: "https://erwanleboucher.dev${1}"
     matrix-well-known-redirect:
       redirectRegex:
         permanent: true
         regex: "^https?://erwanleboucher\\.dev(/.well-known/matrix/.*)$"
-        replacement: "https://matrix.erwanleboucher.dev$${1}"
+        replacement: "https://matrix.erwanleboucher.dev${1}"
     gotosocial-well-known-redirect:
       redirectRegex:
         permanent: true
         regex: "^https?://erwanleboucher\\.dev(/.well-known/(webfinger|host-meta|nodeinfo).*)$"
-        replacement: "https://gts.erwanleboucher.dev$${1}"
+        replacement: "https://gts.erwanleboucher.dev${1}"
     matrix-cors:
       headers:
         accessControlAllowOriginList:
