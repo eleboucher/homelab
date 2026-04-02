@@ -157,9 +157,12 @@ services:
       METRICS_BIND: ":9091"
       OG_EXPIRY_TIME: "24h"
       OG_PASSTHROUGH: "true"
+      POLICY_FNAME: "/etc/anubis/policy.yaml"
       SERVE_ROBOTS_TXT: "true"
       REDIRECT_DOMAINS: "erwanleboucher.dev"
       TARGET: "http://localhost:8082"
+    volumes:
+      - ./config/anubis/policy.yaml:/etc/anubis/policy.yaml:ro
     depends_on:
       gerbil:
         condition: service_started
