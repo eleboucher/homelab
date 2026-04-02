@@ -130,7 +130,7 @@ spec:
       - name: signing-key
         secret:
           secretName: forgejo-signing-key
-          defaultMode: 0400
+          defaultMode: 0440
       - name: forgejo-ssh
         secret:
           secretName: forgejo-secret
