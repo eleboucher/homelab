@@ -64,6 +64,15 @@ http:
         accessControlAllowMethods:
           - GET
           - OPTIONS
+    wkd-cors:
+      headers:
+        accessControlAllowOriginList:
+          - "*"
+        accessControlAllowHeaders:
+          - "*"
+        accessControlAllowMethods:
+          - GET
+          - OPTIONS
     security-headers:
       headers:
         contentTypeNosniff: true
@@ -139,6 +148,29 @@ http:
         - websecure
       middlewares:
         - badger
+      tls:
+        certResolver: letsencrypt
+
+    # WKD Direct setup — serve OpenPGP keys directly from S3, bypassing Anubis
+    wkd-direct:
+      entryPoints:
+        - websecure
+      middlewares:
+        - wkd-cors
+      rule: "Host(`erwanleboucher.dev`) && PathPrefix(`/.well-known/openpgpkey/`)"
+      priority: 1000
+      service: ovh-s3-website
+      tls:
+        certResolver: letsencrypt
+
+    # WKD Advanced setup — openpgpkey subdomain
+    wkd-advanced:
+      entryPoints:
+        - websecure
+      middlewares:
+        - wkd-cors
+      rule: "Host(`openpgpkey.erwanleboucher.dev`) && PathPrefix(`/.well-known/openpgpkey/`)"
+      service: ovh-s3-website
       tls:
         certResolver: letsencrypt
 

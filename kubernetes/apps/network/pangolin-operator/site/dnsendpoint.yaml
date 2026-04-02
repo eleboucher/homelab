@@ -27,3 +27,7 @@ spec:
       recordType: A
       targets:
         - ${VPS_IP}
+    - dnsName: openpgpkey.erwanleboucher.dev
+      recordType: A
+      targets:
+        - ${VPS_IP}
