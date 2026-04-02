@@ -151,7 +151,7 @@ http:
         - matrix-well-known-redirect
       rule: "Host(`erwanleboucher.dev`) && PathPrefix(`/.well-known/matrix/`)"
       priority: 1000
-      service: noop@internal
+      service: anubis-website-svc
       tls:
         certResolver: letsencrypt
 
@@ -163,7 +163,7 @@ http:
         - gotosocial-well-known-redirect
       rule: "Host(`erwanleboucher.dev`) && (PathPrefix(`/.well-known/webfinger`) || PathPrefix(`/.well-known/host-meta`) || PathPrefix(`/.well-known/nodeinfo`))"
       priority: 1000
-      service: noop@internal
+      service: anubis-website-svc
       tls:
         certResolver: letsencrypt
 
@@ -174,7 +174,7 @@ http:
         - www-to-root
       priority: 999
       rule: "Host(`www.erwanleboucher.dev`)"
-      service: noop@internal
+      service: anubis-website-svc
       tls:
         certResolver: letsencrypt
 
