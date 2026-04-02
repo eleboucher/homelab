@@ -30,8 +30,6 @@ spec:
       SUBDOMAIN: git
       OIDC_DISABLE_PKCE: "true"
       OIDC_SCOPES: '["openid", "profile", "email", "groups", "ssh_publickeys"]'
-      OIDC_CLIENT_ID_KEY: key
-      OIDC_CLIENT_SECRET_KEY: secret
   prune: true
   sourceRef:
     kind: Bucket
