@@ -1,5 +1,7 @@
 ---
 extends: default
+ignore:
+  - dynamic_config.yml
 rules:
   brackets:
     max-spaces-inside: 1
