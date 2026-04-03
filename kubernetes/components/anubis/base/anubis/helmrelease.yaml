@@ -84,7 +84,10 @@ spec:
                 challenge:
                   algorithm: fast
                   difficulty: 4
-            dnsbl: true
+            store:
+              backend: valkey
+              parameters:
+                url: "redis://dragonfly.database.svc:6379/3"
     service:
       anubis:
         controller: anubis
