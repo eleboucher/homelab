@@ -13,6 +13,8 @@ spec:
       app.kubernetes.io/name: ${APP}-anubis
   template:
     metadata:
+      annotations:
+        reloader.stakater.com/auto: "true"
       labels:
         app.kubernetes.io/name: ${APP}-anubis
     spec:

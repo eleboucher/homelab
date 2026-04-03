@@ -2,6 +2,9 @@
 bots:
   - import: (data)/meta/default-config.yaml
   - import: (data)/apps/gitea-rss-feeds.yaml
+  - name: oci-registry
+    path_regex: ^/v2/.*
+    action: ALLOW
   - name: catch-all
     path_regex: .*
     action: CHALLENGE
