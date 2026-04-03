@@ -16,9 +16,11 @@ spec:
         data:
           runner.yaml: |-
             cache:
-              enabled: false
+              enabled: true
+              dir: /data/cache
             container:
               docker_host: "-"
+              workdir_parent: shared/workdir
             kubernetes:
               namespace: selfhosted
               poll_timeout: 10m
@@ -30,9 +32,25 @@ spec:
               labels:
                 - ubuntu-latest:k8spod:/config/podspec-default.yaml
                 - default:k8spod:/config/podspec-default.yaml
-                - docker:k8spod:/config/podspec-default.yaml
+                - docker:k8spod:/config/podspec-dind.yaml
               timeout: 3h
           podspec-default.yaml: |-
+            containers:
+              - env:
+                  - name: DEBIAN_FRONTEND
+                    value: noninteractive
+                image: ghcr.io/catthehacker/ubuntu:act-24.04
+                imagePullPolicy: IfNotPresent
+                name: main
+                resources:
+                  limits:
+                    cpu: "1"
+                    memory: 2Gi
+                  requests:
+                    cpu: 100m
+                    memory: 256Mi
+            restartPolicy: Never
+          podspec-dind.yaml: |-
             initContainers:
               - name: dind
                 image: docker:29-dind
@@ -118,7 +136,7 @@ spec:
           register-runner:
             image:
               repository: git.erwanleboucher.dev/eleboucher/runner
-              tag: latest
+              tag: latest@sha256:212e8eb7848bfcb2afdb83efadc5ec6009074c62fa62f51f05bffa772ef64bad
             command:
               - sh
               - -c
@@ -144,7 +162,7 @@ spec:
           runner:
             image:
               repository: git.erwanleboucher.dev/eleboucher/runner
-              tag: latest
+              tag: latest@sha256:212e8eb7848bfcb2afdb83efadc5ec6009074c62fa62f51f05bffa772ef64bad
             command:
               - /bin/forgejo-runner
               - daemon
