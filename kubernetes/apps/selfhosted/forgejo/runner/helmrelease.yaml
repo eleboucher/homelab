@@ -57,7 +57,7 @@ spec:
                     command:
                       - sh
                       - -c
-                      - test -f /certs/client/cert.pem
+                      - test -f /certs/client/ca.pem && test -f /certs/client/cert.pem && test -f /certs/client/key.pem
                   initialDelaySeconds: 2
                   periodSeconds: 1
             containers:
