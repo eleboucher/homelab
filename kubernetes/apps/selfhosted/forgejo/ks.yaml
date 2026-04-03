@@ -14,8 +14,6 @@ spec:
     - ../../../../components/volsync
     - ../../../../components/oidc
   dependsOn:
-    - name: garage
-      namespace: garage-system
     - name: longhorn
       namespace: longhorn-system
   interval: 1h
