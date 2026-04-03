@@ -71,6 +71,7 @@ spec:
                 type: RuntimeDefault
     configMaps:
       policy:
+        suffix: policy
         data:
           policy.yaml: |-
             bots:
@@ -104,7 +105,7 @@ spec:
     persistence:
       policy:
         type: configMap
-        name: ${APP}-anubis-policy
+        identifier: policy
         globalMounts:
           - path: /etc/anubis
             readOnly: true
