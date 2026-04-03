@@ -3,19 +3,25 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: ${APP}-anubis-policy
+  name: ${APP}-anubis
 spec:
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: &app ${APP}
   interval: 1h
-  path: ./kubernetes/components/anubis/policy
+  path: ./kubernetes/components/anubis/base/anubis
   postBuild:
     substitute:
-      APP: ${APP}
+      APP: *app
+      APP_NAMESPACE: ${APP_NAMESPACE}
+      ANUBIS_TARGET: ${ANUBIS_TARGET}
+      ANUBIS_DIFFICULTY: "${ANUBIS_DIFFICULTY:=\"4\"}"
   prune: true
-  targetNamespace: ${APP_NAMESPACE}
   retryInterval: 2m
   sourceRef:
     kind: Bucket
     name: flux-system
     namespace: flux-system
+  targetNamespace: ${APP_NAMESPACE}
   timeout: 5m
   wait: false
