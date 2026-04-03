@@ -36,6 +36,7 @@ spec:
           autoDiscoverUrl: "https://idm.erwanleboucher.dev/oauth2/openid/forgejo/.well-known/openid-configuration"
       config:
         APP_NAME: "Erwan's Forge"
+        SLOGAN: "deep deep in the mine"
         database:
           DB_TYPE: postgres
           HOST: pooler-rw.database.svc:5432
