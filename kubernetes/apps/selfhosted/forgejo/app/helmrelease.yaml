@@ -27,6 +27,10 @@ spec:
       repository: forgejo/forgejo
       tag: 14.0.3-rootless
     gitea:
+      metrics:
+        enabled: true
+        serviceMonitor:
+          enabled: true
       admin:
         existingSecret: forgejo-secret
       oauth:
@@ -77,6 +81,8 @@ spec:
           CRUD_ACTIONS: pubkey, parentsigned
           WIKI: never
           MERGES: pubkey
+        metrics:
+          ENABLED: true
         openid:
           ENABLE_OPENID_SIGNIN: false
           ENABLE_OPENID_SIGNUP: false
