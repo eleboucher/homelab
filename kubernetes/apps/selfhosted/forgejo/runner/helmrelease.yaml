@@ -18,8 +18,10 @@ spec:
             cache:
               enabled: false
             container:
-              k8s_namespace: selfhosted
-              kubernetes: true
+              docker_host: "-"
+            kubernetes:
+              namespace: selfhosted
+              poll_timeout: 10m
             log:
               level: info
             runner:
@@ -115,8 +117,8 @@ spec:
         initContainers:
           register-runner:
             image:
-              repository: code.forgejo.org/johbo/k8s-runner
-              tag: v9.1.1-21-gd2a8af7d
+              repository: git.erwanleboucher.dev/eleboucher/runner
+              tag: latest
             command:
               - sh
               - -c
@@ -141,8 +143,8 @@ spec:
         containers:
           runner:
             image:
-              repository: code.forgejo.org/johbo/k8s-runner
-              tag: v9.1.1-21-gd2a8af7d
+              repository: git.erwanleboucher.dev/eleboucher/runner
+              tag: latest
             command:
               - /bin/forgejo-runner
               - daemon
