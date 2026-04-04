@@ -26,6 +26,12 @@ spec:
               poll_timeout: 10m
             log:
               level: info
+            plugins:
+              k8s:
+                address: "unix:///plugin/forgejo-runner-k8s.sock"
+                options:
+                  namespace: selfhosted
+                  poll_timeout: 10m
             runner:
               capacity: 2
               file: /persistent/.runner
@@ -33,6 +39,8 @@ spec:
                 - ubuntu-latest:k8spod:/config/podspec-default.yaml
                 - default:k8spod:/config/podspec-default.yaml
                 - docker:k8spod:/config/podspec-dind.yaml
+                - plugin-k8s:k8s://config/podspec-default.yaml
+                - plugin-docker:k8s://config/podspec-dind.yaml
               timeout: 3h
           podspec-default.yaml: |-
             containers:
@@ -136,7 +144,7 @@ spec:
           register-runner:
             image:
               repository: git.erwanleboucher.dev/eleboucher/runner
-              tag: latest@sha256:d04345529082456ed0f16f9f8858e47b757eaaff7f73df3686fd58d4b1a50945
+              tag: latest@sha256:d014e2971e15de0b812cf947aab1da4d2d0444987ec97580069457013cc3dd57
             command:
               - sh
               - -c
@@ -162,7 +170,7 @@ spec:
           runner:
             image:
               repository: git.erwanleboucher.dev/eleboucher/runner
-              tag: latest@sha256:d04345529082456ed0f16f9f8858e47b757eaaff7f73df3686fd58d4b1a50945
+              tag: latest@sha256:d014e2971e15de0b812cf947aab1da4d2d0444987ec97580069457013cc3dd57
             command:
               - /bin/forgejo-runner
               - daemon
@@ -172,8 +180,23 @@ spec:
               requests:
                 cpu: 5m
                 memory: 32Mi
-                # limits:
-                #   memory: 128Mi
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - ALL
+          k8s-plugin:
+            image:
+              repository: git.erwanleboucher.dev/eleboucher/runner-k8s-plugin
+              tag: latest@sha256:ec9a1ced96137820b02f6a103e7f5c2f16faa2bcde01ecbaf0e1bcef84fe2809
+            args:
+              - --listen
+              - unix:///plugin/forgejo-runner-k8s.sock
+            resources:
+              requests:
+                cpu: 5m
+                memory: 32Mi
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
@@ -225,6 +248,10 @@ spec:
         identifier: config
         globalMounts:
           - path: /config
+      plugin-socket:
+        type: emptyDir
+        globalMounts:
+          - path: /plugin
       tmpfs:
         type: emptyDir
         sizeLimit: 10Gi
