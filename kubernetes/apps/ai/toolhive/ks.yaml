@@ -17,7 +17,7 @@ spec:
   path: "./kubernetes/apps/ai/toolhive/crds"
   prune: true
   sourceRef:
-    kind: GitRepository
+    kind: Bucket
     name: flux-system
     namespace: flux-system
   targetNamespace: ai
@@ -44,7 +44,7 @@ spec:
   path: "./kubernetes/apps/ai/toolhive/app"
   prune: true
   sourceRef:
-    kind: GitRepository
+    kind: Bucket
     name: flux-system
     namespace: flux-system
   targetNamespace: ai
