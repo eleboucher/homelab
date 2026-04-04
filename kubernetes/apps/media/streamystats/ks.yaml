@@ -10,6 +10,7 @@ spec:
   interval: 1h
   components:
     - ../../../../components/postgres/pass
+    - ../../../../components/anubis
   path: ./kubernetes/apps/media/streamystats/app
   dependsOn:
     - name: envoy-gateway
@@ -18,6 +19,8 @@ spec:
   postBuild:
     substitute:
       APP: *app
+      APP_NAMESPACE: media
+      ANUBIS_TARGET: "http://streamystats-frontend.media.svc:80"
   sourceRef:
     kind: Bucket
     name: flux-system

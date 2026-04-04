@@ -11,14 +11,19 @@ spec:
     name: *app
   values:
     httpRoute:
-      enabled: false
-    tcpRoute:
       enabled: true
       parentRefs:
         - name: envoy-external
           namespace: network
-          sectionName: ssh
-        - name: envoy-internal
+      backendRefs:
+        - name: forgejo-anubis
+          port: 8080
+      hostnames:
+        - "git.erwanleboucher.dev"
+    tcpRoute:
+      enabled: true
+      parentRefs:
+        - name: envoy-external
           namespace: network
           sectionName: ssh
     image:

@@ -10,7 +10,7 @@ spec:
   interval: 1h
   components:
     - ../../../../components/volsync
-    - ../../../../components/nfs-scaler
+    - ../../../../components/anubis
   path: ./kubernetes/apps/media/jellyseerr/app
   dependsOn:
     - name: envoy-gateway
@@ -21,6 +21,7 @@ spec:
     substitute:
       APP: jellyseerr
       APP_NAMESPACE: media
+      ANUBIS_TARGET: "http://jellyseerr.media.svc:5055"
       VOLSYNC_CAPACITY: 2Gi
       VOLSYNC_SCHEDULE: "10 1-23/2 * * *"
   prune: true

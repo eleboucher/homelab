@@ -112,5 +112,5 @@ spec:
           - streamystats.erwanleboucher.dev
         rules:
           - backendRefs:
-              - identifier: frontend
-                port: 80
+              - name: streamystats-anubis
+                port: 8080

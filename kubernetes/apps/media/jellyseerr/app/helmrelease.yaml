@@ -67,6 +67,11 @@ spec:
             namespace: network
         hostnames:
           - request.erwanleboucher.dev
+        rules:
+          - backendRefs:
+              - name: jellyseerr-anubis
+                port: 8080
+
     persistence:
       config:
         type: persistentVolumeClaim
