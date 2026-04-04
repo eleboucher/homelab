@@ -1,11 +1,4 @@
 ---
 bots:
   - import: (data)/meta/default-config.yaml
-  - import: (data)/apps/gitea-rss-feeds.yaml
-  - name: catch-all
-    path_regex: .*
-    action: CHALLENGE
-    challenge:
-      algorithm: fast
-      difficulty: 4
-dnsbl: true
+dnsbl: false
