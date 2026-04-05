@@ -35,13 +35,12 @@ spec:
                   namespace: selfhosted
                   poll_timeout: 10m
             runner:
-              capacity: 2
+              capacity: 4
               file: /persistent/.runner
               labels:
-                - ubuntu-latest:k8spod:/config/podspec-default.yaml
-                - default:k8spod:/config/podspec-default.yaml
-                - docker:k8spod:/config/podspec-dind.yaml
-                - plugin-k8s:k8s://config/podspec-default.yaml
+                - ubuntu-latest:k8s:/config/podspec-default.yaml
+                - default:k8s:/config/podspec-default.yaml
+                - docker:k8s:/config/podspec-dind.yaml
                 - plugin-docker:k8s://config/podspec-dind.yaml
               timeout: 3h
           podspec-default.yaml: |-
