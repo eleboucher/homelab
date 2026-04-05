@@ -21,6 +21,8 @@ spec:
             container:
               docker_host: "-"
               workdir_parent: shared/workdir
+            host:
+              workdir_parent: /persistent/cache/act
             kubernetes:
               namespace: selfhosted
               poll_timeout: 10m
