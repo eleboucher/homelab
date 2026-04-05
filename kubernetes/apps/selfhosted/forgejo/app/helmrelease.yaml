@@ -159,7 +159,7 @@ spec:
       - name: root-ca
         mountPath: "/var/run/secrets/root-ca"
       - name: signing-key
-        mountPath: /tmp/signing
+        mountPath: /data/signing
         readOnly: true
     extraContainerVolumeMounts:
       - name: postgres-forgejo
@@ -169,3 +169,6 @@ spec:
       - name: forgejo-ssh
         mountPath: "/data/gitea/ssh/ssh_host_ed25519_key"
         subPath: ssh_host_ed25519_key
+      - name: signing-key
+        mountPath: /data/signing
+        readOnly: true
