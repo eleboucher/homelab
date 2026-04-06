@@ -38,9 +38,9 @@ spec:
               capacity: 4
               file: /persistent/.runner
               labels:
-                - ubuntu-latest:plugin:k8s:/config/podspec-default.yaml
-                - default:plugin:k8s:/config/podspec-default.yaml
-                - docker:plugin:k8s:/config/podspec-dind.yaml
+                - ubuntu-latest:k8s:/config/podspec-default.yaml
+                - default:k8s:/config/podspec-default.yaml
+                - docker:k8s:/config/podspec-dind.yaml
               timeout: 3h
           podspec-default.yaml: |-
             containers:
@@ -143,8 +143,8 @@ spec:
         initContainers:
           copy-k8s-plugin:
             image:
-              repository: git.erwanleboucher.dev/eleboucher/runner-k8s-plugin
-              tag: latest@sha256:0d352617a5cdf1cab8b6621a6b1a2c689d142d70316e8355e0ef45d48bf68a7d
+              repository: git.erwanleboucher.dev/eleboucher/runner-k8s-plugin-v2
+              tag: sha-26faa7cd2fe98ff6a1be4e3f298ace40cb05cb69
             command:
               - sh
               - -c
@@ -190,23 +190,6 @@ spec:
               - daemon
               - --config
               - /config/runner.yaml
-            resources:
-              requests:
-                cpu: 5m
-                memory: 32Mi
-            securityContext:
-              allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
-              capabilities:
-                drop:
-                  - ALL
-          k8s-plugin:
-            image:
-              repository: git.erwanleboucher.dev/eleboucher/runner-k8s-plugin
-              tag: latest@sha256:cc620bf33a98e14e115f59a0c3c4f91bb47c6e5cfe3ecbf6fa4a08c9cc776e22
-            args:
-              - --listen
-              - unix:///plugin/forgejo-runner-k8s.sock
             resources:
               requests:
                 cpu: 5m
