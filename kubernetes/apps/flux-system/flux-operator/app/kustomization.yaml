@@ -6,4 +6,4 @@ resources:
   - clusterrolebinding.yaml
   - helmrelease.yaml
   - httproute.yaml
-  - repository.yaml
+  - ocirepository.yaml

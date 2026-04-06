@@ -50,6 +50,21 @@ spec:
               limits:
                 memory: 500Mi
 
+    persistence:
+      data:
+        type: persistentVolumeClaim
+        existingClaim: "{{ .Release.Name }}"
+        globalMounts:
+          - path: /app/data
+
+    route:
+      app:
+        hostnames:
+          - mealie.erwanleboucher.dev
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
+
     service:
       app:
         controller: mealie
@@ -57,18 +72,3 @@ spec:
           http:
             port: 9000
             protocol: TCP
-
-    route:
-      app:
-        parentRefs:
-          - name: envoy-internal
-            namespace: network
-        hostnames:
-          - mealie.erwanleboucher.dev
-
-    persistence:
-      data:
-        type: persistentVolumeClaim
-        existingClaim: "{{ .Release.Name }}"
-        globalMounts:
-          - path: /app/data

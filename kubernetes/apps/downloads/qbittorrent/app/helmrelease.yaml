@@ -13,22 +13,39 @@ spec:
   values:
     controllers:
       qbittorrent:
-        type: deployment
-        replicas: 1
-        strategy: Recreate
-        annotations:
-          reloader.stakater.com/auto: "true"
         pod:
           nodeSelector:
             kubernetes.io/hostname: le-havre
           securityContext:
             fsGroup: 1000
             fsGroupChangePolicy: "OnRootMismatch"
+        annotations:
+          reloader.stakater.com/auto: "true"
+        replicas: 1
+        strategy: Recreate
+        type: deployment
         containers:
           gluetun:
             image:
               repository: qmcgaw/gluetun
               tag: v3.41.1
+            env:
+              DOT: "off"
+              FIREWALL_INPUT_PORTS: "8080,8388,8888,9999"
+              FIREWALL_OUTBOUND_SUBNETS: "10.42.0.0/24,10.42.1.0/24,192.168.1.0/24,10.0.0.0/24"
+              HTTPPROXY: "on"
+              IPV6_DISABLED: "true"
+              PORT_FORWARD_ONLY: "on"
+              SERVER_COUNTRIES: "Netherlands"
+              SHADOWSOCKS: "on"
+              TZ: "Europe/Paris"
+              VPN_PORT_FORWARDING: "on"
+              VPN_PORT_FORWARDING_PROVIDER: protonvpn
+              VPN_SERVICE_PROVIDER: protonvpn
+              VPN_TYPE: wireguard
+            envFrom:
+              - secretRef:
+                  name: vpn-config
             probes:
               startup:
                 enabled: false
@@ -44,33 +61,16 @@ spec:
                   initialDelaySeconds: 30
                   timeoutSeconds: 2
                   failureThreshold: 3
-            securityContext:
-              privileged: true
-              capabilities:
-                add:
-                  - NET_ADMIN
             resources:
               requests:
                 memory: 128Mi
               limits:
                 memory: 256Mi
-            envFrom:
-              - secretRef:
-                  name: vpn-config
-            env:
-              DOT: "off"
-              FIREWALL_INPUT_PORTS: "8080,8388,8888,9999"
-              FIREWALL_OUTBOUND_SUBNETS: "10.42.0.0/24,10.42.1.0/24,192.168.1.0/24,10.0.0.0/24"
-              HTTPPROXY: "on"
-              IPV6_DISABLED: "true"
-              PORT_FORWARD_ONLY: "on"
-              SERVER_COUNTRIES: "Netherlands"
-              SHADOWSOCKS: "on"
-              TZ: "Europe/Paris"
-              VPN_PORT_FORWARDING: "on"
-              VPN_PORT_FORWARDING_PROVIDER: protonvpn
-              VPN_SERVICE_PROVIDER: protonvpn
-              VPN_TYPE: wireguard
+            securityContext:
+              privileged: true
+              capabilities:
+                add:
+                  - NET_ADMIN
           port-forward:
             dependsOn: gluetun
             image:
@@ -91,22 +91,8 @@ spec:
             image:
               repository: ghcr.io/home-operations/qbittorrent
               tag: 5.1.4
-            securityContext:
-              allowPrivilegeEscalation: false
-              capabilities:
-                drop:
-                  - ALL
-              readOnlyRootFilesystem: true
-              runAsGroup: 1000
-              runAsNonRoot: true
-              runAsUser: 1000
             env:
               TZ: "Europe/Paris"
-            resources:
-              requests:
-                memory: 1.5Gi
-              limits:
-                memory: 2Gi
             probes:
               liveness: &probes
                 enabled: true
@@ -120,33 +106,20 @@ spec:
                   timeoutSeconds: 1
                   failureThreshold: 3
               readiness: *probes
-    service:
-      app:
-        controller: qbittorrent
-        ports:
-          http:
-            port: 8080
-            protocol: TCP
-      proxy:
-        controller: qbittorrent
-        ports:
-          http-proxy:
-            port: 8888
-            protocol: TCP
-          shadowsocks:
-            port: 8388
-            protocol: TCP
-    route:
-      app:
-        parentRefs:
-          - name: envoy-internal
-            namespace: network
-        hostnames:
-          - qbit.erwanleboucher.dev
-        rules:
-          - backendRefs:
-              - identifier: app
-                port: 8080
+            resources:
+              requests:
+                memory: 1.5Gi
+              limits:
+                memory: 2Gi
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop:
+                  - ALL
+              readOnlyRootFilesystem: true
+              runAsGroup: 1000
+              runAsNonRoot: true
+              runAsUser: 1000
     persistence:
       config:
         type: persistentVolumeClaim
@@ -177,3 +150,32 @@ spec:
           qbittorrent:
             app:
               - path: /tmp
+
+    route:
+      app:
+        hostnames:
+          - qbit.erwanleboucher.dev
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
+        rules:
+          - backendRefs:
+              - identifier: app
+                port: 8080
+
+    service:
+      app:
+        controller: qbittorrent
+        ports:
+          http:
+            port: 8080
+            protocol: TCP
+      proxy:
+        controller: qbittorrent
+        ports:
+          http-proxy:
+            port: 8888
+            protocol: TCP
+          shadowsocks:
+            port: 8388
+            protocol: TCP

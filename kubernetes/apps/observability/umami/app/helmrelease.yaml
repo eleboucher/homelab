@@ -10,16 +10,13 @@ spec:
     name: umami
   interval: 30m
   values:
-    global:
-      fullnameOverride: *name
-
     controllers:
       umami:
-        replicas: 1
         pod:
           securityContext:
             fsGroup: 1000
             fsGroupChangePolicy: "OnRootMismatch"
+        replicas: 1
 
         containers:
           app:
@@ -67,13 +64,14 @@ spec:
               limits:
                 memory: 512Mi
 
-    service:
-      app:
-        primary: true
-        controller: umami
-        ports:
-          http:
-            port: &port 3000
+    global:
+      fullnameOverride: *name
+
+    persistence:
+      tmp:
+        type: emptyDir
+        globalMounts:
+          - path: /tmp
 
     route:
       app:
@@ -82,8 +80,11 @@ spec:
         parentRefs:
           - name: envoy-external
             namespace: network
-    persistence:
-      tmp:
-        type: emptyDir
-        globalMounts:
-          - path: /tmp
+
+    service:
+      app:
+        controller: umami
+        ports:
+          http:
+            port: &port 3000
+        primary: true

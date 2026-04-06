@@ -79,37 +79,27 @@ spec:
               limits:
                 memory: 6Gi
           gotenberg:
-            env:
-              DISABLE_GOOGLE_CHROME: "1"
             image:
               repository: docker.io/gotenberg/gotenberg
               tag: 8.29.1@sha256:36c925776fa0db0fd1030408d131fde7ac3453027a559883555155b72adb16a7
+            env:
+              DISABLE_GOOGLE_CHROME: "1"
             resources:
-              limits:
-                memory: 142Mi
               requests:
                 cpu: 10m
+                memory: 142Mi
+              limits:
                 memory: 142Mi
           tika:
             image:
               repository: apache/tika
               tag: 3.3.0.0@sha256:2a565f1ea1290bdcb74a7d35957d16a989ed44ef98790dcdcc28121d728fa583
-
             resources:
-              limits:
-                memory: 251Mi
               requests:
                 cpu: 10m
                 memory: 251Mi
-    service:
-      app:
-        controller: paperless
-        forceRename: paperless
-        ports:
-          http:
-            port: 8000
-        primary: true
-
+              limits:
+                memory: 251Mi
     persistence:
       data:
         type: persistentVolumeClaim
@@ -148,3 +138,12 @@ spec:
           - backendRefs:
               - identifier: app
                 port: http
+
+    service:
+      app:
+        controller: paperless
+        forceRename: paperless
+        ports:
+          http:
+            port: 8000
+        primary: true

@@ -5,10 +5,10 @@ kind: HelmRelease
 metadata:
   name: &app forgejo
 spec:
-  interval: 1h
   chartRef:
     kind: OCIRepository
     name: *app
+  interval: 1h
   values:
     httpRoute:
       enabled: false
