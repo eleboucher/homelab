@@ -57,10 +57,10 @@ jobs:
             --path=. \
             --source=${{ forgejo.server_url }}/${{ forgejo.repository }} \
             --revision=${{ forgejo.ref_name }}@sha1:${{ forgejo.sha }} \
-            --creds=eleboucher:${{ secrets.CODEBERG_TOKEN }}
+            --creds=eleboucher:${{ secrets.CODEBERG_PACKAGE_TOKEN }}
           flux tag artifact oci://code.forgejo.org/eleboucher/homelab:${{ forgejo.sha }} \
             --tag main \
-            --creds=eleboucher:${{ secrets.CODEBERG_TOKEN }}
+            --creds=eleboucher:${{ secrets.CODEBERG_PACKAGE_TOKEN }}
 
   sign:
     runs-on: ubuntu-latest
