@@ -41,6 +41,8 @@ entryPoints:
       respondingTimeouts:
         readTimeout: "30m"
     http:
+      middlewares:
+        - crowdsec@file
       tls:
         certResolver: "letsencrypt"
       encodedCharacters:
