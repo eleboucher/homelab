@@ -28,9 +28,9 @@ spec:
               poll_timeout: 10m
             log:
               level: info
-            plugins:
+            pluginsv2:
               k8s:
-                address: "unix:///plugin/forgejo-runner-k8s.sock"
+                path: /plugins/forgejo-runner-k8s
                 options:
                   namespace: selfhosted
                   poll_timeout: 10m
@@ -38,10 +38,9 @@ spec:
               capacity: 4
               file: /persistent/.runner
               labels:
-                - ubuntu-latest:k8s:/config/podspec-default.yaml
-                - default:k8s:/config/podspec-default.yaml
-                - docker:k8s:/config/podspec-dind.yaml
-                - plugin-docker:k8s://config/podspec-dind.yaml
+                - ubuntu-latest:plugin:k8s:/config/podspec-default.yaml
+                - default:plugin:k8s:/config/podspec-default.yaml
+                - docker:plugin:k8s:/config/podspec-dind.yaml
               timeout: 3h
           podspec-default.yaml: |-
             containers:
@@ -142,6 +141,20 @@ spec:
             runAsNonRoot: true
             runAsUser: 1000
         initContainers:
+          copy-k8s-plugin:
+            image:
+              repository: git.erwanleboucher.dev/eleboucher/runner-k8s-plugin
+              tag: latest@sha256:0d352617a5cdf1cab8b6621a6b1a2c689d142d70316e8355e0ef45d48bf68a7d
+            command:
+              - sh
+              - -c
+              - cp /usr/local/bin/forgejo-runner-k8s /plugins/forgejo-runner-k8s
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - ALL
           register-runner:
             image:
               repository: git.erwanleboucher.dev/eleboucher/runner
@@ -249,10 +262,10 @@ spec:
         identifier: config
         globalMounts:
           - path: /config
-      plugin-socket:
+      plugins:
         type: emptyDir
         globalMounts:
-          - path: /plugin
+          - path: /plugins
       tmpfs:
         type: emptyDir
         sizeLimit: 10Gi
