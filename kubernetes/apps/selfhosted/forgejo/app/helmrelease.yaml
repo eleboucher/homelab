@@ -11,15 +11,7 @@ spec:
     name: *app
   values:
     httpRoute:
-      enabled: true
-      parentRefs:
-        - name: envoy-external
-          namespace: network
-      backendRefs:
-        - name: forgejo-anubis
-          port: 8080
-      hostnames:
-        - "git.erwanleboucher.dev"
+      enabled: false
     tcpRoute:
       enabled: true
       parentRefs:
