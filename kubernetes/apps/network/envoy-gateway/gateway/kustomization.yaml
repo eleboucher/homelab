@@ -6,6 +6,7 @@ resources:
   - ./certificate.yaml
   - ./envoy.yaml
   - ./external.yaml
+  - ./grafanadashboard.yaml
   - ./https-redirect.yaml
   - ./internal.yaml
   - ./podmonitor.yaml
