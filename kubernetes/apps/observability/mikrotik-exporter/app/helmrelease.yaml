@@ -20,9 +20,9 @@ spec:
         fsGroupChangePolicy: OnRootMismatch
     controllers:
       mktxp:
-        type: statefulset
         annotations:
           reloader.stakater.com/auto: "true"
+        type: statefulset
 
         containers:
           mktxp:
@@ -48,6 +48,21 @@ spec:
               readOnlyRootFilesystem: true
               capabilities: {drop: ["ALL"]}
 
+    persistence:
+      config:
+        type: configMap
+        name: mktxp-config
+        globalMounts:
+          - path: /mktxp_config/mktxp.yaml
+            subPath: mktxp.yaml
+          - path: /mktxp_config/_mktxp.yaml
+            subPath: _mktxp.yaml
+      credentials:
+        type: secret
+        name: mktxp-credentials
+        globalMounts:
+          - path: /mktxp_credentials
+
     service:
       mktxp:
         ports:
@@ -63,18 +78,3 @@ spec:
             path: /metrics
             interval: 1m
             scrapeTimeout: 10s
-
-    persistence:
-      config:
-        type: configMap
-        name: mktxp-config
-        globalMounts:
-          - path: /mktxp_config/mktxp.yaml
-            subPath: mktxp.yaml
-          - path: /mktxp_config/_mktxp.yaml
-            subPath: _mktxp.yaml
-      credentials:
-        type: secret
-        name: mktxp-credentials
-        globalMounts:
-          - path: /mktxp_credentials

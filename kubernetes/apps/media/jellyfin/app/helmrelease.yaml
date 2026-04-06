@@ -64,20 +64,6 @@ spec:
                 memory: 10Gi
             securityContext:
               privileged: true
-    service:
-      app:
-        controller: jellyfin
-        ports:
-          http:
-            port: 8096
-            protocol: TCP
-    route:
-      app:
-        parentRefs:
-          - name: envoy-external
-            namespace: network
-        hostnames:
-          - watch.erwanleboucher.dev
     persistence:
       config:
         type: persistentVolumeClaim
@@ -85,8 +71,8 @@ spec:
         globalMounts:
           - path: /config
       metadata:
-        size: 10Gi
         accessMode: ReadWriteOnce
+        size: 10Gi
         suffix: "metadata"
         globalMounts:
           - path: /metadata
@@ -117,3 +103,19 @@ spec:
         hostPath: /dev/dri/renderD128
         globalMounts:
           - path: /dev/dri/renderD128
+
+    route:
+      app:
+        hostnames:
+          - watch.erwanleboucher.dev
+        parentRefs:
+          - name: envoy-external
+            namespace: network
+
+    service:
+      app:
+        controller: jellyfin
+        ports:
+          http:
+            port: 8096
+            protocol: TCP

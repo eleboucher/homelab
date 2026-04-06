@@ -15,41 +15,6 @@ spec:
         runAsNonRoot: true
         runAsUser: 1000
         runAsGroup: 1000
-    controllers:
-      smtp-relay:
-        replicas: 2
-        strategy: RollingUpdate
-        annotations:
-          reloader.stakater.com/auto: "true"
-        containers:
-          app:
-            image:
-              repository: ghcr.io/foxcpp/maddy
-              tag: 0.9.2
-            env:
-              SMTP_RELAY_SMTP_PORT: &port 25
-            envFrom:
-              - secretRef:
-                  name: "{{ .Release.Name }}-secret"
-            probes:
-              liveness:
-                enabled: true
-              readiness:
-                enabled: true
-            securityContext:
-              allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
-              capabilities: {drop: ["ALL"]}
-            resources:
-              requests:
-                cpu: 10m
-              limits:
-                memory: 64Mi
-    service:
-      app:
-        ports:
-          smtp:
-            port: *port
     configMaps:
       config:
         data:
@@ -71,6 +36,36 @@ spec:
                 auth plain {env:SMTP_RELAY_USERNAME} {env:SMTP_RELAY_PASSWORD}
                 targets tcp://{env:SMTP_RELAY_SERVER}:587
             }
+    controllers:
+      smtp-relay:
+        replicas: 2
+        strategy: RollingUpdate
+        annotations:
+          reloader.stakater.com/auto: "true"
+        containers:
+          app:
+            image:
+              repository: ghcr.io/foxcpp/maddy
+              tag: 0.9.2
+            env:
+              SMTP_RELAY_SMTP_PORT: &port 25
+            envFrom:
+              - secretRef:
+                  name: "{{ .Release.Name }}-secret"
+            probes:
+              liveness:
+                enabled: true
+              readiness:
+                enabled: true
+            resources:
+              requests:
+                cpu: 10m
+              limits:
+                memory: 64Mi
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: {drop: ["ALL"]}
     persistence:
       cache:
         type: emptyDir
@@ -80,3 +75,9 @@ spec:
         globalMounts:
           - path: /data/maddy.conf
             subPath: maddy.conf
+
+    service:
+      app:
+        ports:
+          smtp:
+            port: *port

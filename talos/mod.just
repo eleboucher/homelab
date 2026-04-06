@@ -2,7 +2,7 @@ set quiet := true
 set shell := ['bash', '-euo', 'pipefail', '-c']
 
 talos_dir := justfile_dir() + '/talos'
-controller := `talosctl config info -o yaml | yq -e '.endpoints[0]'`
+controller := shell('talosctl config info -o yaml | yq -e ".endpoints[0]"')
 
 [private]
 default:

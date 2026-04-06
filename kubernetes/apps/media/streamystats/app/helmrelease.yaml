@@ -90,6 +90,18 @@ spec:
               limits:
                 memory: 1Gi
             securityContext: *sec
+    route:
+      main:
+        parentRefs:
+          - name: envoy-external
+            namespace: network
+        hostnames:
+          - streamystats.erwanleboucher.dev
+        rules:
+          - backendRefs:
+              - name: streamystats-anubis
+                port: 8080
+
     service:
       frontend:
         controller: frontend
@@ -103,14 +115,3 @@ spec:
           http:
             port: 80
             targetPort: 3005
-    route:
-      main:
-        parentRefs:
-          - name: envoy-external
-            namespace: network
-        hostnames:
-          - streamystats.erwanleboucher.dev
-        rules:
-          - backendRefs:
-              - name: streamystats-anubis
-                port: 8080

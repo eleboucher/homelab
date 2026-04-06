@@ -5,10 +5,10 @@ kind: HelmRelease
 metadata:
   name: &app continuwuity
 spec:
-  interval: 1h
   chartRef:
     kind: OCIRepository
     name: continuwuity
+  interval: 1h
   values:
     defaultPodOptions:
       securityContext:
@@ -49,12 +49,6 @@ spec:
             envFrom:
               - secretRef:
                   name: continuwuity-secret
-            securityContext:
-              allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
-              capabilities:
-                drop:
-                  - "ALL"
             probes:
               liveness:
                 enabled: true
@@ -66,13 +60,22 @@ spec:
                 memory: 256Mi
               limits:
                 memory: 2Gi
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - "ALL"
 
-    service:
-      app:
-        controller: continuwuity
-        ports:
-          http:
-            port: *port
+    persistence:
+      config:
+        enabled: true
+        type: persistentVolumeClaim
+        existingClaim: "{{ .Release.Name }}"
+        globalMounts:
+          - path: /data
+      tmp:
+        type: emptyDir
 
     route:
       app:
@@ -86,12 +89,9 @@ spec:
               - identifier: app
                 port: *port
 
-    persistence:
-      config:
-        enabled: true
-        type: persistentVolumeClaim
-        existingClaim: "{{ .Release.Name }}"
-        globalMounts:
-          - path: /data
-      tmp:
-        type: emptyDir
+    service:
+      app:
+        controller: continuwuity
+        ports:
+          http:
+            port: *port

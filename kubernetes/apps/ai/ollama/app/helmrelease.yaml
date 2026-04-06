@@ -57,9 +57,9 @@ spec:
             protocol: TCP
     persistence:
       config:
-        enabled: true
-        storageClass: "longhorn"
         accessMode: ReadWriteOnce
+        enabled: true
         size: 10Gi
+        storageClass: "longhorn"
         globalMounts:
           - path: /root/.ollama
