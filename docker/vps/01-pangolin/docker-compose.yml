@@ -191,93 +191,14 @@ networks:
 
 configs:
   pangolin_config:
-    content: |-
-      # https://docs.pangolin.net/
-      gerbil:
-          start_port: 51820
-          base_endpoint: "pangolin.erwanleboucher.dev"
-      app:
-          dashboard_url: "https://pangolin.erwanleboucher.dev"
-          log_level: "info"
-          telemetry:
-              anonymous_usage: false
-      domains:
-          domain1:
-              base_domain: "erwanleboucher.dev"
-              cert_resolver: "letsencrypt"
-      server:
-          secret: "${PANGOLIN_SECRET}"
-          cors:
-              origins: ["https://pangolin.erwanleboucher.dev"]
-              methods: ["GET", "POST", "PUT", "DELETE", "PATCH"]
-              allowed_headers: ["X-CSRF-Token", "Content-Type"]
-              credentials: false
-          maxmind_db_path: "./config/GeoLite2/GeoLite2-Country.mmdb"
-          maxmind_asn_path: "./config/GeoLite2/GeoLite2-ASN.mmdb"
-      flags:
-          require_email_verification: false
-          disable_signup_without_invite: true
-          disable_user_create_org: false
-          allow_raw_resources: true
-          enable_integration_api: true
+    file: ./config/pangolin/config.yml
   traefik_config:
     file: ./config/traefik/traefik_config.yml
-  crowdsec_acquis:
-    content: |
-      source: file
-      filenames:
-        - /var/log/traefik/access.log
-      labels:
-        type: traefik
-      ---
-      source: journalctl
-      journalctl_filter:
-        - "--directory=/var/log/host/"
-      labels:
-        type: syslog
-      ---
-      source: appsec
-      listen_addr: 0.0.0.0:7422
-      path: /
-      appsec_config: crowdsecurity/virtual-patching
-      labels:
-        type: appsec
-  prometheus_agent_config:
-    content: |-
-      global:
-        scrape_interval: 30s
-        external_labels:
-          instance: pangolin-vps
-          location: ovh
-
-      remote_write:
-        - url: https://prometheus-rw.erwanleboucher.dev/api/v1/write
-          tls_config:
-            insecure_skip_verify: false
-          queue_config:
-            max_samples_per_send: 1000
-            max_shards: 5
-            capacity: 2500
-
-      scrape_configs:
-        - job_name: node_exporter
-          static_configs:
-            - targets:
-                - localhost:9100
-          relabel_configs:
-            - target_label: job
-              replacement: node-exporter
-            - target_label: instance
-              replacement: pangolin-vps
-            - target_label: nodename
-              replacement: vps
-  crowdsec_whitelist:
-    content: |
-      name: custom/home-whitelist
-      description: "Whitelist home ISP (Free SAS - AS12322)"
-      whitelist:
-        reason: "home ISP (Free SAS)"
-        expression:
-          - evt.Meta.ASNumber == "12322"
   traefik_dynamic_config:
     file: ./config/traefik/dynamic_config.yml
+  crowdsec_acquis:
+    file: ./config/crowdsec/acquis.yaml
+  crowdsec_whitelist:
+    file: ./config/crowdsec/my-whitelists.yaml
+  prometheus_agent_config:
+    file: ./config/prometheus/prometheus.yml

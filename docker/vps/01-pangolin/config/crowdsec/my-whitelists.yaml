@@ -1,0 +1,6 @@
+name: custom/home-whitelist
+description: "Whitelist home ISP (Free SAS - AS12322)"
+whitelist:
+  reason: "home ISP (Free SAS)"
+  expression:
+    - evt.Meta.ASNumber == "12322"

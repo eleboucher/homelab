@@ -32,7 +32,16 @@ certificatesResolvers:
       storage: "/letsencrypt/acme.json"
       caServer: "https://acme-v02.api.letsencrypt.org/directory"
 
+metrics:
+  prometheus:
+    addEntryPointsLabels: true
+    addRoutersLabels: true
+    addServicesLabels: true
+    entryPoint: metrics
+
 entryPoints:
+  metrics:
+    address: ":8090"
   web:
     address: ":80"
   websecure:
