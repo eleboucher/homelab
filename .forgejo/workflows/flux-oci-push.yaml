@@ -61,7 +61,17 @@ jobs:
           flux tag artifact oci://code.forgejo.org/eleboucher/homelab:${{ forgejo.sha }} \
             --tag main \
             --creds=eleboucher:${{ secrets.CODEBERG_PACKAGE_TOKEN }}
-
+      - name: Push to apoci registry
+        run: |
+          flux push artifact \
+            oci://registry.erwanleboucher.dev/registry.erwanleboucher.dev/eleboucher/homelab:${{ forgejo.sha }} \
+            --path=. \
+            --source=${{ forgejo.server_url }}/${{ forgejo.repository }} \
+            --revision=${{ forgejo.ref_name }}@sha1:${{ forgejo.sha }} \
+            --creds=eleboucher:${{ secrets.APOCI_REGISTRY_TOKEN }}
+          flux tag artifact oci://registry.erwanleboucher.dev/registry.erwanleboucher.dev/eleboucher/homelab:${{ forgejo.sha }} \
+            --tag main \
+            --creds=eleboucher:${{ secrets.APOCI_REGISTRY_TOKEN }}
   sign:
     runs-on: ubuntu-latest
     needs: push
