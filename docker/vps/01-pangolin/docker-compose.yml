@@ -169,6 +169,22 @@ services:
       gerbil:
         condition: service_started
 
+  apoci:
+    image: git.erwanleboucher.dev/eleboucher/atoci:sha-b717ac1e83fa3b44d69e429acb6124bb7745af5f
+    container_name: apoci
+    restart: unless-stopped
+    user: "1000:1000"
+    volumes:
+      - /opt/apoci/data:/apoci/storage
+    configs:
+      - source: apoci_config
+        target: /apoci/config/apoci.yaml
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:5000/healthz"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
   geoipupdate:
     container_name: geoipupdate
     image: ghcr.io/maxmind/geoipupdate:v7.1.1
@@ -200,5 +216,7 @@ configs:
     file: ./config/crowdsec/acquis.yaml
   crowdsec_whitelist:
     file: ./config/crowdsec/my-whitelists.yaml
+  apoci_config:
+    file: ./config/apoci/apoci.yaml
   prometheus_agent_config:
     file: ./config/prometheus/prometheus.yml

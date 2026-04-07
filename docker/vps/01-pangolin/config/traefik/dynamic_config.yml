@@ -185,6 +185,16 @@ http:
       tls:
         certResolver: letsencrypt
 
+    # WebFinger for apoci registry → proxy to apoci directly
+    apoci-webfinger:
+      entryPoints:
+        - websecure
+      rule: "Host(`erwanleboucher.dev`) && PathPrefix(`/.well-known/webfinger`) && QueryRegexp(`resource`, `.*registry@.*`)"
+      priority: 1001
+      service: apoci-svc
+      tls:
+        certResolver: letsencrypt
+
     # 301 redirect /.well-known/webfinger|host-meta|nodeinfo → social subdomain
     gotosocial-well-known:
       entryPoints:
@@ -218,6 +228,22 @@ http:
       tls:
         certResolver: letsencrypt
 
+    apoci-redirect:
+      rule: "Host(`registry.erwanleboucher.dev`)"
+      service: apoci-svc
+      entryPoints:
+        - web
+      middlewares:
+        - redirect-to-https
+
+    apoci-router:
+      rule: "Host(`registry.erwanleboucher.dev`)"
+      service: apoci-svc
+      entryPoints:
+        - websecure
+      tls:
+        certResolver: letsencrypt
+
     website-s3-backend:
       entryPoints:
         - s3-passthrough
@@ -244,6 +270,11 @@ http:
       loadBalancer:
         servers:
           - url: "http://localhost:8083"
+
+    apoci-svc:
+      loadBalancer:
+        servers:
+          - url: "http://apoci:5000"
 
     ovh-s3-website:
       loadBalancer:
