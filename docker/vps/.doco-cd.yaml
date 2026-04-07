@@ -14,3 +14,6 @@ external_secrets:
   MAXMIND_LICENSE_KEY: "op://kubernetes/pangolin/maxmind_key"
   CROWDSEC_API_KEY: "op://kubernetes/pangolin/crowdsec_api_key"
   ANUBIS_ED25519_PRIVATE_KEY_HEX: "op://kubernetes/anubis/ED25519_PRIVATE_KEY_HEX"
+  OVH_S3_ENDPOINT: "op://kubernetes/ovh-cnpg-backup/S3_ENDPOINT"
+  OVH_S3_ACCESS_KEY_ID: "op://kubernetes/ovh-cnpg-backup/AWS_ACCESS_KEY_ID"
+  OVH_S3_SECRET_ACCESS_KEY: "op://kubernetes/ovh-cnpg-backup/AWS_SECRET_ACCESS_KEY"

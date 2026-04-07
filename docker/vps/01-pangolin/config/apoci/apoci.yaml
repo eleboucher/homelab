@@ -1,8 +1,13 @@
+---
 endpoint: "https://registry.erwanleboucher.dev"
 accountDomain: "erwanleboucher.dev"
 listen: ":5000"
 dataDir: "/apoci/storage"
 logFormat: text
+
+database:
+  driver: postgres
+  dsn: "postgres://apoci:apoci@apoci-postgres:5432/apoci?sslmode=disable"
 
 peering:
   healthCheckInterval: 30s
