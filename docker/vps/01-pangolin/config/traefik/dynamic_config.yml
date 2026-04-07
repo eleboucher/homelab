@@ -8,7 +8,7 @@ http:
             - 10.0.0.0/8
             - 172.16.0.0/12
             - 192.168.0.0/16
-            - 100.89.137.0/20
+            - 100.89.0.0/16
           crowdsecAppsecBodyLimit: 10485760
           crowdsecAppsecEnabled: true
           crowdsecAppsecFailureBlock: true
@@ -17,13 +17,13 @@ http:
           crowdsecLapiHost: crowdsec:8080
           crowdsecLapiKey: {{ env "CROWDSEC_API_KEY" }}
           crowdsecLapiScheme: http
-          crowdsecMode: live
-          defaultDecisionSeconds: 15
+          crowdsecMode: stream
+          defaultDecisionSeconds: 60
           enabled: true
           httpTimeoutSeconds: 10
           logLevel: INFO
-          updateIntervalSeconds: 15
-          updateMaxFailure: 0
+          updateIntervalSeconds: 60
+          updateMaxFailure: 5
     default-whitelist:
       ipWhiteList:
         sourceRange:
@@ -212,7 +212,6 @@ http:
       entryPoints:
         - websecure
       middlewares:
-        # - crowdsec
         - security-headers
       rule: "Host(`erwanleboucher.dev`)"
       service: anubis-website-svc

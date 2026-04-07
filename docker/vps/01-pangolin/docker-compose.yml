@@ -58,6 +58,8 @@ services:
     configs:
       - source: crowdsec_acquis
         target: /etc/crowdsec/acquis.yaml
+      - source: crowdsec_whitelist
+        target: /etc/crowdsec/parsers/s02-enrich/my-whitelists.yaml
   gerbil:
     image: docker.io/fosrl/gerbil:1.3.1
     container_name: gerbil
@@ -269,5 +271,13 @@ configs:
               replacement: pangolin-vps
             - target_label: nodename
               replacement: vps
+  crowdsec_whitelist:
+    content: |
+      name: custom/home-whitelist
+      description: "Whitelist home ISP (Free SAS - AS12322)"
+      whitelist:
+        reason: "home ISP (Free SAS)"
+        expression:
+          - evt.Meta.ASNumber == "12322"
   traefik_dynamic_config:
     file: ./config/traefik/dynamic_config.yml
