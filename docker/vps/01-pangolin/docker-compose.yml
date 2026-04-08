@@ -2,7 +2,7 @@
 name: pangolin
 services:
   pangolin:
-    image: docker.io/fosrl/pangolin:ee-1.17.0
+    image: ghcr.io/fosrl/pangolin:ee-1.17.0
     container_name: pangolin
     restart: unless-stopped
     deploy:
@@ -44,7 +44,7 @@ services:
         - lapi
         - status
       timeout: 5s
-    image: docker.io/crowdsecurity/crowdsec:v1.7.7
+    image: ghcr.io/crowdsecurity/crowdsec:v1.7.7
     labels:
       - traefik.enable=false
     ports:
@@ -67,7 +67,7 @@ services:
       - source: crowdsec_whitelist_postoverflows
         target: /etc/crowdsec/postoverflows/s01-whitelist/my-whitelists.yaml
   gerbil:
-    image: docker.io/fosrl/gerbil:1.3.1
+    image: ghcr.io/fosrl/gerbil:1.3.1
     container_name: gerbil
     restart: unless-stopped
     depends_on:
@@ -137,7 +137,7 @@ services:
         condition: service_started
 
   prometheus-agent:
-    image: prom/prometheus:v3.11.1
+    image: quay.io/prometheus/prometheus:v3.11.1
     container_name: prometheus-agent
     restart: unless-stopped
     command:
@@ -146,12 +146,29 @@ services:
       - --storage.agent.path=/prometheus
     depends_on:
       - node-exporter
-    network_mode: service:gerbil
+      - pangolin-cli
+    network_mode: service:pangolin-cli
     configs:
       - source: prometheus_agent_config
         target: /etc/prometheus/prometheus.yml
     volumes:
       - prometheus-data:/prometheus
+
+  pangolin-cli:
+    image: fosrl/pangolin-cli
+    container_name: pangolin-cli
+    restart: unless-stopped
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    environment:
+      - PANGOLIN_ENDPOINT=https://pangolin.erwanleboucher.dev
+      - CLIENT_ID=${PANGOLIN_CLI_CLIENT_ID}
+      - CLIENT_SECRET=${PANGOLIN_CLI_CLIENT_SECRET}
+    depends_on:
+      pangolin:
+        condition: service_healthy
 
   anubis-website:
     image: ghcr.io/techarohq/anubis:v1.25.0

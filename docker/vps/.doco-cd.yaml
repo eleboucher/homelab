@@ -17,3 +17,5 @@ external_secrets:
   OVH_S3_ENDPOINT: "op://kubernetes/ovh-cnpg-backup/S3_ENDPOINT"
   OVH_S3_ACCESS_KEY_ID: "op://kubernetes/ovh-cnpg-backup/AWS_ACCESS_KEY_ID"
   OVH_S3_SECRET_ACCESS_KEY: "op://kubernetes/ovh-cnpg-backup/AWS_SECRET_ACCESS_KEY"
+  PANGOLIN_CLI_CLIENT_ID: "op://kubernetes/pangolin-cli/client_id"
+  PANGOLIN_CLI_CLIENT_SECRET: "op://kubernetes/pangolin-cli/client_secret"

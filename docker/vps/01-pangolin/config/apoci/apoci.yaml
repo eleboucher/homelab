@@ -13,5 +13,9 @@ peering:
   healthCheckInterval: 30s
   fetchTimeout: 60s
 
+metrics:
+  enabled: true
+  listen: ":9090"
+
 federation:
   autoAccept: mutual
