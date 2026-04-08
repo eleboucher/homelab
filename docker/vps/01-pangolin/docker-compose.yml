@@ -47,6 +47,9 @@ services:
     image: ghcr.io/crowdsecurity/crowdsec:v1.7.7
     labels:
       - traefik.enable=false
+      - prometheus.scrape=true
+      - prometheus.port=6060
+      - prometheus.job=crowdsec
     ports:
       - 6060:6060
     restart: unless-stopped
@@ -140,35 +143,21 @@ services:
     image: quay.io/prometheus/prometheus:v3.11.1
     container_name: prometheus-agent
     restart: unless-stopped
+    group_add:
+      - 989
     command:
       - --config.file=/etc/prometheus/prometheus.yml
       - --agent
       - --storage.agent.path=/prometheus
     depends_on:
       - node-exporter
-      - pangolin-cli
-    network_mode: service:pangolin-cli
+    network_mode: service:gerbil
     configs:
       - source: prometheus_agent_config
         target: /etc/prometheus/prometheus.yml
     volumes:
       - prometheus-data:/prometheus
-
-  pangolin-cli:
-    image: fosrl/pangolin-cli
-    container_name: pangolin-cli
-    restart: unless-stopped
-    cap_add:
-      - NET_ADMIN
-    devices:
-      - /dev/net/tun:/dev/net/tun
-    environment:
-      - PANGOLIN_ENDPOINT=https://pangolin.erwanleboucher.dev
-      - CLIENT_ID=${PANGOLIN_CLI_CLIENT_ID}
-      - CLIENT_SECRET=${PANGOLIN_CLI_CLIENT_SECRET}
-    depends_on:
-      pangolin:
-        condition: service_healthy
+      - /var/run/docker.sock:/var/run/docker.sock:ro
 
   anubis-website:
     image: ghcr.io/techarohq/anubis:v1.25.0
@@ -197,6 +186,10 @@ services:
     container_name: apoci
     restart: unless-stopped
     user: "1000:1000"
+    labels:
+      - prometheus.scrape=true
+      - prometheus.port=9090
+      - prometheus.job=apoci
     depends_on:
       apoci-postgres:
         condition: service_healthy
