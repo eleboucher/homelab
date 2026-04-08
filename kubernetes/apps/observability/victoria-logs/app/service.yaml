@@ -1,0 +1,17 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: victoria-logs-client
+  namespace: observability
+spec:
+  ports:
+    - name: http
+      port: 9428
+      protocol: TCP
+      targetPort: 9428
+  selector:
+    app: server
+    app.kubernetes.io/instance: victoria-logs
+    app.kubernetes.io/name: victoria-logs-single
+  type: ClusterIP
