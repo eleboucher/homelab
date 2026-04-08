@@ -1,0 +1,7 @@
+---
+name: custom/home-whitelist-postoverflows
+description: "Whitelist home ISP (Free SAS - AS12322) and work (OVH SAS - AS35540) at postoverflow stage"
+whitelist:
+  reason: "home ISP (Free SAS) or work (OVH SAS)"
+  expression:
+    - evt.Overflow.Alert.Source.AsNumber == "12322" || evt.Overflow.Alert.Source.AsNumber == "35540"

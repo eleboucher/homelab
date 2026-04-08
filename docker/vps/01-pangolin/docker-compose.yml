@@ -64,6 +64,8 @@ services:
         target: /etc/crowdsec/scenarios/ban-gafam.yaml
       - source: crowdsec_ban_ai_crawlers
         target: /etc/crowdsec/scenarios/ban-ai-crawlers.yaml
+      - source: crowdsec_whitelist_postoverflows
+        target: /etc/crowdsec/postoverflows/s01-whitelist/my-whitelists.yaml
   gerbil:
     image: docker.io/fosrl/gerbil:1.3.1
     container_name: gerbil
@@ -272,6 +274,8 @@ configs:
     file: ./config/crowdsec/ban-gafam.yaml
   crowdsec_ban_ai_crawlers:
     file: ./config/crowdsec/ban-ai-crawlers.yaml
+  crowdsec_whitelist_postoverflows:
+    file: ./config/crowdsec/my-whitelist-postoverflows.yaml
   apoci_config:
     file: ./config/apoci/apoci.yaml
   prometheus_agent_config:
