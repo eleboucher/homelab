@@ -170,7 +170,7 @@ services:
         condition: service_started
 
   apoci:
-    image: git.erwanleboucher.dev/eleboucher/apoci:0.0.2
+    image: git.erwanleboucher.dev/eleboucher/apoci:0.0.3
     container_name: apoci
     restart: unless-stopped
     user: "1000:1000"
