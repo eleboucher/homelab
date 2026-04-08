@@ -45,7 +45,7 @@ jobs:
                 email: "noreply@erwanleboucher.dev"
               }
             }')
-          SIGNATURE="sha256=$(echo -n "${PAYLOAD}" | openssl dgst -sha256 -hmac "${WEBHOOK_SECRET}" | sed 's/^.* //')"
+          SIGNATURE=$(echo -n "${PAYLOAD}" | openssl dgst -sha256 -hmac "${WEBHOOK_SECRET}" | sed 's/^.* //')
           curl -sf -X POST "${WEBHOOK_URL}" \
             -H "Content-Type: application/json" \
             -H "X-Gitea-Event: push" \
