@@ -244,6 +244,22 @@ http:
       tls:
         certResolver: letsencrypt
 
+    doco-cd-redirect:
+      rule: "Host(`doco-cd.erwanleboucher.dev`)"
+      service: doco-cd-svc
+      entryPoints:
+        - web
+      middlewares:
+        - redirect-to-https
+
+    doco-cd-router:
+      rule: "Host(`doco-cd.erwanleboucher.dev`)"
+      service: doco-cd-svc
+      entryPoints:
+        - websecure
+      tls:
+        certResolver: letsencrypt
+
     website-s3-backend:
       entryPoints:
         - s3-passthrough
@@ -275,6 +291,11 @@ http:
       loadBalancer:
         servers:
           - url: "http://apoci:5000"
+
+    doco-cd-svc:
+      loadBalancer:
+        servers:
+          - url: "http://doco-cd:80"
 
     ovh-s3-website:
       loadBalancer:

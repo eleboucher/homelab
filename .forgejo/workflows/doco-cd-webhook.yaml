@@ -1,0 +1,27 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+name: Doco-CD Webhook
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - docker/**
+
+jobs:
+  webhook:
+    name: Trigger Doco-CD
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send Webhook
+        env:
+          WEBHOOK_SECRET: ${{ secrets.DOCO_CD_WEBHOOK_SECRET }}
+          WEBHOOK_URL: https://doco-cd.erwanleboucher.dev/v1/webhook
+        run: |-
+          PAYLOAD='{"ref":"${{ forgejo.ref }}","repository":{"clone_url":"https://git.erwanleboucher.dev/eleboucher/homelab.git","default_branch":"main","full_name":"${{ forgejo.repository }}"}}'
+          SIGNATURE=$(printf '%s' "${PAYLOAD}" | openssl dgst -sha256 -hmac "${WEBHOOK_SECRET}" | awk '{print $2}')
+          curl -sf -X POST "${WEBHOOK_URL}" \
+            -H "Content-Type: application/json" \
+            -H "X-Gitea-Signature: ${SIGNATURE}" \
+            -d "${PAYLOAD}"

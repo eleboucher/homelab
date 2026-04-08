@@ -31,6 +31,10 @@ spec:
       recordType: A
       targets:
         - ${VPS_IP}
+    - dnsName: doco-cd.erwanleboucher.dev
+      recordType: A
+      targets:
+        - ${VPS_IP}
     - dnsName: registry.erwanleboucher.dev
       recordType: A
       targets:

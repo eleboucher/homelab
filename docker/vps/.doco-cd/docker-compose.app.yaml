@@ -4,11 +4,14 @@ secrets:
     file: /opt/doco-cd/1pw_token
   api_secret:
     file: /opt/doco-cd/api_secret
+  webhook_secret:
+    file: /opt/doco-cd/webhook_secret
 services:
   app:
     container_name: doco-cd
     environment:
       API_SECRET_FILE: /run/secrets/api_secret
+      WEBHOOK_SECRET_FILE: /run/secrets/webhook_secret
       DEPLOY_CONFIG_BASE_DIR: ./docker/vps/
       LOG_LEVEL: info
       POLL_CONFIG: |-
@@ -35,8 +38,13 @@ services:
     secrets:
       - 1pw_token
       - api_secret
+      - webhook_secret
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - data:/data
 volumes:
   data: {}
+networks:
+  default:
+    name: pangolin
+    external: true

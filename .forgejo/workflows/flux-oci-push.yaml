@@ -64,12 +64,12 @@ jobs:
       - name: Push to apoci registry
         run: |
           flux push artifact \
-            oci://registry.erwanleboucher.dev/registry.erwanleboucher.dev/eleboucher/homelab:${{ forgejo.sha }} \
+            oci://registry.erwanleboucher.dev/eleboucher/homelab:${{ forgejo.sha }} \
             --path=. \
             --source=${{ forgejo.server_url }}/${{ forgejo.repository }} \
             --revision=${{ forgejo.ref_name }}@sha1:${{ forgejo.sha }} \
             --creds=eleboucher:${{ secrets.APOCI_REGISTRY_TOKEN }}
-          flux tag artifact oci://registry.erwanleboucher.dev/registry.erwanleboucher.dev/eleboucher/homelab:${{ forgejo.sha }} \
+          flux tag artifact oci://registry.erwanleboucher.dev/eleboucher/homelab:${{ forgejo.sha }} \
             --tag main \
             --creds=eleboucher:${{ secrets.APOCI_REGISTRY_TOKEN }}
   sign:
