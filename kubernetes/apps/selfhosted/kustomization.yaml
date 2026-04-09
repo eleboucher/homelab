@@ -5,6 +5,7 @@ kind: Kustomization
 namespace: selfhosted
 
 resources:
+  - anytype/ks.yaml
   - atuin/ks.yaml
   - bentopdf/ks.yaml
   - bluesky/ks.yaml
