@@ -128,7 +128,7 @@ spec:
           volumeClaimTemplates:
             - name: persistent
               size: 1Gi
-              accessMode: ReadWriteOnce
+              accessMode: ReadWriteMany
               globalMounts:
                 - path: /persistent
         pod:
