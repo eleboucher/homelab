@@ -10,7 +10,6 @@
         "ghcr.io/bjw-s-labs/**",
       ],
       automerge: true,
-      ignoreTests: false,
     },
     {
       description: "Auto merge minors and patches",
@@ -22,17 +21,18 @@
       ],
       automerge: true,
       automergeType: "pr",
-      ignoreTests: false,
     },
     {
-      description: "Auto merge minors and patches after minimumReleaseAge",
+      description: "Auto-merge high-cadence packages weekly",
       matchDatasources: ["docker"],
-      matchUpdateTypes: ["minor", "patch"],
-      matchPackageNames: ["ghcr.io/renovatebot/renovate"],
       automerge: true,
-      automergeType: "pr",
-      minimumReleaseAge: "3 days",
-      ignoreTests: false,
+      matchUpdateTypes: ["minor", "patch"],
+      matchPackageNames: [
+        "ghcr.io/renovatebot/renovate",
+        "ghcr.io/emberstack/helm-charts/reflector",
+        "ghcr.io/mogenius/helm-charts/renovate-operator",
+      ],
+      schedule: ["before 6am on Monday"],
     },
   ],
 }
