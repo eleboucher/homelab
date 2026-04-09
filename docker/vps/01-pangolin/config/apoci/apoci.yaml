@@ -19,3 +19,11 @@ metrics:
 
 federation:
   autoAccept: mutual
+
+upstreams:
+  enabled: true
+  registries:
+    - name: docker.io
+      endpoint: "https://registry-1.docker.io"
+    - name: ghcr.io
+      endpoint: "https://ghcr.io"
