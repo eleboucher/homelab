@@ -86,20 +86,14 @@ releases:
       - cert-manager/cert-manager
   - name: onepassword
     namespace: security
-    chart: oci://ghcr.io/bjw-s-labs/helm/app-template
-    version: 4.6.2
+    chart: oci://ghcr.io/1password/connect
+    version: 2.4.1
     values:
-      - ./templates/values.yaml.gotmpl
+      - templates/values.yaml.gotmpl
+    needs:
+      - external-secrets/external-secrets
     hooks:
-      - # Wait for ExternalSecrets CRDs to be available
-        command: bash
-        args:
-          - -c
-          - until kubectl get crd clustersecretstores.external-secrets.io &>/dev/null; do sleep 5; done
-        events:
-          - postsync
-        showlogs: true
-      - # Apply ExternalSecret Resources
+      - # Apply ClusterSecretStore
         command: kubectl
         args:
           - apply
@@ -109,8 +103,6 @@ releases:
         events:
           - postsync
         showlogs: true
-    needs:
-      - security/external-secrets
 
   - name: flux-operator
     namespace: flux-system
