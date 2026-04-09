@@ -72,7 +72,6 @@ spec:
           DISABLED_REPO_UNITS: repo.ext_wiki,repo.ext_issues
           DISABLE_DOWNLOAD_SOURCE_ARCHIVES: true
         repository.pull-request:
-          DEFAULT_DELETE_BRANCH_AFTER_MERGE: true
           DEFAULT_MERGE_STYLE: squash
         repository.signing:
           FORMAT: ssh
@@ -106,6 +105,8 @@ spec:
           PROTOCOL: smtp
           SMTP_ADDR: smtp-relay.selfhosted.svc.cluster.local
           SMTP_PORT: 25
+        webhook:
+          ALLOWED_HOST_LIST: "*"
     deployment:
       env:
         - name: PGSSLROOTCERT
