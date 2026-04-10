@@ -1,17 +1,18 @@
-# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
 ---
 # yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app gatus
-  namespace: flux-system
 spec:
   interval: 1h
   path: ./kubernetes/apps/observability/gatus/app
+  components:
+    - ../../../../components/volsync
   postBuild:
     substitute:
-      APP: *app
+      APP: atuin
+      APP_NAMESPACE: selfhosted
   prune: true
   retryInterval: 2m
   sourceRef:

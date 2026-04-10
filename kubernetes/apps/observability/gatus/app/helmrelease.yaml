@@ -80,6 +80,11 @@ spec:
         globalMounts:
           - path: /config/config.yaml
             subPath: config.yaml
+      config:
+        type: persistentVolumeClaim
+        existingClaim: "{{ .Release.Name }}"
+        globalMounts:
+          - path: /config
     rbac:
       roles:
         gatus:
