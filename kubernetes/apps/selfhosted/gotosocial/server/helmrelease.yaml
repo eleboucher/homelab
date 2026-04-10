@@ -25,11 +25,11 @@ spec:
               TZ: Europe/Paris
               GTS_HOST: gts.erwanleboucher.dev
               GTS_ACCOUNT_DOMAIN: erwanleboucher.dev
-              GTS_ADVANCED_RATE_LIMIT_REQUESTS: 0
               GTS_STORAGE_LOCAL_BASE_PATH: /storage
               GTS_SEMAPHORE_URL: https://phanpy.erwanleboucher.dev
-              GTS_LANDING_PAGE_USER: "me"
+              GTS_LANDING_PAGE_USER: "eleboucher"
               GTS_METRICS_ENABLED: "true"
+              GTS_TRUSTED_PROXIES: "127.0.0.1/32,::1,10.42.0.0/16,192.168.1.0/24"
               OTEL_EXPORTER_PROMETHEUS_HOST: 0.0.0.0
               OTEL_METRICS_PRODUCERS: prometheus
               OTEL_METRICS_EXPORTER: prometheus
@@ -52,6 +52,12 @@ spec:
         globalMounts:
           - subPath: data
             path: /storage
+      tmpfs:
+        type: emptyDir
+        sizeLimit: 1Gi
+        globalMounts:
+          - path: /tmp
+            subPath: tmp
     service:
       main:
         controller: gts

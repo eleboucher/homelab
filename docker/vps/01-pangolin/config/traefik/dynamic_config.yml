@@ -200,6 +200,7 @@ http:
       entryPoints:
         - websecure
       middlewares:
+        - wkd-cors
         - gotosocial-well-known-redirect
       rule: "Host(`erwanleboucher.dev`) && (PathPrefix(`/.well-known/webfinger`) || PathPrefix(`/.well-known/host-meta`) || PathPrefix(`/.well-known/nodeinfo`))"
       priority: 1000
