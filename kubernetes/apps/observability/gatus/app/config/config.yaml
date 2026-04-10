@@ -34,24 +34,28 @@ endpoints:
       dns-resolver: tcp://1.1.1.1:53
     conditions:
       - "[STATUS] == 200"
-
+  - name: pangolin
+    group: external
+    url: https://pangolin.erwanleboucher.dev
+    interval: 1m
+    client:
+      dns-resolver: tcp://1.1.1.1:53
+    conditions:
+      - "[STATUS] == 200"
+  - name: registry
+    group: external
+    url: https://registry.erwanleboucher.dev/healthz
+    interval: 1m
+    client:
+      dns-resolver: tcp://1.1.1.1:53
+    conditions:
+      - "[STATUS] == 200"
 metrics: true
 
 storage:
   type: sqlite
   path: ${GATUS_CONFIG_PATH}/sqlite.db
   caching: true
-
-alerting:
-  discord:
-    webhook-url: ${CUSTOM_DISCORD_WEBHOOK_URL}
-    priority: 1
-    resolved-priority: 0
-    default-alert:
-      description: health-check failed
-      send-on-resolved: true
-      failure-threshold: 5
-      success-threshold: 3
 
 ui:
   title: Status | Gatus
