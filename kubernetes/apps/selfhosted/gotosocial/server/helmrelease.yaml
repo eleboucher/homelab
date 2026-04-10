@@ -30,6 +30,7 @@ spec:
               GTS_LANDING_PAGE_USER: "eleboucher"
               GTS_METRICS_ENABLED: "true"
               GTS_TRUSTED_PROXIES: "127.0.0.1/32,::1,10.42.0.0/16"
+              GTS_ADVANCED_RATE_LIMIT_EXCEPTIONS: "192.168.1.0/24"
               OTEL_EXPORTER_PROMETHEUS_HOST: 0.0.0.0
               OTEL_METRICS_PRODUCERS: prometheus
               OTEL_METRICS_EXPORTER: prometheus
