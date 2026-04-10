@@ -32,6 +32,7 @@ spec:
               GTS_TRUSTED_PROXIES: "127.0.0.1/32,::1,10.42.0.0/16"
               GTS_ADVANCED_RATE_LIMIT_EXCEPTIONS: "192.168.1.0/24"
               OTEL_EXPORTER_PROMETHEUS_HOST: 0.0.0.0
+              GTS_ACCOUNTS_ALLOW_CUSTOM_CSS: "true"
               OTEL_METRICS_PRODUCERS: prometheus
               OTEL_METRICS_EXPORTER: prometheus
               GTS_OIDC_ENABLED: "true"
