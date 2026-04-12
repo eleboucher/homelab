@@ -27,7 +27,7 @@ spec:
       sync:
         interval: 5m
         kind: OCIRepository
-        url: "oci://git.erwanleboucher.dev/eleboucher/homelab"
+        url: "oci://registry.erwanleboucher.dev/eleboucher/homelab"
         ref: "main"
         path: "kubernetes/flux/cluster"
       resources:
