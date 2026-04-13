@@ -71,6 +71,11 @@ spec:
             env:
               !!merge <<: *env
               HOST: 0.0.0.0
+              SESSION_POLL_INTERVAL_MS: "30000"
+              CRON_ACTIVITY_SYNC: "*/5 * * * *"
+              CRON_RECENT_ITEMS_SYNC: "*/5 * * * *"
+              CRON_USER_SYNC: "*/5 * * * *"
+              CRON_JOB_CLEANUP: "*/5 * * * *"
             ports:
               - containerPort: 3005
                 name: http
