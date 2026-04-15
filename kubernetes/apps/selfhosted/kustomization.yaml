@@ -18,3 +18,4 @@ resources:
   - paperless/ks.yaml
   - smtp-relay/ks.yaml
   - sparkyfitness/ks.yaml
+  - syncthing/ks.yaml
