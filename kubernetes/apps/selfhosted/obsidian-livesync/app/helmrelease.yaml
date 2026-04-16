@@ -3,35 +3,35 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: syncthing
+  name: obsidian-livesync
 spec:
   chartRef:
     kind: OCIRepository
-    name: syncthing
+    name: obsidian-livesync
   interval: 30m
   values:
     controllers:
-      syncthing:
-        type: statefulset
+      obsidian-livesync:
         annotations:
           reloader.stakater.com/auto: "true"
         containers:
           app:
             image:
-              repository: syncthing/syncthing
-              tag: 2.0.13
+              repository: couchdb
+              tag: 3.4.2
             env:
               TZ: "Europe/Paris"
-              PUID: "1000"
-              PGID: "1000"
+            envFrom:
+              - secretRef:
+                  name: obsidian-livesync
             probes:
               liveness: &probes
                 enabled: true
                 custom: true
                 spec:
                   httpGet:
-                    path: /rest/noauth/health
-                    port: &port 8384
+                    path: /
+                    port: &port 5984
                   initialDelaySeconds: 0
                   periodSeconds: 10
                   timeoutSeconds: 1
@@ -41,73 +41,88 @@ spec:
                 enabled: true
                 spec:
                   httpGet:
-                    path: /rest/noauth/health
+                    path: /
                     port: *port
                   failureThreshold: 30
                   periodSeconds: 10
+            resources:
+              requests:
+                cpu: 10m
+                memory: 128Mi
+              limits:
+                memory: 512Mi
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: false
               capabilities:
                 drop:
                   - ALL
-            resources:
-              requests:
-                cpu: 15m
-                memory: 150Mi
-              limits:
-                memory: 500Mi
         pod:
           securityContext:
             runAsNonRoot: true
-            runAsUser: 1000
-            runAsGroup: 1000
-            fsGroup: 1000
+            runAsUser: 5984
+            runAsGroup: 5984
+            fsGroup: 5984
             fsGroupChangePolicy: OnRootMismatch
             seccompProfile:
               type: RuntimeDefault
 
     service:
       app:
-        controller: syncthing
+        controller: obsidian-livesync
         ports:
           http:
             port: *port
-      sync:
-        controller: syncthing
-        type: LoadBalancer
-        annotations:
-          lbipam.cilium.io/ips: 192.168.69.110
-        externalTrafficPolicy: Local
-        ports:
-          listen-tcp:
-            port: 22000
-            protocol: TCP
-          listen-quic:
-            port: 22000
-            protocol: UDP
-          discovery:
-            port: 21027
-            protocol: UDP
+
     persistence:
-      config:
+      data:
         enabled: true
         type: persistentVolumeClaim
         existingClaim: "{{ .Release.Name }}"
         globalMounts:
-          - path: /var/syncthing/config
-            subPath: config
-          - path: /var/syncthing/data
-            subPath: data
+          - path: /opt/couchdb/data
+      local-config:
+        type: configMap
+        name: obsidian-livesync-config
+        globalMounts:
+          - path: /opt/couchdb/etc/local.d/local.ini
+            subPath: local.ini
+            readOnly: true
 
     route:
       app:
         hostnames:
-          - syncthing.erwanleboucher.dev
+          - obsidian-livesync.erwanleboucher.dev
         parentRefs:
-          - name: envoy-internal
+          - name: envoy-external
             namespace: network
         rules:
           - backendRefs:
               - identifier: app
                 port: *port
+
+    configMaps:
+      config:
+        data:
+          local.ini: |-
+            [couchdb]
+            single_node=true
+            max_document_size = 50000000
+
+            [chttpd]
+            require_valid_user = true
+            max_http_request_size = 4294967296
+            enable_cors = true
+
+            [chttpd_auth]
+            require_valid_user = true
+
+            [httpd]
+            WWW-Authenticate = Basic realm="couchdb"
+            bind_address = 0.0.0.0
+
+            [cors]
+            credentials = true
+            headers = accept, authorization, content-type, origin, referer
+            methods = GET, PUT, POST, HEAD, DELETE
+            origins = app://obsidian.md, capacitor://localhost, http://localhost

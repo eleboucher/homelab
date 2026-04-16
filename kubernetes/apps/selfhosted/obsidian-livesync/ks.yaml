@@ -3,21 +3,23 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: syncthing
+  name: obsidian-livesync
 spec:
   commonMetadata:
     labels:
-      app.kubernetes.io/name: syncthing
+      app.kubernetes.io/name: obsidian-livesync
   components:
     - ../../../../components/volsync
   dependsOn:
     - name: longhorn
       namespace: longhorn-system
+    - name: external-secrets
+      namespace: security
   interval: 1h
-  path: "./kubernetes/apps/selfhosted/syncthing/app"
+  path: "./kubernetes/apps/selfhosted/obsidian-livesync/app"
   postBuild:
     substitute:
-      APP: syncthing
+      APP: obsidian-livesync
       APP_NAMESPACE: selfhosted
       VOLSYNC_CAPACITY: 5Gi
   prune: true
