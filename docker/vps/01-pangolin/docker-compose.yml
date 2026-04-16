@@ -93,6 +93,7 @@ services:
       - 443:443
       - 80:80
       - 2222:2222
+      - 4443:4443
 
   traefik:
     image: docker.io/traefik:v3.6.13
@@ -271,6 +272,37 @@ services:
         target: /fluent-bit/etc/enrich.lua
       - source: fluent_bit_custom_parsers
         target: /fluent-bit/etc/custom-parsers.conf
+
+  turbo-node:
+    image: git.erwanleboucher.dev/eleboucher/turbo-node:sha-81e7ff7f8bf9b05fdb21d8c8ac4492da542316bb
+    container_name: turbo-node
+    restart: unless-stopped
+    environment:
+      RUST_LOG: info
+      TURBO_IDENTITY__KEY_PATH: /data/node.key
+      TURBO_HUB__ENABLED: "true"
+      TURBO_HUB__DB_PATH: /data/hub.db
+      TURBO_HUB__LISTEN_ADDR: 0.0.0.0:8443
+      TURBO_HUB__PUBLIC_URL: https://turbo.erwanleboucher.dev
+      TURBO_HUB__OPERATOR_API_KEY_PATH: /data/operator.key
+      TURBO_EDGE__ENABLED: "true"
+      TURBO_EDGE__LISTEN_ADDR: 0.0.0.0:4443
+      TURBO_EDGE__HEALTH_LISTEN_ADDR: 0.0.0.0:9092
+    labels:
+      - prometheus.scrape=true
+      - prometheus.port=9092
+      - prometheus.job=turbo-node
+    volumes:
+      - /opt/turbo-tunnel:/data
+    healthcheck:
+      test:
+        - CMD
+        - curl
+        - -sf
+        - http://localhost:9092/health
+      interval: 10s
+      timeout: 5s
+      retries: 3
 
   geoipupdate:
     container_name: geoipupdate

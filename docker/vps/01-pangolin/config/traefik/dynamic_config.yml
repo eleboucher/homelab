@@ -261,6 +261,22 @@ http:
       tls:
         certResolver: letsencrypt
 
+    turbo-hub-redirect:
+      rule: "Host(`turbo.erwanleboucher.dev`)"
+      service: turbo-hub-svc
+      entryPoints:
+        - web
+      middlewares:
+        - redirect-to-https
+
+    turbo-hub-router:
+      rule: "Host(`turbo.erwanleboucher.dev`)"
+      service: turbo-hub-svc
+      entryPoints:
+        - websecure
+      tls:
+        certResolver: letsencrypt
+
     website-s3-backend:
       entryPoints:
         - s3-passthrough
@@ -303,7 +319,25 @@ http:
         passHostHeader: false
         servers:
           - url: "http://erwanleboucher.dev.s3-website.rbx.io.cloud.ovh.net"
+
+    turbo-hub-svc:
+      loadBalancer:
+        servers:
+          - url: "http://turbo-node:8443"
 tcp:
+  routers:
+    turbo-edge-passthrough:
+      entryPoints:
+        - turbo-edge
+      rule: "HostSNI(`*`)"
+      service: turbo-edge-svc
+
+  services:
+    turbo-edge-svc:
+      loadBalancer:
+        servers:
+          - address: "turbo-node:4443"
+
   serversTransports:
     pp-transport-v1:
       proxyProtocol:

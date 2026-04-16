@@ -39,3 +39,7 @@ spec:
       recordType: A
       targets:
         - ${VPS_IP}
+    - dnsName: turbo.erwanleboucher.dev
+      recordType: A
+      targets:
+        - ${VPS_IP}
