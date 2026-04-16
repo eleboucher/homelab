@@ -18,7 +18,7 @@ spec:
           app:
             image:
               repository: couchdb
-              tag: 3.4.2
+              tag: 3.5.1
             env:
               TZ: "Europe/Paris"
             envFrom:
