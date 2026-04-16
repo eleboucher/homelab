@@ -90,10 +90,9 @@ services:
     ports:
       - 51820:51820/udp
       - 21820:21820/udp
-      - 443:443
-      - 80:80
-      - 2222:2222
-      - 4443:4443
+      - "${VPS_IP}:443:443"
+      - "${VPS_IP}:80:80"
+      - "${VPS_IP}:2222:2222"
 
   traefik:
     image: docker.io/traefik:v3.6.13
@@ -274,7 +273,7 @@ services:
         target: /fluent-bit/etc/custom-parsers.conf
 
   turbo-node:
-    image: git.erwanleboucher.dev/eleboucher/turbo-node:sha-7ed2b957cba9ca4b6087e28b8a051ce19ab70adb
+    image: git.erwanleboucher.dev/eleboucher/turbo-node:sha-8bb6ab8b62e5607daaf3551867478ec65baf2fe9
     container_name: turbo-node
     restart: unless-stopped
     environment:
@@ -288,7 +287,13 @@ services:
       TURBO_EDGE__ENABLED: "true"
       TURBO_EDGE__LISTEN_ADDR: 0.0.0.0:4443
       TURBO_EDGE__HEALTH_LISTEN_ADDR: 0.0.0.0:9092
-      TURBO_EDGE__PUBLIC_ADDRESSES: '["turbo.erwanleboucher.dev:4443"]'
+      TURBO_EDGE__PUBLIC_ADDRESSES: '["tunnel.erwanleboucher.dev:443"]'
+      TURBO_EDGE__TLS__CERT_DIR: /data/certs
+      TURBO_EDGE__TLS__ACME_EMAIL: ${TURBO_ACME_EMAIL}
+      TURBO_EDGE__TLS__HTTP_LISTEN_ADDR: 0.0.0.0:8081
+    ports:
+      - "${VPS_ADD_IP}:443:4443"
+      - "${VPS_ADD_IP}:80:8081"
     labels:
       - prometheus.scrape=true
       - prometheus.port=9092

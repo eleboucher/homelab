@@ -11,16 +11,11 @@
     pangolin_site_name: "k8s-cluster"
     pangolin_org_subnet: "100.89.0.0/16"
     pangolin_org_utility_subnet: "100.90.0.0/24"
+    network_interface: "ens3"
 
   tasks:
     - name: Ping
       ansible.builtin.ping:
-
-    - name: Install Docker
-      ansible.builtin.shell: curl -fsSL https://get.docker.com | sh
-      args:
-        executable: /bin/bash
-        creates: /usr/bin/docker
 
     - name: Read secrets from 1Password
       ansible.builtin.shell: "op read 'op://kubernetes/{{ item.key }}' < /dev/null"
@@ -34,6 +29,7 @@
         - {key: "pangolin/admin_email", var: "admin_email"}
         - {key: "pangolin/admin_password", var: "admin_password"}
         - {key: "pangolin/CROWDSEC_API_KEY", var: "crowdsec_api_key"}
+        - {key: "pangolin-operator/vps_add_ip", var: "vps_add_ip"}
       register: secrets_raw
 
     - name: Set secret facts
@@ -45,6 +41,37 @@
         admin_email: "{{ secrets_raw.results[4].stdout }}"
         admin_password: "{{ secrets_raw.results[5].stdout }}"
         crowdsec_api_key: "{{ secrets_raw.results[6].stdout }}"
+        vps_add_ip: "{{ secrets_raw.results[7].stdout }}"
+        additional_ips: "{{ [secrets_raw.results[7].stdout] | select('truthy') | list }}"
+
+    - name: network | Deploy additional-IPs netplan overlay
+      ansible.builtin.copy:
+        dest: /etc/netplan/60-additional-ips.yaml
+        content: |
+          network:
+            version: 2
+            ethernets:
+              {{ network_interface }}:
+                addresses:
+          {% for ip in additional_ips %}
+                  - {{ ip }}/32
+          {% endfor %}
+        owner: root
+        group: root
+        mode: "0600"
+      register: netplan_additional
+      when: additional_ips | length > 0
+
+    - name: network | Apply netplan
+      ansible.builtin.command: netplan apply
+      when: netplan_additional is defined and netplan_additional.changed
+      changed_when: true
+
+    - name: Install Docker
+      ansible.builtin.shell: curl -fsSL https://get.docker.com | sh
+      args:
+        executable: /bin/bash
+        creates: /usr/bin/docker
     - name: ssh
       block:
         - name: ssh | Harden sshd_config

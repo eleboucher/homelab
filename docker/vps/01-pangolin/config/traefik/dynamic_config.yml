@@ -325,19 +325,6 @@ http:
         servers:
           - url: "http://turbo-node:8443"
 tcp:
-  routers:
-    turbo-edge-passthrough:
-      entryPoints:
-        - turbo-edge
-      rule: "HostSNI(`*`)"
-      service: turbo-edge-svc
-
-  services:
-    turbo-edge-svc:
-      loadBalancer:
-        servers:
-          - address: "turbo-node:4443"
-
   serversTransports:
     pp-transport-v1:
       proxyProtocol:

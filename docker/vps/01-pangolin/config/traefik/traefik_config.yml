@@ -61,8 +61,6 @@ entryPoints:
     address: ":2222"
   s3-passthrough:
     address: ":8082"
-  turbo-edge:
-    address: ":4443"
 
 serversTransport:
   insecureSkipVerify: true

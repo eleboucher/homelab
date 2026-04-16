@@ -17,3 +17,10 @@ external_secrets:
   OVH_S3_ENDPOINT: "op://kubernetes/ovh-cnpg-backup/S3_ENDPOINT"
   OVH_S3_ACCESS_KEY_ID: "op://kubernetes/ovh-cnpg-backup/AWS_ACCESS_KEY_ID"
   OVH_S3_SECRET_ACCESS_KEY: "op://kubernetes/ovh-cnpg-backup/AWS_SECRET_ACCESS_KEY"
+  # Primary + additional OVH IPs used for per-IP port binding on the VPS
+  # (Pangolin on primary, turbo-node on the additional one).
+  VPS_IP: "op://kubernetes/pangolin-operator/vps_ip"
+  VPS_ADD_IP: "op://kubernetes/pangolin-operator/vps_add_ip"
+  # Contact email used when turbo-node registers with Let's Encrypt for
+  # on-demand edge TLS termination.
+  TURBO_ACME_EMAIL: "op://kubernetes/pangolin-operator/acme_email"
