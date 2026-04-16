@@ -30,7 +30,7 @@ spec:
                 custom: true
                 spec:
                   httpGet:
-                    path: /
+                    path: /_up
                     port: &port 5984
                   initialDelaySeconds: 0
                   periodSeconds: 10
@@ -41,7 +41,7 @@ spec:
                 enabled: true
                 spec:
                   httpGet:
-                    path: /
+                    path: /_up
                     port: *port
                   failureThreshold: 30
                   periodSeconds: 10
@@ -83,9 +83,9 @@ spec:
           - path: /opt/couchdb/data
       local-config:
         type: configMap
-        name: obsidian-livesync-config
+        name: obsidian-livesync
         globalMounts:
-          - path: /opt/couchdb/etc/local.d/local.ini
+          - path: /opt/couchdb/etc/local.ini
             subPath: local.ini
             readOnly: true
 
@@ -110,7 +110,7 @@ spec:
             max_document_size = 50000000
 
             [chttpd]
-            require_valid_user = true
+            require_valid_user_except_for_up = true
             max_http_request_size = 4294967296
             enable_cors = true
 
