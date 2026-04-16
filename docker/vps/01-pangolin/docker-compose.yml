@@ -274,7 +274,7 @@ services:
         target: /fluent-bit/etc/custom-parsers.conf
 
   turbo-node:
-    image: git.erwanleboucher.dev/eleboucher/turbo-node:sha-81e7ff7f8bf9b05fdb21d8c8ac4492da542316bb
+    image: git.erwanleboucher.dev/eleboucher/turbo-node:sha-7ed2b957cba9ca4b6087e28b8a051ce19ab70adb
     container_name: turbo-node
     restart: unless-stopped
     environment:
@@ -288,6 +288,7 @@ services:
       TURBO_EDGE__ENABLED: "true"
       TURBO_EDGE__LISTEN_ADDR: 0.0.0.0:4443
       TURBO_EDGE__HEALTH_LISTEN_ADDR: 0.0.0.0:9092
+      TURBO_EDGE__PUBLIC_ADDRESSES: '["turbo.erwanleboucher.dev:4443"]'
     labels:
       - prometheus.scrape=true
       - prometheus.port=9092

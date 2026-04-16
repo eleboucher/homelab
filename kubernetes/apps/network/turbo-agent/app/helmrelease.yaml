@@ -1,0 +1,55 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: turbo-agent
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: turbo-agent
+  interval: 1h
+  values:
+    controllers:
+      turbo-agent:
+        type: deployment
+        replicas: 1
+        annotations:
+          reloader.stakater.com/auto: "true"
+        initContainers:
+          init-invite:
+            image:
+              repository: git.erwanleboucher.dev/eleboucher/turbo-agent
+              tag: sha-7ed2b957cba9ca4b6087e28b8a051ce19ab70adb
+            command:
+              - /bin/sh
+              - -c
+              - |
+                [ -f /root/.turbo-tunnel/state.toml ] && echo "already initialized" && exit 0
+                turbo-agent init --invite "$TURBO_INVITE_TOKEN"
+            envFrom: &envFrom
+              - secretRef:
+                  name: turbo-agent-secret
+            securityContext: &securityContext
+              allowPrivilegeEscalation: false
+        containers:
+          app:
+            image:
+              repository: git.erwanleboucher.dev/eleboucher/turbo-agent
+              tag: sha-7ed2b957cba9ca4b6087e28b8a051ce19ab70adb
+            env:
+              RUST_LOG: info
+              TURBO_AGENT_SERVICES: '[{"hostname":"*.erwanleboucher.dev","origin":"envoy-external.network.svc.cluster.local:443"}]'
+            probes:
+              liveness:
+                enabled: false
+              readiness:
+                enabled: false
+            securityContext: *securityContext
+    persistence:
+      state:
+        type: persistentVolumeClaim
+        accessMode: ReadWriteOnce
+        size: 100Mi
+        globalMounts:
+          - path: /root/.turbo-tunnel
