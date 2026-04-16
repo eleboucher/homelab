@@ -273,7 +273,7 @@ services:
         target: /fluent-bit/etc/custom-parsers.conf
 
   turbo-node:
-    image: git.erwanleboucher.dev/eleboucher/turbo-node:sha-8bb6ab8b62e5607daaf3551867478ec65baf2fe9
+    image: git.erwanleboucher.dev/eleboucher/turbo-node:sha-13a022941d1bea5a852fffd7c20349aab79c311a
     container_name: turbo-node
     restart: unless-stopped
     environment:
