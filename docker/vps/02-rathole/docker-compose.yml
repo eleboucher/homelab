@@ -1,0 +1,29 @@
+---
+name: rathole
+services:
+  rathole:
+    # renovate: datasource=docker depName=rapiz1/rathole
+    image: docker.io/rapiz1/rathole:v0.5.0
+    container_name: rathole
+    restart: unless-stopped
+    command:
+      - --server
+      - /etc/rathole/server.toml
+    ports:
+      - "${VPS_ADD_IP}:2222:2222"
+      - "${VPS_ADD_IP}:2333:2333"
+    configs:
+      - source: rathole_server_config
+        target: /etc/rathole/server.toml
+    labels:
+      - prometheus.scrape=false
+
+configs:
+  rathole_server_config:
+    content: |-
+      [server]
+      bind_addr = "0.0.0.0:2333"
+
+      [server.services.forgejo-ssh]
+      token = "${RATHOLE_FORGEJO_SSH_TOKEN}"
+      bind_addr = "0.0.0.0:2222"

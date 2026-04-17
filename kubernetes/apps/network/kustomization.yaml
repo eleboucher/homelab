@@ -9,5 +9,6 @@ resources:
   - external-dns/ks.yaml
   - envoy-gateway/ks.yaml
   - pangolin-operator/ks.yaml
+  - rathole/ks.yaml
   - turbo-agent/ks.yaml
   - namespace.yaml

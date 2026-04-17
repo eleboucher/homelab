@@ -26,3 +26,6 @@ external_secrets:
   TURBO_ACME_EMAIL: "op://kubernetes/pangolin-operator/acme_email"
   FORGEJO_RUNNER_UUID: "op://kubernetes/forgejo-runner-vps/uuid"
   FORGEJO_RUNNER_TOKEN: "op://kubernetes/forgejo-runner-vps/token"
+  # Shared secret between the rathole server (VPS) and the rathole client
+  # (cluster) that tunnels SSH :2222 to envoy-external.
+  RATHOLE_FORGEJO_SSH_TOKEN: "op://kubernetes/rathole/forgejo_ssh_token"
