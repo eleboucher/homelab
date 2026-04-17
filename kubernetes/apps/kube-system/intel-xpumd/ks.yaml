@@ -21,4 +21,4 @@ spec:
     kind: OCIRepository
     name: flux-system
     namespace: flux-system
-  targetNamespace: intel-xpumd
+  targetNamespace: kube-system
