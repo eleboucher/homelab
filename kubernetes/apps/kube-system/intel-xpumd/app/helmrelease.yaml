@@ -23,3 +23,6 @@ spec:
     prometheus:
       monitor: true
       release: kube-prometheus-stack
+    grafana:
+      dashboards: true
+      namespace: intel-xpumd
