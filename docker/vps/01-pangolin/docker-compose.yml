@@ -332,6 +332,8 @@ services:
       - -H
       - tcp://0.0.0.0:2375
       - --tls=false
+    ports:
+      - 127.0.0.1:2375:2375
     volumes:
       - forgejo-runner-dind-data:/var/lib/docker
 
@@ -362,6 +364,7 @@ services:
           dir: /data/cache
         container:
           docker_host: tcp://forgejo-runner-dind:2375
+          options: --add-host=forgejo-runner-dind:host-gateway
           workdir_parent: /data/workdir
         log:
           level: info

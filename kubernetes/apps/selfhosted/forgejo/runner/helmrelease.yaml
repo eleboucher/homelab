@@ -52,6 +52,7 @@ spec:
                 name: main
                 resources:
                   limits:
+                    cpu: 500m
                     memory: 2Gi
                   requests:
                     cpu: 100m
@@ -72,6 +73,7 @@ spec:
                     cpu: 100m
                     memory: 256Mi
                   limits:
+                    cpu: 500m
                     memory: 4Gi
                 volumeMounts:
                   - name: docker-storage
@@ -101,7 +103,7 @@ spec:
                 name: main
                 resources:
                   limits:
-                    cpu: "1"
+                    cpu: 500m
                     memory: 2Gi
                   requests:
                     cpu: 100m
