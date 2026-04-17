@@ -75,9 +75,7 @@ machine:
       validSubnets:
         - 192.168.1.0/24
   nodeLabels:
-  {% if ENV.IS_CONTROLLER %}
     node.kubernetes.io/gpu: "true"
-  {% endif %}
     topology.kubernetes.io/region: main
   sysctls:
     fs.inotify.max_user_instances: "8192"
