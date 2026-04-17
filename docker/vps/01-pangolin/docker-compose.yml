@@ -357,20 +357,22 @@ services:
         set -e
         umask 077
         cat > /data/runner-config.yml <<EOF
-        log:
-          level: info
-        runner:
-          file: .runner
-          capacity: 1
-          timeout: 3h
-          labels:
-            - docker:docker://node:lts
-            - ubuntu-latest:docker://catthehacker/ubuntu:act-latest
         cache:
           enabled: true
           dir: /data/cache
         container:
+          docker_host: tcp://forgejo-runner-dind:2375
           workdir_parent: /data/workdir
+        log:
+          level: info
+        runner:
+          capacity: 1
+          file: .runner
+          labels:
+            - ubuntu-latest:docker://ghcr.io/bjw-s-labs/forgejo-runner:ubuntu-24.04
+            - default:docker://ghcr.io/bjw-s-labs/forgejo-runner:ubuntu-24.04
+            - docker:docker://docker:29-dind
+          timeout: 3h
         server:
           connections:
             forgejo:
