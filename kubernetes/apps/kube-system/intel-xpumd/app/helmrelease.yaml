@@ -12,7 +12,7 @@ spec:
   values:
     gpuAccess: dra
     nodeSelector:
-      intel.feature.node.kubernetes.io/gpu: "true"
+      node.kubernetes.io/gpu: "true"
     config:
       service:
         pipelines:

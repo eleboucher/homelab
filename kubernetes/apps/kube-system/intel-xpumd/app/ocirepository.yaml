@@ -10,5 +10,5 @@ spec:
     mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
     operation: copy
   ref:
-    tag: 2.0.0
+    tag: 0.0.0-v2.x
   url: oci://ghcr.io/intel/xpumanager/charts/xpumd
