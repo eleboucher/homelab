@@ -322,9 +322,68 @@ services:
     volumes:
       - "/opt/pangolin/config/GeoLite2:/usr/share/GeoIP"
 
+  forgejo-runner-dind:
+    image: docker:29-dind
+    container_name: forgejo-runner-dind
+    restart: unless-stopped
+    privileged: true
+    command:
+      - dockerd
+      - -H
+      - tcp://0.0.0.0:2375
+      - --tls=false
+    volumes:
+      - forgejo-runner-dind-data:/var/lib/docker
+
+  forgejo-runner:
+    image: data.forgejo.org/forgejo/runner:12
+    container_name: forgejo-runner
+    restart: unless-stopped
+    depends_on:
+      forgejo-runner-dind:
+        condition: service_started
+    environment:
+      DOCKER_HOST: tcp://forgejo-runner-dind:2375
+      FORGEJO_RUNNER_UUID: ${FORGEJO_RUNNER_UUID}
+      FORGEJO_RUNNER_TOKEN: ${FORGEJO_RUNNER_TOKEN}
+    user: 1001:1001
+    working_dir: /data
+    volumes:
+      - /opt/forgejo-runner/data:/data
+    entrypoint:
+      - sh
+      - -c
+      - |
+        set -e
+        umask 077
+        cat > /data/runner-config.yml <<EOF
+        log:
+          level: info
+        runner:
+          file: .runner
+          capacity: 1
+          timeout: 3h
+          labels:
+            - docker:docker://node:lts
+            - ubuntu-latest:docker://catthehacker/ubuntu:act-latest
+        cache:
+          enabled: true
+          dir: /data/cache
+        container:
+          workdir_parent: /data/workdir
+        server:
+          connections:
+            forgejo:
+              url: https://git.erwanleboucher.dev/
+              uuid: "$${FORGEJO_RUNNER_UUID}"
+              token: "$${FORGEJO_RUNNER_TOKEN}"
+        EOF
+        exec forgejo-runner daemon --config /data/runner-config.yml
+
 volumes:
   apoci-pg-data:
   fluent-bit-data:
+  forgejo-runner-dind-data:
   prometheus-data:
 
 networks:
