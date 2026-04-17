@@ -24,3 +24,5 @@ external_secrets:
   # Contact email used when turbo-node registers with Let's Encrypt for
   # on-demand edge TLS termination.
   TURBO_ACME_EMAIL: "op://kubernetes/pangolin-operator/acme_email"
+  FORGEJO_RUNNER_UUID: "op://kubernetes/forgejo-runner-vps/uuid"
+  FORGEJO_RUNNER_TOKEN: "op://kubernetes/forgejo-runner-vps/token"
