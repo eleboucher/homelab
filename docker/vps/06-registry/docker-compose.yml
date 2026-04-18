@@ -30,6 +30,9 @@ services:
       interval: 10s
       timeout: 5s
       retries: 3
+    networks:
+      - default
+      - legacy
 
   apoci-postgres:
     # renovate: datasource=docker depName=postgres
@@ -79,4 +82,7 @@ configs:
 networks:
   default:
     name: edge
+    external: true
+  legacy:
+    name: pangolin
     external: true
