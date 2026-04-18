@@ -9,16 +9,12 @@ external_secrets:
   OVH_APPLICATION_KEY: "op://kubernetes/ovh/OVH_APPLICATION_KEY"
   OVH_APPLICATION_SECRET: "op://kubernetes/ovh/OVH_APPLICATION_SECRET"
   OVH_CONSUMER_KEY: "op://kubernetes/ovh/OVH_CONSUMER_KEY"
-  PANGOLIN_SECRET: "op://kubernetes/pangolin/server_secret"
-  MAXMIND_ACCOUNT_ID: "op://kubernetes/pangolin/maxmind_account_id"
-  MAXMIND_LICENSE_KEY: "op://kubernetes/pangolin/maxmind_key"
-  CROWDSEC_API_KEY: "op://kubernetes/pangolin/crowdsec_api_key"
   ANUBIS_ED25519_PRIVATE_KEY_HEX: "op://kubernetes/anubis/ED25519_PRIVATE_KEY_HEX"
   OVH_S3_ENDPOINT: "op://kubernetes/ovh-cnpg-backup/S3_ENDPOINT"
   OVH_S3_ACCESS_KEY_ID: "op://kubernetes/ovh-cnpg-backup/AWS_ACCESS_KEY_ID"
   OVH_S3_SECRET_ACCESS_KEY: "op://kubernetes/ovh-cnpg-backup/AWS_SECRET_ACCESS_KEY"
   # Primary + additional OVH IPs used for per-IP port binding on the VPS
-  # (Pangolin on primary, towonel-node on the additional one).
+  # (Caddy on primary, towonel-node on the additional one).
   VPS_IP: "op://kubernetes/pangolin-operator/vps_ip"
   VPS_ADD_IP: "op://kubernetes/pangolin-operator/vps_add_ip"
   # Contact email used when towonel-node registers with Let's Encrypt for

@@ -18,9 +18,6 @@ services:
     configs:
       - source: caddyfile
         target: /etc/caddy/Caddyfile
-    networks:
-      - default
-      - legacy
     labels:
       - prometheus.scrape=false
 
@@ -57,7 +54,4 @@ configs:
 networks:
   default:
     name: edge
-    external: true
-  legacy:
-    name: pangolin
     external: true

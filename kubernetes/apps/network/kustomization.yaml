@@ -8,7 +8,6 @@ resources:
   - echo/ks.yaml
   - external-dns/ks.yaml
   - envoy-gateway/ks.yaml
-  - pangolin-operator/ks.yaml
   - rathole/ks.yaml
   - towonel-agent/ks.yaml
   - namespace.yaml

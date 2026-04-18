@@ -39,7 +39,6 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
     networks:
       - default
-      - legacy
 
   fluent-bit:
     # renovate: datasource=docker depName=cr.fluentbit.io/fluent/fluent-bit
@@ -72,7 +71,4 @@ configs:
 networks:
   default:
     name: edge
-    external: true
-  legacy:
-    name: pangolin
     external: true

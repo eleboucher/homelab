@@ -1,9 +1,0 @@
----
-# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/pangolin.home-operations.com/newtsite_v1alpha1.json
-apiVersion: pangolin.home-operations.com/v1alpha1
-kind: NewtSite
-metadata:
-  name: local
-spec:
-  name: local
-  type: local
