@@ -13,43 +13,26 @@ spec:
     controllers:
       towonel-agent:
         type: deployment
-        replicas: 1
+        replicas: 2
         annotations:
           reloader.stakater.com/auto: "true"
-        initContainers:
-          init-invite:
-            image:
-              repository: git.erwanleboucher.dev/eleboucher/towonel-agent
-              tag: 0.0.2
-            command:
-              - /bin/sh
-              - -c
-              - |
-                [ -f /root/.towonel/state.toml ] && echo "already initialized" && exit 0
-                towonel-agent init --invite "$TOWONEL_INVITE_TOKEN"
-            envFrom: &envFrom
-              - secretRef:
-                  name: towonel-agent-secret
-            securityContext: &securityContext
-              allowPrivilegeEscalation: false
         containers:
           app:
             image:
               repository: git.erwanleboucher.dev/eleboucher/towonel-agent
-              tag: 0.0.2
+              tag: 0.0.4
             env:
               RUST_LOG: info
               TOWONEL_AGENT_SERVICES: '[{"hostname":"*.erwanleboucher.dev","origin":"envoy-external.network.svc.cluster.local:443"}]'
+              TOWONEL_INVITE_TOKEN:
+                valueFrom:
+                  secretKeyRef:
+                    name: towonel-agent-secret
+                    key: invite-token
             probes:
               liveness:
                 enabled: false
               readiness:
                 enabled: false
-            securityContext: *securityContext
-    persistence:
-      state:
-        type: persistentVolumeClaim
-        accessMode: ReadWriteOnce
-        size: 100Mi
-        globalMounts:
-          - path: /root/.towonel
+            securityContext:
+              allowPrivilegeEscalation: false
