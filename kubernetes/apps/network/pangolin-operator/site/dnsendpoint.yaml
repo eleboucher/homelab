@@ -10,7 +10,7 @@ spec:
     - dnsName: external.erwanleboucher.dev
       recordType: A
       targets:
-        - ${VPS_IP}
+        - ${VPS_ADD_IP}
     - dnsName: pangolin.erwanleboucher.dev
       recordType: A
       targets:
