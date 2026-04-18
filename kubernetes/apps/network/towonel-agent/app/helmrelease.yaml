@@ -20,7 +20,7 @@ spec:
           init-invite:
             image:
               repository: git.erwanleboucher.dev/eleboucher/towonel-agent
-              tag: 0.0.1
+              tag: 0.0.2
             command:
               - /bin/sh
               - -c
@@ -36,7 +36,7 @@ spec:
           app:
             image:
               repository: git.erwanleboucher.dev/eleboucher/towonel-agent
-              tag: 0.0.1
+              tag: 0.0.2
             env:
               RUST_LOG: info
               TOWONEL_AGENT_SERVICES: '[{"hostname":"*.erwanleboucher.dev","origin":"envoy-external.network.svc.cluster.local:443"}]'
