@@ -12,6 +12,9 @@ spec:
     substitute:
       APP: towonel-agent
       APP_NAMESPACE: network
+    substituteFrom:
+      - kind: Secret
+        name: towonel-agent-secret
   prune: true
   sourceRef:
     kind: OCIRepository

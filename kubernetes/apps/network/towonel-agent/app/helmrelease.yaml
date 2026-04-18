@@ -28,7 +28,7 @@ spec:
                 valueFrom:
                   secretKeyRef:
                     name: towonel-agent-secret
-                    key: invite-token
+                    key: TOWONEL_INVITE_TOKEN
             probes:
               liveness:
                 enabled: false
