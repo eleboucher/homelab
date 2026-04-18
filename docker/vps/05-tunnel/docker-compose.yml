@@ -4,7 +4,7 @@ name: tunnel
 services:
   towonel-node:
     # renovate: datasource=docker depName=git.erwanleboucher.dev/eleboucher/towonel-node
-    image: git.erwanleboucher.dev/eleboucher/towonel-node:0.0.2
+    image: git.erwanleboucher.dev/eleboucher/towonel-node:0.0.4
     container_name: towonel-node
     restart: unless-stopped
     environment:
@@ -22,6 +22,7 @@ services:
       TOWONEL_EDGE__PUBLIC_ADDRESSES: '["tunnel.erwanleboucher.dev:443"]'
       TOWONEL_EDGE__TLS__CERT_DIR: /data/certs
       TOWONEL_EDGE__TLS__ACME_EMAIL: ${TOWONEL_ACME_EMAIL}
+      TOWONEL_INVITE_HASH_KEY: ${TOWONEL_INVITE_HASH_KEY}
       TOWONEL_EDGE__TLS__HTTP_LISTEN_ADDR: 0.0.0.0:8081
     ports:
       - "${VPS_ADD_IP}:443:4443"

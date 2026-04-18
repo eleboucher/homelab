@@ -13,13 +13,10 @@ external_secrets:
   OVH_S3_ENDPOINT: "op://kubernetes/ovh-cnpg-backup/S3_ENDPOINT"
   OVH_S3_ACCESS_KEY_ID: "op://kubernetes/ovh-cnpg-backup/AWS_ACCESS_KEY_ID"
   OVH_S3_SECRET_ACCESS_KEY: "op://kubernetes/ovh-cnpg-backup/AWS_SECRET_ACCESS_KEY"
-  # Primary + additional OVH IPs used for per-IP port binding on the VPS
-  # (Caddy on primary, towonel-node on the additional one).
   VPS_IP: "op://kubernetes/pangolin-operator/vps_ip"
   VPS_ADD_IP: "op://kubernetes/pangolin-operator/vps_add_ip"
-  # Contact email used when towonel-node registers with Let's Encrypt for
-  # on-demand edge TLS termination.
-  TOWONEL_ACME_EMAIL: "op://kubernetes/pangolin-operator/acme_email"
+  TOWONEL_ACME_EMAIL: "op://kubernetes/towonel-hub/acme_email"
+  TOWONEL_INVITE_HASH_KEY: "op://kubernetes/towonel-hub/invite_hash"
   FORGEJO_RUNNER_UUID: "op://kubernetes/forgejo-runner-vps/uuid"
   FORGEJO_RUNNER_TOKEN: "op://kubernetes/forgejo-runner-vps/token"
   RATHOLE_FORGEJO_SSH_TOKEN: "op://kubernetes/rathole/forgejo_ssh_token"
