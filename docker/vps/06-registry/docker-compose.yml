@@ -36,7 +36,7 @@ services:
 
   apoci-postgres:
     # renovate: datasource=docker depName=postgres
-    image: docker.io/library/postgres:17-alpine
+    image: docker.io/library/postgres:18-alpine
     container_name: apoci-postgres
     restart: unless-stopped
     environment:
