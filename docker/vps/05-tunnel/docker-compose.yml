@@ -4,7 +4,7 @@ name: tunnel
 services:
   towonel-node:
     # renovate: datasource=docker depName=git.erwanleboucher.dev/eleboucher/towonel-node
-    image: git.erwanleboucher.dev/eleboucher/towonel-node:0.0.4
+    image: git.erwanleboucher.dev/eleboucher/towonel-node:0.0.5
     container_name: towonel-node
     restart: unless-stopped
     environment:
