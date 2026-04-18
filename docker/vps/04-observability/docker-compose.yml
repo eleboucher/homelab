@@ -27,7 +27,7 @@ services:
       - "989" # host docker group, for /var/run/docker.sock
     command:
       - --config.file=/etc/prometheus/prometheus.yml
-      - --enable-feature=agent
+      - --agent
       - --storage.agent.path=/prometheus
     depends_on:
       - node-exporter
