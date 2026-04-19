@@ -93,7 +93,7 @@ spec:
         session:
           PROVIDER: redis
           PROVIDER_CONFIG: redis://dragonfly.database.svc:6379?pool_size=100&idle_timeout=180s
-          SESSION_LIFETIME: 2678400
+          SESSION_LIFE_TIME: "86400"
         cache:
           ENABLED: true
           ADAPTER: redis
@@ -132,21 +132,21 @@ spec:
     extraVolumes:
       - name: postgres-forgejo
         secret:
-          defaultMode: 0600
+          defaultMode: 600
           secretName: postgres-forgejo-cert
       - name: root-ca
         secret:
-          defaultMode: 0600
+          defaultMode: 600
           secretName: root-ca
 
       - name: signing-key
         secret:
           secretName: forgejo-signing-key
-          defaultMode: 0400
+          defaultMode: 400
       - name: forgejo-ssh
         secret:
           secretName: forgejo-secret
-          defaultMode: 0400
+          defaultMode: 400
     extraInitVolumeMounts:
       - name: postgres-forgejo
         mountPath: "/var/run/secrets/postgresql"
