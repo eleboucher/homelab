@@ -84,8 +84,13 @@ spec:
               limits:
                 cpu: 500m
                 memory: 256Mi
+    service:
+      app:
+        ports:
+          http:
+            port: 9090
     serviceMonitor:
       app:
         endpoints:
-          - port: 9090
+          - port: http
             interval: 1m
