@@ -60,7 +60,7 @@ spec:
           app:
             image:
               repository: ghcr.io/m00nwtchr/kanidm-provision
-              tag: main@sha256:1aceec0e53e5648bbc7dbdf5b47dd15f99c85b2947764372acf08508ca895809
+              tag: main@sha256:369aa547ef1c2fc5f973e886cee172f7cade3b624a9a3092ece2a8791185a01a
             env:
               KANIDM_INSTANCE: https://idm.erwanleboucher.dev
               KANIDM_NAMESPACE: security
@@ -89,7 +89,7 @@ spec:
       certs:
         type: secret
         name: idm-erwanleboucher-dev-tls
-        defaultMode: 0400
+        defaultMode: 400
         advancedMounts:
           kanidm:
             app:
