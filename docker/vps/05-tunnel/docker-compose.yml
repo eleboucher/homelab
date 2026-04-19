@@ -4,9 +4,10 @@ name: tunnel
 services:
   towonel-node:
     # renovate: datasource=docker depName=git.erwanleboucher.dev/eleboucher/towonel-node
-    image: registry.erwanleboucher.dev/eleboucher/towonel-node:0.0.6
+    image: git.erwanleboucher.dev/eleboucher/towonel-node:0.0.7
     container_name: towonel-node
     restart: unless-stopped
+    user: "10001:10001"
     environment:
       RUST_LOG: info
       TOWONEL_IDENTITY__KEY_PATH: /data/node.key
@@ -33,15 +34,6 @@ services:
       - prometheus.job=towonel-node
     volumes:
       - /opt/towonel:/data
-    healthcheck:
-      test:
-        - CMD
-        - curl
-        - -sf
-        - http://localhost:9092/health
-      interval: 10s
-      timeout: 5s
-      retries: 3
 
 networks:
   default:
