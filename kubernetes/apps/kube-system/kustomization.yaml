@@ -10,7 +10,6 @@ resources:
   - coredns/ks.yaml
   - descheduler/ks.yaml
   - intel-gpu-resource-driver/ks.yaml
-  - intel-xpumd/ks.yaml
   - ksgate/ks.yaml
   - metrics-server/ks.yaml
   - multus/ks.yaml
