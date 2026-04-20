@@ -52,3 +52,10 @@ scrape_configs:
     relabel_configs:
       - target_label: instance
         replacement: edge-vps
+  - job_name: towonel-edge
+    static_configs:
+      - targets:
+          - towonel-node:9092
+    relabel_configs:
+      - target_label: instance
+        replacement: edge-vps

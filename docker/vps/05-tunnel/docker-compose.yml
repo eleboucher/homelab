@@ -31,7 +31,7 @@ services:
       - "${VPS_ADD_IP}:80:8081"
     labels:
       - prometheus.scrape=true
-      - prometheus.port=9092
+      - prometheus.ports=9091,9092
       - prometheus.job=towonel-node
     volumes:
       - /opt/towonel:/data
