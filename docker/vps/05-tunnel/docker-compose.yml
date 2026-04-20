@@ -4,28 +4,28 @@ name: tunnel
 services:
   towonel-node:
     # renovate: datasource=docker depName=git.erwanleboucher.dev/eleboucher/towonel-node
-    image: registry.erwanleboucher.dev/eleboucher/towonel-node:0.0.11
+    image: registry.erwanleboucher.dev/eleboucher/towonel-node:0.0.12
     container_name: towonel-node
     restart: unless-stopped
     user: "10001:10001"
     environment:
       RUST_LOG: info
-      TOWONEL_IDENTITY__KEY_PATH: /data/node.key
-      TOWONEL_HUB__ENABLED: "true"
-      TOWONEL_HUB__DATABASE__DRIVER: sqlite
-      TOWONEL_HUB__DATABASE__DSN: /data/hub.db
-      TOWONEL_HUB__LISTEN_ADDR: 0.0.0.0:8443
-      TOWONEL_HUB__HEALTH_LISTEN_ADDR: 0.0.0.0:9091
-      TOWONEL_HUB__PUBLIC_URL: https://towonel.erwanleboucher.dev
-      TOWONEL_HUB__OPERATOR_API_KEY_PATH: /data/operator.key
-      TOWONEL_EDGE__ENABLED: "true"
-      TOWONEL_EDGE__LISTEN_ADDR: 0.0.0.0:4443
-      TOWONEL_EDGE__HEALTH_LISTEN_ADDR: 0.0.0.0:9092
-      TOWONEL_EDGE__PUBLIC_ADDRESSES: '["tunnel.erwanleboucher.dev:443"]'
-      TOWONEL_EDGE__TLS__CERT_DIR: /data/certs
-      TOWONEL_EDGE__TLS__ACME_EMAIL: ${TOWONEL_ACME_EMAIL}
+      TOWONEL_IDENTITY_KEY_PATH: /data/node.key
       TOWONEL_INVITE_HASH_KEY: ${TOWONEL_INVITE_HASH_KEY}
-      TOWONEL_EDGE__TLS__HTTP_LISTEN_ADDR: 0.0.0.0:8081
+      TOWONEL_HUB_ENABLED: "true"
+      TOWONEL_HUB_DB_DRIVER: sqlite
+      TOWONEL_HUB_DB_DSN: /data/hub.db
+      TOWONEL_HUB_LISTEN_ADDR: 0.0.0.0:8443
+      TOWONEL_HUB_HEALTH_LISTEN_ADDR: 0.0.0.0:9091
+      TOWONEL_HUB_PUBLIC_URL: https://towonel.erwanleboucher.dev
+      TOWONEL_HUB_OPERATOR_API_KEY_PATH: /data/operator.key
+      TOWONEL_EDGE_ENABLED: "true"
+      TOWONEL_EDGE_LISTEN_ADDR: 0.0.0.0:4443
+      TOWONEL_EDGE_HEALTH_LISTEN_ADDR: 0.0.0.0:9092
+      TOWONEL_EDGE_PUBLIC_ADDRESSES: tunnel.erwanleboucher.dev:443
+      TOWONEL_EDGE_TLS_CERT_DIR: /data/certs
+      TOWONEL_EDGE_TLS_ACME_EMAIL: ${TOWONEL_ACME_EMAIL}
+      TOWONEL_EDGE_TLS_HTTP_LISTEN_ADDR: 0.0.0.0:8081
     ports:
       - "${VPS_ADD_IP}:443:4443"
       - "${VPS_ADD_IP}:80:8081"
