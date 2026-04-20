@@ -93,7 +93,7 @@ spec:
         session:
           PROVIDER: redis
           PROVIDER_CONFIG: redis://dragonfly.database.svc:6379?pool_size=100&idle_timeout=180s
-          SESSION_LIFE_TIME: "86400"
+          SESSION_LIFE_TIME: "1209600"
         cache:
           ENABLED: true
           ADAPTER: redis
