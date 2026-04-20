@@ -100,7 +100,7 @@ jobs:
       - name: Add Comment
         if: ${{ steps.diff.outputs.diff != '' }}
         env:
-          GH_TOKEN: ${{ secrets.MISTGAZER_TOKEN }}
+          GH_TOKEN: ${{ secrets.BOTOWL_TOKEN }}
           PR_NUMBER: ${{ forgejo.event.pull_request.number }}
           HEADER: "${{ forgejo.event.pull_request.number }}/kubernetes/${{ matrix.resources }}"
           DIFF_CONTENT: ${{ steps.diff.outputs.diff }}
