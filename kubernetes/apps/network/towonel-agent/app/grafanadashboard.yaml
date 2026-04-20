@@ -12,7 +12,7 @@ spec:
   datasources:
     - datasourceName: prometheus
       inputName: DS_PROMETHEUS
-  url: https://git.erwanleboucher.dev/eleboucher/towonel/raw/branch/main/deploy/grafana/towonel-agent.json
+  url: https://git.erwanleboucher.dev/eleboucher/towonel/raw/commit/53bd4c868b595625031c17a47dcb36c2c246651a/deploy/grafana/towonel-agent.json
 ---
 # yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/grafana.integreatly.org/grafanadashboard_v1beta1.json
 apiVersion: grafana.integreatly.org/v1beta1
@@ -27,4 +27,4 @@ spec:
   datasources:
     - datasourceName: prometheus
       inputName: DS_PROMETHEUS
-  url: https://git.erwanleboucher.dev/eleboucher/towonel/raw/branch/main/deploy/grafana/towonel-hub.json
+  url: https://git.erwanleboucher.dev/eleboucher/towonel/raw/commit/53bd4c868b595625031c17a47dcb36c2c246651a/deploy/grafana/towonel-hub.json
