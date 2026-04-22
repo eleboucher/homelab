@@ -1,6 +1,20 @@
 ---
 name: rathole
 services:
+  rathole-init:
+    image: docker.io/library/alpine:3.21
+    container_name: rathole-init
+    restart: "no"
+    command:
+      - /bin/sh
+      - -c
+      - apk add --no-cache gettext && envsubst < /tmpl/server.toml.tmpl > /config/server.toml.tmp && mv /config/server.toml.tmp /config/server.toml
+    environment:
+      - RATHOLE_FORGEJO_SSH_TOKEN
+    volumes:
+      - ./server.toml.tmpl:/tmpl/server.toml.tmpl:ro
+      - rathole-config:/config
+
   rathole:
     # renovate: datasource=docker depName=rapiz1/rathole
     image: docker.io/rapiz1/rathole:v0.5.0
@@ -9,33 +23,19 @@ services:
     command:
       - --server
       - /etc/rathole/server.toml
+    depends_on:
+      rathole-init:
+        condition: service_completed_successfully
     ports:
       - "${VPS_ADD_IP}:2222:2222"
       - "${VPS_ADD_IP}:2333:2333"
-    configs:
-      - source: rathole_server_config
-        target: /etc/rathole/server.toml
+    volumes:
+      - rathole-config:/etc/rathole:ro
     labels:
       - prometheus.scrape=false
 
-configs:
-  rathole_server_config:
-    content: |-
-      [server]
-      bind_addr = "0.0.0.0:2333"
-      heartbeat_interval = 30
-
-      [server.services.forgejo-ssh]
-      token = "${RATHOLE_FORGEJO_SSH_TOKEN}"
-      bind_addr = "0.0.0.0:2222"
-
-      [server.services.prom-write]
-      token = "${RATHOLE_FORGEJO_SSH_TOKEN}"
-      bind_addr = "0.0.0.0:9090"
-
-      [server.services.vlogs-write]
-      token = "${RATHOLE_FORGEJO_SSH_TOKEN}"
-      bind_addr = "0.0.0.0:9428"
+volumes:
+  rathole-config:
 
 networks:
   default:
