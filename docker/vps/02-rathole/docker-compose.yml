@@ -2,7 +2,7 @@
 name: rathole
 services:
   rathole-init:
-    image: docker.io/library/alpine:3.21
+    image: docker.io/library/alpine:3.23
     container_name: rathole-init
     restart: "no"
     command:
