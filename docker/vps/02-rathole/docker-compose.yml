@@ -16,6 +16,9 @@ services:
       - rathole-config:/config
 
   rathole:
+    networks:
+      default:
+        ipv4_address: 172.21.0.2
     # renovate: datasource=docker depName=rapiz1/rathole
     image: docker.io/rapiz1/rathole:v0.5.0
     container_name: rathole

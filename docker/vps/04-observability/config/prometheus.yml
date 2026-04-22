@@ -6,7 +6,7 @@ global:
     location: ovh
 
 remote_write:
-  - url: http://rathole:9090/api/v1/write
+  - url: http://172.21.0.2:9090/api/v1/write
     queue_config:
       max_samples_per_send: 1000
       max_shards: 5
