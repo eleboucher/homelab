@@ -26,7 +26,7 @@ spec:
               RUN_MIGRATIONS: "1"
               OAUTH2_PROVIDER: oidc
               OAUTH2_REDIRECT_URL: https://rss.erwanleboucher.dev/oauth2/oidc/callback
-              OAUTH2_OIDC_DISCOVERY_ENDPOINT: https://auth.erwanleboucher.dev/oauth2/openid/miniflux
+              OAUTH2_OIDC_DISCOVERY_ENDPOINT: https://idm.erwanleboucher.dev/oauth2/openid/miniflux
               OAUTH2_OIDC_PROVIDER_NAME: kanidm
               OAUTH2_USER_CREATION: "1"
               TZ: Europe/Paris
@@ -34,12 +34,12 @@ spec:
                 valueFrom:
                   secretKeyRef:
                     name: kanidm-miniflux-oidc
-                    key: OAUTH2_CLIENT_ID
+                    key: client-id
               OAUTH2_CLIENT_SECRET:
                 valueFrom:
                   secretKeyRef:
                     name: kanidm-miniflux-oidc
-                    key: OAUTH2_CLIENT_SECRET
+                    key: client-secret
               DATABASE_URL:
                 valueFrom:
                   secretKeyRef:

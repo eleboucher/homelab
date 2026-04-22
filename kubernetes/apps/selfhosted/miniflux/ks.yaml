@@ -24,6 +24,7 @@ spec:
       APP_NAMESPACE: selfhosted
       OIDC_CALLBACK: /oauth2/oidc/callback
       SUBDOMAIN: rss
+      OIDC_DISABLE_PKCE: "true"
       OIDC_SCOPES: '["openid", "profile", "email", "groups"]'
   prune: true
   sourceRef:
