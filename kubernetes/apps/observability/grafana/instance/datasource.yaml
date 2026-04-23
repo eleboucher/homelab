@@ -3,17 +3,17 @@
 apiVersion: grafana.integreatly.org/v1beta1
 kind: GrafanaDatasource
 metadata:
-  name: prometheus
+  name: victoriametrics
 spec:
   instanceSelector:
     matchLabels:
       dashboards: grafana
   datasource:
     type: prometheus
-    name: prometheus
+    name: VictoriaMetrics
     access: proxy
     isDefault: true
-    url: http://prometheus-operated.observability.svc.cluster.local:9090
+    url: http://vmsingle-victoria-metrics.observability.svc.cluster.local:8428
 ---
 # yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/grafana.integreatly.org/grafanadatasource_v1beta1.json
 apiVersion: grafana.integreatly.org/v1beta1

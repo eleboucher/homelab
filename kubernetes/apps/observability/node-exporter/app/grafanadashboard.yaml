@@ -10,6 +10,6 @@ spec:
     matchLabels:
       dashboards: grafana
   datasources:
-    - datasourceName: prometheus
+    - datasourceName: VictoriaMetrics
       inputName: DS_PROMETHEUS
   url: https://grafana.com/api/dashboards/1860/revisions/45/download
