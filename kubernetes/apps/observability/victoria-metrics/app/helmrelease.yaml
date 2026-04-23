@@ -361,6 +361,8 @@ spec:
     vmagent:
       spec:
         scrapeInterval: 30s
+        externalLabels:
+          cluster: home
         remoteWrite:
           - url: http://vmsingle-victoria-metrics.observability.svc.cluster.local:8428/api/v1/write
         extraArgs:
@@ -385,6 +387,8 @@ spec:
     vmalert:
       spec:
         evaluationInterval: 30s
+        externalLabels:
+          cluster: home
         remoteWrite:
           url: http://vmsingle-victoria-metrics.observability.svc.cluster.local:8428/api/v1/write
         remoteRead:
