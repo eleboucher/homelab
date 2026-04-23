@@ -16,6 +16,7 @@ spec:
       analytics:
         enabled: false
       localpv:
+        enableLeaderElection: false
         image:
           registry: quay.io/
         basePath: &hostPath /var/mnt/local-hostpath

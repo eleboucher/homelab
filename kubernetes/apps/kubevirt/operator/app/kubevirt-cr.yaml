@@ -24,6 +24,14 @@ spec:
       product: talosvm
       sku: TalosCloud
       version: v0.1.0
+  customizeComponents:
+    patches:
+      # Increases leader election timeouts to survive etcd compaction spikes.
+      # NOTE: image tags below must be kept in sync with the kubevirt version in kustomization.yaml
+      - patch: '[{"op":"replace","path":"/spec/template/spec/containers/0/args","value":["--launcher-image","quay.io/kubevirt/virt-launcher:v1.7.1","--exporter-image","quay.io/kubevirt/virt-exportserver:v1.7.1","--port","8443","-v","2","--leader-elect-lease-duration","60s","--leader-elect-renew-deadline","40s","--leader-elect-retry-period","10s"]}]'
+        resourceName: virt-controller
+        resourceType: Deployment
+        type: json
   workloadUpdateStrategy:
     workloadUpdateMethods:
       - LiveMigrate
