@@ -14,7 +14,6 @@ resources:
   - headlamp/ks.yaml
   - keda/ks.yaml
   - kromgo/ks.yaml
-  - kube-prometheus-stack/ks.yaml
   - kube-state-metrics/ks.yaml
   - mikrotik-exporter/ks.yaml
   - namespace.yaml
@@ -23,3 +22,4 @@ resources:
   - smartctl-exporter/ks.yaml
   - umami/ks.yaml
   - victoria-logs/ks.yaml
+  - victoria-metrics/ks.yaml

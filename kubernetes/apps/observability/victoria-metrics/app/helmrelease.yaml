@@ -1,0 +1,180 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: victoria-metrics
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: victoria-metrics
+  interval: 1h
+  values:
+    fullnameOverride: victoria-metrics
+
+    global:
+      clusterLabel: home
+
+    victoria-metrics-operator:
+      crds:
+        cleanup:
+          image:
+            repository: registry.k8s.io/kubectl
+
+    vmcluster:
+      enabled: false
+
+    vmagent:
+      spec:
+        scrapeInterval: 30s
+        remoteWrite:
+          - url: http://vmsingle-victoria-metrics.observability.svc.cluster.local:8428/api/v1/write
+        extraArgs:
+          promscrape.streamParse: "true"
+        externalLabels:
+          cluster: home
+
+    vmalert:
+      spec:
+        evaluationInterval: 30s
+        remoteWrite:
+          url: http://vmsingle-victoria-metrics.observability.svc.cluster.local:8428/api/v1/write
+        remoteRead:
+          url: http://vmsingle-victoria-metrics.observability.svc.cluster.local:8428
+        externalLabels:
+          cluster: home
+
+    alertmanager:
+      spec:
+        externalURL: https://vmalertmanager.erwanleboucher.dev
+        replicaCount: 1
+        storage:
+          volumeClaimTemplate:
+            spec:
+              storageClassName: longhorn
+              resources:
+                requests:
+                  storage: 5Gi
+      useManagedConfig: true
+      config:
+        route:
+          receiver: discord
+          repeat_interval: 12h
+          routes:
+            - receiver: blackhole
+              matchers:
+                - alertname = InfoInhibitor
+            - receiver: blackhole
+              matchers:
+                - alertname = Watchdog
+            - receiver: blackhole
+              matchers:
+                - severity = info
+            - receiver: discord
+              matchers:
+                - severity = critical
+          group_by:
+            - alertname
+            - cluster
+            - job
+          group_interval: 5m
+          group_wait: 1m
+        inhibit_rules:
+          - equal:
+              - alertname
+              - namespace
+            source_matchers:
+              - severity = "critical"
+            target_matchers:
+              - severity = "warning"
+        receivers:
+          - name: blackhole
+          - name: discord
+            discord_configs:
+              - send_resolved: true
+                title: |-
+                  [{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ if eq .Status "firing" }}{{ if eq .CommonLabels.severity "critical" }}🔥{{ else if eq .CommonLabels.severity "warning" }}⚠️{{ else }}ℹ️{{ end }}{{ else }}✅{{ end }} {{ if ne .CommonAnnotations.summary ""}}{{ .CommonAnnotations.summary }} {{ else if ne .CommonAnnotations.message ""}}{{ .CommonAnnotations.message }} {{ else if ne .CommonAnnotations.description ""}}{{ .CommonAnnotations.description }} {{ else }}{{ .CommonLabels.alertname }}{{ end }}
+                message: |-
+                  {{ range .Alerts -}}
+                    **Alert:** {{ .Annotations.title }}{{ if .Labels.severity }} - `{{ .Labels.severity }}`{{ end }}
+
+                  {{ if ne .Annotations.summary ""}}**Summary:** {{ .Annotations.summary }} {{ else if ne .Annotations.message ""}}**Message:** {{ .Annotations.message }} {{ else if ne .Annotations.description ""}}**Description:** {{ .Annotations.description }}{{ end }}
+
+                  🏷 Labels:
+                    {{ range .Labels.SortedPairs }} • *{{ .Name }}:* `{{ .Value }}`
+                    {{ end }}
+                  {{ end }}
+                api_url:
+                  name: vmalertmanager-secret
+                  key: DISCORD_WEBHOOK_URL
+      route:
+        enabled: true
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
+        hostnames:
+          - vmalertmanager.erwanleboucher.dev
+
+    vmsingle:
+      enabled: true
+      spec:
+        retentionPeriod: 90d
+        storage:
+          storageClassName: longhorn
+          resources:
+            requests:
+              storage: 50Gi
+      route:
+        enabled: true
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
+        hostnames:
+          - vmsingle.erwanleboucher.dev
+
+    defaultDashboards:
+      grafanaOperator:
+        enabled: true
+        spec:
+          allowCrossNamespaceImport: true
+
+    defaultDatasources:
+      grafanaOperator:
+        enabled: true
+        spec:
+          allowCrossNamespaceImport: true
+
+    grafana:
+      enabled: false
+      forceDeployDatasource: true
+
+    kubeControllerManager:
+      vmScrape:
+        spec:
+          endpoints:
+            - bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+              port: http-metrics
+              scheme: https
+              tlsConfig:
+                insecureSkipVerify: true
+
+    kubeEtcd:
+      service:
+        selector:
+          component: kube-apiserver
+        port: 2381
+        targetPort: 2381
+      vmScrape:
+        spec:
+          endpoints:
+            - scheme: http
+
+    kubeScheduler:
+      vmScrape:
+        spec:
+          endpoints:
+            - bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+              port: http-metrics
+              scheme: https
+              tlsConfig:
+                insecureSkipVerify: true

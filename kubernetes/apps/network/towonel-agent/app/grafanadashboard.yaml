@@ -10,7 +10,7 @@ spec:
     matchLabels:
       dashboards: grafana
   datasources:
-    - datasourceName: prometheus
+    - datasourceName: VictoriaMetrics
       inputName: DS_PROMETHEUS
   url: https://git.erwanleboucher.dev/eleboucher/towonel/raw/commit/53bd4c868b595625031c17a47dcb36c2c246651a/deploy/grafana/towonel-agent.json
 ---
@@ -25,6 +25,6 @@ spec:
     matchLabels:
       dashboards: grafana
   datasources:
-    - datasourceName: prometheus
+    - datasourceName: VictoriaMetrics
       inputName: DS_PROMETHEUS
   url: https://git.erwanleboucher.dev/eleboucher/towonel/raw/commit/53bd4c868b595625031c17a47dcb36c2c246651a/deploy/grafana/towonel-hub.json

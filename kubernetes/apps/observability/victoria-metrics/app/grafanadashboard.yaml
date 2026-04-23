@@ -6,12 +6,12 @@ metadata:
   name: kubernetes-api-server
 spec:
   allowCrossNamespaceImport: true
-  datasources:
-    - datasourceName: prometheus
-      inputName: DS_PROMETHEUS
   instanceSelector:
     matchLabels:
       dashboards: grafana
+  datasources:
+    - datasourceName: VictoriaMetrics
+      inputName: DS_PROMETHEUS
   url: https://grafana.com/api/dashboards/15761/revisions/21/download
 ---
 # yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/grafana.integreatly.org/grafanadashboard_v1beta1.json
@@ -21,12 +21,12 @@ metadata:
   name: kubernetes-coredns
 spec:
   allowCrossNamespaceImport: true
-  datasources:
-    - datasourceName: prometheus
-      inputName: DS_PROMETHEUS
   instanceSelector:
     matchLabels:
       dashboards: grafana
+  datasources:
+    - datasourceName: VictoriaMetrics
+      inputName: DS_PROMETHEUS
   url: https://grafana.com/api/dashboards/15762/revisions/22/download
 ---
 # yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/grafana.integreatly.org/grafanadashboard_v1beta1.json
@@ -36,12 +36,12 @@ metadata:
   name: kubernetes-global
 spec:
   allowCrossNamespaceImport: true
-  datasources:
-    - datasourceName: prometheus
-      inputName: DS_PROMETHEUS
   instanceSelector:
     matchLabels:
       dashboards: grafana
+  datasources:
+    - datasourceName: VictoriaMetrics
+      inputName: DS_PROMETHEUS
   url: https://grafana.com/api/dashboards/15757/revisions/43/download
 ---
 # yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/grafana.integreatly.org/grafanadashboard_v1beta1.json
@@ -51,12 +51,12 @@ metadata:
   name: kubernetes-namespaces
 spec:
   allowCrossNamespaceImport: true
-  datasources:
-    - datasourceName: prometheus
-      inputName: DS_PROMETHEUS
   instanceSelector:
     matchLabels:
       dashboards: grafana
+  datasources:
+    - datasourceName: VictoriaMetrics
+      inputName: DS_PROMETHEUS
   url: https://grafana.com/api/dashboards/15758/revisions/46/download
 ---
 # yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/grafana.integreatly.org/grafanadashboard_v1beta1.json
@@ -66,12 +66,12 @@ metadata:
   name: kubernetes-nodes
 spec:
   allowCrossNamespaceImport: true
-  datasources:
-    - datasourceName: prometheus
-      inputName: DS_PROMETHEUS
   instanceSelector:
     matchLabels:
       dashboards: grafana
+  datasources:
+    - datasourceName: VictoriaMetrics
+      inputName: DS_PROMETHEUS
   url: https://grafana.com/api/dashboards/15759/revisions/40/download
 ---
 # yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/grafana.integreatly.org/grafanadashboard_v1beta1.json
@@ -81,12 +81,12 @@ metadata:
   name: kubernetes-pods
 spec:
   allowCrossNamespaceImport: true
-  datasources:
-    - datasourceName: prometheus
-      inputName: DS_PROMETHEUS
   instanceSelector:
     matchLabels:
       dashboards: grafana
+  datasources:
+    - datasourceName: VictoriaMetrics
+      inputName: DS_PROMETHEUS
   url: https://grafana.com/api/dashboards/15760/revisions/39/download
 ---
 # yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/grafana.integreatly.org/grafanadashboard_v1beta1.json
@@ -96,10 +96,10 @@ metadata:
   name: kubernetes-volumes
 spec:
   allowCrossNamespaceImport: true
-  datasources:
-    - datasourceName: prometheus
-      inputName: DS_PROMETHEUS
   instanceSelector:
     matchLabels:
       dashboards: grafana
+  datasources:
+    - datasourceName: VictoriaMetrics
+      inputName: DS_PROMETHEUS
   url: https://grafana.com/api/dashboards/11454/revisions/14/download
