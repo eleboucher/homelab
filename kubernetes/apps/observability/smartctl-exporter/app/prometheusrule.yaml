@@ -67,7 +67,7 @@ spec:
               Device {{ $labels.device }} on instance {{ $labels.instance }}
               interface is slower then it should be.
           expr: |
-            smartctl_device_interface_speed{speed_type="current"} != on(device, instance, namespace, pod) smartctl_device_interface_speed{speed_type="max"}
+            smartctl_device_interface_speed{speed_type="current"} != on(cluster, device, instance, namespace, pod) smartctl_device_interface_speed{speed_type="max"}
           for: 15m
           labels:
             severity: critical
