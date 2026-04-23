@@ -161,7 +161,10 @@ cluster:
       crt: op://kubernetes/talos/CLUSTER_ETCD_CA_CRT
       key: op://kubernetes/talos/CLUSTER_ETCD_CA_KEY
     extraArgs:
+      auto-compaction-mode: revision
+      auto-compaction-retention: "10000"
       listen-metrics-urls: http://0.0.0.0:2381
+      snapshot-count: "5000"
   proxy:
     disabled: true
     image: registry.k8s.io/kube-proxy:v1.35.4
