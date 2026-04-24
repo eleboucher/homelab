@@ -11,6 +11,9 @@ spec:
   interval: 1h
   values:
     fullnameOverride: victoria-logs
+    global:
+      image:
+        registry: quay.io
     server:
       persistentVolume:
         enabled: true
