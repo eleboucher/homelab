@@ -11,6 +11,9 @@ spec:
   interval: 1h
   values:
     fullnameOverride: victoria-logs-collector
+    global:
+      image:
+        registry: quay.io
     podMonitor:
       enabled: true
     remoteWrite:
