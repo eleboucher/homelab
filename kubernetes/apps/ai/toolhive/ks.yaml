@@ -49,3 +49,34 @@ spec:
     namespace: flux-system
   targetNamespace: ai
   timeout: 5m
+---
+# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: toolhive-config
+spec:
+  components:
+    - ../../../../components/oidc
+  postBuild:
+    substitute:
+      APP: toolhive
+      APP_NAMESPACE: ai
+      OIDC_CALLBACK: /oauth/callback
+      SUBDOMAIN: mcp
+      OIDC_DISABLE_PKCE: "true"
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: toolhive-config
+  dependsOn:
+    - name: toolhive-operator-crds
+      namespace: ai
+  interval: 1h
+  path: "./kubernetes/apps/ai/toolhive/config"
+  prune: true
+  sourceRef:
+    kind: OCIRepository
+    name: flux-system
+    namespace: flux-system
+  targetNamespace: ai
+  timeout: 5m

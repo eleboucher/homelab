@@ -1,0 +1,11 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/toolhive.stacklok.dev/mcpoidcconfig_v1beta1.json
+apiVersion: toolhive.stacklok.dev/v1beta1
+kind: MCPOIDCConfig
+metadata:
+  name: external-oidc
+spec:
+  type: inline
+  inline:
+    issuer: https://mcp.erwanleboucher.dev
+    jwksAllowPrivateIP: true
