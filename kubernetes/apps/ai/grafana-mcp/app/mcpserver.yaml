@@ -1,0 +1,27 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/toolhive.stacklok.dev/mcpserver_v1alpha1.json
+apiVersion: toolhive.stacklok.dev/v1alpha1
+kind: MCPServer
+metadata:
+  name: grafana
+spec:
+  image: mcp/grafana:latest
+  transport: streamable-http
+  mcpPort: 8000
+  args:
+    - -t
+    - streamable-http
+    - --address
+    - 0.0.0.0:8000
+  groupRef:
+    name: mcp-tools
+  permissionProfile:
+    type: builtin
+    name: network
+  env:
+    - name: GRAFANA_URL
+      value: http://grafana-service.observability.svc.cluster.local:3000
+  secrets:
+    - name: grafana-mcp
+      key: token
+      targetEnvName: GRAFANA_SERVICE_ACCOUNT_TOKEN

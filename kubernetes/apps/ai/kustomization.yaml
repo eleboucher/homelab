@@ -6,5 +6,9 @@ namespace: ai
 
 resources:
   - namespace.yaml
+  - context7-mcp/ks.yaml
+  - grafana-mcp/ks.yaml
+  - memory-mcp/ks.yaml
   - ollama/ks.yaml
   - toolhive/ks.yaml
+  - victoria-logs-mcp/ks.yaml
