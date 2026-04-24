@@ -18,9 +18,6 @@ spec:
     prometheus-node-exporter:
       enabled: true
       fullnameOverride: node-exporter
-      image:
-        registry: quay.io
-        repository: prometheus/node-exporter
       hostNetwork: false
       prometheus:
         monitor:
