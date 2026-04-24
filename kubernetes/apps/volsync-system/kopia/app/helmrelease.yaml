@@ -52,7 +52,7 @@ spec:
               requests:
                 memory: 128Mi
               limits:
-                memory: 1Gi
+                memory: 240Mi
             securityContext:
               allowPrivilegeEscalation: false
               capabilities:

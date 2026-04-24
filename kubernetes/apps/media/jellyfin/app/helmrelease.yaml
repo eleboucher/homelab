@@ -58,10 +58,10 @@ spec:
               claims:
                 - name: gpu
               requests:
-                cpu: 1
+                cpu: 45m
                 memory: 1Gi
               limits:
-                memory: 10Gi
+                memory: 1344Mi
             securityContext:
               privileged: true
     persistence:
