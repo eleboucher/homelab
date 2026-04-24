@@ -252,7 +252,6 @@ spec:
           - path: /plugins
       tmpfs:
         type: emptyDir
-        sizeLimit: 10Gi
         globalMounts:
           - path: /data
             subPath: data
