@@ -405,6 +405,8 @@ spec:
     alertmanager:
       spec:
         externalURL: https://vmalertmanager.erwanleboucher.dev
+        image:
+          repository: prometheus/alertmanager
         replicaCount: 1
         storage:
           volumeClaimTemplate:
