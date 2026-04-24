@@ -20,4 +20,5 @@ resources:
   - smartctl-exporter/ks.yaml
   - umami/ks.yaml
   - victoria-logs/ks.yaml
+  - victoria-logs-collector/ks.yaml
   - victoria-metrics/ks.yaml

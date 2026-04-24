@@ -32,15 +32,6 @@ spec:
 
       inputs: |-
         [INPUT]
-          name tail
-          alias kubernetes
-          path /var/log/containers/*.log
-          parser containerd
-          tag kubernetes.*
-          skip_empty_lines on
-          skip_long_lines on
-
-        [INPUT]
           name tcp
           alias talos_kernel
           listen 127.0.0.1
@@ -52,64 +43,13 @@ spec:
 
       filters: |-
         [FILTER]
-          name kubernetes
-          match kubernetes.*
-          merge_log on
-          kube_tag_prefix kubernetes.var.log.containers.
-          k8s-logging.parser on
-          k8s-logging.exclude on
-          namespace_labels off
-          Buffer_Size 1Mb
-          annotations off
-
-        [FILTER]
-          name nest
-          match kubernetes.*
-          operation lift
-          nested_under kubernetes
-          add_prefix k_
-
-        [FILTER]
-          name nest
-          match kubernetes.*
-          operation lift
-          nested_under k_labels
-          add_prefix k_labels_
-
-        [FILTER]
-          name modify
-          match kubernetes.*
-          rename k_labels_app.kubernetes.io/name app
-          rename k_labels_app app
-          rename k_labels_k8s-app app
-
-        [FILTER]
           name modify
           match talos.*
           add node ${NODE_NAME}
           rename talos-level level
           rename talos-time talos_time
 
-      customParsers: |-
-        [PARSER]
-          name containerd
-          format regex
-          regex ^(?<time>[^ ]+) (?<stream>stdout|stderr) (?<logtag>[^ ]*) (?<log>.*)$
-          time_key time
-          time_format %Y-%m-%dT%H:%M:%S.%L%z
-
       outputs: |-
-        [OUTPUT]
-          name http
-          match kubernetes.*
-          host victoria-logs-server.observability.svc.cluster.local
-          port 9428
-          uri /insert/jsonline?_stream_fields=stream,k_namespace_name,k_pod_name,app&_msg_field=log&_time_field=date
-          format json_lines
-          json_date_format iso8601
-          compress gzip
-          log_response_payload false
-
         [OUTPUT]
           name http
           match talos.*
