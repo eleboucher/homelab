@@ -75,9 +75,9 @@ spec:
                   initialDelaySeconds: 5
             resources:
               requests:
-                memory: 2Gi
+                memory: 800Mi
               limits:
-                memory: 6Gi
+                memory: 1280Mi
           gotenberg:
             image:
               repository: docker.io/gotenberg/gotenberg

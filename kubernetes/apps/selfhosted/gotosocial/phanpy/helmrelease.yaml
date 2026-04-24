@@ -24,7 +24,7 @@ spec:
               requests:
                 cpu: 10m
               limits:
-                memory: 512Mi
+                memory: 32Mi
     service:
       main:
         controller: phanpy
