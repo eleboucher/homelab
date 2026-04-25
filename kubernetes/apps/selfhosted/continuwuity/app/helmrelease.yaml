@@ -24,7 +24,7 @@ spec:
           app:
             image:
               repository: forgejo.ellis.link/continuwuation/continuwuity
-              tag: v0.5.7-maxperf
+              tag: v0.5.8-maxperf
             env:
               TZ: "Europe/Paris"
               CONDUWUIT_SERVER_NAME: erwanleboucher.dev
