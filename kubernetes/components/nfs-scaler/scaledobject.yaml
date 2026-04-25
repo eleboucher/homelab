@@ -7,7 +7,7 @@ metadata:
 spec:
   advanced:
     restoreToOriginalReplicaCount: true
-  cooldownPeriod: 0
+  cooldownPeriod: 60
   minReplicaCount: 0
   maxReplicaCount: 1
   scaleTargetRef:
@@ -20,4 +20,4 @@ spec:
         serverAddress: http://vmsingle-victoria-metrics.observability.svc.cluster.local:8428
         query: max_over_time(probe_success{instance=~".+:2049"}[1m])
         threshold: "1"
-        ignoreNullValues: "0"
+        ignoreNullValues: "1"

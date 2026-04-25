@@ -31,6 +31,13 @@ spec:
               tag: latest@sha256:73e7ab16d8b8daeaa64b82afc4e703853cab680f248f976d5738c9fda1390cf1
             env:
               EXPORTS_MOUNTED: "true"
+            lifecycle:
+              preStop:
+                exec:
+                  command:
+                    - sh
+                    - -c
+                    - exportfs -ua; killall -TERM rpc.nfsd; sleep 5
             probes:
               liveness: &probes
                 enabled: true
@@ -48,9 +55,9 @@ spec:
             resources:
               requests:
                 cpu: 50m
-                memory: 64Mi
+                memory: 256Mi
               limits:
-                memory: 64Mi
+                memory: 256Mi
             securityContext:
               capabilities:
                 add:
