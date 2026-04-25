@@ -2,69 +2,91 @@
 
 
 :root {
-  --steel-900: #0a0c12;
+  --anthracite-1000: #0a0c12;
+  --anthracite-950: #101218;
+  --anthracite-900: #16181f;
+  --anthracite-850: #1c1e28;
+  --anthracite-800: #252834;
+  --anthracite-700: #313544;
+  --anthracite-600: #3e4358;
+  --anthracite-500: #535875;
+
+  --navy-700: #1e3d66;
+  --navy-600: #2a5080;
+  --navy-500: #3672a4;
+  --navy-400: #4a8ec8;
+  --navy-300: #6baad8;
+  --navy-200: #a8c8e0;
+
+  --slate-400: #8a9ab5;
+  --slate-300: #b4c0d5;
+
+  --cream-400: #d0d0d8;
+  --cream-300: #e0e0e6;
+  --cream-200: #ededf0;
+
+  --steel-900: var(--anthracite-1000);
   --steel-850: #0c0e13;
-  --steel-800: #101218;
-  --steel-750: #16181f;
-  --steel-700: #1c1e28;
-  --steel-650: #252834;
-  --steel-600: #313544;
-  --steel-550: #3e4358;
-  --steel-500: #535875;
+  --steel-800: var(--anthracite-950);
+  --steel-750: var(--anthracite-900);
+  --steel-700: var(--anthracite-850);
+  --steel-650: var(--anthracite-800);
+  --steel-600: var(--anthracite-700);
+  --steel-550: var(--anthracite-600);
+  --steel-500: var(--anthracite-500);
   --steel-450: #6e7390;
-  --steel-400: #8a9ab5;
+  --steel-400: var(--slate-400);
   --steel-350: #a8b3c8;
-  --steel-300: #b4c0d5;
+  --steel-300: var(--slate-300);
   --steel-250: #c4cad8;
-  --steel-200: #d0d0d8;
-  --steel-150: #e0e0e6;
-  --steel-100: #ededf0;
+  --steel-200: var(--cream-400);
+  --steel-150: var(--cream-300);
+  --steel-100: var(--cream-200);
 
-  --color-primary: #2a5080;
-  --color-primary-contrast: #d6e7f5;
-  --color-primary-dark-1: #3672a4;
-  --color-primary-dark-2: #4a8ec8;
-  --color-primary-dark-3: #6baad8;
-  --color-primary-dark-4: #a8c8e0;
-  --color-primary-dark-5: #c6dcee;
-  --color-primary-dark-6: #d6e7f5;
-  --color-primary-dark-7: #ebf2f9;
-  --color-primary-light-1: #1e3d66;
-  --color-primary-light-2: #173052;
-  --color-primary-light-3: #11243f;
-  --color-primary-light-4: #0c1a2e;
-  --color-primary-light-5: #0c1a2e;
-  --color-primary-light-6: #0a1424;
-  --color-primary-light-7: #0a1424;
-  --color-primary-alpha-10: #2a508019;
-  --color-primary-alpha-20: #2a508033;
-  --color-primary-alpha-30: #2a50804b;
-  --color-primary-alpha-40: #2a508066;
-  --color-primary-alpha-50: #2a508080;
-  --color-primary-alpha-60: #2a508099;
-  --color-primary-alpha-70: #2a5080b3;
-  --color-primary-alpha-80: #2a5080cc;
-  --color-primary-alpha-90: #2a5080e1;
+  --color-primary: var(--navy-300);
+  --color-primary-contrast: var(--anthracite-950);
+  --color-primary-dark-1: var(--navy-200);
+  --color-primary-dark-2: #c6dcee;
+  --color-primary-dark-3: #d6e7f5;
+  --color-primary-dark-4: #ebf2f9;
+  --color-primary-dark-5: #f5f9fc;
+  --color-primary-dark-6: #fafcfd;
+  --color-primary-dark-7: #ffffff;
+  --color-primary-light-1: var(--navy-400);
+  --color-primary-light-2: var(--navy-500);
+  --color-primary-light-3: var(--navy-600);
+  --color-primary-light-4: var(--navy-700);
+  --color-primary-light-5: #173052;
+  --color-primary-light-6: #11243f;
+  --color-primary-light-7: #0c1a2e;
+  --color-primary-alpha-10: #6baad819;
+  --color-primary-alpha-20: #6baad833;
+  --color-primary-alpha-30: #6baad84b;
+  --color-primary-alpha-40: #6baad866;
+  --color-primary-alpha-50: #6baad880;
+  --color-primary-alpha-60: #6baad899;
+  --color-primary-alpha-70: #6baad8b3;
+  --color-primary-alpha-80: #6baad8cc;
+  --color-primary-alpha-90: #6baad8e1;
 
-  --color-accent: #6baad8;
-  --color-small-accent: #1e3d66;
-  --color-highlight-fg: #a8c8e0;
-  --color-highlight-bg: #2a508033;
+  --color-accent: var(--navy-400);
+  --color-small-accent: var(--navy-700);
+  --color-highlight-fg: var(--navy-200);
 
-  --color-text: #ededf0;
+  --color-text: var(--cream-200);
   --color-text-dark: #ffffff;
-  --color-text-light: #ededf0;
-  --color-text-light-1: #ededf0;
-  --color-text-light-2: #d0d0d8;
-  --color-text-light-3: #b4c0d5;
-  --color-input-text: #ededf0;
+  --color-text-light: var(--cream-200);
+  --color-text-light-1: var(--cream-200);
+  --color-text-light-2: var(--cream-400);
+  --color-text-light-3: var(--slate-300);
+  --color-input-text: var(--cream-200);
   --color-text-focus: #ffffff;
   --color-label-text: #ffffff;
 
-  --color-selection-bg: #4a8ec8;
-  --color-selection-fg: #101218;
+  --color-selection-bg: var(--navy-400);
+  --color-selection-fg: var(--anthracite-950);
 }
 
 ::selection {
-  background-color: color-mix(in srgb, #4a8ec8 30%, transparent);
+  background-color: color-mix(in srgb, var(--navy-400) 30%, transparent);
 }

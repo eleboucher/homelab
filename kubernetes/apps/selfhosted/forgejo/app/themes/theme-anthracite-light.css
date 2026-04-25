@@ -2,18 +2,24 @@
 
 
 :root {
-  --color-primary: #2a5080;
+  --navy-700: #1e3d66;
+  --navy-600: #2a5080;
+  --navy-500: #3672a4;
+  --navy-400: #4a8ec8;
+  --navy-300: #6baad8;
+
+  --color-primary: var(--navy-600);
   --color-primary-contrast: #ffffff;
-  --color-primary-dark-1: #1e3d66;
+  --color-primary-dark-1: var(--navy-700);
   --color-primary-dark-2: #173052;
   --color-primary-dark-3: #11243f;
   --color-primary-dark-4: #0c1a2e;
   --color-primary-dark-5: #0c1a2e;
   --color-primary-dark-6: #0c1a2e;
   --color-primary-dark-7: #0c1a2e;
-  --color-primary-light-1: #3672a4;
-  --color-primary-light-2: #4a8ec8;
-  --color-primary-light-3: #6baad8;
+  --color-primary-light-1: var(--navy-500);
+  --color-primary-light-2: var(--navy-400);
+  --color-primary-light-3: var(--navy-300);
   --color-primary-light-4: #a3cae6;
   --color-primary-light-5: #c5dcef;
   --color-primary-light-6: #e0ecf6;
@@ -30,10 +36,10 @@
   --color-primary-hover: var(--color-primary-dark-1);
   --color-primary-active: var(--color-primary-dark-2);
 
-  --color-selection-bg: #4a8ec8;
+  --color-selection-bg: var(--navy-400);
   --color-selection-fg: #ffffff;
 }
 
 ::selection {
-  background-color: color-mix(in srgb, #4a8ec8 30%, transparent);
+  background-color: color-mix(in srgb, var(--navy-400) 30%, transparent);
 }
