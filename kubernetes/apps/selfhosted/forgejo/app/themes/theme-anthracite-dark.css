@@ -51,10 +51,18 @@
   --color-highlight-fg: #a8c8e0;
   --color-highlight-bg: #2a508033;
 
+  --color-text: #ededf0;
+  --color-text-dark: #ffffff;
+  --color-text-light: #ededf0;
+  --color-text-light-1: #ededf0;
+  --color-text-light-2: #d0d0d8;
+  --color-text-light-3: #b4c0d5;
+  --color-input-text: #ededf0;
+  --color-text-focus: #ffffff;
+  --color-label-text: #ffffff;
+
   --color-selection-bg: #4a8ec8;
   --color-selection-fg: #101218;
-  --color-text-dark: #ededf0;
-  --color-text-focus: #ededf0;
 }
 
 ::selection {
