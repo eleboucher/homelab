@@ -70,9 +70,9 @@ services:
       TOWONEL_EDGE_TLS_CERT_DIR: /data/certs
       TOWONEL_EDGE_TLS_ACME_EMAIL: ${TOWONEL_ACME_EMAIL}
       TOWONEL_EDGE_TLS_HTTP_LISTEN_ADDR: 0.0.0.0:8081
-    ports:
-      - "${VPS_ADD_IP}:443:4443"
-      - "${VPS_ADD_IP}:80:8081"
+    expose:
+      - "4443"
+      - "8081"
     volumes:
       - /opt/towonel/edge:/data
     labels:

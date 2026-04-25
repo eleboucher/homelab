@@ -30,8 +30,8 @@ services:
       rathole-init:
         condition: service_completed_successfully
     ports:
-      - "${VPS_ADD_IP}:2222:2222"
-      - "${VPS_ADD_IP}:2333:2333"
+      - "${VPS_IP}:2222:2222"
+      - "${VPS_IP}:2333:2333"
     volumes:
       - rathole-config:/etc/rathole:ro
     labels:

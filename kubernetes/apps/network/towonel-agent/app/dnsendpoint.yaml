@@ -9,7 +9,7 @@ spec:
     - dnsName: external.erwanleboucher.dev
       recordType: A
       targets:
-        - ${VPS_ADD_IP}
+        - ${VPS_IP}
     - dnsName: erwanleboucher.dev
       recordType: A
       targets:
@@ -37,4 +37,4 @@ spec:
     - dnsName: tunnel.erwanleboucher.dev
       recordType: A
       targets:
-        - ${VPS_ADD_IP}
+        - ${VPS_IP}

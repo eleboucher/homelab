@@ -22,7 +22,6 @@
         - {key: "doco-cd/webhook_secret", var: "webhook_secret"}
         - {key: "towonel-tunnel/CROWDSEC_FW_API_KEY", var: "crowdsec_fw_api_key"}
         - {key: "towonel-tunnel/ip", var: "vps_ip"}
-        - {key: "towonel-tunnel/add_ip", var: "vps_add_ip"}
       register: secrets_raw
 
     - name: Set secret facts
@@ -33,30 +32,16 @@
         webhook_secret: "{{ secrets_raw.results[3].stdout }}"
         crowdsec_fw_api_key: "{{ secrets_raw.results[4].stdout }}"
         vps_ip: "{{ secrets_raw.results[5].stdout }}"
-        vps_add_ip: "{{ secrets_raw.results[6].stdout }}"
-        additional_ips: "{{ [secrets_raw.results[6].stdout] | select('truthy') | list }}"
 
-    - name: network | Deploy additional-IPs netplan overlay
-      ansible.builtin.copy:
-        dest: /etc/netplan/60-additional-ips.yaml
-        content: |
-          network:
-            version: 2
-            ethernets:
-              {{ network_interface }}:
-                addresses:
-          {% for ip in additional_ips %}
-                  - {{ ip }}/32
-          {% endfor %}
-        owner: root
-        group: root
-        mode: "0600"
-      register: netplan_additional
-      when: additional_ips | length > 0
+    - name: network | Remove legacy additional-IPs netplan overlay
+      ansible.builtin.file:
+        path: /etc/netplan/60-additional-ips.yaml
+        state: absent
+      register: netplan_additional_removed
 
     - name: network | Apply netplan
       ansible.builtin.command: netplan apply
-      when: netplan_additional is defined and netplan_additional.changed
+      when: netplan_additional_removed.changed
       changed_when: true
 
     - name: Install Docker
@@ -243,7 +228,6 @@
         msg:
           - "=== Bootstrap complete ==="
           - "VPS IP     : {{ vps_ip }}"
-          - "VPS add IP : {{ vps_add_ip }}"
 
   handlers:
     - name: Restart ssh.socket

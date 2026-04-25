@@ -3,8 +3,10 @@ name: edge
 
 services:
   caddy:
-    # renovate: datasource=docker depName=caddy
-    image: docker.io/library/caddy:2.11-alpine
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: caddy-l4:local
     container_name: caddy
     restart: unless-stopped
     environment:
