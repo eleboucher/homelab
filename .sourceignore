@@ -1,0 +1,2 @@
+!kubernetes/apps/selfhosted/forgejo/app/img/*.png
+!kubernetes/apps/selfhosted/forgejo/app/img/*.svg
