@@ -3,33 +3,35 @@
 	http_port 8080
 	https_port 8443
 
-	# towonel-edge does not speak PROXY protocol, so tunnel.* legs forward raw.
-	# Loopback legs send PROXY v2 so caddy's http app sees the real client IP.
+	# Hosts caddy serves locally (sites defined below) → loopback with PROXY v2.
+	# Everything else → towonel-edge raw passthrough; the edge tunnels to the
+	# cluster, which serves bluesky/gts/watch/etc. via envoy-external.
+	# towonel-edge does not speak PROXY protocol, so the default leg is raw.
 	layer4 {
 		:443 {
-			@tunnel tls sni tunnel.erwanleboucher.dev
-			route @tunnel {
-				proxy towonel-edge:4443
-			}
-			@tls tls
-			route @tls {
+			@local tls sni registry.erwanleboucher.dev doco-cd.erwanleboucher.dev towonel.erwanleboucher.dev k8s-schemas.erwanleboucher.dev openpgpkey.erwanleboucher.dev www.erwanleboucher.dev erwanleboucher.dev
+			route @local {
 				proxy {
 					proxy_protocol v2
 					upstream 127.0.0.1:8443
 				}
 			}
+			@tls tls
+			route @tls {
+				proxy towonel-edge:4443
+			}
 		}
 		:80 {
-			@tunnel_http http host tunnel.erwanleboucher.dev
-			route @tunnel_http {
-				proxy towonel-edge:8081
-			}
-			@http http
-			route @http {
+			@local_http http host registry.erwanleboucher.dev doco-cd.erwanleboucher.dev towonel.erwanleboucher.dev k8s-schemas.erwanleboucher.dev openpgpkey.erwanleboucher.dev www.erwanleboucher.dev erwanleboucher.dev
+			route @local_http {
 				proxy {
 					proxy_protocol v2
 					upstream 127.0.0.1:8080
 				}
+			}
+			@http http
+			route @http {
+				proxy towonel-edge:8081
 			}
 		}
 	}
