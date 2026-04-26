@@ -33,7 +33,7 @@ spec:
             env:
               RUST_LOG: info
               TOWONEL_AGENT_SERVICES: '[{"hostname":"*.erwanleboucher.dev","origin":"envoy-external.network.svc.cluster.local:443"}]'
-              TOWONEL_AGENT_TRUSTED_EDGES: '["2b9ab7b5e3fc595ecebf5ea3d50e599b2ba8626c3f2a58f3a8a760a30dcc085c"]'
+              TOWONEL_AGENT_TCP_SERVICES: '[{"name":"forgejo-ssh", "origin":"envoy-external.network.svc.cluster.local:2222","listen_port":2222}]'
               TOWONEL_INVITE_TOKEN:
                 valueFrom:
                   secretKeyRef:
