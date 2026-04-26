@@ -14,7 +14,7 @@
 			}
 			@tls tls
 			route @tls {
-				proxy towonel-edge:4443
+				proxy towonel-hub:4443
 			}
 		}
 		:80 {
@@ -27,7 +27,7 @@
 			}
 			@http http
 			route @http {
-				proxy towonel-edge:8081
+				proxy towonel-hub:8081
 			}
 		}
 	}
