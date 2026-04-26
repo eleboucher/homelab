@@ -1,6 +1,9 @@
 ---
 working_dir: ./docker/vps
 auto_discover: true
+reconciliation:
+  enabled: true
+  interval: 3600
 auto_discover_opts:
   depth: 1
   delete: true
