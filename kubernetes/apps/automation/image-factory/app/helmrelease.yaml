@@ -39,7 +39,7 @@ spec:
             installer: eleboucher/installer
             installerBase: eleboucher/installer-base
             imager: eleboucher/imager
-            extensionManifest: siderolabs/extensions
+            extensionManifest: eleboucher/extensions
             overlayManifest: siderolabs/overlays
             talosctl: siderolabs/talosctl-all
 
