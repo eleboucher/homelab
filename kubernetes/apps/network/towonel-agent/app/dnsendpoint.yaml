@@ -7,9 +7,9 @@ metadata:
 spec:
   endpoints:
     - dnsName: external.erwanleboucher.dev
-      recordType: A
+      recordType: CNAME
       targets:
-        - ${VPS_IP}
+        - tunnel.erwanleboucher.dev
     - dnsName: erwanleboucher.dev
       recordType: A
       targets:
