@@ -35,7 +35,8 @@ services:
     expose:
       - "4443"
       - "8081"
-      - "2222"
+    ports:
+      - "2222:2222"
     volumes:
       - /opt/towonel:/data
     labels:
