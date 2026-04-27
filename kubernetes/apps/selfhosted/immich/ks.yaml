@@ -13,7 +13,7 @@ spec:
   path: ./kubernetes/apps/selfhosted/immich/app
   postBuild:
     substitute:
-      APP: *app
+      APP: immich-server
       APP_NAMESPACE: selfhosted
       SUBDOMAIN: photos
       DATABASE_EXTENSIONS: |
