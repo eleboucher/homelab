@@ -168,6 +168,7 @@ cluster:
       listen-metrics-urls: http://0.0.0.0:2381
       snapshot-count: "5000"
       heartbeat-interval: "500"
+      election-timeout: "5000"
   proxy:
     disabled: true
     image: registry.k8s.io/kube-proxy:v1.35.4
