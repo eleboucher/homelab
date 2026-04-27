@@ -59,6 +59,7 @@ services:
             - ubuntu-latest:docker://ghcr.io/bjw-s-labs/forgejo-runner:ubuntu-24.04
             - default:docker://ghcr.io/bjw-s-labs/forgejo-runner:ubuntu-24.04
             - docker:docker://ghcr.io/bjw-s-labs/forgejo-runner:ubuntu-24.04
+            - multiarch:docker://ghcr.io/bjw-s-labs/forgejo-runner:ubuntu-24.04
           timeout: 3h
         server:
           connections:
