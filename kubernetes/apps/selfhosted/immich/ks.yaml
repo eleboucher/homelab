@@ -7,13 +7,12 @@ metadata:
 spec:
   components:
     - ../../../../components/postgres/cert
-    - ../../../../components/nfs-scaler
     - ../../../../components/oidc
   interval: 1h
   path: ./kubernetes/apps/selfhosted/immich/app
   postBuild:
     substitute:
-      APP: immich-server
+      APP: immich
       APP_NAMESPACE: selfhosted
       SUBDOMAIN: photos
       DATABASE_EXTENSIONS: |
