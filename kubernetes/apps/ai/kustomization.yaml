@@ -10,5 +10,6 @@ resources:
   - grafana-mcp/ks.yaml
   - memory-mcp/ks.yaml
   - ollama/ks.yaml
+  - sidero-mcp/ks.yaml
   - toolhive/ks.yaml
   - victoria-logs-mcp/ks.yaml

@@ -1,0 +1,11 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/toolhive.stacklok.dev/mcpremoteproxy_v1alpha1.json
+apiVersion: toolhive.stacklok.dev/v1alpha1
+kind: MCPRemoteProxy
+metadata:
+  name: sidero
+spec:
+  groupRef:
+    name: mcp-tools
+  remoteUrl: https://docs.siderolabs.com/mcp
+  transport: streamable-http
