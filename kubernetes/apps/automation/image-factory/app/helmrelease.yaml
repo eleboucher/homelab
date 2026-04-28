@@ -36,23 +36,30 @@ spec:
         core:
           registry: ghcr.io
           components:
-            installer: eleboucher/installer
-            installerBase: eleboucher/installer-base
-            imager: eleboucher/imager
-            extensionManifest: eleboucher/extensions
+            installer: arch-talos/installer
+            installerBase: arch-talos/installer-base
+            imager: arch-talos/imager
+            extensionManifest: arch-talos/extensions
             overlayManifest: siderolabs/overlays
             talosctl: siderolabs/talosctl-all
 
         installer:
           internal:
             registry: ghcr.io
-            namespace: eleboucher
+            namespace: arch-talos
             repository: installer
 
         schematic:
           registry: ghcr.io
-          namespace: eleboucher
+          namespace: arch-talos
           repository: schematics
+
+      cache:
+        oci:
+          registry: ghcr.io
+          namespace: arch-talos
+          repository: cache
+        signingKeyPath: /etc/image-factory/keys/cache-signing.key
 
       containerSignature:
         disabled: true
