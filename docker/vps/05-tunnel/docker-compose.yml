@@ -38,6 +38,7 @@ services:
       - "8081"
     ports:
       - "2222:2222"
+      - "22222:22222"
     volumes:
       - /opt/towonel:/data
     labels:

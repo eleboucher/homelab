@@ -87,6 +87,8 @@
           port: 22
         - name: SSH-forgejo
           port: 2222
+        - name: SSH-forgejo-1
+          port: 22222
         - name: Rathole-control
           port: 2333
         - name: HTTP
