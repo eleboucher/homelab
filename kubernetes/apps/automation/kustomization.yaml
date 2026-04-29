@@ -6,5 +6,4 @@ namespace: automation
 
 resources:
   - namespace.yaml
-  - image-factory/ks.yaml
   - renovate-operator/ks.yaml
