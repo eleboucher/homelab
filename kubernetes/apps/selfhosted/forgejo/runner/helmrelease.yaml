@@ -28,9 +28,9 @@ spec:
               poll_timeout: 10m
             log:
               level: info
-            pluginsv2:
+            plugins:
               k8s:
-                path: /plugins/forgejo-runner-k8s
+                address: "unix:///plugin/forgejo-runner-k8s.sock"
                 options:
                   namespace: selfhosted
                   poll_timeout: 10m
@@ -141,20 +141,6 @@ spec:
             runAsNonRoot: true
             runAsUser: 1000
         initContainers:
-          copy-k8s-plugin:
-            image:
-              repository: git.erwanleboucher.dev/eleboucher/runner-k8s-plugin-v2
-              tag: sha-f7ab06b75887e5497c9f9f9bef641aafb2ae3e1c
-            command:
-              - sh
-              - -c
-              - cp /usr/local/bin/forgejo-runner-k8s /plugins/forgejo-runner-k8s
-            securityContext:
-              allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
-              capabilities:
-                drop:
-                  - ALL
           register-runner:
             image:
               repository: git.erwanleboucher.dev/eleboucher/runner
@@ -201,6 +187,24 @@ spec:
               capabilities:
                 drop:
                   - ALL
+          k8s-plugin:
+            image:
+              repository: git.erwanleboucher.dev/eleboucher/runner-k8s-plugin
+              tag: sha-f7ab06b75887e5497c9f9f9bef641aafb2ae3e1c
+            args:
+              - --listen
+              - unix:///plugin/forgejo-runner-k8s.sock
+            resources:
+              requests:
+                cpu: 5m
+                memory: 32Mi
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - ALL
+
     serviceAccount:
       forgejo-runner: {}
     rbac:
@@ -249,7 +253,7 @@ spec:
       plugins:
         type: emptyDir
         globalMounts:
-          - path: /plugins
+          - path: /plugin
       tmpfs:
         type: emptyDir
         globalMounts:
