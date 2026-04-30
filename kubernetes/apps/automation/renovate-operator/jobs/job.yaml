@@ -1,4 +1,5 @@
 ---
+
 # yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/renovate-operator.mogenius.com/renovatejob_v1alpha1.json
 apiVersion: renovate-operator.mogenius.com/v1alpha1
 kind: RenovateJob
@@ -13,6 +14,8 @@ spec:
       value: debug
     - name: RENOVATE_PLATFORM_COMMIT
       value: "true"
+    - name: RENOVATE_REDIS_URL
+      value: "redis://dragonfly.database.svc:6379/2"
   image: ghcr.io/renovatebot/renovate:43.101.1
   parallelism: 5
   resources:
