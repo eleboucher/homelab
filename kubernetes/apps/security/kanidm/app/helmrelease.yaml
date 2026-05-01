@@ -37,6 +37,7 @@ spec:
               KANIDM_ORIGIN: https://idm.erwanleboucher.dev
               KANIDM_TLS_CHAIN: /certs/tls.crt
               KANIDM_TLS_KEY: /certs/tls.key
+              KANIDM_MAIL_RELAY: smtp-relay.selfhosted.svc.cluster.local:25
             resources:
               requests:
                 cpu: 10m
