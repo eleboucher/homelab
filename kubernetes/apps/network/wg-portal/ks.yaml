@@ -1,0 +1,30 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: wg-portal
+spec:
+  components:
+    - ../../../../components/oidc
+  interval: 1h
+  path: ./kubernetes/apps/network/wg-portal/app
+  postBuild:
+    substitute:
+      APP: wg-portal
+      APP_NAMESPACE: network
+      SUBDOMAIN: wgp
+      OIDC_DISPLAY_NAME: wg-portal
+      OIDC_PUBLIC_CLIENT: "true"
+      OIDC_LOCALHOST: "true"
+      OIDC_GROUP: users
+      OIDC_SUP_SCOPE_MAPS: |-
+        {"homelab_admins": ["openid", "profile", "email", "groups"]}
+  prune: true
+  sourceRef:
+    kind: OCIRepository
+    name: flux-system
+    namespace: flux-system
+  targetNamespace: network
+  timeout: 5m
+  wait: false

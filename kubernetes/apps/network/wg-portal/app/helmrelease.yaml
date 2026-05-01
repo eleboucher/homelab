@@ -1,0 +1,115 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: wg-portal
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: wg-portal
+  interval: 1h
+  values:
+    defaultPodOptions:
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        runAsGroup: 10001
+        fsGroup: 10001
+        seccompProfile:
+          type: RuntimeDefault
+    controllers:
+      wg-portal:
+        type: deployment
+        replicas: 1
+        annotations:
+          reloader.stakater.com/auto: "true"
+        containers:
+          app:
+            image:
+              repository: git.erwanleboucher.dev/eleboucher/wg-portal-server
+              tag: sha-2be79ac1b4d60c97cc97dda43fcef772ea9ff693
+            env:
+              RUST_LOG: info
+              LISTEN_ADDR: "[::]:50051"
+              METRICS_ADDR: 0.0.0.0:9091
+              MIKROTIK_URL: http://192.168.1.1
+              MIKROTIK_INTERFACE: wg-remote
+              KANIDM_ISSUER: https://idm.erwanleboucher.dev
+              KANIDM_CLIENT_ID: wg-portal
+              ADMIN_GROUP: admins
+              WG_ENDPOINT: wg.erwanleboucher.dev:51820
+              WG_DNS: 192.168.1.2
+              WG_ALLOWED_IPS: 10.10.0.0/24,10.42.0.0/16,10.43.0.0/16,192.168.1.0/24,192.168.69.0/24
+              WG_POOL_SUBNET: 10.10.0.0/24
+            envFrom:
+              - secretRef:
+                  name: wg-portal-secret
+            probes:
+              liveness:
+                enabled: true
+                custom: true
+                spec:
+                  grpc:
+                    port: 50051
+                  initialDelaySeconds: 10
+                  periodSeconds: 30
+                  timeoutSeconds: 3
+                  failureThreshold: 3
+              readiness:
+                enabled: true
+                custom: true
+                spec:
+                  grpc:
+                    port: 50051
+                  initialDelaySeconds: 3
+                  periodSeconds: 10
+                  timeoutSeconds: 3
+                  failureThreshold: 3
+              startup:
+                enabled: true
+                custom: true
+                spec:
+                  grpc:
+                    port: 50051
+                  initialDelaySeconds: 2
+                  periodSeconds: 2
+                  failureThreshold: 30
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - "ALL"
+            resources:
+              requests:
+                cpu: 25m
+                memory: 32Mi
+              limits:
+                cpu: 250m
+                memory: 64Mi
+    service:
+      app:
+        ports:
+          grpc:
+            port: 50051
+            appProtocol: kubernetes.io/h2c
+          metrics:
+            port: 9091
+    route:
+      app:
+        parentRefs:
+          - name: envoy-external
+            namespace: network
+        hostnames:
+          - wgp.erwanleboucher.dev
+        rules:
+          - backendRefs:
+              - name: wg-portal
+                port: 50051
+    serviceMonitor:
+      app:
+        endpoints:
+          - port: metrics
+            interval: 1m
