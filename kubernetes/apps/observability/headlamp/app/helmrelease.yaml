@@ -10,69 +10,14 @@ spec:
     name: headlamp
   interval: 15m
   values:
-    replicaCount: 1
+    fullnameOverride: headlamp
     config:
       watchPlugins: true
-      oidc:
-        secret:
-          create: false
-        externalSecret:
-          enabled: true
-          name: kanidm-headlamp-oidc
-
-    env:
-      - name: OIDC_ISSUER_URL
-        value: "https://idm.erwanleboucher.dev/oauth2/openid/headlamp"
-      - name: OIDC_SCOPES
-        value: "openid,profile,email,groups"
-
     ingress:
       enabled: false
-
-    initContainers:
-      - command:
-          - /bin/sh
-          - "-c"
-          - |
-            kubectl config set-cluster main --server=https://kubernetes.default.svc --certificate-authority=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt
-            kubectl config set-credentials main --token=$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)
-            kubectl config set-context main --cluster=main --user=main
-            kubectl config use-context main
-        env:
-          - name: KUBERNETES_SERVICE_HOST
-            valueFrom:
-              fieldRef:
-                fieldPath: status.hostIP
-          - name: KUBERNETES_SERVICE_PORT
-            value: "6443"
-          - name: KUBECONFIG
-            value: /home/headlamp/.config/Headlamp/kubeconfigs/config
-        image: alpine/kubectl:1.36.0
-        name: create-kubeconfig
-        securityContext:
-          capabilities:
-            drop:
-              - ALL
-          privileged: false
-          readOnlyRootFilesystem: true
-          runAsGroup: 101
-          runAsNonRoot: true
-          runAsUser: 100
-        volumeMounts:
-          - mountPath: /home/headlamp/.config/Headlamp/kubeconfigs
-            name: kubeconfig
-            readOnly: false
     serviceAccount:
       create: false
       name: headlamp-admin
-    volumeMounts:
-      - mountPath: "/home/headlamp/.config/Headlamp/kubeconfigs/"
-        name: kubeconfig
-        readOnly: true
-    volumes:
-      - name: kubeconfig
-        emptyDir: {}
-
     pluginsManager:
       enabled: true
       configContent: |-
