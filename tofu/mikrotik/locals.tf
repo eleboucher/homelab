@@ -93,6 +93,9 @@ locals {
     wg-portal = {
       policies = ["read", "write", "sensitive", "api", "rest-api", "!local", "!telnet", "!ssh", "!ftp", "!reboot", "!policy", "!test", "!winbox", "!password", "!web", "!sniff", "!romon"]
     }
+    external_dns = {
+      policies = ["read", "write", "api", "rest-api", "!local", "!telnet", "!ssh", "!ftp", "!reboot", "!policy", "!test", "!winbox", "!password", "!web", "!sniff", "!sensitive", "!romon"]
+    }
   }
 
   users = {
@@ -108,6 +111,9 @@ locals {
     }
     homepage = {
       group = "homepage"
+    }
+    external-dns = {
+      group = "external_dns"
     }
   }
 }

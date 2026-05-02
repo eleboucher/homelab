@@ -1,9 +1,10 @@
 locals {
   user_passwords = {
-    admin      = var.user_password_admin
-    mktxp_user = var.user_password_mktxp_user
-    wg-portal  = var.user_password_wg_portal
-    homepage   = var.user_password_homepage
+    admin        = var.user_password_admin
+    mktxp_user   = var.user_password_mktxp_user
+    wg-portal    = var.user_password_wg_portal
+    homepage     = var.user_password_homepage
+    external-dns = var.user_password_external_dns
   }
 }
 
