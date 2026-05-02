@@ -19,7 +19,7 @@ spec:
       OIDC_LOCALHOST: "true"
       OIDC_GROUP: users
       OIDC_SUP_SCOPE_MAPS: |-
-        {"homelab_admins": ["openid", "profile", "email", "groups"]}
+        {"admins": ["openid", "profile", "email", "groups"]}
   prune: true
   sourceRef:
     kind: OCIRepository
