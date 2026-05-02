@@ -8,8 +8,20 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: headlamp
+  components:
+    - ../../../../components/oidc
   interval: 1h
   path: ./kubernetes/apps/observability/headlamp/app
+  postBuild:
+    substitute:
+      APP: headlamp
+      APP_NAMESPACE: observability
+      OIDC_CALLBACK: /oidc-callback
+      OIDC_CLIENT_ID_KEY: OIDC_CLIENT_ID
+      OIDC_CLIENT_SECRET_KEY: OIDC_CLIENT_SECRET
+      OIDC_DISPLAY_NAME: Headlamp
+      OIDC_GROUP: admins
+      OIDC_SCOPES: '["openid", "profile", "email", "groups"]'
   prune: true
   sourceRef:
     kind: OCIRepository
