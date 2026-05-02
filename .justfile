@@ -8,6 +8,7 @@ mod bootstrap "bootstrap"
 mod kube "kubernetes"
 mod talos "talos"
 mod ansible 'ansible'
+mod mikrotik 'tofu/mikrotik'
 
 [private]
 default:

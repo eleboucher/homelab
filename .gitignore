@@ -3,7 +3,6 @@
 .task/
 .venv/
 *.crt
-*.env
 *.iso
 *.key
 .decrypted~*
@@ -17,4 +16,3 @@ talosconfig
 *.tfstate.*
 *.tfvars
 *.tfvars.json
-
