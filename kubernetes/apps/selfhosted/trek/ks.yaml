@@ -25,7 +25,7 @@ spec:
       APP: trek
       ANUBIS_TARGET: http://trek.selfhosted.svc:3000
       APP_NAMESPACE: selfhosted
-      OIDC_CALLBACK: /oauth2/callback
+      OIDC_CALLBACK: /api/auth/oidc/callback
       OIDC_SCOPES: '["openid", "profile", "email", "groups"]'
       SUBDOMAIN: travel
   prune: true
