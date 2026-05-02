@@ -13,6 +13,18 @@ spec:
     replicaCount: 1
     config:
       watchPlugins: true
+      oidc:
+        secret:
+          create: false
+        externalSecret:
+          enabled: true
+          name: kanidm-headlamp-oidc
+
+    env:
+      - name: OIDC_ISSUER_URL
+        value: "https://idm.erwanleboucher.dev/oauth2/openid/headlamp"
+      - name: OIDC_SCOPES
+        value: "openid,profile,email,groups"
 
     ingress:
       enabled: false
