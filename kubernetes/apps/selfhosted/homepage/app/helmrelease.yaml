@@ -174,7 +174,7 @@ spec:
                   description: Metrics
                   widget:
                     type: prometheus
-                    url: http://vmsingle-victoria-metrics-cluster.observability:8428
+                    url: http://vmsingle-victoria-metrics.observability:8428
               - Grafana:
                   icon: grafana.png
                   href: https://grafana.erwanleboucher.dev

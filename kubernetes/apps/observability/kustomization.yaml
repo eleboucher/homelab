@@ -14,8 +14,12 @@ resources:
   - headlamp/ks.yaml
   - keda/ks.yaml
   - kromgo/ks.yaml
+  - kube-state-metrics/ks.yaml
   - mikrotik-exporter/ks.yaml
   - namespace.yaml
+  - node-exporter/ks.yaml
+  - prometheus-adapter/ks.yaml
+  - prometheus-operator-crds/ks.yaml
   - silence-operator/ks.yaml
   - smartctl-exporter/ks.yaml
   - umami/ks.yaml
