@@ -83,19 +83,17 @@ jobs:
       - name: Generate Diff
         id: diff
         run: |
-          if [ -f pull/diff.patch ] && [ -s pull/diff.patch ]; then
-            {
-                echo 'diff<<EOF'
-                cat pull/diff.patch
-                echo EOF
-            } >> "${FORGEJO_OUTPUT}";
-            {
-                echo "## Flux ${{ matrix.resources }} diff"
-                echo '```diff'
-                cat pull/diff.patch
-                echo '```'
-            } >> "${FORGEJO_STEP_SUMMARY}"
-          fi
+          {
+              echo 'diff<<EOF'
+              cat pull/diff.patch
+              echo EOF
+          } >> "${FORGEJO_OUTPUT}";
+          {
+              echo "## Flux ${{ matrix.resources }} diff"
+              echo '```diff'
+              cat pull/diff.patch
+              echo '```'
+          } >> "${FORGEJO_STEP_SUMMARY}"
 
       - name: Add Comment
         if: ${{ steps.diff.outputs.diff != '' }}
