@@ -1,0 +1,38 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: trek
+spec:
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: trek
+  components:
+    - ../../../../components/anubis
+    - ../../../../components/oidc
+  dependsOn:
+    - name: envoy-gateway
+      namespace: network
+    - name: external-secrets
+      namespace: security
+    - name: longhorn
+      namespace: longhorn-system
+  interval: 1h
+  path: ./kubernetes/apps/selfhosted/trek/app
+  postBuild:
+    substitute:
+      APP: trek
+      ANUBIS_TARGET: http://trek-app.selfhosted.svc:3000
+      APP_NAMESPACE: selfhosted
+      OIDC_CALLBACK: /oauth2/callback
+      OIDC_SCOPES: '["openid", "profile", "email", "groups"]'
+      SUBDOMAIN: travel
+  prune: true
+  sourceRef:
+    kind: OCIRepository
+    name: flux-system
+    namespace: flux-system
+  targetNamespace: selfhosted
+  timeout: 5m
+  wait: false
