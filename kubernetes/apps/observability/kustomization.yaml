@@ -18,7 +18,6 @@ resources:
   - mikrotik-exporter/ks.yaml
   - namespace.yaml
   - node-exporter/ks.yaml
-  - prometheus-adapter/ks.yaml
   - prometheus-operator-crds/ks.yaml
   - silence-operator/ks.yaml
   - smartctl-exporter/ks.yaml
