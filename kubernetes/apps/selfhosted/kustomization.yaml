@@ -16,9 +16,10 @@ resources:
   - immich/ks.yaml
   - mealie/ks.yaml
   - miniflux/ks.yaml
+  - obsidian-livesync/ks.yaml
   - namespace.yaml
   - paperless/ks.yaml
   - smtp-relay/ks.yaml
   - sparkyfitness/ks.yaml
+  - thelounge/ks.yaml
   - trek/ks.yaml
-  - obsidian-livesync/ks.yaml
