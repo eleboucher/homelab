@@ -21,5 +21,4 @@ resources:
   - paperless/ks.yaml
   - smtp-relay/ks.yaml
   - sparkyfitness/ks.yaml
-  - thelounge/ks.yaml
   - trek/ks.yaml
