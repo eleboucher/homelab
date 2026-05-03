@@ -7,7 +7,7 @@ resource "routeros_ip_dns" "server" {
   max_concurrent_queries      = 500
   max_concurrent_tcp_sessions = 100
 
-  query_server_timeout = "4s"
+  query_server_timeout = "8s"
 }
 
 # ExternalDNS owns every *.erwanleboucher.dev record; only router-local entries here.
