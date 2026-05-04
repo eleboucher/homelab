@@ -1,0 +1,66 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: heisenbridge
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: heisenbridge
+  interval: 1h
+  values:
+    controllers:
+      heisenbridge:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        containers:
+          app:
+            image:
+              repository: docker.io/hif1/heisenbridge
+              tag: 1.15.4@sha256:4648b0987d37ea9f398e93940bafb32b4f0fa0ff1a7611af993a35ea4debc03f
+            args:
+              - "-c=/etc/config.yaml"
+              - "-l=0.0.0.0"
+              - "-p=9898"
+              - "http://continuwuity.matrix.svc:8080"
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: {drop: ["ALL"]}
+            resources:
+              requests:
+                cpu: 10m
+              limits:
+                memory: 100Mi
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+    service:
+      app:
+        ports:
+          http:
+            port: 80
+            targetPort: 9898
+    route:
+      app:
+        hostnames:
+          - matrix.erwanleboucher.dev
+        parentRefs:
+          - name: envoy-external
+            namespace: network
+        rules:
+          - matches:
+              - path:
+                  value: /_heisenbridge/media/
+    persistence:
+      config:
+        type: secret
+        name: heisenbridge
+        globalMounts:
+          - path: /etc/config.yaml
+            subPath: registration.yaml

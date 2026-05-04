@@ -1,0 +1,17 @@
+---
+id: heisenbridge
+url: http://heisenbridge.matrix.svc
+as_token: "{{ .AS_TOKEN }}"
+hs_token: "{{ .HS_TOKEN }}"
+rate_limited: false
+sender_localpart: heisenbridge
+namespaces:
+  users:
+    - regex: "@irc_.*"
+      exclusive: true
+    - regex: "@heisenbridge:.*"
+      exclusive: true
+  aliases: []
+  rooms: []
+heisenbridge:
+  media_url: "https://matrix.erwanleboucher.dev"

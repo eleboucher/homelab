@@ -6,4 +6,5 @@ namespace: matrix
 
 resources:
   - continuwuity/ks.yaml
+  - heisenbridge/ks.yaml
   - namespace.yaml
