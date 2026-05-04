@@ -11,6 +11,8 @@ spec:
     name: homepage
   interval: 1h
   values:
+    defaultPodOptions:
+      automountServiceAccountToken: true
     controllers:
       homepage:
         type: deployment
@@ -70,10 +72,6 @@ spec:
                   - icon: github.png
                     href: https://github.com/erwanleboucher/homelab
                     description: Repository
-              - Cloudflare:
-                  - icon: cloudflare.png
-                    href: https://dash.cloudflare.com/
-                    description: DNS & Tunnel
               - Flux:
                   - icon: flux-cd.png
                     href: https://flux.erwanleboucher.dev
@@ -194,15 +192,6 @@ spec:
                     url: https://192.168.1.2
                     username: '{{ "{{" }}HOMEPAGE_VAR_MIKROTIK_USER{{ "}}" }}'
                     password: '{{ "{{" }}HOMEPAGE_VAR_MIKROTIK_PASS{{ "}}" }}'
-              - Cloudflared:
-                  icon: cloudflare.png
-                  href: https://one.dash.cloudflare.com/
-                  description: Tunnel Status
-                  widget:
-                    type: cloudflared
-                    accountid: '{{ "{{" }}HOMEPAGE_VAR_CF_ACCOUNT_ID{{ "}}" }}'
-                    tunnelid: '{{ "{{" }}HOMEPAGE_VAR_CF_TUNNEL_ID{{ "}}" }}'
-                    key: '{{ "{{" }}HOMEPAGE_VAR_CF_API_KEY{{ "}}" }}'
               - Alertmanager:
                   icon: alertmanager.png
                   href: https://alertmanager.erwanleboucher.dev
@@ -321,5 +310,3 @@ spec:
                 subPath: settings.yaml
               - path: /app/config/widgets.yaml
                 subPath: widgets.yaml
-    serviceAccount:
-      homepage: {}
