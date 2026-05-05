@@ -95,11 +95,6 @@ www.erwanleboucher.dev {
 }
 
 erwanleboucher.dev {
-	log {
-		output stdout
-		format json
-	}
-
 	# WKD direct — OpenPGP keys from S3, with CORS.
 	@wkd path /.well-known/openpgpkey/*
 	handle @wkd {
@@ -131,6 +126,7 @@ erwanleboucher.dev {
 	# *after* the registry-webfinger rule so apoci still handles its own case.
 	@fediverse path /.well-known/webfinger /.well-known/host-meta* /.well-known/nodeinfo*
 	handle @fediverse {
+		header Access-Control-Allow-Origin *
 		redir https://gts.erwanleboucher.dev{uri} 301
 	}
 
