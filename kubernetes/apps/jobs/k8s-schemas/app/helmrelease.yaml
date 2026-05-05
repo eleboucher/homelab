@@ -48,7 +48,7 @@ spec:
           app:
             image:
               repository: docker.io/amazon/aws-cli
-              tag: "2.34.41"
+              tag: "2.34.42"
             env:
               AWS_ACCESS_KEY_ID:
                 valueFrom:
