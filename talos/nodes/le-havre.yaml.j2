@@ -1,9 +1,13 @@
 ---
 machine:
-  type: worker
+  type: controlplane
+  certSANs:
+    - 127.0.0.1
+    - 192.168.1.7
   install:
     diskSelector:
-      serial: 2526511B4465
+      # TODO(erwan): replace with Intel 600p serial once installed
+      serial: INTEL-600P-SERIAL-TODO
 ---
 apiVersion: v1alpha1
 kind: LinkAliasConfig
@@ -16,13 +20,6 @@ kind: LinkAliasConfig
 name: lan1
 selector:
   match: mac(link.permanent_addr) == "6c:1f:f7:5c:03:94"
----
-apiVersion: v1alpha1
-kind: ExistingVolumeConfig
-name: media
-discovery:
-  volumeSelector:
-    match: disk.transport == "usb"
 ---
 apiVersion: v1alpha1
 kind: ResolverConfig

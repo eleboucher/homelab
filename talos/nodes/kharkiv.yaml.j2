@@ -6,10 +6,9 @@ machine:
     - 192.168.1.41
   install:
     diskSelector:
-      serial: 50026B73842F7F3C
+      serial: 2526511B4465
   udev:
     rules:
-      # Intel GPU - allow render group access to render devices
       - SUBSYSTEM=="drm", KERNEL=="renderD*", GROUP="992", MODE="0660"
 ---
 apiVersion: v1alpha1

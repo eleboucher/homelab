@@ -4,6 +4,7 @@ customization:
     - -init_on_alloc
     - -init_on_free
     - -selinux
+    - amd_iommu=on # PCI Passthrough
     - apparmor=0
     - i915.enable_guc=3
     - init_on_alloc=0
@@ -19,6 +20,8 @@ customization:
     - talos.dashboard.disabled=1
   systemExtensions:
         officialExtensions:
+            - siderolabs/amd-ucode
+            - siderolabs/binfmt-misc
             - siderolabs/i915
             - siderolabs/intel-ucode
             - siderolabs/iscsi-tools
