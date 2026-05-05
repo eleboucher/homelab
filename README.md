@@ -1,5 +1,7 @@
 <div align="center">
 
+hello i'm a tests
+
 # homelab K8s
 
 ### 🏠 A GitOps-managed Homelab
@@ -28,7 +30,7 @@ _Powered by [Talos](https://talos.dev), [Flux](https://fluxcd.io), and [Kubernet
 
 ## 📖 Overview
 
-This repository hosts the Infrastructure as Code (IaC) for my Kubernetes homelab. It runs a media server stack, home automation, and observability infrastructure. 
+This repository hosts the Infrastructure as Code (IaC) for my Kubernetes homelab. It runs a media server stack, home automation, and observability infrastructure.
 
 The cluster is built on **Talos Linux**, an immutable and minimal OS, and managed via **GitOps** principles using **Flux**. Changes pushed to this repository are automatically reconciled in the cluster.
 
@@ -38,21 +40,22 @@ The cluster is built on **Talos Linux**, an immutable and minimal OS, and manage
 
 My cluster is a hybrid setup running on bare metal and virtualized nodes.
 
-| Node | OS | Hardware | Specs | Role | Storage |
-| :--- | :--- | :--- | :--- | :--- | :--- |
-| **kharkiv** | Talos Linux | Intel i5 12th Gen | 8C / 16T / 32GB | `control-plane` |  |
-| **le-havre**| Talos Linux | Intel N150 | 4C / 4T / 32GB | `worker` | USB HDD (`/mnt/media`) |
+| Node         | OS          | Hardware          | Specs           | Role            | Storage                |
+| :----------- | :---------- | :---------------- | :-------------- | :-------------- | :--------------------- |
+| **kharkiv**  | Talos Linux | Intel i5 12th Gen | 8C / 16T / 32GB | `control-plane` |                        |
+| **le-havre** | Talos Linux | Intel N150        | 4C / 4T / 32GB  | `worker`        | USB HDD (`/mnt/media`) |
 
 ---
+
 ## 🧩 Core Components
 
-| Component | Description | Namespace |
-| :--- | :--- | :--- |
-| **[Cilium](https://cilium.io/)** | CNI, Network Policies, and Load Balancing. | `kube-system` |
-| **[Cert-Manager](https://cert-manager.io/)** | Automates Let's Encrypt SSL certificates. | `cert-manager` |
-| **[External Secrets](https://external-secrets.io/)** | Syncs secrets from 1Password into the cluster. | `security` |
-| **[Gateway API](https://gateway-api.sigs.k8s.io/)** | Modern ingress management via **Envoy Gateway**. | `network` |
-| **[Longhorn](https://longhorn.io/)** | Distributed block storage for persistent volumes. | `longhorn-system` |
+| Component                                            | Description                                       | Namespace         |
+| :--------------------------------------------------- | :------------------------------------------------ | :---------------- |
+| **[Cilium](https://cilium.io/)**                     | CNI, Network Policies, and Load Balancing.        | `kube-system`     |
+| **[Cert-Manager](https://cert-manager.io/)**         | Automates Let's Encrypt SSL certificates.         | `cert-manager`    |
+| **[External Secrets](https://external-secrets.io/)** | Syncs secrets from 1Password into the cluster.    | `security`        |
+| **[Gateway API](https://gateway-api.sigs.k8s.io/)**  | Modern ingress management via **Envoy Gateway**.  | `network`         |
+| **[Longhorn](https://longhorn.io/)**                 | Distributed block storage for persistent volumes. | `longhorn-system` |
 
 ---
 
@@ -60,11 +63,11 @@ My cluster is a hybrid setup running on bare metal and virtualized nodes.
 
 Key user-facing applications running on the cluster.
 
-| Category | Applications |
-| :--- | :--- |
-| **Media** | [Jellyfin](https://jellyfin.org/), [Sonarr](https://sonarr.tv/), [Radarr](https://radarr.video/), [Bazarr](https://www.bazarr.media/), [Prowlarr](https://prowlarr.com), [Seerr](https://github.com/seerr-team/seerr) |
-| **Observability** | [Grafana](https://grafana.com/), [Prometheus](https://prometheus.io/), [VictoriaLogs](https://docs.victoriametrics.com/victorialogs/), [Gatus](https://gatus.io)|
-| **IOT** | [Home Assistant](https://www.home-assistant.io/) |
+| Category          | Applications                                                                                                                                                                                                          |
+| :---------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Media**         | [Jellyfin](https://jellyfin.org/), [Sonarr](https://sonarr.tv/), [Radarr](https://radarr.video/), [Bazarr](https://www.bazarr.media/), [Prowlarr](https://prowlarr.com), [Seerr](https://github.com/seerr-team/seerr) |
+| **Observability** | [Grafana](https://grafana.com/), [Prometheus](https://prometheus.io/), [VictoriaLogs](https://docs.victoriametrics.com/victorialogs/), [Gatus](https://gatus.io)                                                      |
+| **IOT**           | [Home Assistant](https://www.home-assistant.io/)                                                                                                                                                                      |
 
 ---
 
