@@ -1,0 +1,43 @@
+---
+machine:
+  type: controlplane
+  certSANs:
+    - 127.0.0.1
+    - 192.168.1.42
+  install:
+    diskSelector:
+      # TODO(erwan): verify model string matches `talosctl get disks`
+      match: disk.model == "SAMSUNG MZ7KM1T9HMJP-00005"
+---
+apiVersion: v1alpha1
+kind: ExistingVolumeConfig
+name: media
+discovery:
+  volumeSelector:
+    match: disk.transport == "ata" && disk.size > 4000000000000u
+---
+apiVersion: v1alpha1
+kind: LinkAliasConfig
+name: lan0
+selector:
+  # TODO(erwan): fill in paris's SFP+ NIC MAC after install
+  match: mac(link.permanent_addr) == "AA:BB:CC:DD:EE:FF"
+---
+apiVersion: v1alpha1
+kind: BondConfig
+name: lacp0
+mtu: 9000
+links:
+  - lan0
+bondMode: active-backup
+miimon: 100
+---
+apiVersion: v1alpha1
+kind: ResolverConfig
+nameservers:
+  - address: 192.168.1.2
+---
+apiVersion: v1alpha1
+kind: HostnameConfig
+auto: "off"
+hostname: paris
