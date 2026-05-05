@@ -53,6 +53,12 @@ spec:
             envFrom:
               - secretRef:
                   name: sparkyfitness-secrets
+            resources:
+              requests:
+                cpu: 20m
+                memory: 384Mi
+              limits:
+                memory: 768Mi
     service:
       main:
         controller: main

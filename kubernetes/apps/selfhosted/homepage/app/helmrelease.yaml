@@ -36,7 +36,7 @@ spec:
               requests:
                 memory: 128Mi
               limits:
-                memory: 512Mi
+                memory: 256Mi
             probes:
               liveness:
                 enabled: true
