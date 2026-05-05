@@ -95,6 +95,11 @@ www.erwanleboucher.dev {
 }
 
 erwanleboucher.dev {
+	log {
+		output stdout
+		format json
+	}
+
 	# WKD direct — OpenPGP keys from S3, with CORS.
 	@wkd path /.well-known/openpgpkey/*
 	handle @wkd {
