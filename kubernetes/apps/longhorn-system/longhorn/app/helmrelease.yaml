@@ -43,7 +43,3 @@ spec:
     metrics:
       serviceMonitor:
         enabled: true
-    image:
-      longhorn:
-        instanceManager:
-          tag: v1.11.0-hotfix-1
