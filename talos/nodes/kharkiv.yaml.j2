@@ -12,12 +12,17 @@ machine:
       - SUBSYSTEM=="drm", KERNEL=="renderD*", GROUP="992", MODE="0660"
 ---
 apiVersion: v1alpha1
+kind: VolumeConfig
+name: EPHEMERAL
+provisioning:
+  maxSize: 100GiB
+---
+apiVersion: v1alpha1
 kind: RawVolumeConfig
-name: rook-ceph
+name: rook-osd
 provisioning:
   diskSelector:
-    # TODO(erwan): rook-ceph OSD shares install/etcd drive (1TB, serial 2526511B4465)
-    match: ""
+    match: disk.serial == "2526511B4465"
   minSize: 500GiB
   maxSize: 800GiB
 ---
@@ -32,6 +37,18 @@ kind: LinkAliasConfig
 name: lan1
 selector:
   match: mac(link.permanent_addr) == "38:05:25:35:3b:9b"
+---
+apiVersion: v1alpha1
+kind: BondConfig
+name: lacp0
+mtu: 9000
+links:
+  - lan0
+  - lan1
+bondMode: 802.3ad
+lacpRate: fast
+xmitHashPolicy: layer3+4
+miimon: 100
 ---
 apiVersion: v1alpha1
 kind: HostnameConfig

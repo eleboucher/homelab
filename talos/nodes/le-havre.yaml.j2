@@ -6,16 +6,14 @@ machine:
     - 192.168.1.7
   install:
     diskSelector:
-      # TODO(erwan): replace with Intel 600p serial once installed
-      serial: INTEL-600P-SERIAL-TODO
+      serial: BTPY701113LV256D
 ---
 apiVersion: v1alpha1
 kind: RawVolumeConfig
-name: rook-ceph
+name: rook-osd
 provisioning:
   diskSelector:
-    # TODO(erwan): rook-ceph OSD on SEPARATE drive from install/etcd — set match once second disk is known
-    match: ""
+    match: disk.serial == "50026B73842F7F3C"
   minSize: 400GiB
   maxSize: 500GiB
 ---
@@ -31,6 +29,18 @@ name: lan1
 selector:
   match: mac(link.permanent_addr) == "6c:1f:f7:5c:03:94"
 
+---
+apiVersion: v1alpha1
+kind: BondConfig
+name: lacp0
+mtu: 9000
+links:
+  - lan0
+  - lan1
+bondMode: 802.3ad
+lacpRate: fast
+xmitHashPolicy: layer3+4
+miimon: 100
 ---
 apiVersion: v1alpha1
 kind: HostnameConfig

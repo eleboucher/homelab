@@ -55,8 +55,7 @@ locals {
       lease_time = "4w2d"
     }
     "192.168.1.42" = {
-      # TODO(erwan): replace placeholder MAC after paris install
-      mac        = "AA:BB:CC:DD:EE:FF"
+      mac        = "C4:62:37:09:DF:FF"
       comment    = "paris"
       lease_time = "4w2d"
     }

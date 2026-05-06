@@ -200,18 +200,6 @@ cluster:
   {% endif %}
 ---
 apiVersion: v1alpha1
-kind: BondConfig
-name: lacp0
-mtu: 9000
-links:
-  - lan0
-  - lan1
-bondMode: 802.3ad
-lacpRate: fast
-xmitHashPolicy: layer3+4
-miimon: 100
----
-apiVersion: v1alpha1
 kind: BridgeConfig
 name: bond0
 mtu: 9000
