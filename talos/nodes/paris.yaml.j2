@@ -10,6 +10,16 @@ machine:
       match: disk.model == "SAMSUNG MZ7KM1T9HMJP-00005"
 ---
 apiVersion: v1alpha1
+kind: RawVolumeConfig
+name: rook-ceph
+provisioning:
+  diskSelector:
+    # TODO(erwan): rook-ceph OSD shares install/etcd drive (1.9TB Samsung MZ7KM1T9HMJP-00005)
+    match: ""
+  minSize: 1TiB
+  maxSize: 1.5TiB
+---
+apiVersion: v1alpha1
 kind: ExistingVolumeConfig
 name: media
 discovery:
@@ -31,11 +41,6 @@ links:
   - lan0
 bondMode: active-backup
 miimon: 100
----
-apiVersion: v1alpha1
-kind: ResolverConfig
-nameservers:
-  - address: 192.168.1.2
 ---
 apiVersion: v1alpha1
 kind: HostnameConfig

@@ -10,6 +10,16 @@ machine:
       serial: INTEL-600P-SERIAL-TODO
 ---
 apiVersion: v1alpha1
+kind: RawVolumeConfig
+name: rook-ceph
+provisioning:
+  diskSelector:
+    # TODO(erwan): rook-ceph OSD on SEPARATE drive from install/etcd — set match once second disk is known
+    match: ""
+  minSize: 400GiB
+  maxSize: 500GiB
+---
+apiVersion: v1alpha1
 kind: LinkAliasConfig
 name: lan0
 selector:
@@ -20,11 +30,7 @@ kind: LinkAliasConfig
 name: lan1
 selector:
   match: mac(link.permanent_addr) == "6c:1f:f7:5c:03:94"
----
-apiVersion: v1alpha1
-kind: ResolverConfig
-nameservers:
-  - address: 192.168.1.2
+
 ---
 apiVersion: v1alpha1
 kind: HostnameConfig

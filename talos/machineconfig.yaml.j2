@@ -231,6 +231,11 @@ device: /dev/watchdog0
 timeout: 5m
 ---
 apiVersion: v1alpha1
+kind: ResolverConfig
+nameservers:
+  - address: 192.168.1.2
+---
+apiVersion: v1alpha1
 kind: KmsgLogConfig
 name: fluent-bit
 url: tcp://127.0.0.1:5170/

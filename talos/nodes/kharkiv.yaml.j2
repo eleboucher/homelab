@@ -12,6 +12,16 @@ machine:
       - SUBSYSTEM=="drm", KERNEL=="renderD*", GROUP="992", MODE="0660"
 ---
 apiVersion: v1alpha1
+kind: RawVolumeConfig
+name: rook-ceph
+provisioning:
+  diskSelector:
+    # TODO(erwan): rook-ceph OSD shares install/etcd drive (1TB, serial 2526511B4465)
+    match: ""
+  minSize: 500GiB
+  maxSize: 800GiB
+---
+apiVersion: v1alpha1
 kind: LinkAliasConfig
 name: lan0
 selector:
