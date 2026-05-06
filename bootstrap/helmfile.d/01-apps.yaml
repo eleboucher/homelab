@@ -91,7 +91,7 @@ releases:
     values:
       - templates/values.yaml.gotmpl
     needs:
-      - external-secrets/external-secrets
+      - security/external-secrets
     hooks:
       - # Apply ClusterSecretStore
         command: kubectl

@@ -7,7 +7,6 @@ resources:
   - ./helmrelease.yaml
   - ./httproute.yaml
   - ./ocirepository.yaml
-  - ./pubresource.yaml
 configMapGenerator:
   - name: forgejo-themes
     files:

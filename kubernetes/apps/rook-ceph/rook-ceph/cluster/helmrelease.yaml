@@ -36,7 +36,7 @@ spec:
           limits:
             memory: 8Gi # Required for bootstrap
       storage:
-        devicePathFilter: ^/dev/disk/by-partlabel/rook-ceph$
+        devicePathFilter: ^/dev/disk/by-partlabel/r-rook-osd$
         useAllDevices: false
         useAllNodes: true
     cephBlockPools:

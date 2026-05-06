@@ -21,9 +21,9 @@ spec:
     size: 8Gi
     storageClass: openebs-hostpath
 
-  # bootstrap:
-  #   recovery:
-  #     source: &src source
+  bootstrap:
+    recovery:
+      source: &src source
 
   plugins:
     - name: &plugin barman-cloud.cloudnative-pg.io
@@ -32,7 +32,7 @@ spec:
         barmanObjectName: &store ovh-store
 
   externalClusters:
-    - name: source
+    - name: *src
       plugin:
         name: *plugin
         parameters:

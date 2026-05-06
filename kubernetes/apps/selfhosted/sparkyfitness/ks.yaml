@@ -19,6 +19,7 @@ spec:
   postBuild:
     substitute:
       APP: sparkyfitness
+      APP_NAMESPACE: selfhosted
       APP_UID: "1000"
       VOLSYNC_CAPACITY: 15Gi
   prune: true

@@ -63,7 +63,7 @@ spec:
                         resources:
                           limits:
                             cpu: null
-                            memory: 2Gi
+                            memory: 8Gi
             target:
               kind: Deployment
               name: (kustomize-controller|helm-controller|source-controller)
@@ -71,13 +71,12 @@ spec:
             patch: |-
               - op: add
                 path: /spec/template/spec/containers/0/args/-
-                value: --concurrent=20
+                value: --concurrent=5
               - op: replace
                 path: /spec/template/spec/volumes/0
                 value:
                   name: temp
-                  emptyDir:
-                    medium: Memory
+                  emptyDir: {}
             target:
               kind: Deployment
               name: kustomize-controller

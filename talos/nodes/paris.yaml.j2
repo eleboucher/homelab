@@ -28,7 +28,7 @@ kind: ExistingVolumeConfig
 name: media
 discovery:
   volumeSelector:
-    match: disk.transport == "ata" && disk.size > 4000000000000u
+    match: disk.transport == "sata" && disk.size > 4000000000000u
 ---
 apiVersion: v1alpha1
 kind: LinkAliasConfig

@@ -15,6 +15,7 @@ spec:
   postBuild:
     substitute:
       APP: esphome
+      APP_NAMESPACE: home-assistant
   prune: true
   sourceRef:
     kind: OCIRepository

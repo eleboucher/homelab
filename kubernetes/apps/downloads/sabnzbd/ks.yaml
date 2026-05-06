@@ -20,6 +20,7 @@ spec:
   postBuild:
     substitute:
       APP: sabnzbd
+      APP_NAMESPACE: downloads
       VOLSYNC_CAPACITY: 5Gi
       VOLSYNC_SCHEDULE: "20 1-23/2 * * *"
   prune: true

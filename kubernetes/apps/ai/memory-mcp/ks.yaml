@@ -16,6 +16,7 @@ spec:
   postBuild:
     substitute:
       APP: memory-mcp
+      APP_NAMESPACE: ai
       APP_UID: "65534"
       APP_GID: "65533"
   sourceRef:

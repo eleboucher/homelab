@@ -18,6 +18,7 @@ spec:
   postBuild:
     substitute:
       APP: actual
+      APP_NAMESPACE: selfhosted
   prune: true
   sourceRef:
     kind: OCIRepository

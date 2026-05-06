@@ -16,6 +16,7 @@ spec:
   postBuild:
     substitute:
       APP: kanidm
+      APP_NAMESPACE: security
   sourceRef:
     kind: OCIRepository
     name: flux-system
