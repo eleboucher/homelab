@@ -10,8 +10,8 @@ spec:
     - ../../../../components/postgres/cert
     - ../../../../components/volsync
   dependsOn:
-    - name: longhorn
-      namespace: longhorn-system
+    - name: rook-ceph-cluster
+      namespace: rook-ceph
   interval: 1h
   path: ./kubernetes/apps/selfhosted/mealie/app
   postBuild:

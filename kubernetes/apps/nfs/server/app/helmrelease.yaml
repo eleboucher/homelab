@@ -17,7 +17,7 @@ spec:
           annotations:
             k8s.v1.cni.cncf.io/networks: nfs-lan
           nodeSelector:
-            kubernetes.io/hostname: le-havre
+            kubernetes.io/hostname: paris
           priorityClassName: system-cluster-critical
           securityContext:
             runAsUser: 0

@@ -14,8 +14,8 @@ spec:
     - ../../../../components/volsync
     - ../../../../components/oidc
   dependsOn:
-    - name: longhorn
-      namespace: longhorn-system
+    - name: rook-ceph-cluster
+      namespace: rook-ceph
   interval: 1h
   path: "./kubernetes/apps/forgejo/forgejo/app"
   postBuild:

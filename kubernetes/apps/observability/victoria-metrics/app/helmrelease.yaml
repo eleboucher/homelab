@@ -28,7 +28,7 @@ spec:
         storage:
           volumeClaimTemplate:
             spec:
-              storageClassName: longhorn
+              storageClassName: ceph-block
               resources:
                 requests:
                   storage: 5Gi
@@ -193,7 +193,7 @@ spec:
         extraArgs:
           maxLabelsPerTimeseries: "40"
         storage:
-          storageClassName: longhorn
+          storageClassName: ceph-block
           resources:
             requests:
               storage: 50Gi

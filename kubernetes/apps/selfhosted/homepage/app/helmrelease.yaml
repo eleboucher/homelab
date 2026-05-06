@@ -119,9 +119,6 @@ spec:
               Automation:
                 style: row
                 columns: 1
-            providers:
-              longhorn:
-                url: http://longhorn-frontend.kube-system
           widgets.yaml: |
             - datetime:
                 text_size: xl
@@ -151,11 +148,6 @@ spec:
                   label: "cluster"
                 nodes:
                   show: false
-            - longhorn:
-                expanded: false
-                total: true
-                labels: false
-                nodes: false
           services.yaml: |
             - observability:
               - Gatus:

@@ -14,8 +14,8 @@ spec:
   dependsOn:
     - name: garage
       namespace: garage-system
-    - name: longhorn
-      namespace: longhorn-system
+    - name: rook-ceph-cluster
+      namespace: rook-ceph
   interval: 1h
   path: "./kubernetes/apps/selfhosted/bluesky/app"
   postBuild:

@@ -13,8 +13,8 @@ spec:
     - ../../../../components/oidc
     - ../../../../components/postgres/cert
   dependsOn:
-    - name: longhorn
-      namespace: longhorn-system
+    - name: rook-ceph-cluster
+      namespace: rook-ceph
   interval: 1h
   path: "./kubernetes/apps/selfhosted/paperless/app"
   postBuild:

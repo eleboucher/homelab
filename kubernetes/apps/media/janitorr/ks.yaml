@@ -12,8 +12,8 @@ spec:
   dependsOn:
     - name: external-secrets
       namespace: security
-    - name: longhorn
-      namespace: longhorn-system
+    - name: rook-ceph-cluster
+      namespace: rook-ceph
   postBuild:
     substitute:
       APP: janitorr

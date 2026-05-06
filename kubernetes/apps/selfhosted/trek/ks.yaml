@@ -16,8 +16,8 @@ spec:
       namespace: network
     - name: external-secrets
       namespace: security
-    - name: longhorn
-      namespace: longhorn-system
+    - name: rook-ceph-cluster
+      namespace: rook-ceph
   interval: 1h
   path: ./kubernetes/apps/selfhosted/trek/app
   postBuild:

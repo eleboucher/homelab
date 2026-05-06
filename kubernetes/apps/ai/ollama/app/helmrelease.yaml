@@ -60,6 +60,6 @@ spec:
         accessMode: ReadWriteOnce
         enabled: true
         size: 10Gi
-        storageClass: "longhorn"
+        storageClass: ceph-block
         globalMounts:
           - path: /root/.ollama
