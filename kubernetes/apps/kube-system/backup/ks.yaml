@@ -8,9 +8,6 @@ metadata:
 spec:
   interval: 12h
   path: ./kubernetes/apps/kube-system/backup/app
-  dependsOn:
-    - name: longhorn
-      namespace: longhorn-system
   prune: true
   sourceRef:
     kind: OCIRepository

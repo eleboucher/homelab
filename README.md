@@ -52,7 +52,6 @@ My cluster is a hybrid setup running on bare metal and virtualized nodes.
 | **[Cert-Manager](https://cert-manager.io/)** | Automates Let's Encrypt SSL certificates. | `cert-manager` |
 | **[External Secrets](https://external-secrets.io/)** | Syncs secrets from 1Password into the cluster. | `security` |
 | **[Gateway API](https://gateway-api.sigs.k8s.io/)** | Modern ingress management via **Envoy Gateway**. | `network` |
-| **[Longhorn](https://longhorn.io/)** | Distributed block storage for persistent volumes. | `longhorn-system` |
 
 ---
 

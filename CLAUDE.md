@@ -60,7 +60,7 @@ kubernetes/
 │   ├── database/            # CloudNative PostgreSQL
 │   ├── downloads/           # qBittorrent, SABnzbd, Autobrr
 │   ├── flux-system/         # Flux controllers
-│   ├── kube-system/         # Cilium, CoreDNS, Longhorn, metrics
+│   ├── kube-system/         # Cilium, CoreDNS,  metrics
 │   ├── media/               # Jellyfin, Sonarr, Radarr, Bazarr, Prowlarr
 │   ├── observability/          # Prometheus, Grafana, VictoriaLogs
 │   ├── network/             # Envoy Gateway, External DNS, Cloudflared

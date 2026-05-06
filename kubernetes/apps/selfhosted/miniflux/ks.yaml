@@ -12,8 +12,8 @@ spec:
     - ../../../../components/postgres/cert
     - ../../../../components/oidc
   dependsOn:
-    - name: longhorn
-      namespace: longhorn-system
+    - name: rook-ceph-cluster
+      namespace: rook-ceph
     - name: external-secrets
       namespace: security
   interval: 1h

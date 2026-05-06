@@ -75,7 +75,7 @@ spec:
       backup:
         accessMode: ReadWriteOnce
         size: 15Gi
-        storageClass: "longhorn"
+        storageClass: ceph-block
         globalMounts:
           - path: /app/SparkyFitnessServer/backup
       tmp:

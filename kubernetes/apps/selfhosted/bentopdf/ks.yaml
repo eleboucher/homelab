@@ -11,8 +11,8 @@ spec:
   dependsOn:
     - name: envoy-gateway
       namespace: network
-    - name: longhorn
-      namespace: longhorn-system
+    - name: rook-ceph-cluster
+      namespace: rook-ceph
   postBuild:
     substitute:
       APP: bentopdf

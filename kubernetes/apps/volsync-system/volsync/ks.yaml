@@ -8,8 +8,8 @@ spec:
   interval: 1h
   path: ./kubernetes/apps/volsync-system/volsync/app
   dependsOn:
-    - name: longhorn
-      namespace: longhorn-system
+    - name: rook-ceph-cluster
+      namespace: rook-ceph
     - name: snapshot-controller
       namespace: kube-system
   healthChecks:

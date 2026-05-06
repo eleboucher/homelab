@@ -33,5 +33,5 @@ spec:
     sourceIdentity:
       sourceName: ${APP}
       sourceNamespace: ${VOLSYNC_SOURCE_NAMESPACE:=${APP_NAMESPACE}}
-    storageClassName: ${VOLSYNC_STORAGECLASS:=longhorn-snapshot}
-    volumeSnapshotClassName: ${VOLSYNC_SNAPSHOTCLASS:=longhorn-snapclass}
+    storageClassName: ${VOLSYNC_STORAGECLASS:=ceph-block}
+    volumeSnapshotClassName: ${VOLSYNC_SNAPSHOTCLASS:=csi-ceph-blockpool}

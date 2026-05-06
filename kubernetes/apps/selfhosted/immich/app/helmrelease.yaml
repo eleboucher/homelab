@@ -53,7 +53,7 @@ spec:
         metadata:
           forceRename: immich-metadata
           size: 30Gi
-          storageClass: longhorn
+          storageClass: ceph-block
           accessMode: ReadWriteOnce
           globalMounts:
             - path: /data/thumbs
