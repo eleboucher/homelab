@@ -8,6 +8,7 @@ resources:
   - namespace.yaml
   - context7-mcp/ks.yaml
   - grafana-mcp/ks.yaml
+  - llama-cpp/ks.yaml
   - memory-mcp/ks.yaml
   - ollama/ks.yaml
   - sidero-mcp/ks.yaml
