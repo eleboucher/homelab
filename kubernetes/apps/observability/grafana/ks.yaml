@@ -25,6 +25,11 @@ spec:
     - name: grafana
     - name: rook-ceph-cluster
       namespace: rook-ceph
+  healthChecks:
+    - apiVersion: v1
+      kind: Secret
+      name: grafana-mcp
+      namespace: observability
   interval: 1h
   path: ./kubernetes/apps/observability/grafana/instance
   prune: true
@@ -52,3 +57,21 @@ spec:
     namespace: flux-system
   targetNamespace: observability
   wait: false
+---
+# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: grafana-reflect
+spec:
+  dependsOn:
+    - name: grafana-instance
+  interval: 1h
+  path: ./kubernetes/apps/observability/grafana/reflect
+  prune: true
+  sourceRef:
+    kind: OCIRepository
+    name: flux-system
+    namespace: flux-system
+  targetNamespace: observability
+  wait: true
