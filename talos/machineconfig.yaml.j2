@@ -52,7 +52,7 @@ machine:
         rsize=1048576
         wsize=1048576
   install:
-    image: factory.talos.dev/installer/2bd4910da009c445ae73a4ea380e1b9e50c25c1f260f0fa78c0e9f142b467aed:v1.13.0
+    image: factory.talos.dev/installer/7827684230cfe8cd11498cae792a2d22c13f9d9177062db783e1ddd81afc4423:v1.13.0
   kernel:
     modules:
       - name: nbd
@@ -61,6 +61,8 @@ machine:
     defaultRuntimeSeccompProfileEnabled: true
     disableManifestsDirectory: true
     extraConfig:
+      imageGCHighThresholdPercent: 70
+      imageGCLowThresholdPercent: 50
       maxPods: 250
       serializeImagePulls: false
     image: ghcr.io/siderolabs/kubelet:v1.36.0
