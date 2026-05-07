@@ -29,7 +29,18 @@ data:
             "sms.search"
           ]
         },
+        "http": {
+          "endpoints": {
+            "chatCompletions": {
+              "enabled": true
+            }
+          }
+        },
         "port": 18789,
+        "reload": {
+          "debounceMs": 300,
+          "mode": "hybrid"
+        },
         "tailscale": {
           "mode": "off",
           "resetOnExit": false
@@ -38,6 +49,32 @@ data:
       },
       "agents": {
         "defaults": {
+          "compaction": {
+            "memoryFlush": {
+              "enabled": true,
+              "softThresholdTokens": 6000
+            },
+            "mode": "safeguard",
+            "reserveTokensFloor": 8000,
+            "timeoutSeconds": 900
+          },
+          "contextPruning": {
+            "hardClear": {
+              "enabled": true,
+              "placeholder": "[Old tool result cleared]"
+            },
+            "hardClearRatio": 0.5,
+            "keepLastAssistants": 3,
+            "minPrunableToolChars": 50000,
+            "mode": "cache-ttl",
+            "softTrim": {
+              "headChars": 1500,
+              "maxChars": 4000,
+              "tailChars": 1500
+            },
+            "softTrimRatio": 0.3,
+            "ttl": "1h"
+          },
           "maxConcurrent": 4,
           "model": {
             "primary": "llama-cpp/qwen/qwen3.6-35B-A3B:general",
@@ -45,22 +82,14 @@ data:
               "llama-cpp/google/gemma-4-E4B-it"
             ]
           },
+          "sandbox": {
+            "mode": "non-main",
+            "scope": "agent"
+          },
           "subagents": {
             "maxConcurrent": 8
           },
           "workspace": "/home/node/.openclaw/workspace"
-        }
-      },
-      "commands": {
-        "native": "auto",
-        "nativeSkills": "auto"
-      },
-      "auth": {
-        "profiles": {
-          "llama-cpp:default": {
-            "provider": "llama-cpp",
-            "mode": "api_key"
-          }
         }
       },
       "channels": {
@@ -77,6 +106,41 @@ data:
             }
           },
           "token": "{{ .DISCORD_TOKEN }}"
+        },
+        "matrix": {
+          "accessToken": "{{ .MATRIX_ACCESS_TOKEN }}",
+          "autoJoin": "always",
+          "dm": {
+            "allowFrom": ["@genesixx:erwanleboucher.dev"],
+            "policy": "pairing",
+            "sessionScope": "per-room"
+          },
+          "enabled": true,
+          "encryption": true,
+          "groupAllowFrom": ["@genesixx:erwanleboucher.dev"],
+          "groupPolicy": "allowlist",
+          "homeserver": "https://matrix.erwanleboucher.dev",
+          "userId": "{{ .MATRIX_USER_ID }}"
+        }
+      },
+      "commands": {
+        "native": "auto",
+        "nativeSkills": "auto"
+      },
+      "mcp": {
+        "servers": {
+          "homelab": {
+            "transport": "streamable-http",
+            "url": "http://vmcp-mcp-gateway-internal.ai.svc.cluster.local:4483/mcp"
+          }
+        }
+      },
+      "auth": {
+        "profiles": {
+          "llama-cpp:default": {
+            "provider": "llama-cpp",
+            "mode": "api_key"
+          }
         }
       },
       "hooks": {
@@ -139,8 +203,28 @@ data:
         }
       },
       "plugins": {
+        "allow": [
+          "memory-lancedb",
+          "skill-workshop"
+        ],
+        "slots": {
+          "memory": "memory-lancedb"
+        },
         "entries": {
           "discord": {
+            "enabled": true
+          },
+          "memory-lancedb": {
+            "config": {
+              "autoCapture": false,
+              "autoRecall": true,
+              "embedding": {
+                "apiKey": "none",
+                "baseUrl": "http://mcp-tools-embedding.ai.svc.cluster.local:8080",
+                "dimensions": 384,
+                "model": "sentence-transformers/all-MiniLM-L6-v2"
+              }
+            },
             "enabled": true
           },
           "searxng": {
@@ -150,11 +234,18 @@ data:
               }
             },
             "enabled": true
+          },
+          "skill-workshop": {
+            "enabled": true
           }
         }
       },
       "session": {
-        "dmScope": "per-channel-peer"
+        "dmScope": "per-channel-peer",
+        "reset": {
+          "idleMinutes": 120,
+          "mode": "daily"
+        }
       },
       "tools": {
         "profile": "coding",

@@ -65,6 +65,8 @@ spec:
                 fi
 
                 mkdir -p /home/node/.openclaw
+
+                export PATH=/home/node/.local/bin:$PATH
             securityContext:
               allowPrivilegeEscalation: false
               capabilities:
