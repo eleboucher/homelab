@@ -33,7 +33,8 @@ data:
         "tailscale": {
           "mode": "off",
           "resetOnExit": false
-        }
+        },
+        "trustedProxies": ["10.42.0.0/16"]
       },
       "agents": {
         "defaults": {
@@ -139,9 +140,6 @@ data:
           "discord": {
             "enabled": true
           },
-          "ollama": {
-            "enabled": true
-          },
           "searxng": {
             "config": {
               "webSearch": {
@@ -158,7 +156,11 @@ data:
       "tools": {
         "profile": "coding",
         "web": {
+          "fetch": {
+            "enabled": true
+          },
           "search": {
+            "enabled": true,
             "provider": "searxng"
           }
         }
