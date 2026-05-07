@@ -17,6 +17,7 @@ resources:
   - obsidian-livesync/ks.yaml
   - namespace.yaml
   - paperless/ks.yaml
+  - searxng/ks.yaml
   - smtp-relay/ks.yaml
   - sparkyfitness/ks.yaml
   - trek/ks.yaml

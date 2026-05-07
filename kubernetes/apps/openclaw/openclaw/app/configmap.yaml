@@ -13,7 +13,8 @@ data:
         },
         "bind": "lan",
         "controlUi": {
-          "allowInsecureAuth": true
+          "allowInsecureAuth": true,
+          "allowedOrigins": ["https://openclaw.erwanleboucher.dev"]
         },
         "mode": "local",
         "nodes": {
@@ -114,6 +115,11 @@ data:
             "enabled": true
           },
           "searxng": {
+            "config": {
+              "webSearch": {
+                "baseUrl": "http://searxng.selfhosted.svc.cluster.local:8080"
+              }
+            },
             "enabled": true
           }
         }
