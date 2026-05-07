@@ -7,6 +7,9 @@ machine:
   install:
     diskSelector:
       model: SAMSUNG MZ7KM1T9
+  udev:
+    rules:
+      - SUBSYSTEM=="drm", KERNEL=="renderD*", GROUP="992", MODE="0660"
 ---
 apiVersion: v1alpha1
 kind: VolumeConfig

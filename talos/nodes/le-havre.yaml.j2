@@ -7,6 +7,9 @@ machine:
   install:
     diskSelector:
       serial: BTPY701113LV256D
+  udev:
+    rules:
+      - SUBSYSTEM=="drm", KERNEL=="renderD*", GROUP="992", MODE="0660"
 ---
 apiVersion: v1alpha1
 kind: RawVolumeConfig
