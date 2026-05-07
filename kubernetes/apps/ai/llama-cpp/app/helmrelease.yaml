@@ -125,7 +125,7 @@ spec:
     route:
       app:
         hostnames:
-          - "llama.${SECRET_DOMAIN}"
+          - "llama.erwanleboucher.dev"
         parentRefs:
           - name: envoy-internal
             namespace: network
