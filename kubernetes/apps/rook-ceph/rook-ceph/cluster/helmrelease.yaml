@@ -32,7 +32,26 @@ spec:
         connections:
           requireMsgr2: true
       resources:
+        crashcollector:
+          requests:
+            cpu: 10m
+            memory: 60Mi
+        exporter:
+          requests:
+            cpu: 50m
+            memory: 50Mi
+        mgr:
+          requests:
+            cpu: 200m
+            memory: 512Mi
+        mon:
+          requests:
+            cpu: 200m
+            memory: 1Gi
         osd:
+          requests:
+            cpu: 250m
+            memory: 4Gi
           limits:
             memory: 8Gi # Required for bootstrap
       storage:

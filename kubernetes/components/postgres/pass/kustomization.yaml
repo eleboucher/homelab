@@ -20,21 +20,3 @@ patches:
           substitute:
             DISABLE_PASSWORD: "false"
             APP: "${APP}"
-  - target:
-      kind: HelmRelease
-      group: helm.toolkit.fluxcd.io
-      version: v2
-    patch: |-
-      apiVersion: helm.toolkit.fluxcd.io/v2
-      kind: HelmRelease
-      metadata:
-        name: not-used
-      spec:
-        values:
-          persistence:
-            root-ca:
-              type: secret
-              name: root-ca
-              defaultMode: 0440
-              globalMounts:
-                - path: /var/run/secrets/root-ca
