@@ -6,17 +6,19 @@ metadata:
 data:
   presets.ini: |-
     [google/gemma-4-E4B-it]
-    model    = /models/models--unsloth--gemma-4-E4B-it-GGUF/model.gguf
-    mmproj   = /models/models--unsloth--gemma-4-E4B-it-GGUF/mmproj.gguf
-    ctx-size = 131072
-    temp     = 1.0
-    top-k    = 64
-    top-p    = 0.95
+    model         = /models/models--unsloth--gemma-4-E4B-it-GGUF/model.gguf
+    mmproj        = /models/models--unsloth--gemma-4-E4B-it-GGUF/mmproj.gguf
+    ctx-size      = 32768
+    n-gpu-layers  = 99
+    temp          = 1.0
+    top-k         = 64
+    top-p         = 0.95
 
     [qwen/qwen3.6-35B-A3B:general]
     model                = /models/models--unsloth--Qwen3.6-35B-A3B-GGUF/model.gguf
     mmproj               = /models/models--unsloth--Qwen3.6-35B-A3B-GGUF/mmproj.gguf
     ctx-size             = 32768
+    n-gpu-layers         = 35
     cache-type-k         = q8_0
     cache-type-v         = q8_0
     temp                 = 1.0

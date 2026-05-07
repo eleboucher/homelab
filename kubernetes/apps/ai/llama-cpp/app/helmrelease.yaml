@@ -58,8 +58,6 @@ spec:
             args:
               - --models-preset
               - /config/presets.ini
-              - --n-gpu-layers
-              - "35"
               - --flash-attn
               - on
             env:
