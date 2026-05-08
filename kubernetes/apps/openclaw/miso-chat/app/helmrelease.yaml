@@ -22,7 +22,9 @@ spec:
             env:
               CORS_ORIGIN: "https://chat.erwanleboucher.dev"
               GATEWAY_DEVICE_IDENTITY_PATH: &devicePath /secrets/device.json
-              GATEWAY_URL: "ws://openclaw.openclaw.svc.cluster.local:18789"
+              GATEWAY_URL: "http://openclaw.openclaw.svc.cluster.local:18789"
+              GATEWAY_WS_URL: "ws://openclaw.openclaw.svc.cluster.local:18789"
+              OIDC_AUTHORIZATION_URL: "https://idm.erwanleboucher.dev/ui/oauth2"
               OIDC_CALLBACK_URL: "https://chat.erwanleboucher.dev/auth/oidc/callback"
               OIDC_CLIENT_ID: miso-chat
               OIDC_CLIENT_SECRET:
@@ -34,6 +36,8 @@ spec:
               OIDC_ISSUER: "https://idm.erwanleboucher.dev/oauth2/openid/miso-chat"
               OIDC_PROVIDER_NAME: Kanidm
               OIDC_PROVIDER_URL: "https://idm.erwanleboucher.dev/oauth2/openid/miso-chat/.well-known/openid-configuration"
+              OIDC_TOKEN_URL: "https://idm.erwanleboucher.dev/oauth2/token"
+              OIDC_USERINFO_URL: "https://idm.erwanleboucher.dev/oauth2/openid/miso-chat/userinfo"
               REDIS_URL: "redis://dragonfly.database.svc:6379"
               SESSION_COOKIE_SAMESITE: none
               SESSION_COOKIE_SECURE: "true"

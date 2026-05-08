@@ -19,6 +19,7 @@ spec:
       APP: miso-chat
       APP_NAMESPACE: openclaw
       OIDC_CALLBACK: /auth/oidc/callback
+      OIDC_DISABLE_PKCE: "true"
       OIDC_GROUP: users
       SUBDOMAIN: chat
   prune: true
