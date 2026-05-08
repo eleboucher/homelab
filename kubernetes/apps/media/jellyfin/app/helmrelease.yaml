@@ -61,7 +61,7 @@ spec:
                 cpu: 45m
                 memory: 1Gi
               limits:
-                memory: 1344Mi
+                memory: 10Gi
             securityContext:
               privileged: true
     persistence:
