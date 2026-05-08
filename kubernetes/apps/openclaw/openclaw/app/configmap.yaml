@@ -79,7 +79,8 @@ data:
           "model": {
             "primary": "litellm/gemma",
             "fallbacks": [
-              "litellm/qwen"
+              "litellm/qwen",
+              "litellm/minimax"
             ]
           },
           "subagents": {
@@ -192,6 +193,23 @@ data:
                   "cacheWrite": 0
                 },
                 "contextWindow": 32768,
+                "maxTokens": 8192,
+                "compat": {
+                  "supportsUsageInStreaming": true
+                }
+              },
+              {
+                "id": "minimax",
+                "name": "MiniMax M2.7",
+                "reasoning": true,
+                "input": ["text"],
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0
+                },
+                "contextWindow": 200000,
                 "maxTokens": 8192,
                 "compat": {
                   "supportsUsageInStreaming": true

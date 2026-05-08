@@ -13,6 +13,8 @@ data:
     fallback_providers:
       - provider: custom:kubernetes
         model: qwen
+      - provider: custom:kubernetes
+        model: minimax
     toolsets:
       - hermes-cli
     terminal:
