@@ -15,6 +15,9 @@ spec:
         pod:
           nodeSelector:
             kubernetes.io/hostname: paris
+          resourceClaims:
+            - name: gpu
+              resourceClaimTemplateName: llama-cpp-gpu
           securityContext:
             supplementalGroups:
               - 44 # video
@@ -51,7 +54,7 @@ spec:
           app:
             image:
               repository: ghcr.io/ggml-org/llama.cpp
-              tag: server-vulkan-b9070@sha256:af4bd974ba84e3d2a9aba69db3721b0da4e5f5dde1b710405d6cd56e6f3b1347
+              tag: server-intel-b9070@sha256:64b208df872f374e6984eed5bd8aad95ea765fa7cdb6ec76a404eb627b505ba7
             args:
               - --models-preset
               - /config/presets.ini
@@ -66,6 +69,9 @@ spec:
               LLAMA_ARG_HOST: 0.0.0.0
               LLAMA_ARG_PORT: "8080"
               LLAMA_OFFLINE: "1"
+              ONEAPI_DEVICE_SELECTOR: level_zero:0
+              SYCL_CACHE_PERSISTENT: "1"
+              ZES_ENABLE_SYSMAN: "1"
             probes:
               liveness:
                 enabled: true
@@ -98,6 +104,8 @@ spec:
                   periodSeconds: 10
                   timeoutSeconds: 5
             resources:
+              claims:
+                - name: gpu
               requests:
                 cpu: 100m
                 memory: 512Mi
