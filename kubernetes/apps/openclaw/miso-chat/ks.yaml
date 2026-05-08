@@ -20,6 +20,7 @@ spec:
       APP_NAMESPACE: openclaw
       OIDC_CALLBACK: /auth/oidc/callback
       OIDC_GROUP: users
+      SUBDOMAIN: chat
   prune: true
   sourceRef:
     kind: OCIRepository
