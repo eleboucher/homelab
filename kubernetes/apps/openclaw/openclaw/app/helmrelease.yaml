@@ -289,7 +289,7 @@ spec:
       home:
         accessMode: ReadWriteOnce
         forceRename: openclaw-home
-        size: 5Gi
+        size: 20Gi
         storageClass: ceph-block
         globalMounts:
           - path: /home/node
