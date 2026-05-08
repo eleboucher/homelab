@@ -16,6 +16,16 @@ spec:
   permissionProfile:
     type: builtin
     name: network
+  podTemplateSpec:
+    spec:
+      volumes:
+        - name: tmp
+          emptyDir: {}
+      containers:
+        - name: mcp
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
   env:
     - name: NPM_CONFIG_CACHE
       value: /tmp/npm-cache
