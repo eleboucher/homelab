@@ -6,8 +6,6 @@ metadata:
   name: llama-cpp
   namespace: flux-system
 spec:
-  components:
-    - ../../../../components/gpu
   dependsOn:
     - name: rook-ceph-cluster
       namespace: rook-ceph
