@@ -132,6 +132,26 @@ data:
           "homelab": {
             "transport": "streamable-http",
             "url": "http://vmcp-mcp-gateway-internal.ai.svc.cluster.local:4483/mcp"
+          },
+          "skiplagged": {
+            "transport": "streamable-http",
+            "url": "https://mcp.skiplagged.com/mcp"
+          },
+          "kiwi": {
+            "transport": "streamable-http",
+            "url": "https://mcp.kiwi.com"
+          },
+          "trivago": {
+            "transport": "streamable-http",
+            "url": "https://mcp.trivago.com/mcp"
+          },
+          "ferryhopper": {
+            "transport": "streamable-http",
+            "url": "https://mcp.ferryhopper.com/mcp"
+          },
+          "airbnb": {
+            "command": "npx",
+            "args": ["-y", "@openbnb/mcp-server-airbnb@latest", "--ignore-robots-txt"]
           }
         }
       },
@@ -261,6 +281,13 @@ data:
           "skill-workshop": {
             "enabled": true
           }
+        }
+      },
+      "skills": {
+        "load": {
+          "extraDirs": [
+            "/home/node/.openclaw/plugins/travel-hacking-toolkit/plugins/travel-hacking-toolkit/skills"
+          ]
         }
       },
       "session": {

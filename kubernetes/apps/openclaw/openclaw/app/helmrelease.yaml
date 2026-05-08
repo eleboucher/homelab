@@ -92,6 +92,16 @@ spec:
 
                 mkdir -p /home/node/.openclaw
 
+                if [ ! -d /home/node/.openclaw/plugins/travel-hacking-toolkit ]; then
+                  mkdir -p /home/node/.openclaw/plugins
+                  git clone --depth 1 https://github.com/borski/travel-hacking-toolkit \
+                    /home/node/.openclaw/plugins/travel-hacking-toolkit
+                else
+                  cd /home/node/.openclaw/plugins/travel-hacking-toolkit
+                  git pull --ff-only || true
+                  cd -
+                fi
+
                 export PATH=/home/node/.local/bin:$PATH
             securityContext:
               allowPrivilegeEscalation: false
