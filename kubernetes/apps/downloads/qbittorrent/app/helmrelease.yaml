@@ -15,7 +15,7 @@ spec:
       qbittorrent:
         pod:
           nodeSelector:
-            kubernetes.io/hostname: le-havre
+            kubernetes.io/hostname: paris
           securityContext:
             fsGroup: 1000
             fsGroupChangePolicy: "OnRootMismatch"
