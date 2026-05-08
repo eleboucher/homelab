@@ -1,0 +1,25 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/toolhive.stacklok.dev/mcpserver_v1alpha1.json
+apiVersion: toolhive.stacklok.dev/v1alpha1
+kind: MCPServer
+metadata:
+  name: seerr-mcp
+spec:
+  image: docker.io/node:24-alpine
+  transport: stdio
+  args:
+    - npx
+    - -y
+    - "@jhomen368/overseerr-mcp"
+  groupRef:
+    name: mcp-tools
+  permissionProfile:
+    type: builtin
+    name: network
+  env:
+    - name: SEERR_URL
+      value: http://jellyseerr.media.svc.cluster.local:5055
+  secrets:
+    - name: seerr-mcp
+      key: api-key
+      targetEnvName: SEERR_API_KEY

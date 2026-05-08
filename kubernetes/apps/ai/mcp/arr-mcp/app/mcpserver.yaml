@@ -1,0 +1,35 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/toolhive.stacklok.dev/mcpserver_v1alpha1.json
+apiVersion: toolhive.stacklok.dev/v1alpha1
+kind: MCPServer
+metadata:
+  name: arr-mcp
+spec:
+  image: docker.io/node:24-alpine
+  transport: stdio
+  args:
+    - npx
+    - -y
+    - mcp-arr-server@1.5.4
+  groupRef:
+    name: mcp-tools
+  permissionProfile:
+    type: builtin
+    name: network
+  env:
+    - name: SONARR_URL
+      value: http://sonarr.media.svc.cluster.local
+    - name: RADARR_URL
+      value: http://radarr.media.svc.cluster.local
+    - name: PROWLARR_URL
+      value: http://prowlarr.media.svc.cluster.local
+  secrets:
+    - name: arr-mcp
+      key: sonarr-api-key
+      targetEnvName: SONARR_API_KEY
+    - name: arr-mcp
+      key: radarr-api-key
+      targetEnvName: RADARR_API_KEY
+    - name: arr-mcp
+      key: prowlarr-api-key
+      targetEnvName: PROWLARR_API_KEY

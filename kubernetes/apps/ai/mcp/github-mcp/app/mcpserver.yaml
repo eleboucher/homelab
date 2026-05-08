@@ -1,0 +1,18 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/toolhive.stacklok.dev/mcpserver_v1alpha1.json
+apiVersion: toolhive.stacklok.dev/v1alpha1
+kind: MCPServer
+metadata:
+  name: github-mcp
+spec:
+  image: ghcr.io/github/github-mcp-server:latest
+  transport: stdio
+  groupRef:
+    name: mcp-tools
+  permissionProfile:
+    type: builtin
+    name: network
+  secrets:
+    - name: github-mcp
+      key: token
+      targetEnvName: GITHUB_PERSONAL_ACCESS_TOKEN

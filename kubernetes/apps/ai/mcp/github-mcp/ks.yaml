@@ -3,13 +3,13 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: grafana-mcp
+  name: github-mcp
 spec:
   dependsOn:
     - name: toolhive-config
       namespace: ai
   interval: 1h
-  path: ./kubernetes/apps/ai/grafana-mcp/app
+  path: ./kubernetes/apps/ai/mcp/github-mcp/app
   prune: true
   sourceRef:
     kind: OCIRepository
