@@ -61,26 +61,7 @@ module "firewall" {
   }
 
   nat_rules = {
-    "dns-redirect-udp" = {
-      chain       = "dstnat"
-      action      = "redirect"
-      protocol    = "udp"
-      dst_port    = "53"
-      src_address = "192.168.1.0/24"
-      to_ports    = "53"
-      comment     = "Redirect LAN DNS UDP to router"
-      order       = 10
-    }
-    "dns-redirect-tcp" = {
-      chain       = "dstnat"
-      action      = "redirect"
-      protocol    = "tcp"
-      dst_port    = "53"
-      src_address = "192.168.1.0/24"
-      to_ports    = "53"
-      comment     = "Redirect LAN DNS TCP to router"
-      order       = 20
-    }
+
     "fix-triangle-routing" = {
       chain       = "srcnat"
       action      = "masquerade"
