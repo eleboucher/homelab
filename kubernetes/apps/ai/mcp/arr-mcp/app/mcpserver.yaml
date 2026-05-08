@@ -27,8 +27,14 @@ spec:
       value: http://prowlarr.media.svc.cluster.local
   podTemplateSpec:
     spec:
+      volumes:
+        - name: tmp
+          emptyDir: {}
       containers:
         - name: mcp
           envFrom:
             - secretRef:
                 name: arr-mcp
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp

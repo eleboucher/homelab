@@ -108,9 +108,9 @@ spec:
               readiness: *probes
             resources:
               requests:
-                memory: 112Mi
-              limits:
                 memory: 256Mi
+              limits:
+                memory: 4Gi
             securityContext:
               allowPrivilegeEscalation: false
               capabilities:
