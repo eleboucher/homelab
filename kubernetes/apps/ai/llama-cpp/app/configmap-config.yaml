@@ -13,15 +13,15 @@ data:
     top-k         = 64
     top-p         = 0.95
 
-    [qwen/qwen3.6-35B-A3B:general]
-    model                = /models/models--unsloth--Qwen3.6-35B-A3B-GGUF/model.gguf
-    mmproj               = /models/models--unsloth--Qwen3.6-35B-A3B-GGUF/mmproj.gguf
+    [qwen/qwen3.6-27B:general]
+    model                = /models/models--unsloth--Qwen3.6-27B-GGUF/model.gguf
+    mmproj               = /models/models--unsloth--Qwen3.6-27B-GGUF/mmproj.gguf
     ctx-size             = 32768
     cache-type-k         = q8_0
     cache-type-v         = q8_0
-    temp                 = 1.0
+    temp                 = 0.7
     top-k                = 20
-    top-p                = 0.95
+    top-p                = 0.8
     min-p                = 0.0
     presence-penalty     = 1.5
     repeat-penalty       = 1.0

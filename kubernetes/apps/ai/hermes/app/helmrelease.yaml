@@ -1,0 +1,224 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: hermes
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: hermes
+  interval: 15m
+  values:
+    defaultPodOptions:
+      securityContext:
+        fsGroup: 10000
+        fsGroupChangePolicy: OnRootMismatch
+        runAsGroup: 10000
+        runAsUser: 10000
+        seccompProfile:
+          type: RuntimeDefault
+    controllers:
+      hermes:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        initContainers:
+          init:
+            image:
+              repository: docker.io/library/alpine
+              tag: "3.21"
+            command:
+              - sh
+              - -c
+              - |
+                set -euo pipefail
+                cp /tmp/config.yaml /opt/data/config.yaml
+                chown 10000:10000 /opt/data/config.yaml
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities:
+                add:
+                  - CHOWN
+                drop:
+                  - ALL
+              runAsGroup: 0
+              runAsUser: 0
+        containers:
+          app:
+            image:
+              repository: nousresearch/hermes-agent
+              tag: v2026.4.30@sha256:900e1f8076662a20a685142321808085cc0b2935bb904b234c6828b4d7fb0f77
+            args:
+              - gateway
+              - run
+            env:
+              HERMES_HOME: /opt/data
+              HOME: /opt/data
+              TZ: ${TZ}
+            envFrom:
+              - secretRef:
+                  name: hermes
+            resources:
+              requests:
+                cpu: 500m
+              limits:
+                memory: 2Gi
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities:
+                add:
+                  - CHOWN
+                drop:
+                  - ALL
+              readOnlyRootFilesystem: false
+          codeserver:
+            image:
+              repository: ghcr.io/coder/code-server
+              tag: 4.117.0@sha256:e6702766518b961c7e3c41095c129c7c9a82b041578c53326c52fa363a057727
+            args:
+              - --auth
+              - none
+              - --user-data-dir
+              - /home/node/.vscode
+              - --extensions-dir
+              - /home/node/.vscode
+              - --port
+              - "12321"
+              - /config
+            env:
+              TZ: ${TZ}
+            resources:
+              requests:
+                cpu: 10m
+              limits:
+                memory: 1Gi
+          dashboard:
+            image:
+              repository: nousresearch/hermes-agent
+              tag: v2026.4.30@sha256:900e1f8076662a20a685142321808085cc0b2935bb904b234c6828b4d7fb0f77
+            args:
+              - dashboard
+              - --host
+              - 0.0.0.0
+              - --insecure
+            env:
+              GATEWAY_HEALTH_URL: http://localhost:8642
+              TZ: ${TZ}
+            resources:
+              requests:
+                cpu: 500m
+              limits:
+                memory: 1Gi
+    persistence:
+      configmap:
+        type: configMap
+        name: hermes-config
+        defaultMode: 0o755
+        globalMounts:
+          - path: /tmp/config.yaml
+            subPath: config.yaml
+      data:
+        type: persistentVolumeClaim
+        existingClaim: hermes
+        globalMounts:
+          - path: /opt/data
+    rbac:
+      bindings:
+        hermes-read-all:
+          type: ClusterRoleBinding
+          roleRef:
+            identifier: hermes-read-all
+          subjects:
+            - identifier: hermes
+              serviceAccount: hermes
+      roles:
+        hermes-read-all:
+          type: ClusterRole
+          rules:
+            - apiGroups:
+                - ""
+              resources:
+                - pods
+                - pods/log
+                - nodes
+                - services
+                - namespaces
+                - configmaps
+                - persistentvolumes
+                - persistentvolumeclaims
+                - events
+              verbs:
+                - get
+                - list
+                - watch
+            - apiGroups:
+                - apps
+              resources:
+                - deployments
+                - daemonsets
+                - statefulsets
+              verbs:
+                - get
+                - list
+                - watch
+            - apiGroups:
+                - batch
+              resources:
+                - jobs
+                - cronjobs
+              verbs:
+                - get
+                - list
+                - watch
+            - apiGroups:
+                - helm.toolkit.fluxcd.io
+              resources:
+                - helmreleases
+              verbs:
+                - get
+                - list
+                - watch
+            - apiGroups:
+                - kustomize.toolkit.fluxcd.io
+              resources:
+                - kustomizations
+              verbs:
+                - get
+                - list
+                - watch
+    route:
+      app:
+        hostnames:
+          - hermes.erwanleboucher.dev
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
+        rules:
+          - backendRefs:
+              - identifier: dashboard
+                port: http
+      codeserver:
+        hostnames:
+          - hermes-code.erwanleboucher.dev
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
+        rules:
+          - backendRefs:
+              - identifier: app
+                port: codeserver
+    service:
+      app:
+        controller: hermes
+        ports:
+          codeserver:
+            port: 12321
+          http:
+            port: 8642
+      dashboard:
+        controller: hermes
+        ports:
+          http:
+            port: 9119
+    serviceAccount:
+      hermes: {}

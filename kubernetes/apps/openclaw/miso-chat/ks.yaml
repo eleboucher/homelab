@@ -1,0 +1,30 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: miso-chat
+  namespace: flux-system
+spec:
+  components:
+    - ../../../../components/oidc
+  dependsOn:
+    - name: kanidm
+      namespace: security
+    - name: openclaw
+  interval: 15m
+  path: ./kubernetes/apps/openclaw/miso-chat/app
+  postBuild:
+    substitute:
+      APP: miso-chat
+      APP_NAMESPACE: openclaw
+      OIDC_CALLBACK: /auth/oidc/callback
+      OIDC_GROUP: users
+  prune: true
+  sourceRef:
+    kind: OCIRepository
+    name: flux-system
+    namespace: flux-system
+  targetNamespace: openclaw
+  timeout: 5m
+  wait: false

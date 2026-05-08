@@ -79,7 +79,7 @@ data:
           "model": {
             "primary": "llama-cpp/google/gemma-4-E4B-it",
             "fallbacks": [
-              "llama-cpp/qwen/qwen3.6-35B-A3B:general"
+              "llama-cpp/qwen/qwen3.6-27B:general"
             ]
           },
           "subagents": {
@@ -181,8 +181,8 @@ data:
                 }
               },
               {
-                "id": "qwen/qwen3.6-35B-A3B:general",
-                "name": "Qwen3.6 35B A3B",
+                "id": "qwen/qwen3.6-27B:general",
+                "name": "Qwen3.6 27B",
                 "reasoning": false,
                 "input": ["text"],
                 "cost": {

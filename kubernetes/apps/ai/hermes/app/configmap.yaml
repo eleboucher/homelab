@@ -1,0 +1,43 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: hermes-config
+data:
+  config.yaml: |-
+    model:
+      default: gemma
+      provider: custom:kubernetes
+      base_url: http://litellm.ai:4000/v1
+      api_key: ${LITELLM_API_KEY}
+    fallback_providers:
+      - provider: custom:kubernetes
+        model: qwen
+    toolsets:
+      - hermes-cli
+    terminal:
+      backend: local
+      cwd: /opt/data/workspace
+      timeout: 180
+      persistent_shell: true
+    memory:
+      auto_migrate: true
+      auto_summarize:
+        threshold: 50
+    compression:
+      enabled: true
+    agent:
+      max_turns: 90
+      gateway_timeout: 1800
+      restart_drain_timeout: 60
+      api_max_retries: 2
+      reasoning_effort: medium
+    streaming:
+      enabled: false
+    security:
+      redact_secrets: true
+    privacy:
+      redact_pii: true
+    mcp_servers:
+      toolhive:
+        url: http://vmcp-mcp-gateway-internal.ai.svc.cluster.local:4483/mcp

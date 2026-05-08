@@ -27,6 +27,25 @@ spec:
         strategy: Recreate
         type: deployment
         initContainers:
+          init:
+            image:
+              repository: docker.io/library/alpine
+              tag: "3.21"
+            command:
+              - sh
+              - -c
+              - |
+                set -euo pipefail
+                mkdir -p /home/node/.openclaw
+                cp /run/config/openclaw.json /home/node/.openclaw/openclaw.json
+                chmod 600 /home/node/.openclaw/openclaw.json
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop:
+                  - ALL
+              runAsGroup: 100
+              runAsUser: 1000
           install-tools:
             image:
               repository: ghcr.io/openclaw/openclaw
@@ -268,9 +287,11 @@ spec:
         type: secret
         name: openclaw-config
         defaultMode: 0o400
-        globalMounts:
-          - path: /home/node/.openclaw/openclaw.json
-            subPath: openclaw.json
+        advancedMounts:
+          openclaw:
+            init:
+              - path: /run/config/openclaw.json
+                subPath: openclaw.json
       next-cache:
         type: emptyDir
         globalMounts:
