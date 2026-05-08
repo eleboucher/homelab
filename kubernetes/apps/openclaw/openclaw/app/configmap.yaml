@@ -80,7 +80,7 @@ data:
             "primary": "litellm/gemma",
             "fallbacks": [
               "litellm/qwen",
-              "litellm/minimax"
+              "litellm/minimax/MiniMax-M2.7"
             ]
           },
           "subagents": {
@@ -199,7 +199,7 @@ data:
                 }
               },
               {
-                "id": "minimax",
+                "id": "minimax/MiniMax-M2.7",
                 "name": "MiniMax M2.7",
                 "reasoning": true,
                 "input": ["text"],

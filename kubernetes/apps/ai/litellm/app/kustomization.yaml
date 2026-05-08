@@ -5,5 +5,8 @@ kind: Kustomization
 resources:
   - ./configmap.yaml
   - ./externalsecret.yaml
+  - ./grafanadashboard.yaml
   - ./helmrelease.yaml
   - ./ocirepository.yaml
+  - ./servicemonitor.yaml
+  - ./dashboard

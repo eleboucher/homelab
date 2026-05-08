@@ -18,7 +18,7 @@ data:
           api_base: http://llama-cpp.ai:8080/v1
           api_key: os.environ/LLAMA_API_KEY
 
-      - model_name: minimax
+      - model_name: minimax/MiniMax-M2.7
         litellm_params:
           model: minimax/MiniMax-M2.7
           api_base: https://api.minimax.io/v1

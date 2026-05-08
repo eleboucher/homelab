@@ -14,7 +14,7 @@ data:
       - provider: custom:kubernetes
         model: qwen
       - provider: custom:kubernetes
-        model: minimax
+        model: minimax/MiniMax-M2.7
     toolsets:
       - hermes-cli
     terminal:
