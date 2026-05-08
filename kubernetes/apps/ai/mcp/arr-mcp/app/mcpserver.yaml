@@ -25,13 +25,10 @@ spec:
       value: http://radarr.media.svc.cluster.local
     - name: PROWLARR_URL
       value: http://prowlarr.media.svc.cluster.local
-  secrets:
-    - name: arr-mcp
-      key: sonarr-api-key
-      targetEnvName: SONARR_API_KEY
-    - name: arr-mcp
-      key: radarr-api-key
-      targetEnvName: RADARR_API_KEY
-    - name: arr-mcp
-      key: prowlarr-api-key
-      targetEnvName: PROWLARR_API_KEY
+  podTemplateSpec:
+    spec:
+      containers:
+        - name: mcp
+          envFrom:
+            - secretRef:
+                name: arr-mcp
