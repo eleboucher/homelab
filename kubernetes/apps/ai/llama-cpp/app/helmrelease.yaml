@@ -54,14 +54,12 @@ spec:
           app:
             image:
               repository: ghcr.io/ggml-org/llama.cpp
-              tag: server-intel-b9070@sha256:64b208df872f374e6984eed5bd8aad95ea765fa7cdb6ec76a404eb627b505ba7
+              tag: server-intel-b9049@sha256:c41427b2188ba0d95b96588d4f728ce1b7007489d79e50831addb1bce5dc118e
             args:
               - --models-preset
               - /config/presets.ini
               - --flash-attn
               - on
-              - --models-max
-              - "1"
             env:
               LLAMA_API_KEY:
                 valueFrom:
