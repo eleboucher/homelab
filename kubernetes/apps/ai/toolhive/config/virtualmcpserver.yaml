@@ -38,6 +38,10 @@ spec:
       conflictResolution: prefix
       conflictResolutionConfig:
         prefixFormat: "{workload}_"
+    operational:
+      failureHandling:
+        healthCheckInterval: 5m
+        statusReportingInterval: 5m
   embeddingServerRef:
     name: mcp-tools-embedding
   incomingAuth:

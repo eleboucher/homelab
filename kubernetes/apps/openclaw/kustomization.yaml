@@ -6,6 +6,5 @@ namespace: openclaw
 
 resources:
   - namespace.yaml
-  - extended-memory/ks.yaml
   - miso-chat/ks.yaml
   - openclaw/ks.yaml

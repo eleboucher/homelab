@@ -9,3 +9,6 @@ resources:
   - ./embeddingserver.yaml
   - ./virtualmcpserver.yaml
   - ./mcpconfigoidc.yaml
+  - ./mcp-telemetry.yaml
+  - ./podmonitor.yaml
+  - ./dashboard

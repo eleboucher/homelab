@@ -1,0 +1,10 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/toolhive.stacklok.dev/mcptelemetryconfig_v1alpha1.json
+apiVersion: toolhive.stacklok.dev/v1alpha1
+kind: MCPTelemetryConfig
+metadata:
+  name: prometheus
+  namespace: ai
+spec:
+  prometheus:
+    enabled: true

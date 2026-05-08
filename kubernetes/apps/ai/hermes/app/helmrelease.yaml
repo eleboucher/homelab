@@ -12,10 +12,10 @@ spec:
   values:
     defaultPodOptions:
       securityContext:
-        fsGroup: 10000
+        fsGroup: 1000
         fsGroupChangePolicy: OnRootMismatch
-        runAsGroup: 10000
-        runAsUser: 10000
+        runAsGroup: 1000
+        runAsUser: 1000
         seccompProfile:
           type: RuntimeDefault
     controllers:
@@ -33,7 +33,7 @@ spec:
               - |
                 set -euo pipefail
                 cp /tmp/config.yaml /opt/data/config.yaml
-                chown 10000:10000 /opt/data/config.yaml
+                chown 1000:1000 /opt/data/config.yaml
             securityContext:
               allowPrivilegeEscalation: false
               capabilities:

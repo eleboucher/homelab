@@ -19,8 +19,6 @@ spec:
       APP: hermes
       APP_NAMESPACE: ai
       VOLSYNC_CAPACITY: 5Gi
-      VOLSYNC_PGID: "10000"
-      VOLSYNC_PUID: "10000"
   prune: true
   sourceRef:
     kind: OCIRepository
