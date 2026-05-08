@@ -17,6 +17,8 @@ spec:
     type: builtin
     name: network
   env:
+    - name: NPM_CONFIG_CACHE
+      value: /tmp/npm-cache
     - name: SONARR_URL
       value: http://sonarr.media.svc.cluster.local
     - name: RADARR_URL

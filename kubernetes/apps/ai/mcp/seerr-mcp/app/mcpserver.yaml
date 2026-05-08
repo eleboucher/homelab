@@ -17,6 +17,8 @@ spec:
     type: builtin
     name: network
   env:
+    - name: NPM_CONFIG_CACHE
+      value: /tmp/npm-cache
     - name: SEERR_URL
       value: http://jellyseerr.media.svc.cluster.local:5055
   secrets:
