@@ -6,19 +6,333 @@ metadata:
 data:
   openclaw.json: |-
     {
-      "gateway": {
-        "auth": {
-          "mode": "token",
-          "token": "{{ .GATEWAY_TOKEN }}"
+      agents: {
+        defaults: {
+          compaction: {
+            memoryFlush: { enabled: true, softThresholdTokens: 6000 },
+            mode: "safeguard",
+            reserveTokensFloor: 8000,
+            timeoutSeconds: 900,
+          },
+          contextPruning: {
+            hardClear: { enabled: true, placeholder: "[Old tool result cleared]" },
+            hardClearRatio: 0.5,
+            keepLastAssistants: 3,
+            minPrunableToolChars: 50000,
+            mode: "cache-ttl",
+            softTrim: { headChars: 1500, maxChars: 4000, tailChars: 1500 },
+            softTrimRatio: 0.3,
+            ttl: "1h",
+          },
+          heartbeat: {
+            directPolicy: "allow",
+            lightContext: true,
+            isolatedSession: true,
+            includeReasoning: true,
+          },
+          imageModel: {
+            primary: "litellm/gemma",
+          },
+          maxConcurrent: 4,
+          memorySearch: {
+            provider: "local",
+            fallback: "none",
+            local: {
+              modelPath: "hf:ggml-org/embeddinggemma-300M-GGUF/embeddinggemma-300M-Q8_0.gguf",
+            },
+            sync: { watch: true },
+            query: {
+              hybrid: { enabled: true, vectorWeight: 0.7, textWeight: 0.3 },
+            },
+          },
+          model: {
+            primary: "litellm/minimax/MiniMax-M2.7",
+            fallbacks: [
+              "litellm/qwen",
+              "litellm/gemma",
+            ],
+          },
+          models: {
+            "litellm/gemma": { alias: "gemma" },
+            "litellm/qwen": { alias: "qwen" },
+            "litellm/minimax/MiniMax-M2.7": { alias: "minimax" },
+          },
+          subagents: {
+            model: { primary: "litellm/qwen" },
+            archiveAfterMinutes: 120,
+            maxConcurrent: 3,
+            thinking: "adaptive",
+          },
+          thinkingDefault: "adaptive",
+          timeoutSeconds: 600,
+          workspace: "/home/node/.openclaw/workspace",
         },
-        "bind": "lan",
-        "controlUi": {
-          "allowInsecureAuth": true,
-          "allowedOrigins": ["https://openclaw.erwanleboucher.dev", "https://chat.erwanleboucher.dev"]
+        list: [
+          {
+            id: "main",
+            default: true,
+            name: "Owl",
+            workspace: "/home/node/.openclaw/workspace",
+            agentDir: "/home/node/.openclaw/agents/main/agent",
+            identity: {
+              name: "Owl",
+              avatar: "avatars/owl_avatar.png",
+            },
+            heartbeat: {
+              every: "60m",
+              model: "litellm/minimax/MiniMax-M2.7",
+              activeHours: { start: "06:00", end: "23:00" },
+            },
+          },
+        ],
+      },
+      bindings: [
+        { agentId: "main", match: { channel: "discord", accountId: "default" } },
+        { agentId: "main", match: { channel: "matrix" } },
+      ],
+      channels: {
+        discord: {
+          enabled: true,
+          defaultAccount: "default",
+          groupPolicy: "allowlist",
+          accounts: {
+            default: {
+              token: "{{ .DISCORD_TOKEN }}",
+              guilds: {
+                "1441534507017703547": {
+                  channels: {
+                    "1501981764430594189": { enabled: true },
+                  },
+                },
+              },
+            },
+          },
         },
-        "mode": "local",
-        "nodes": {
-          "denyCommands": [
+        matrix: {
+          enabled: true,
+          accessToken: "{{ .MATRIX_ACCESS_TOKEN }}",
+          autoJoin: "always",
+          dm: {
+            allowFrom: ["@genesixx:erwanleboucher.dev"],
+            policy: "pairing",
+            sessionScope: "per-room",
+          },
+          encryption: true,
+          groupAllowFrom: ["@genesixx:erwanleboucher.dev"],
+          groupPolicy: "allowlist",
+          homeserver: "http://continuwuity.matrix.svc.cluster.local:8080",
+          network: { dangerouslyAllowPrivateNetwork: true },
+          userId: "{{ .MATRIX_USER_ID }}",
+        },
+      },
+      commands: {
+        native: "auto",
+        nativeSkills: "auto",
+        allowFrom: {
+          discord: ["user:178154257042636800"],
+          matrix: ["user:@genesixx:erwanleboucher.dev"],
+        },
+      },
+      auth: {
+        profiles: {
+          "litellm:default": { provider: "litellm", mode: "api_key" },
+        },
+      },
+      hooks: {
+        internal: {
+          enabled: true,
+          entries: {
+            "compaction-notifier": { enabled: true },
+            "session-memory": { enabled: true },
+          },
+        },
+      },
+      models: {
+        mode: "merge",
+        providers: {
+          litellm: {
+            api: "openai-responses",
+            apiKey: "{{ .LITELLM_MASTER_KEY }}",
+            baseUrl: "http://litellm.ai:4000/v1",
+            models: [
+              {
+                id: "gemma",
+                name: "Gemma 4 E4B",
+                reasoning: false,
+                input: ["text", "image"],
+                cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
+                contextWindow: 131072,
+                maxTokens: 8192,
+                compat: { supportsUsageInStreaming: true },
+              },
+              {
+                id: "qwen",
+                name: "Qwen3.6 27B",
+                reasoning: false,
+                input: ["text"],
+                cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
+                contextWindow: 32768,
+                maxTokens: 8192,
+                compat: { supportsUsageInStreaming: true },
+              },
+              {
+                id: "minimax/MiniMax-M2.7",
+                name: "MiniMax M2.7",
+                reasoning: true,
+                input: ["text"],
+                cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
+                contextWindow: 200000,
+                maxTokens: 8192,
+                compat: { supportsUsageInStreaming: true },
+              },
+            ],
+          },
+        },
+      },
+      messages: {
+        groupChat: { visibleReplies: "message_tool" },
+      },
+      mcp: {
+        servers: {
+          homelab: {
+            transport: "streamable-http",
+            url: "http://vmcp-mcp-gateway-internal.ai.svc.cluster.local:4483/mcp",
+          },
+          skiplagged: {
+            transport: "streamable-http",
+            url: "https://mcp.skiplagged.com/mcp",
+          },
+          kiwi: {
+            transport: "streamable-http",
+            url: "https://mcp.kiwi.com",
+          },
+          trivago: {
+            transport: "streamable-http",
+            url: "https://mcp.trivago.com/mcp",
+          },
+          ferryhopper: {
+            transport: "streamable-http",
+            url: "https://mcp.ferryhopper.com/mcp",
+          },
+          airbnb: {
+            command: "npx",
+            args: ["-y", "@openbnb/mcp-server-airbnb@latest", "--ignore-robots-txt"],
+          },
+        },
+      },
+      plugins: {
+        allow: [
+          "browser",
+          "discord",
+          "matrix",
+          "memory-core",
+          "memory-wiki",
+          "searxng",
+          "skill-workshop",
+        ],
+        bundledDiscovery: "compat",
+        entries: {
+          browser: { enabled: true },
+          discord: { enabled: true },
+          "memory-core": { enabled: true },
+          "memory-wiki": {
+            enabled: true,
+            config: {
+              vaultMode: "bridge",
+              vault: {
+                path: "/home/node/.openclaw/wiki/main",
+                renderMode: "native",
+              },
+              bridge: {
+                enabled: true,
+                readMemoryArtifacts: true,
+                indexDreamReports: true,
+                indexDailyNotes: true,
+                indexMemoryRoot: true,
+                followMemoryEvents: true,
+              },
+              search: {
+                backend: "shared",
+                corpus: "all",
+              },
+              render: {
+                preserveHumanBlocks: true,
+                createBacklinks: true,
+                createDashboards: true,
+              },
+            },
+          },
+          searxng: {
+            enabled: true,
+            config: {
+              webSearch: {
+                baseUrl: "http://searxng.selfhosted.svc.cluster.local:8080",
+              },
+            },
+          },
+          "skill-workshop": { enabled: true },
+        },
+        slots: {
+          memory: "memory-core",
+        },
+      },
+      session: {
+        dmScope: "main",
+        reset: {
+          mode: "idle",
+          idleMinutes: 1440,
+        },
+        maintenance: {
+          mode: "enforce",
+          pruneAfter: "7d",
+          maxEntries: 1000,
+          rotateBytes: "100mb",
+          resetArchiveRetention: "7d",
+        },
+      },
+      skills: {
+        load: {
+          extraDirs: [
+            "/home/node/.openclaw/plugins/travel-hacking-toolkit/plugins/travel-hacking-toolkit/skills",
+          ],
+        },
+      },
+      tools: {
+        alsoAllow: ["browser"],
+        media: { image: { timeoutSeconds: 180 } },
+        sessions: { visibility: "all" },
+        agentToAgent: { enabled: true },
+        exec: { security: "full", ask: "off", strictInlineEval: false },
+        elevated: {
+          enabled: true,
+          allowFrom: {
+            discord: ["178154257042636800"],
+            matrix: ["@genesixx:erwanleboucher.dev"],
+          },
+        },
+        web: {
+          fetch: { enabled: true },
+          search: { enabled: true, provider: "searxng" },
+        },
+      },
+      gateway: {
+        auth: { mode: "token", token: "{{ .GATEWAY_TOKEN }}" },
+        bind: "lan",
+        controlUi: {
+          allowInsecureAuth: true,
+          allowedOrigins: [
+            "https://openclaw.erwanleboucher.dev",
+            "https://chat.erwanleboucher.dev",
+          ],
+        },
+        http: {
+          endpoints: {
+            chatCompletions: { enabled: true },
+          },
+        },
+        mode: "local",
+        nodes: {
+          denyCommands: [
             "camera.snap",
             "camera.clip",
             "screen.record",
@@ -26,287 +340,12 @@ data:
             "calendar.add",
             "reminders.add",
             "sms.send",
-            "sms.search"
-          ]
+            "sms.search",
+          ],
         },
-        "http": {
-          "endpoints": {
-            "chatCompletions": {
-              "enabled": true
-            }
-          }
-        },
-        "port": 18789,
-        "reload": {
-          "debounceMs": 300,
-          "mode": "hybrid"
-        },
-        "tailscale": {
-          "mode": "off",
-          "resetOnExit": false
-        },
-        "trustedProxies": ["10.42.0.0/16"]
+        port: 18789,
+        reload: { debounceMs: 300, mode: "hybrid" },
+        tailscale: { mode: "off", resetOnExit: false },
+        trustedProxies: ["10.42.0.0/16", "192.168.0.0/16"],
       },
-      "agents": {
-        "defaults": {
-          "compaction": {
-            "memoryFlush": {
-              "enabled": true,
-              "softThresholdTokens": 6000
-            },
-            "mode": "safeguard",
-            "reserveTokensFloor": 8000,
-            "timeoutSeconds": 900
-          },
-          "contextPruning": {
-            "hardClear": {
-              "enabled": true,
-              "placeholder": "[Old tool result cleared]"
-            },
-            "hardClearRatio": 0.5,
-            "keepLastAssistants": 3,
-            "minPrunableToolChars": 50000,
-            "mode": "cache-ttl",
-            "softTrim": {
-              "headChars": 1500,
-              "maxChars": 4000,
-              "tailChars": 1500
-            },
-            "softTrimRatio": 0.3,
-            "ttl": "1h"
-          },
-          "maxConcurrent": 4,
-          "model": {
-            "primary": "litellm/gemma",
-            "fallbacks": [
-              "litellm/qwen",
-              "litellm/minimax/MiniMax-M2.7"
-            ]
-          },
-          "subagents": {
-            "maxConcurrent": 8
-          },
-          "workspace": "/home/node/.openclaw/workspace"
-        }
-      },
-      "channels": {
-        "discord": {
-          "enabled": true,
-          "groupPolicy": "allowlist",
-          "guilds": {
-            "1441534507017703547": {
-              "channels": {
-                "1501981764430594189": {
-                  "enabled": true
-                }
-              }
-            }
-          },
-          "token": "{{ .DISCORD_TOKEN }}"
-        },
-        "matrix": {
-          "accessToken": "{{ .MATRIX_ACCESS_TOKEN }}",
-          "autoJoin": "always",
-          "dm": {
-            "allowFrom": ["@genesixx:erwanleboucher.dev"],
-            "policy": "pairing",
-            "sessionScope": "per-room"
-          },
-          "enabled": true,
-          "encryption": true,
-          "groupAllowFrom": ["@genesixx:erwanleboucher.dev"],
-          "groupPolicy": "allowlist",
-          "homeserver": "http://continuwuity.matrix.svc.cluster.local:8080",
-          "network": {
-            "dangerouslyAllowPrivateNetwork": true
-          },
-          "userId": "{{ .MATRIX_USER_ID }}"
-        }
-      },
-      "commands": {
-        "native": "auto",
-        "nativeSkills": "auto"
-      },
-      "mcp": {
-        "servers": {
-          "homelab": {
-            "transport": "streamable-http",
-            "url": "http://vmcp-mcp-gateway-internal.ai.svc.cluster.local:4483/mcp"
-          },
-          "skiplagged": {
-            "transport": "streamable-http",
-            "url": "https://mcp.skiplagged.com/mcp"
-          },
-          "kiwi": {
-            "transport": "streamable-http",
-            "url": "https://mcp.kiwi.com"
-          },
-          "trivago": {
-            "transport": "streamable-http",
-            "url": "https://mcp.trivago.com/mcp"
-          },
-          "ferryhopper": {
-            "transport": "streamable-http",
-            "url": "https://mcp.ferryhopper.com/mcp"
-          },
-          "airbnb": {
-            "command": "npx",
-            "args": ["-y", "@openbnb/mcp-server-airbnb@latest", "--ignore-robots-txt"]
-          }
-        }
-      },
-      "auth": {
-        "profiles": {
-          "litellm:default": {
-            "provider": "litellm",
-            "mode": "api_key"
-          }
-        }
-      },
-      "hooks": {
-        "internal": {
-          "enabled": true,
-          "entries": {
-            "compaction-notifier": {
-              "enabled": true
-            },
-            "session-memory": {
-              "enabled": true
-            }
-          }
-        }
-      },
-      "models": {
-        "mode": "merge",
-        "providers": {
-          "litellm": {
-            "api": "openai-responses",
-            "apiKey": "{{ .LITELLM_MASTER_KEY }}",
-            "baseUrl": "http://litellm.ai:4000/v1",
-            "models": [
-              {
-                "id": "gemma",
-                "name": "Gemma 4 E4B",
-                "reasoning": false,
-                "input": ["text", "image"],
-                "cost": {
-                  "input": 0,
-                  "output": 0,
-                  "cacheRead": 0,
-                  "cacheWrite": 0
-                },
-                "contextWindow": 131072,
-                "maxTokens": 8192,
-                "compat": {
-                  "supportsUsageInStreaming": true
-                }
-              },
-              {
-                "id": "qwen",
-                "name": "Qwen3.6 27B",
-                "reasoning": false,
-                "input": ["text"],
-                "cost": {
-                  "input": 0,
-                  "output": 0,
-                  "cacheRead": 0,
-                  "cacheWrite": 0
-                },
-                "contextWindow": 32768,
-                "maxTokens": 8192,
-                "compat": {
-                  "supportsUsageInStreaming": true
-                }
-              },
-              {
-                "id": "minimax/MiniMax-M2.7",
-                "name": "MiniMax M2.7",
-                "reasoning": true,
-                "input": ["text"],
-                "cost": {
-                  "input": 0,
-                  "output": 0,
-                  "cacheRead": 0,
-                  "cacheWrite": 0
-                },
-                "contextWindow": 200000,
-                "maxTokens": 8192,
-                "compat": {
-                  "supportsUsageInStreaming": true
-                }
-              }
-            ]
-          }
-        }
-      },
-      "messages": {
-        "groupChat": {
-          "visibleReplies": "message_tool"
-        }
-      },
-      "plugins": {
-        "allow": [
-          "memory-lancedb",
-          "skill-workshop"
-        ],
-        "bundledDiscovery": "compat",
-        "slots": {
-          "memory": "memory-lancedb"
-        },
-        "entries": {
-          "discord": {
-            "enabled": true
-          },
-          "memory-lancedb": {
-            "config": {
-              "autoCapture": false,
-              "autoRecall": true,
-              "embedding": {
-                "apiKey": "none",
-                "baseUrl": "http://mcp-tools-embedding.ai.svc.cluster.local:8080",
-                "dimensions": 384,
-                "model": "sentence-transformers/all-MiniLM-L6-v2"
-              }
-            },
-            "enabled": true
-          },
-          "searxng": {
-            "config": {
-              "webSearch": {
-                "baseUrl": "http://searxng.selfhosted.svc.cluster.local:8080"
-              }
-            },
-            "enabled": true
-          },
-          "skill-workshop": {
-            "enabled": true
-          }
-        }
-      },
-      "skills": {
-        "load": {
-          "extraDirs": [
-            "/home/node/.openclaw/plugins/travel-hacking-toolkit/plugins/travel-hacking-toolkit/skills"
-          ]
-        }
-      },
-      "session": {
-        "dmScope": "per-channel-peer",
-        "reset": {
-          "idleMinutes": 120,
-          "mode": "daily"
-        }
-      },
-      "tools": {
-        "profile": "coding",
-        "web": {
-          "fetch": {
-            "enabled": true
-          },
-          "search": {
-            "enabled": true,
-            "provider": "searxng"
-          }
-        }
-      }
     }
