@@ -82,10 +82,6 @@ data:
               "llama-cpp/qwen/qwen3.6-35B-A3B:general"
             ]
           },
-          "sandbox": {
-            "mode": "non-main",
-            "scope": "agent"
-          },
           "subagents": {
             "maxConcurrent": 8
           },
@@ -205,11 +201,17 @@ data:
           }
         }
       },
+      "messages": {
+        "groupChat": {
+          "visibleReplies": "message_tool"
+        }
+      },
       "plugins": {
         "allow": [
           "memory-lancedb",
           "skill-workshop"
         ],
+        "bundledDiscovery": "compat",
         "slots": {
           "memory": "memory-lancedb"
         },
