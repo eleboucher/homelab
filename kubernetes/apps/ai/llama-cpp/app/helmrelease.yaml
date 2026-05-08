@@ -60,6 +60,8 @@ spec:
               - /config/presets.ini
               - --flash-attn
               - on
+              - --models-max
+              - "1"
             env:
               LLAMA_API_KEY:
                 valueFrom:

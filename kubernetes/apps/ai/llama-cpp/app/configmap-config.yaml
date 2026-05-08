@@ -19,6 +19,7 @@ data:
     ctx-size             = 32768
     cache-type-k         = q8_0
     cache-type-v         = q8_0
+    parallel             = 1
     temp                 = 1.0
     top-k                = 20
     top-p                = 0.95
