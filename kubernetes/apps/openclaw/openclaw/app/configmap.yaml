@@ -77,9 +77,9 @@ data:
           },
           "maxConcurrent": 4,
           "model": {
-            "primary": "llama-cpp/qwen/qwen3.6-35B-A3B:general",
+            "primary": "llama-cpp/google/gemma-4-E4B-it",
             "fallbacks": [
-              "llama-cpp/google/gemma-4-E4B-it"
+              "llama-cpp/qwen/qwen3.6-35B-A3B:general"
             ]
           },
           "sandbox": {
