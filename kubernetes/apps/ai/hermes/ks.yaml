@@ -6,14 +6,21 @@ metadata:
   name: hermes
   namespace: flux-system
 spec:
+  components:
+    - ../../../../components/volsync
   dependsOn:
     - name: litellm
+    - name: rook-ceph-cluster
+      namespace: rook-ceph
   interval: 15m
   path: ./kubernetes/apps/ai/hermes/app
   postBuild:
     substitute:
       APP: hermes
       APP_NAMESPACE: ai
+      VOLSYNC_CAPACITY: 5Gi
+      VOLSYNC_PGID: "10000"
+      VOLSYNC_PUID: "10000"
   prune: true
   sourceRef:
     kind: OCIRepository
