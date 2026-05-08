@@ -77,9 +77,9 @@ data:
           },
           "maxConcurrent": 4,
           "model": {
-            "primary": "llama-cpp/google/gemma-4-E4B-it",
+            "primary": "litellm/gemma",
             "fallbacks": [
-              "llama-cpp/qwen/qwen3.6-27B:general"
+              "litellm/qwen"
             ]
           },
           "subagents": {
@@ -136,8 +136,8 @@ data:
       },
       "auth": {
         "profiles": {
-          "llama-cpp:default": {
-            "provider": "llama-cpp",
+          "litellm:default": {
+            "provider": "litellm",
             "mode": "api_key"
           }
         }
@@ -158,13 +158,13 @@ data:
       "models": {
         "mode": "merge",
         "providers": {
-          "llama-cpp": {
+          "litellm": {
             "api": "openai-responses",
-            "apiKey": "{{ .LLAMA_API_KEY }}",
-            "baseUrl": "http://llama-cpp.ai:8080/v1",
+            "apiKey": "{{ .LITELLM_MASTER_KEY }}",
+            "baseUrl": "http://litellm.ai:4000/v1",
             "models": [
               {
-                "id": "google/gemma-4-E4B-it",
+                "id": "gemma",
                 "name": "Gemma 4 E4B",
                 "reasoning": false,
                 "input": ["text", "image"],
@@ -181,7 +181,7 @@ data:
                 }
               },
               {
-                "id": "qwen/qwen3.6-27B:general",
+                "id": "qwen",
                 "name": "Qwen3.6 27B",
                 "reasoning": false,
                 "input": ["text"],
