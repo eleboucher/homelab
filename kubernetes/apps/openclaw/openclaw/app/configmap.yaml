@@ -119,7 +119,10 @@ data:
           "encryption": true,
           "groupAllowFrom": ["@genesixx:erwanleboucher.dev"],
           "groupPolicy": "allowlist",
-          "homeserver": "https://matrix.erwanleboucher.dev",
+          "homeserver": "http://continuwuity.matrix.svc.cluster.local:8080",
+          "network": {
+            "dangerouslyAllowPrivateNetwork": true
+          },
           "userId": "{{ .MATRIX_USER_ID }}"
         }
       },

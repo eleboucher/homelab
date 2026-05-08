@@ -50,6 +50,13 @@ spec:
                   ln -s /app/openclaw.mjs /home/node/.local/bin/openclaw
                 fi
 
+                if [ ! -f /home/node/.local/bin/docker ]; then
+                  cd /tmp
+                  curl -fsSL https://download.docker.com/linux/static/stable/x86_64/docker-29.4.0.tgz -o docker.tgz
+                  tar xzf docker.tgz --strip-components=1 -C /home/node/.local/bin/ docker/docker
+                  rm -f docker.tgz
+                fi
+
                 if [ ! -f /home/node/.local/go/bin/go ]; then
                   cd /tmp
                   curl -fsSL https://go.dev/dl/go1.23.5.linux-amd64.tar.gz -o go.tar.gz
