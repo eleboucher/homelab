@@ -14,7 +14,7 @@ data:
         "bind": "lan",
         "controlUi": {
           "allowInsecureAuth": true,
-          "allowedOrigins": ["https://openclaw.erwanleboucher.dev"]
+          "allowedOrigins": ["https://openclaw.erwanleboucher.dev", "https://chat.erwanleboucher.dev"]
         },
         "mode": "local",
         "nodes": {
