@@ -9,6 +9,6 @@ resources:
   - hermes/ks.yaml
   - litellm/ks.yaml
   - llama-cpp/ks.yaml
-  - mcp/kustomization.yaml
+  - mcp
   - ollama/ks.yaml
   - toolhive/ks.yaml
