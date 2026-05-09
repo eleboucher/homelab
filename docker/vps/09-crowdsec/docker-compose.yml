@@ -42,10 +42,6 @@ services:
       options:
         max-size: "10m"
         max-file: "3"
-    labels:
-      - prometheus.scrape=true
-      - prometheus.ports=6060
-      - prometheus.job=crowdsec
 
 volumes:
   crowdsec-db:

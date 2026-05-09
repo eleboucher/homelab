@@ -41,10 +41,6 @@ services:
       - "22222:22222"
     volumes:
       - /opt/towonel:/data
-    labels:
-      - prometheus.scrape=true
-      - prometheus.ports=9091,9092
-      - prometheus.job=towonel-node
     healthcheck:
       test:
         - "CMD"
