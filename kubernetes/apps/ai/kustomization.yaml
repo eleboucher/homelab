@@ -7,7 +7,6 @@ namespace: ai
 resources:
   - namespace.yaml
   - hermes/ks.yaml
-  - litellm/ks.yaml
   - llama-cpp/ks.yaml
   - mcp
   - ollama/ks.yaml

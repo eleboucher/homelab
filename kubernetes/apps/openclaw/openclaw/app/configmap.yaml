@@ -31,7 +31,7 @@ data:
             includeReasoning: true,
           },
           imageModel: {
-            primary: "litellm/gemma",
+            primary: "llamacpp/google/gemma-4-E4B-it",
           },
           maxConcurrent: 4,
           memorySearch: {
@@ -46,19 +46,19 @@ data:
             },
           },
           model: {
-            primary: "litellm/minimax/MiniMax-M2.7",
+            primary: "minimax/MiniMax-M2.7",
             fallbacks: [
-              "litellm/qwen",
-              "litellm/gemma",
+              "llamacpp/qwen/qwen3.6-27B:general",
+              "llamacpp/google/gemma-4-E4B-it",
             ],
           },
           models: {
-            "litellm/gemma": { alias: "gemma" },
-            "litellm/qwen": { alias: "qwen" },
-            "litellm/minimax/MiniMax-M2.7": { alias: "minimax" },
+            "llamacpp/google/gemma-4-E4B-it": { alias: "gemma" },
+            "llamacpp/qwen/qwen3.6-27B:general": { alias: "qwen" },
+            "minimax/MiniMax-M2.7": { alias: "minimax" },
           },
           subagents: {
-            model: { primary: "litellm/minimax/MiniMax-M2.7" },
+            model: { primary: "minimax/MiniMax-M2.7" },
             archiveAfterMinutes: 120,
             maxConcurrent: 3,
             thinking: "medium",
@@ -80,7 +80,7 @@ data:
             },
             heartbeat: {
               every: "60m",
-              model: "litellm/minimax/MiniMax-M2.7",
+              model: "minimax/MiniMax-M2.7",
               activeHours: { start: "06:00", end: "23:00" },
             },
           },
@@ -135,7 +135,8 @@ data:
       },
       auth: {
         profiles: {
-          "litellm:default": { provider: "litellm", mode: "api_key" },
+          "llamacpp:default": { provider: "llamacpp", mode: "api_key" },
+          "minimax:default": { provider: "minimax", mode: "api_key" },
         },
       },
       hooks: {
@@ -150,13 +151,13 @@ data:
       models: {
         mode: "merge",
         providers: {
-          litellm: {
+          llamacpp: {
             api: "openai-responses",
-            apiKey: "{{ .LITELLM_MASTER_KEY }}",
-            baseUrl: "http://litellm.ai:4000/v1",
+            apiKey: "{{ .LLAMA_API_KEY }}",
+            baseUrl: "http://llama-cpp.ai:8080/v1",
             models: [
               {
-                id: "gemma",
+                id: "google/gemma-4-E4B-it",
                 name: "Gemma 4 E4B",
                 reasoning: false,
                 input: ["text", "image"],
@@ -166,7 +167,7 @@ data:
                 compat: { supportsUsageInStreaming: true },
               },
               {
-                id: "qwen",
+                id: "qwen/qwen3.6-27B:general",
                 name: "Qwen3.6 27B",
                 reasoning: false,
                 input: ["text"],
@@ -175,8 +176,15 @@ data:
                 maxTokens: 8192,
                 compat: { supportsUsageInStreaming: true },
               },
+            ],
+          },
+          minimax: {
+            api: "anthropic-messages",
+            apiKey: "{{ .MINIMAX_API_KEY }}",
+            baseUrl: "https://api.minimax.io/anthropic",
+            models: [
               {
-                id: "minimax/MiniMax-M2.7",
+                id: "MiniMax-M2.7",
                 name: "MiniMax M2.7",
                 reasoning: true,
                 input: ["text"],

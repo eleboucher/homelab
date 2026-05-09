@@ -6,27 +6,30 @@ metadata:
 data:
   config.yaml: |-
     custom_providers:
-      - name: litellm
-        base_url: http://litellm.ai:4000/v1
-        key_env: LITELLM_API_KEY
+      - name: llamacpp
+        base_url: http://llama-cpp.ai:8080/v1
+        key_env: LLAMA_API_KEY
+      - name: minimax
+        base_url: https://api.minimax.io/v1
+        key_env: MINIMAX_API_KEY
     model:
-      default: minimax/MiniMax-M2.7
-      provider: custom:litellm
+      default: MiniMax-M2.7
+      provider: custom:minimax
     model_aliases:
       gemma:
-        model: gemma
-        provider: custom:litellm
+        model: google/gemma-4-E4B-it
+        provider: custom:llamacpp
       qwen:
-        model: qwen
-        provider: custom:litellm
+        model: qwen/qwen3.6-27B:general
+        provider: custom:llamacpp
       minimax:
-        model: minimax/MiniMax-M2.7
-        provider: custom:litellm
+        model: MiniMax-M2.7
+        provider: custom:minimax
     fallback_providers:
-      - provider: custom:litellm
-        model: qwen
-      - provider: custom:litellm
-        model: gemma
+      - provider: custom:llamacpp
+        model: qwen/qwen3.6-27B:general
+      - provider: custom:llamacpp
+        model: google/gemma-4-E4B-it
     terminal:
       backend: docker
       docker_image: nikolaik/python-nodejs:python3.11-nodejs20
@@ -68,7 +71,8 @@ data:
     web:
       search_backend: searxng
   env: |-
-    LITELLM_API_KEY={{ .LITELLM_MASTER_KEY }}
+    LLAMA_API_KEY={{ .LLAMA_API_KEY }}
+    MINIMAX_API_KEY={{ .MINIMAX_API_KEY }}
     MATRIX_HOMESERVER={{ .MATRIX_HOMESERVER }}
     MATRIX_ACCESS_TOKEN={{ .MATRIX_ACCESS_TOKEN }}
     MATRIX_USER_ID={{ .MATRIX_USER_ID }}
