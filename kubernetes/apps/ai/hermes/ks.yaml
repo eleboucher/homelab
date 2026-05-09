@@ -18,7 +18,7 @@ spec:
     substitute:
       APP: hermes
       APP_NAMESPACE: ai
-      VOLSYNC_CAPACITY: 5Gi
+      VOLSYNC_CAPACITY: 20Gi
   prune: true
   sourceRef:
     kind: OCIRepository
