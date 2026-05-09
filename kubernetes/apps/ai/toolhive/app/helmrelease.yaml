@@ -12,3 +12,13 @@ spec:
   values:
     operator:
       replicaCount: 1
+      resources:
+        requests:
+          cpu: 10m
+          memory: 128Mi
+        limits:
+          cpu: 500m
+          memory: 256Mi
+      gc:
+        gomemlimit: 230MiB
+        gogc: 75
