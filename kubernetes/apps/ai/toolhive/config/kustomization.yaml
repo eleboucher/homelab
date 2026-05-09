@@ -6,7 +6,6 @@ resources:
   - ./externalsecret.yaml
   - ./httproute.yaml
   - ./mcpgroup.yaml
-  - ./embeddingserver.yaml
   - ./virtualmcpserver.yaml
   - ./mcpconfigoidc.yaml
   - ./mcp-telemetry.yaml

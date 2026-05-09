@@ -42,8 +42,6 @@ spec:
       failureHandling:
         healthCheckInterval: 5m
         statusReportingInterval: 5m
-  embeddingServerRef:
-    name: mcp-tools-embedding
   incomingAuth:
     type: oidc
     oidcConfigRef:
@@ -81,8 +79,6 @@ spec:
       conflictResolution: prefix
       conflictResolutionConfig:
         prefixFormat: "{workload}_"
-  embeddingServerRef:
-    name: mcp-tools-embedding
   incomingAuth:
     type: anonymous
   outgoingAuth:
