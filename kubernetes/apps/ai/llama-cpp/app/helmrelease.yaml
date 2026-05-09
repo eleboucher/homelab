@@ -120,17 +120,6 @@ spec:
           http:
             port: 8080
             protocol: TCP
-    route:
-      app:
-        hostnames:
-          - "llama.erwanleboucher.dev"
-        parentRefs:
-          - name: envoy-internal
-            namespace: network
-        rules:
-          - backendRefs:
-              - identifier: app
-                port: 8080
     persistence:
       config:
         type: configMap
