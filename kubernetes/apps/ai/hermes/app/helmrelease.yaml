@@ -58,6 +58,10 @@ spec:
                 set -e
                 mkdir -p /opt/data/.local/bin /opt/data/.local/go
 
+                if [ ! -L /opt/data/.local/bin/hermes ]; then
+                  ln -sf /opt/hermes/.venv/bin/hermes /opt/data/.local/bin/hermes
+                fi
+
                 if [ ! -f /opt/data/.local/bin/gh ]; then
                   cd /tmp
                   curl -fsSL https://github.com/cli/cli/releases/download/v2.61.0/gh_2.61.0_linux_amd64.tar.gz -o gh.tar.gz
@@ -150,19 +154,22 @@ spec:
             env:
               API_SERVER_ENABLED: "true"
               API_SERVER_HOST: 0.0.0.0
-              BROWSER_WS_ENDPOINT: ws://localhost:9222
               DOCKER_CERT_PATH: /certs/client
               DOCKER_HOST: tcp://localhost:2376
               DOCKER_TLS_VERIFY: "1"
               GOPATH: /opt/data/go
               HERMES_DASHBOARD: "1"
+              HERMES_GID: "1000"
               HERMES_HOME: /opt/data
+              HERMES_UID: "1000"
               HOME: /opt/data
               HOMEBREW_CELLAR: /opt/data/.local/homebrew/Cellar
               HOMEBREW_PREFIX: /opt/data/.local/homebrew
               HOMEBREW_REPOSITORY: /opt/data/.local/homebrew
+              MATRIX_ENCRYPTION: "true"
               PATH: /opt/data/.local/bin:/opt/data/.local/go/bin:/opt/data/.local/homebrew/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
               PIP_BREAK_SYSTEM_PACKAGES: "1"
+              SEARXNG_URL: http://searxng.selfhosted.svc.cluster.local:8080
               TERM: xterm-256color
               TZ: ${TZ}
             resources:
@@ -173,40 +180,13 @@ spec:
                 cpu: 4
                 memory: 16Gi
             securityContext:
-              allowPrivilegeEscalation: false
+              allowPrivilegeEscalation: true
               capabilities:
                 drop:
                   - ALL
               readOnlyRootFilesystem: false
-          chrome:
-            image:
-              repository: zenika/alpine-chrome
-              tag: with-node
-            command:
-              - chromium-browser
-              - --headless=new
-              - --disable-gpu
-              - --remote-debugging-address=0.0.0.0
-              - --remote-debugging-port=9222
-              - --no-sandbox
-              - --disable-dev-shm-usage
-              - --disable-blink-features=AutomationControlled
-              - --remote-allow-origins=*
-              - --user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36
-            env:
-              TZ: ${TZ}
-            resources:
-              requests:
-                cpu: 100m
-                memory: 256Mi
-              limits:
-                cpu: 1000m
-                memory: 1Gi
-            securityContext:
-              allowPrivilegeEscalation: false
-              capabilities:
-                drop:
-                  - ALL
+              runAsGroup: 0
+              runAsUser: 0
           codeserver:
             image:
               repository: ghcr.io/coder/code-server

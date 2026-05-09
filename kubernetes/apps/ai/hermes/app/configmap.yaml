@@ -5,32 +5,31 @@ metadata:
   name: hermes-configmap
 data:
   config.yaml: |-
+    custom_providers:
+      - name: litellm
+        base_url: http://litellm.ai:4000/v1
+        key_env: LITELLM_API_KEY
     model:
-      default: minimax
-      provider: custom
-      base_url: http://litellm.ai:4000/v1
-      api_key: ${LITELLM_API_KEY}
+      default: minimax/MiniMax-M2.7
+      provider: custom:litellm
     model_aliases:
       gemma:
         model: gemma
-        provider: custom
-        base_url: http://litellm.ai:4000/v1
+        provider: custom:litellm
       qwen:
         model: qwen
-        provider: custom
-        base_url: http://litellm.ai:4000/v1
+        provider: custom:litellm
       minimax:
         model: minimax/MiniMax-M2.7
-        provider: custom
-        base_url: http://litellm.ai:4000/v1
+        provider: custom:litellm
     fallback_providers:
-      - provider: custom
+      - provider: custom:litellm
         model: qwen
-      - provider: custom
+      - provider: custom:litellm
         model: gemma
     terminal:
       backend: docker
-      docker_image: python:3.11-slim
+      docker_image: nikolaik/python-nodejs:python3.11-nodejs20
       cwd: /opt/data/workspace
       timeout: 180
       persistent_shell: true
@@ -55,14 +54,19 @@ data:
     platforms:
       matrix:
         enabled: true
-        homeserver: http://continuwuity.matrix.svc.cluster.local:8080
-        encryption: true
-        device_id: HERMES_BOT
+    matrix:
+      require_mention: false
+      auto_thread: false
+      dm_mention_threads: false
+    display:
+      platforms:
+        matrix:
+          tool_progress: "off"
     mcp_servers:
       homelab:
         url: http://vmcp-mcp-gateway-internal.ai.svc.cluster.local:4483/mcp
-      searxng:
-        url: http://searxng.selfhosted.svc.cluster.local:8080
+    web:
+      search_backend: searxng
   env: |-
     LITELLM_API_KEY={{ .LITELLM_MASTER_KEY }}
     MATRIX_HOMESERVER={{ .MATRIX_HOMESERVER }}

@@ -14,7 +14,7 @@ data:
 
       - model_name: qwen
         litellm_params:
-          model: openai/qwen/qwen3.6-35B-A3B:general
+          model: openai/qwen/qwen3.6-27B:general
           api_base: http://llama-cpp.ai:8080/v1
           api_key: os.environ/LLAMA_API_KEY
 
