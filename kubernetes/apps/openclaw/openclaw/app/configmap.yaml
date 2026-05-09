@@ -58,7 +58,7 @@ data:
             "litellm/minimax/MiniMax-M2.7": { alias: "minimax" },
           },
           subagents: {
-            model: { primary: "litellm/qwen" },
+            model: { primary: "litellm/minimax/MiniMax-M2.7" },
             archiveAfterMinutes: 120,
             maxConcurrent: 3,
             thinking: "medium",
