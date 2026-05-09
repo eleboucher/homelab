@@ -14,11 +14,11 @@ All commands use `just` (task runner). Run `just -l` to list available commands.
 
 ### Bootstrap (initial cluster setup)
 ```bash
-just bootstrap talos          # Install Talos on nodes
-just bootstrap kube           # Bootstrap Kubernetes
+just bootstrap cluster        # Run full bootstrap end-to-end
+just bootstrap nodes          # Install Talos on nodes
+just bootstrap k8s            # Bootstrap Kubernetes
 just bootstrap kubeconfig     # Fetch kubeconfig
-just bootstrap namespaces     # Apply namespaces
-just bootstrap crds           # Apply CRDs via Helmfile
+just bootstrap base           # Wait for nodes, apply bootstrap kustomize + CRDs
 just bootstrap apps           # Sync Helmfile apps
 ```
 
@@ -72,7 +72,8 @@ kubernetes/
 └── flux/cluster/cluster.yaml    # Master Kustomization
 
 bootstrap/
-├── helmfile.d/              # Helmfile for CRDs and core apps
+├── helmfile/                # Helmfile for CRDs and core apps
+├── kustomize/               # Bootstrap manifests (namespaces, secrets) applied before Flux
 
 talos/
 ├── machineconfig.yaml.j2    # Base Talos machine config (Jinja2)
