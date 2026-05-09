@@ -58,6 +58,8 @@ spec:
             args:
               - --models-preset
               - /config/presets.ini
+              - --models-max
+              - "1"
               - --flash-attn
               - on
             env:
