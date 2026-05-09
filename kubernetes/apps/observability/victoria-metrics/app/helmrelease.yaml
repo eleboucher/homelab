@@ -192,6 +192,12 @@ spec:
         retentionPeriod: 90d
         extraArgs:
           maxLabelsPerTimeseries: "40"
+        resources:
+          requests:
+            cpu: 150m
+            memory: 1Gi
+          limits:
+            memory: 3Gi
         storage:
           storageClassName: ceph-block
           resources:
