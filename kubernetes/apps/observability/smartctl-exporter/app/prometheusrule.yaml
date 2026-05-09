@@ -12,8 +12,8 @@ spec:
           annotations:
             summary: |
               Mounted drive {{ $labels.device }} on device {{ $labels.instance }}
-              has a temperature higher than 70°C.
-          expr: smartctl_device_temperature{temperature_type="current"} > 70
+              has a 5m average temperature higher than 75°C.
+          expr: avg_over_time(smartctl_device_temperature{temperature_type="current"}[5m]) > 75
           for: 15m
           labels:
             severity: critical

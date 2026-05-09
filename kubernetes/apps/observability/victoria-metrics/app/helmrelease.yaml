@@ -108,6 +108,20 @@ spec:
       enabled: false
     prometheus-node-exporter:
       enabled: false
+    kubelet:
+      vmScrape:
+        spec:
+          metricRelabelConfigs:
+            - action: labeldrop
+              regex: (uid)
+            - action: labeldrop
+              regex: (id|name)
+            - action: drop
+              source_labels:
+                - __name__
+              regex: (rest_client_request_duration_seconds_bucket|rest_client_request_duration_seconds_sum|rest_client_request_duration_seconds_count)
+            - action: labeldrop
+              regex: (extensions_talos_dev_.*|feature_node_kubernetes_io_.*|beta_kubernetes_io_.*|node_kubernetes_io_.*)
     kubeControllerManager:
       vmScrape:
         spec:
