@@ -182,6 +182,10 @@ spec:
             securityContext:
               allowPrivilegeEscalation: true
               capabilities:
+                add:
+                  - CHOWN
+                  - SETGID
+                  - SETUID
                 drop:
                   - ALL
               readOnlyRootFilesystem: false
