@@ -7,6 +7,14 @@ metadata:
 spec:
   model: sentence-transformers/all-MiniLM-L6-v2
   image: ghcr.io/huggingface/text-embeddings-inference:cpu-latest@sha256:492506e6a76ce6d0fd834a49f69bee4134f5b37de06052519d358a3d5387434d
+  replicas: 3
+  resources:
+    requests:
+      cpu: 500m
+      memory: 512Mi
+    limits:
+      cpu: "2"
+      memory: 1Gi
   env:
     - name: HOSTNAME
       value: "::"
