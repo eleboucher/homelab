@@ -87,24 +87,23 @@ data:
         ],
       },
       bindings: [
-        { agentId: "main", match: { channel: "discord", accountId: "default" } },
+        { agentId: "main", match: { channel: "discord" } },
         { agentId: "main", match: { channel: "matrix" } },
       ],
       channels: {
         discord: {
           enabled: true,
-          defaultAccount: "default",
+          token: "{{ .DISCORD_TOKEN }}",
+          dmPolicy: "pairing",
+          dm: {
+            enabled: true,
+            allowFrom: ["178154257042636800"],
+          },
           groupPolicy: "allowlist",
-          accounts: {
-            default: {
-              token: "{{ .DISCORD_TOKEN }}",
-              guilds: {
-                "1441534507017703547": {
-                  channels: {
-                    "1501981764430594189": { enabled: true },
-                  },
-                },
-              },
+          guilds: {
+            "1503020857423822858": {
+              requireMention: false,
+              users: ["178154257042636800"],
             },
           },
         },
