@@ -14,6 +14,9 @@ peering:
   fetchTimeout: 60s
 
 gc:
+  untaggedManifestAge: 1h
+  orphanBatchSize: 10000
+  interval: 30m
   diskUsageThreshold: 80
   diskUsageCheckInterval: 5m
   retention:

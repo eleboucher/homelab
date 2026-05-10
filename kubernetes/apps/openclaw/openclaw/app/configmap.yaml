@@ -103,7 +103,6 @@ data:
           guilds: {
             "1503020857423822858": {
               requireMention: false,
-              users: ["178154257042636800"],
             },
           },
         },
