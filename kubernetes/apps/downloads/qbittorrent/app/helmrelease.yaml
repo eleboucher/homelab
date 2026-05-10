@@ -90,7 +90,7 @@ spec:
           app:
             image:
               repository: ghcr.io/home-operations/qbittorrent
-              tag: 5.1.4
+              tag: 5.2.0
             env:
               TZ: "Europe/Paris"
             probes:
