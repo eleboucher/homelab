@@ -196,7 +196,7 @@ data:
         },
       },
       messages: {
-        groupChat: { visibleReplies: "message_tool" },
+        groupChat: { visibleReplies: "automatic" },
       },
       mcp: {
         servers: {
