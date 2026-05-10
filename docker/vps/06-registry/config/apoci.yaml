@@ -13,6 +13,19 @@ peering:
   healthCheckInterval: 30s
   fetchTimeout: 60s
 
+gc:
+  diskUsageThreshold: 80
+  diskUsageCheckInterval: 5m
+  retention:
+    maxAge: 168h
+    pinnedGlobs:
+      - "v*"
+      - "*.*.*"
+    perRepo:
+      - repo: "erwanleboucher.dev/eleboucher/homelab"
+        keepLastN: 7
+        maxAge: 24h
+
 metrics:
   enabled: true
   listen: ":9090"
