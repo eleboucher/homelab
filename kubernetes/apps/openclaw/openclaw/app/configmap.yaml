@@ -107,7 +107,7 @@ data:
           },
         },
         matrix: {
-          enabled: true,
+          enabled: false,
           accessToken: "{{ .MATRIX_ACCESS_TOKEN }}",
           autoJoin: "always",
           dm: {
