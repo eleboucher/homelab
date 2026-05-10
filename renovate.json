@@ -4,7 +4,8 @@
     "local>eleboucher/renovate-config",
     "local>eleboucher/homelab//.renovate/automerge.json5",
     "local>eleboucher/homelab//.renovate/groups.json5",
-    "local>eleboucher/homelab//.renovate/overrides.json5"
+    "local>eleboucher/homelab//.renovate/overrides.json5",
+    "local>eleboucher/homelab//.renovate/talosFactory.json5"
   ],
   "flux": {
     "managerFilePatterns": ["/\\.yaml(?:\\.j2)?$/"]

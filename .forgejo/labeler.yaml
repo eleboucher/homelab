@@ -22,7 +22,7 @@ area/renovate:
   - changed-files:
       - any-glob-to-any-file:
           - .renovate/**/*
-          - .renovaterc.json5
+          - renovate.json
 area/talos:
   - changed-files:
       - any-glob-to-any-file:
