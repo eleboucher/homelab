@@ -28,3 +28,21 @@ resource "routeros_ip_dns_record" "static" {
   type    = "A"
   address = each.value
 }
+
+# Round-robin A records for the Kubernetes API across all control planes.
+# Already covered by the apiserver certSANs in talos/machineconfig.yaml.j2.
+locals {
+  k8s_api_endpoints = toset([
+    "192.168.1.7",
+    "192.168.1.41",
+    "192.168.1.42",
+  ])
+}
+
+resource "routeros_ip_dns_record" "k8s_api" {
+  for_each = local.k8s_api_endpoints
+
+  name    = "k8s.internal"
+  type    = "A"
+  address = each.key
+}
