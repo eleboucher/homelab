@@ -46,8 +46,7 @@ just talos reset-node <node>      # Reset node (wipe)
 just talos shutdown-node <node>   # Shutdown node
 just talos upgrade-k8s <version>  # Upgrade Kubernetes version
 just talos upgrade-node <node>    # Upgrade Talos on node
-just talos gen-schematic-id       # Generate Talos Factory schematic
-just talos download-image <ver> <schematic>  # Download Talos ISO
+just talos download-image <ver>   # Download Talos ISO
 ```
 
 ## Architecture

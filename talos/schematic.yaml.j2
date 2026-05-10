@@ -1,22 +1,14 @@
 ---
 customization:
   extraKernelArgs:
-    - -init_on_alloc
-    - -init_on_free
-    - -selinux
     - amd_iommu=on # PCI Passthrough
-    - apparmor=0
     - i915.enable_guc=3
-    - init_on_alloc=0
-    - init_on_free=0
     - intel_iommu=on # PCI Passthrough
     - iommu=pt # PCI Passthrough
+    - initcall_blacklist=algif_aead_init # copy.fail fix
     - pcie_aspm=off # Disable PCIe ASPM
     - usbcore.autosuspend=-1 # Disable USB autosuspend
-    - mitigations=off
-    - security=none
     - sysctl.kernel.kexec_load_disabled=1
-    - talos.auditd.disabled=1
     - talos.dashboard.disabled=1
   systemExtensions:
         officialExtensions:
@@ -24,7 +16,6 @@ customization:
             - siderolabs/binfmt-misc
             - siderolabs/i915
             - siderolabs/intel-ucode
-            - siderolabs/iscsi-tools
             - siderolabs/mei
             - siderolabs/nfsd
             - siderolabs/nfsrahead
