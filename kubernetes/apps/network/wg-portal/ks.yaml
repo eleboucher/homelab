@@ -17,9 +17,9 @@ spec:
       OIDC_DISPLAY_NAME: wg-portal
       OIDC_PUBLIC_CLIENT: "true"
       OIDC_LOCALHOST: "true"
-      OIDC_GROUP: users
-      OIDC_SUP_SCOPE_MAPS: |-
-        {"admins": ["openid", "profile", "email", "groups"]}
+      OIDC_GROUP: admins
+      OIDC_SCOPES: |-
+        ["openid", "profile", "email", "groups", "offline_access"]
   prune: true
   sourceRef:
     kind: OCIRepository
