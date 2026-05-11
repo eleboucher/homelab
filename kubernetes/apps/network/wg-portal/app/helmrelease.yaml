@@ -34,7 +34,7 @@ spec:
               RUST_LOG: info
               LISTEN_ADDR: "[::]:50051"
               METRICS_ADDR: 0.0.0.0:9091
-              MIKROTIK_URL: http://192.168.1.1
+              MIKROTIK_URL: http://192.168.1.2
               MIKROTIK_INTERFACE: wg-remote
               KANIDM_ISSUER: https://idm.erwanleboucher.dev
               KANIDM_CLIENT_ID: wg-portal
