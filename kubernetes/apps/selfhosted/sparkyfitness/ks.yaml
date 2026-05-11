@@ -42,6 +42,8 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: sparkyfitness
+  dependsOn:
+    - name: sparkyfitness
   interval: 1h
   path: "./kubernetes/apps/selfhosted/sparkyfitness/app"
   prune: true

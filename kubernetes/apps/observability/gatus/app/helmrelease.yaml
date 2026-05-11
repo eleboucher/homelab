@@ -39,6 +39,8 @@ spec:
               - --enable-httproute
               - --enable-service
             resources:
+              requests:
+                memory: 32Mi
               limits:
                 memory: 64Mi
             restartPolicy: Always
@@ -68,8 +70,9 @@ spec:
             resources:
               requests:
                 cpu: 100m
+                memory: 64Mi
               limits:
-                memory: 80Mi
+                memory: 128Mi
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true

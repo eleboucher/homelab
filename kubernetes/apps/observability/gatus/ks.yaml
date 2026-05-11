@@ -15,7 +15,7 @@ spec:
   postBuild:
     substitute:
       APP: gatus
-      APP_NAMESPACE: selfhosted
+      APP_NAMESPACE: observability
   prune: true
   retryInterval: 2m
   sourceRef:

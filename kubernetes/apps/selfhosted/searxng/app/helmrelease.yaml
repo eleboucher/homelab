@@ -131,9 +131,9 @@ spec:
             resources:
               requests:
                 cpu: 10m
-                memory: 215Mi
+                memory: 128Mi
               limits:
-                memory: 4Gi
+                memory: 384Mi
             securityContext:
               allowPrivilegeEscalation: false
               capabilities:
@@ -169,6 +169,7 @@ spec:
             namespace: network
     service:
       app:
+        controller: searxng
         ports:
           http:
             port: *httpPort

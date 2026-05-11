@@ -49,6 +49,9 @@ spec:
               resources:
                 requests:
                   cpu: 11m
+                  memory: 768Mi
+                limits:
+                  memory: 1536Mi
 
     machine-learning:
       controllers:
@@ -60,6 +63,9 @@ spec:
               resources:
                 requests:
                   cpu: 10m
+                  memory: 512Mi
+                limits:
+                  memory: 2Gi
       persistence:
         cache:
           type: persistentVolumeClaim

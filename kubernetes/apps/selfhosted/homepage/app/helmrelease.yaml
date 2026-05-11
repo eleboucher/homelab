@@ -22,8 +22,9 @@ spec:
         containers:
           app:
             image:
+              # renovate: datasource=github-releases depName=gethomepage/homepage
               repository: ghcr.io/gethomepage/homepage
-              tag: latest
+              tag: v1.13.1
             env:
               - name: TZ
                 value: "Europe/Paris"

@@ -6,7 +6,6 @@ namespace: observability
 
 resources:
   - blackbox-exporter/ks.yaml
-  - externalsecret.yaml
   - fluent-bit/ks.yaml
   - gatus/ks.yaml
   - github-exporter/ks.yaml

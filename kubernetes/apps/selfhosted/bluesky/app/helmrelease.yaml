@@ -23,8 +23,9 @@ spec:
         initContainers:
           init-keys:
             image:
+              # renovate: datasource=github-releases depName=haileyok/cocoon
               repository: ghcr.io/haileyok/cocoon
-              tag: latest
+              tag: v0.9.0
             command:
               - /bin/sh
               - -c
@@ -50,8 +51,9 @@ spec:
         containers:
           app:
             image:
+              # renovate: datasource=github-releases depName=haileyok/cocoon
               repository: ghcr.io/haileyok/cocoon
-              tag: latest
+              tag: v0.9.0
             workingDir: /data/cocoon
             env:
               !!merge <<: *env
