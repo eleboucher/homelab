@@ -27,12 +27,6 @@ variable "routeros_insecure" {
   default = false
 }
 
-variable "user_password_admin" {
-  type      = string
-  sensitive = true
-  default   = null
-}
-
 variable "user_password_mktxp_user" {
   type      = string
   sensitive = true

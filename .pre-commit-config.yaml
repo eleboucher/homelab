@@ -28,3 +28,15 @@ repos:
         additional_dependencies:
           - jmespath
           - ruamel.yaml
+      - id: tofu-fmt
+        name: tofu fmt
+        entry: tofu -chdir=tofu/mikrotik fmt -check -recursive
+        language: system
+        files: ^tofu/.+\.tf$
+        pass_filenames: false
+      - id: tofu-validate
+        name: tofu validate
+        entry: tofu -chdir=tofu/mikrotik validate
+        language: system
+        files: ^tofu/mikrotik/.+\.tf$
+        pass_filenames: false

@@ -103,7 +103,8 @@ locals {
       group = "full"
     }
     mktxp_user = {
-      group = "mktxp_group"
+      group   = "mktxp_group"
+      address = "192.168.1.0/24,10.42.0.0/16"
     }
     wg-portal = {
       group   = "wg-portal"

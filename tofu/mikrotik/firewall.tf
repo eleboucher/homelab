@@ -22,6 +22,7 @@ module "firewall" {
       comment          = "Allow Established"
       order            = 110
     }
+    # Pod traffic arrives masqueraded as node IPs; add 10.42.0.0/16 if that ever changes.
     "accept-lan" = {
       chain       = "input"
       action      = "accept"
