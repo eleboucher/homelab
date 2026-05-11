@@ -1,0 +1,112 @@
+[tasks.cluster]
+description = "Bootstrap a Talos & Kubernetes cluster end-to-end"
+quiet = true
+run = '''
+mise run //bootstrap:nodes
+mise run //bootstrap:k8s
+mise run //bootstrap:kubeconfig node
+mise run //bootstrap:base
+mise run //bootstrap:apps
+mise run //bootstrap:kubeconfig
+'''
+
+[tasks.nodes]
+description = "Apply Talos configuration to all nodes"
+hide = true
+quiet = true
+run = '''
+stage="nodes"
+nodes="$(talosctl config info -o yaml | yq -e '.nodes | join (" ")')"
+
+mise run //:log info "Running stage..." "stage" "$stage"
+for n in $nodes; do
+    if ! op=$(mise run //talos:apply-node "$n" --insecure 2>&1); then
+        if [[ "$op" == *"certificate required"* ]]; then
+            mise run //:log info "Talos already configured, skipping apply of config" "stage" "$stage" "node" "$n"
+            continue
+        fi
+        mise run //:log fatal "Failed to apply Talos configuration" "stage" "$stage" "node" "$n" "output" "$op"
+    fi
+done
+'''
+
+[tasks.k8s]
+description = "Bootstrap Kubernetes on the controller node"
+hide = true
+quiet = true
+run = '''
+stage="k8s"
+controller="$(talosctl config info -o yaml | yq -e '.endpoints[0]')"
+
+mise run //:log info "Running stage..." "stage" "$stage"
+mise run //:log info "Starting Kubernetes bootstrap on controller $controller" "stage" "$stage"
+until op=$(talosctl -n 192.168.1.41 bootstrap 2>&1 || true) && [[ "$op" == *"AlreadyExists"* ]]; do
+    mise run //:log info "Kubernetes bootstrap in progress. Retrying in 5 seconds..." "stage" "$stage"
+    sleep 5
+done
+'''
+
+[tasks.kubeconfig]
+description = "Fetch kubeconfig from the controller (optional arg: load-balancer mode, default cilium)"
+hide = true
+quiet = true
+usage = 'arg "[lb]" default="cilium"'
+run = '''
+stage="kubeconfig"
+controller="$(talosctl config info -o yaml | yq -e '.endpoints[0]')"
+
+mise run //:log info "Running stage..." "stage" "$stage"
+if ! talosctl kubeconfig -n "$controller" -f --force-context-name main "$MISE_MONOREPO_ROOT"; then
+    mise run //:log fatal "Failed to fetch kubeconfig" "stage" "$stage"
+fi
+if [[ "$usage_lb" != "cilium" ]]; then
+    if ! kubectl config set-cluster main --server "https://$controller:6443"; then
+        mise run //:log fatal "Failed to set kubectl cluster server address" "stage" "$stage"
+    fi
+fi
+'''
+
+[tasks.ready]
+description = "Wait until nodes register (Ready=False once kubelet is up, before CNI)"
+hide = true
+quiet = true
+run = '''
+stage="ready"
+mise run //:log info "Running stage..." "stage" "$stage"
+if ! kubectl wait nodes --for=condition=Ready=True --all --timeout=10s &>/dev/null; then
+    until kubectl wait nodes --for=condition=Ready=False --all --timeout=10s &>/dev/null; do
+        mise run //:log info "Nodes not available, waiting for nodes to be available. Retrying in 5 seconds..." "stage" "$stage"
+        sleep 5
+    done
+fi
+'''
+
+[tasks.base]
+description = "Apply bootstrap kustomize + CRDs to the cluster"
+hide = true
+quiet = true
+depends = [":ready"]
+run = '''
+stage="base"
+
+mise run //:log info "Running stage..." "stage" "$stage"
+if ! kustomize build kustomize/apps | mise run //:template - | kubectl apply --server-side --field-manager bootstrap --force-conflicts -f -; then
+    mise run //:log fatal "Failed to apply base manifests" "stage" "$stage"
+fi
+if ! helmfile -f helmfile/crds.yaml template -q | yq ea -e 'select(.kind == "CustomResourceDefinition")' | kubectl apply --server-side --field-manager bootstrap --force-conflicts -f -; then
+    mise run //:log fatal "Failed to apply crds" "stage" "$stage"
+fi
+'''
+
+[tasks.apps]
+description = "Sync Helmfile apps"
+hide = true
+quiet = true
+run = '''
+stage="apps"
+
+mise run //:log info "Running stage..." "stage" "$stage"
+if ! helmfile -f helmfile/apps.yaml sync --hide-notes; then
+    mise run //:log fatal "Failed to sync helmfile" "stage" "$stage"
+fi
+'''

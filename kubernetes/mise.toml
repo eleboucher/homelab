@@ -1,0 +1,171 @@
+[tasks."apply-ks"]
+description = "Apply local Flux Kustomization"
+quiet = true
+usage = '''
+arg "<ns>"
+arg "<ks>"
+'''
+run = '''
+mise run //kubernetes:render-local-ks "$usage_ns" "$usage_ks" | kubectl apply --server-side --force-conflicts --field-manager=kustomize-controller -f -
+'''
+
+[tasks."browse-pvc"]
+description = "Browse a PVC"
+quiet = true
+usage = '''
+arg "<namespace>"
+arg "<claim>"
+'''
+run = '''
+kubectl browse-pvc -n "$usage_namespace" -i mirror.gcr.io/alpine:latest "$usage_claim"
+'''
+
+[tasks."delete-ks"]
+description = "Delete local Flux Kustomization"
+quiet = true
+usage = '''
+arg "<ns>"
+arg "<ks>"
+'''
+run = '''
+mise run //kubernetes:render-local-ks "$usage_ns" "$usage_ks" | kubectl delete -f -
+'''
+
+[tasks."restart-ha"]
+description = "Restart Home Assistant VM (fixes Bluetooth USB passthrough)"
+quiet = true
+run = "kubectl virt restart home-assistant -n home-assistant"
+
+[tasks."node-shell"]
+description = "Open a shell on a node"
+quiet = true
+usage = 'arg "<node>"'
+run = '''
+kubectl debug "node/$usage_node" -n default -it --image="mirror.gcr.io/alpine:latest" --profile sysadmin
+kubectl delete pod -n default -l app.kubernetes.io/managed-by=kubectl-debug
+'''
+
+[tasks."prune-pods"]
+description = "Prune pods in Failed, Pending, or Succeeded state"
+quiet = true
+run = '''
+for phase in Failed Pending Succeeded; do
+    kubectl delete pods -A --field-selector status.phase="$phase" --ignore-not-found=true
+done
+'''
+
+[tasks."sync-es"]
+description = "Sync ExternalSecrets (optionally: mise run //kubernetes:sync-es <ns> <name>)"
+quiet = true
+usage = '''
+arg "[ns]"
+arg "[name]"
+'''
+run = '''
+ns="${usage_ns:-}"
+name="${usage_name:-}"
+if [ -n "$ns" ] && [ -n "$name" ]; then
+    kubectl -n "$ns" annotate --field-manager flux-client-side-apply --overwrite es "$name" \
+        force-sync="$(date +%s)"
+else
+    kubectl get es --no-headers -A | while read -r ns name _; do
+        kubectl -n "$ns" annotate --field-manager flux-client-side-apply --overwrite es "$name" \
+            force-sync="$(date +%s)"
+    done
+fi
+'''
+
+[tasks."sync-git"]
+description = "Sync GitRepositories"
+quiet = true
+run = '''
+kubectl get gitrepo --no-headers -A | while read -r ns name _; do
+    kubectl -n "$ns" annotate --field-manager flux-client-side-apply --overwrite gitrepo "$name" reconcile.fluxcd.io/requestedAt="$(date +%s)"
+done
+'''
+
+[tasks."sync-hr"]
+description = "Sync HelmReleases (optionally: mise run //kubernetes:sync-hr <ns> <name>)"
+quiet = true
+usage = '''
+arg "[ns]"
+arg "[name]"
+'''
+run = '''
+ns="${usage_ns:-}"
+name="${usage_name:-}"
+if [ -n "$ns" ] && [ -n "$name" ]; then
+    kubectl -n "$ns" annotate --field-manager flux-client-side-apply --overwrite hr "$name" \
+        reconcile.fluxcd.io/requestedAt="$(date +%s)" reconcile.fluxcd.io/forceAt="$(date +%s)"
+else
+    kubectl get hr --no-headers -A | while read -r ns name _; do
+        kubectl -n "$ns" annotate --field-manager flux-client-side-apply --overwrite hr "$name" \
+            reconcile.fluxcd.io/requestedAt="$(date +%s)" reconcile.fluxcd.io/forceAt="$(date +%s)"
+    done
+fi
+'''
+
+[tasks."sync-ks"]
+description = "Sync Kustomizations (optionally: mise run //kubernetes:sync-ks <ns> <name>)"
+quiet = true
+usage = '''
+arg "[ns]"
+arg "[name]"
+'''
+run = '''
+ns="${usage_ns:-}"
+name="${usage_name:-}"
+if [ -n "$ns" ] && [ -n "$name" ]; then
+    kubectl -n "$ns" annotate --field-manager flux-client-side-apply --overwrite ks "$name" \
+        reconcile.fluxcd.io/requestedAt="$(date +%s)"
+else
+    kubectl get ks --no-headers -A | while read -r ns name _; do
+        kubectl -n "$ns" annotate --field-manager flux-client-side-apply --overwrite ks "$name" \
+            reconcile.fluxcd.io/requestedAt="$(date +%s)"
+    done
+fi
+'''
+
+[tasks."sync-oci"]
+description = "Sync OCIRepositories (optionally: mise run //kubernetes:sync-oci <ns> <name>)"
+quiet = true
+usage = '''
+arg "[ns]"
+arg "[name]"
+'''
+run = '''
+ns="${usage_ns:-}"
+name="${usage_name:-}"
+if [ -n "$ns" ] && [ -n "$name" ]; then
+    kubectl -n "$ns" annotate --field-manager flux-client-side-apply --overwrite ocirepo "$name" \
+        reconcile.fluxcd.io/requestedAt="$(date +%s)"
+else
+    kubectl get ocirepo --no-headers -A | while read -r ns name _; do
+        kubectl -n "$ns" annotate --field-manager flux-client-side-apply --overwrite ocirepo "$name" \
+            reconcile.fluxcd.io/requestedAt="$(date +%s)"
+    done
+fi
+'''
+
+[tasks."view-secret"]
+description = "View a secret"
+quiet = true
+usage = '''
+arg "<namespace>"
+arg "<secret>"
+'''
+run = '''
+kubectl view-secret -n "$usage_namespace" "$usage_secret"
+'''
+
+[tasks."render-local-ks"]
+description = "Render a Flux Kustomization locally (internal helper)"
+hide = true
+quiet = true
+usage = '''
+arg "<ns>"
+arg "<ks>"
+'''
+run = '''
+flux-local build ks --namespace "$usage_ns" --sources "flux-system=." --path flux/cluster "$usage_ks"
+'''
