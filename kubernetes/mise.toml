@@ -17,7 +17,9 @@ arg "<namespace>"
 arg "<claim>"
 '''
 run = '''
-kubectl browse-pvc -n "$usage_namespace" -i mirror.gcr.io/alpine:latest "$usage_claim"
+kubectl run -n "$usage_namespace" "browse-pvc-$usage_claim" -it --rm --restart=Never \
+    --image=mirror.gcr.io/alpine:latest \
+    --overrides='{"spec":{"containers":[{"name":"browse-pvc-'"$usage_claim"'","image":"mirror.gcr.io/alpine:latest","stdin":true,"tty":true,"command":["/bin/sh"],"workingDir":"/mnt","volumeMounts":[{"mountPath":"/mnt","name":"data"}]}],"volumes":[{"name":"data","persistentVolumeClaim":{"claimName":"'"$usage_claim"'"}}]}}'
 '''
 
 [tasks."delete-ks"]
@@ -36,13 +38,44 @@ description = "Restart Home Assistant VM (fixes Bluetooth USB passthrough)"
 quiet = true
 run = "kubectl virt restart home-assistant -n home-assistant"
 
-[tasks."node-shell"]
-description = "Open a shell on a node"
+[tasks."debug-node"]
+description = "Debug a node"
 quiet = true
 usage = 'arg "<node>"'
 run = '''
-kubectl debug "node/$usage_node" -n default -it --image="mirror.gcr.io/alpine:latest" --profile sysadmin
-kubectl delete pod -n default -l app.kubernetes.io/managed-by=kubectl-debug
+trap 'kubectl delete pod -n default -l app.kubernetes.io/managed-by=kubectl-debug --ignore-not-found --wait=false' EXIT
+kubectl debug "node/$usage_node" -n default -it --image=mirror.gcr.io/alpine:latest --profile=sysadmin
+'''
+
+[tasks."restore"]
+description = "Restore a PVC from VolSync, scaling the workload down"
+quiet = true
+usage = '''
+arg "<ns>"
+arg "<app>"
+arg "[previous]" default="0"
+'''
+run = '''
+flux -n "$usage_ns" suspend kustomization "$usage_app"
+flux -n "$usage_ns" suspend helmrelease "$usage_app"
+kubectl -n "$usage_ns" get deploy,sts -l "app.kubernetes.io/name=$usage_app" -o name \
+    | xargs -r -I{} kubectl -n "$usage_ns" scale {} --replicas=0
+kubectl -n "$usage_ns" wait pod --for=delete --selector="app.kubernetes.io/name=$usage_app" --timeout=5m
+kubectl -n "$usage_ns" get replicationdestination "$usage_app-dst" -o json \
+    | jq --arg name "$usage_app-manual" --arg pvc "$usage_app" --argjson prev "$usage_previous" \
+        'del(.status)
+        | .metadata = {name: $name, namespace: .metadata.namespace}
+        | .spec.kopia.copyMethod = "Direct"
+        | .spec.kopia.destinationPVC = $pvc
+        | .spec.kopia.previous = $prev' \
+    | kubectl apply --server-side -f -
+kubectl -n "$usage_ns" wait "job/volsync-dst-$usage_app-manual" --for=create --timeout=120s
+kubectl -n "$usage_ns" wait "job/volsync-dst-$usage_app-manual" --for=condition=complete --timeout=120m
+kubectl -n "$usage_ns" delete replicationdestination "$usage_app-manual"
+flux -n "$usage_ns" resume kustomization "$usage_app"
+flux -n "$usage_ns" resume helmrelease "$usage_app"
+flux -n "$usage_ns" reconcile helmrelease "$usage_app" --force
+kubectl -n "$usage_ns" wait pod --for=condition=ready --selector="app.kubernetes.io/name=$usage_app" --timeout=5m
 '''
 
 [tasks."prune-pods"]
