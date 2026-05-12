@@ -47,10 +47,6 @@ data:
       threshold: 0.5
       target_ratio: 0.2
       protect_last_n: 20
-    auxiliary:
-      compression:
-        model: google/gemma-4-E4B-it
-        provider: custom:llamacpp
     group_sessions_per_user: false
     streaming:
       enabled: false
