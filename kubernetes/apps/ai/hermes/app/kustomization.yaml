@@ -7,3 +7,10 @@ resources:
   - ./externalsecret.yaml
   - ./helmrelease.yaml
   - ./ocirepository.yaml
+configMapGenerator:
+  - name: hermes-skill-homelab-commit-watcher
+    files:
+      - skills/homelab-commit-watcher/SKILL.md
+      - skills/homelab-commit-watcher/fetch_k8s_repos.py
+    options:
+      disableNameSuffixHash: true

@@ -41,6 +41,12 @@ spec:
                 cp /run/config/config.yaml /opt/data/config.yaml
                 cp /run/config/env /opt/data/.env
                 chmod 600 /opt/data/.env
+
+                skill_dir=/opt/data/skills/homelab/homelab-commit-watcher
+                mkdir -p "$skill_dir" /opt/data/workspace
+                cp /run/skills/homelab-commit-watcher/SKILL.md "$skill_dir/SKILL.md"
+                cp /run/skills/homelab-commit-watcher/fetch_k8s_repos.py /opt/data/workspace/fetch_k8s_repos.py
+                chmod +x /opt/data/workspace/fetch_k8s_repos.py
             securityContext:
               allowPrivilegeEscalation: false
               capabilities:
@@ -230,6 +236,14 @@ spec:
             init:
               - path: /run/config/env
                 subPath: env
+      skill-commit-watcher:
+        type: configMap
+        name: hermes-skill-homelab-commit-watcher
+        defaultMode: 0o755
+        advancedMounts:
+          hermes:
+            init:
+              - path: /run/skills/homelab-commit-watcher
       tmp:
         type: emptyDir
         globalMounts:
