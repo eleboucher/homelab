@@ -36,7 +36,6 @@ data:
       timeout: 180
       persistent_shell: true
       env_passthrough:
-        - GH_TOKEN
         - DISCORD_WEBHOOK
     memory:
       auto_migrate: true
@@ -47,6 +46,11 @@ data:
       threshold: 0.5
       target_ratio: 0.2
       protect_last_n: 20
+    auxiliary:
+      compression:
+        model: google/gemma-4-E4B-it
+        provider: custom:llamacpp
+    group_sessions_per_user: false
     streaming:
       enabled: false
     security:
