@@ -12,6 +12,7 @@ spec:
   values:
     defaultPodOptions:
       shareProcessNamespace: true
+      terminationGracePeriodSeconds: 120
       securityContext:
         fsGroup: 1000
         fsGroupChangePolicy: OnRootMismatch

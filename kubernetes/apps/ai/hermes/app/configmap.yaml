@@ -37,16 +37,22 @@ data:
       persistent_shell: true
       env_passthrough:
         - GH_TOKEN
+        - DISCORD_WEBHOOK
     memory:
       auto_migrate: true
       auto_summarize:
         threshold: 50
     compression:
       enabled: true
+      threshold: 0.5
+      target_ratio: 0.2
+      protect_last_n: 20
     streaming:
       enabled: false
     security:
       redact_secrets: true
+      tirith_enabled: true
+      tirith_fail_open: true
     privacy:
       redact_pii: true
     agent:
@@ -55,6 +61,7 @@ data:
       restart_drain_timeout: 60
       api_max_retries: 2
       reasoning_effort: medium
+      tool_use_enforcement: auto
     platforms:
       matrix:
         enabled: true
