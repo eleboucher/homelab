@@ -100,11 +100,6 @@ spec:
             env:
               API_SERVER_ENABLED: "true"
               API_SERVER_HOST: 0.0.0.0
-              GH_TOKEN:
-                valueFrom:
-                  secretKeyRef:
-                    name: hermes-config
-                    key: GH_TOKEN
               GOPATH: /opt/data/go
               HERMES_DASHBOARD: "1"
               HERMES_GID: "1000"
@@ -114,6 +109,11 @@ spec:
               HOMEBREW_CELLAR: /opt/data/.local/homebrew/Cellar
               HOMEBREW_PREFIX: /opt/data/.local/homebrew
               HOMEBREW_REPOSITORY: /opt/data/.local/homebrew
+              HOMELAB_GH_TOKEN:
+                valueFrom:
+                  secretKeyRef:
+                    name: hermes-config
+                    key: GH_TOKEN
               MATRIX_ENCRYPTION: "true"
               PATH: /opt/hermes/.venv/bin:/opt/data/.local/bin:/opt/data/.local/go/bin:/opt/data/.local/homebrew/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
               PIP_BREAK_SYSTEM_PACKAGES: "1"

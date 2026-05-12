@@ -37,6 +37,7 @@ data:
       persistent_shell: true
       env_passthrough:
         - DISCORD_WEBHOOK
+        - HOMELAB_GH_TOKEN
     memory:
       auto_migrate: true
       auto_summarize:
