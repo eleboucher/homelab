@@ -157,6 +157,11 @@ spec:
               DOCKER_CERT_PATH: /certs/client
               DOCKER_HOST: tcp://localhost:2376
               DOCKER_TLS_VERIFY: "1"
+              GH_TOKEN:
+                valueFrom:
+                  secretKeyRef:
+                    name: hermes-config
+                    key: GH_TOKEN
               GOPATH: /opt/data/go
               HERMES_DASHBOARD: "1"
               HERMES_GID: "1000"
@@ -206,6 +211,11 @@ spec:
               - "12321"
               - /opt/data
             env:
+              GH_TOKEN:
+                valueFrom:
+                  secretKeyRef:
+                    name: hermes-config
+                    key: GH_TOKEN
               TZ: ${TZ}
             resources:
               requests:
