@@ -1,7 +1,7 @@
 ---
 name: homelab-commit-watcher
 description: Watch homelab/gitops peer repositories on the k8s-at-home GitHub topic for interesting commits, rank them, and post a summary to a Discord channel via webhook.
-version: 3.4.0
+version: 3.5.0
 author: erwanleboucher
 license: MIT
 required_environment_variables:
@@ -50,7 +50,7 @@ Also runs daily on the Hermes cron job `homelab-peers-commit-watcher`.
 > **Two things matter most. Everything else is mechanical.**
 >
 > 1. **Pick commits that are genuinely interesting to a homelab operator.** A short, signal-dense digest beats a padded one. See step 3.
-> 2. **Match the output format byte-for-byte.** One bullet per line, exact separators, exact whitespace, `flags: 4100` on every POST, no `(cont.)` headers on chunks. See steps 4–5.
+> 2. **Match the output format byte-for-byte.** One bullet per line, message wrapped in a markdown link, `flags: 4100` on every POST, no `(cont.)` headers on chunks. See steps 4–5.
 
 ### 1. Run the fetcher
 
@@ -101,19 +101,21 @@ Discord-compatible markdown.
 
 <emoji> <owner>/<repo>
 
-- <message> — <author> - <commit-url>
-- <message> — <author> - <commit-url>
+- [<message>](<commit-url>) — <author>
+- [<message>](<commit-url>) — <author>
 ```
+
+**Example bullet:** `- [Revert kopia upgrade](https://github.com/buroa/k8s-gitops/commit/d90c300e) — buroa`
 
 **Rules:**
 
 - **Header date**: first 10 chars of the feed's `generated:` line.
 - **Emoji per repo**: cycle `🛠️ 🔧 📦 🚀 🌐 ⚙️` in feed order, reset each run.
-- **Separators**: `—` (em-dash) between message and author, `-` (hyphen) between author and URL.
+- **Bullet shape**: `- [<message>](<url>) — <author>`. The message is wrapped in markdown link syntax (`[text](url)`), so the URL never appears as visible text. Separator before author is `—` (em-dash, with spaces).
 - **Author**: copy verbatim from the feed (text before `:`). No enrichment, no invented full names.
-- **One bullet = one line.** Never split a bullet across lines, never indent the URL — Discord renders the next commit as a nested bullet if you do.
+- **One bullet = one line.** Each bullet is a single self-contained line. Never split across lines.
 - **Whitespace**: one blank line between repo header and first bullet; no blank lines between bullets in the same repo; one blank line between repo sections; no leading spaces on bullet lines.
-- **Grouping**: merge adjacent commits with shared scope (same parenthetical or same first 3 words) into one bullet; concatenate their URLs on the same line.
+- **Grouping**: merge adjacent commits with shared scope (same parenthetical or same first 3 words) into one bullet by putting multiple `[msg](url)` links separated by ` · ` before the author. Still one line.
 - **Empty feed**: post `# Homelab commits — YYYY-MM-DD\n\n_No notable commits in the last 24h._`
 
 ### 5. Post to Discord
