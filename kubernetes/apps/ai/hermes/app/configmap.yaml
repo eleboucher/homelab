@@ -31,13 +31,10 @@ data:
       - provider: custom:llamacpp
         model: google/gemma-4-E4B-it
     terminal:
-      backend: docker
-      docker_image: nikolaik/python-nodejs:python3.11-nodejs20
+      backend: local
       cwd: /opt/data/workspace
       timeout: 180
       persistent_shell: true
-      docker_forward_env:
-        - GH_TOKEN
       env_passthrough:
         - GH_TOKEN
     memory:
