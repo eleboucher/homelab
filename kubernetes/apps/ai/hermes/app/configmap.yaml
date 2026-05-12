@@ -9,12 +9,9 @@ data:
       - name: llamacpp
         base_url: http://llama-cpp.ai:8080/v1
         key_env: LLAMA_API_KEY
-      - name: minimax
-        base_url: https://api.minimax.io/v1
-        key_env: MINIMAX_API_KEY
     model:
-      default: MiniMax-M2.7
-      provider: custom:minimax
+      default: "MiniMax-M2.7"
+      provider: minimax
     model_aliases:
       gemma:
         model: google/gemma-4-E4B-it
@@ -22,9 +19,6 @@ data:
       qwen:
         model: qwen/qwen3.6-27B:general
         provider: custom:llamacpp
-      minimax:
-        model: MiniMax-M2.7
-        provider: custom:minimax
     fallback_providers:
       - provider: custom:llamacpp
         model: qwen/qwen3.6-27B:general
