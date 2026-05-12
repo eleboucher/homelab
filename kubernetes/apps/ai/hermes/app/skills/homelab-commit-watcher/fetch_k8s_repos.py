@@ -141,7 +141,8 @@ def build_commits_query(batch: list[dict]) -> str:
             f"        ... on Commit {{\n"
             f"          history(since: $since, first: 50) {{\n"
             f"            nodes {{\n"
-            f"              messageHeadline committedDate url\n"
+            f"              messageHeadline messageBody committedDate url\n"
+            f"              additions deletions changedFilesIfAvailable\n"
             f"              author {{ name email user {{ login }} }}\n"
             f"            }}\n"
             f"          }}\n"
@@ -209,12 +210,32 @@ def is_skippable_commit(message: str) -> bool:
     return False
 
 
+BODY_MAX_CHARS = 600
+
+
+def _trim_body(body: str) -> str:
+    body = body.strip()
+    if not body:
+        return ""
+    if len(body) <= BODY_MAX_CHARS:
+        return body
+    cut = body.rfind("\n", 0, BODY_MAX_CHARS)
+    if cut < BODY_MAX_CHARS // 2:
+        cut = BODY_MAX_CHARS
+    return body[:cut].rstrip() + "\n…"
+
+
 def render_feed(feed: list[dict], since: str, generated_at: str) -> str:
     lines = [f"since: {since}", f"generated: {generated_at}", ""]
     for entry in feed:
         lines.append(f"## {entry['r']}")
         for c in entry["c"]:
-            lines.append(f"- {c['a']}: {c['m']} · {c['u']}")
+            stats = f"+{c['add']}/-{c['del']}, {c['files']}f"
+            lines.append(f"- {c['a']}: {c['m']} [{stats}] · {c['u']}")
+            body = _trim_body(c.get("b", ""))
+            if body:
+                for line in body.splitlines():
+                    lines.append(f"  > {line}")
         lines.append("")
     return "\n".join(lines)
 
@@ -260,9 +281,13 @@ def main() -> None:
                     commits.append(
                         {
                             "m": c["messageHeadline"],
+                            "b": c.get("messageBody") or "",
                             "d": c["committedDate"],
                             "u": c["url"],
                             "a": user.get("login") or c["author"].get("name"),
+                            "add": c.get("additions") or 0,
+                            "del": c.get("deletions") or 0,
+                            "files": c.get("changedFilesIfAvailable") or 0,
                         }
                     )
                 if commits:
