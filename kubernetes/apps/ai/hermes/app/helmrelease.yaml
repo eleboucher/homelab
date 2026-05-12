@@ -185,17 +185,11 @@ spec:
                 cpu: 4
                 memory: 16Gi
             securityContext:
-              allowPrivilegeEscalation: true
+              allowPrivilegeEscalation: false
               capabilities:
-                add:
-                  - CHOWN
-                  - SETGID
-                  - SETUID
                 drop:
                   - ALL
               readOnlyRootFilesystem: false
-              runAsGroup: 0
-              runAsUser: 0
           codeserver:
             image:
               repository: ghcr.io/coder/code-server
