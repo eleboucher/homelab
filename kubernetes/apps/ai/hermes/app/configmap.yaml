@@ -36,6 +36,10 @@ data:
       cwd: /opt/data/workspace
       timeout: 180
       persistent_shell: true
+      docker_forward_env:
+        - GH_TOKEN
+      env_passthrough:
+        - GH_TOKEN
     memory:
       auto_migrate: true
       auto_summarize:
