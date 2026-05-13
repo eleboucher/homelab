@@ -3,6 +3,7 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
+  - agentmemory-mcp/ks.yaml
   - arr-mcp/ks.yaml
   - context7-mcp/ks.yaml
   - github-mcp/ks.yaml

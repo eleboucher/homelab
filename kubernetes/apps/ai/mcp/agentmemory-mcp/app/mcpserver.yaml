@@ -1,0 +1,26 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/toolhive.stacklok.dev/mcpserver_v1alpha1.json
+apiVersion: toolhive.stacklok.dev/v1alpha1
+kind: MCPServer
+metadata:
+  name: agentmemory-mcp
+spec:
+  image: registry.erwanleboucher.dev/eleboucher/agentmemory:0.9.12-fcfc7b8@sha256:9ce1f2449906f5af164f11db96cc2c9778e9c6711808496b11c11cf9a4644318
+  transport: stdio
+  proxyPort: 8080
+  args:
+    - mcp
+  groupRef:
+    name: mcp-tools
+  permissionProfile:
+    type: builtin
+    name: network
+  env:
+    - name: AGENTMEMORY_URL
+      value: http://agentmemory.ai.svc.cluster.local:3111
+    - name: AGENTMEMORY_TOOLS
+      value: all
+  secrets:
+    - name: agentmemory-mcp-secret
+      key: AGENTMEMORY_SECRET
+      targetEnvName: AGENTMEMORY_SECRET

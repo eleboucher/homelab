@@ -1,0 +1,131 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: agentmemory
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: agentmemory
+  interval: 15m
+  values:
+    defaultPodOptions:
+      securityContext:
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+        runAsGroup: 1000
+        runAsNonRoot: true
+        runAsUser: 1000
+        seccompProfile:
+          type: RuntimeDefault
+    controllers:
+      agentmemory:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        replicas: 1
+        strategy: Recreate
+        type: deployment
+        containers:
+          app:
+            image:
+              repository: registry.erwanleboucher.dev/eleboucher/agentmemory
+              tag: 0.9.12-fcfc7b8@sha256:9ce1f2449906f5af164f11db96cc2c9778e9c6711808496b11c11cf9a4644318
+            env:
+              AGENTMEMORY_HOST: 0.0.0.0
+              AGENTMEMORY_SECRET:
+                valueFrom:
+                  secretKeyRef:
+                    name: agentmemory-secrets
+                    key: AGENTMEMORY_SECRET
+              AGENTMEMORY_TOOLS: all
+              EMBEDDING_PROVIDER: local
+              III_REST_PORT: "3111"
+              MINIMAX_API_KEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: agentmemory-secrets
+                    key: MINIMAX_API_KEY
+              TZ: ${TZ}
+            probes:
+              liveness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /agentmemory/livez
+                    port: 3111
+                  failureThreshold: 3
+                  periodSeconds: 30
+                  timeoutSeconds: 5
+              readiness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /agentmemory/livez
+                    port: 3111
+                  failureThreshold: 3
+                  periodSeconds: 10
+                  timeoutSeconds: 5
+              startup:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /agentmemory/livez
+                    port: 3111
+                  failureThreshold: 60
+                  periodSeconds: 5
+                  timeoutSeconds: 5
+            resources:
+              requests:
+                cpu: 100m
+                memory: 256Mi
+              limits:
+                memory: 2Gi
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop:
+                  - ALL
+    service:
+      app:
+        controller: agentmemory
+        ports:
+          api:
+            port: 3111
+          viewer:
+            port: 3113
+    route:
+      api:
+        hostnames:
+          - agentmemory-api.erwanleboucher.dev
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
+        rules:
+          - backendRefs:
+              - identifier: app
+                port: 3111
+      viewer:
+        hostnames:
+          - agentmemory.erwanleboucher.dev
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
+        rules:
+          - backendRefs:
+              - identifier: app
+                port: 3113
+    persistence:
+      data:
+        existingClaim: agentmemory
+        advancedMounts:
+          agentmemory:
+            app:
+              - path: /data
+      tmp:
+        type: emptyDir
+        globalMounts:
+          - path: /tmp

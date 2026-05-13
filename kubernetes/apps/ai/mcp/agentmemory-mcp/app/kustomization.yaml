@@ -2,13 +2,6 @@
 # yaml-language-server: $schema=https://json.schemastore.org/kustomization
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-namespace: ai
-
 resources:
-  - namespace.yaml
-  - agentmemory/ks.yaml
-  - hermes/ks.yaml
-  - llama-cpp/ks.yaml
-  - mcp
-  - ollama/ks.yaml
-  - toolhive/ks.yaml
+  - ./externalsecret.yaml
+  - ./mcpserver.yaml
