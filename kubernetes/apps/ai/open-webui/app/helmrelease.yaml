@@ -1,0 +1,88 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: open-webui
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: open-webui
+  interval: 30m
+  values:
+    controllers:
+      open-webui:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        containers:
+          app:
+            image:
+              repository: ghcr.io/open-webui/open-webui
+              tag: v0.9.5
+            env:
+              # OAuth
+              ENABLE_OAUTH_SIGNUP: "true"
+              ENABLE_OAUTH_PERSISTENT_CONFIG: "false"
+              OAUTH_MERGE_ACCOUNTS_BY_EMAIL: "true"
+              OAUTH_PROVIDER_NAME: Kanidm
+              OPENID_PROVIDER_URL: https://idm.erwanleboucher.dev/oauth2/openid/open-webui/.well-known/openid-configuration
+              OPENID_REDIRECT_URI: https://chat.erwanleboucher.dev/oauth/oidc/callback
+              OAUTH_SCOPES: openid email profile groups
+              OAUTH_CODE_CHALLENGE_METHOD: S256
+              OAUTH_CLIENT_ID:
+                valueFrom:
+                  secretKeyRef:
+                    name: kanidm-open-webui-oidc
+                    key: client-id
+              OAUTH_CLIENT_SECRET:
+                valueFrom:
+                  secretKeyRef:
+                    name: kanidm-open-webui-oidc
+                    key: client-secret
+              # Role + group sync
+              ENABLE_OAUTH_ROLE_MANAGEMENT: "true"
+              OAUTH_ROLES_CLAIM: groups
+              OAUTH_ALLOWED_ROLES: users@idm.erwanleboucher.dev,admins@idm.erwanleboucher.dev
+              OAUTH_ADMIN_ROLES: admins@idm.erwanleboucher.dev
+              ENABLE_OAUTH_GROUP_MANAGEMENT: "true"
+              OAUTH_GROUP_CLAIM: groups
+              # Features
+              ENABLE_LOGIN_FORM: false
+              ENABLE_OLLAMA_API: true
+              ENABLE_OPENAI_API: false
+              ENABLE_RAG_WEB_SEARCH: true
+              ENABLE_SEARCH_QUERY: true
+              ENABLE_SIGNUP: false
+              # Search
+              RAG_WEB_SEARCH_ENGINE: searxng
+              SEARXNG_QUERY_URL: http://searxng.selfhosted.svc.cluster.local:8080/search?q=<query>
+              # Websockets
+              ENABLE_WEBSOCKET_SUPPORT: true
+              WEBSOCKET_MANAGER: redis
+              WEBSOCKET_REDIS_URL: redis://dragonfly.database:6379
+            envFrom:
+              - secretRef:
+                  name: open-webui-secret
+            resources:
+              requests:
+                cpu: 100m
+              limits:
+                memory: 2Gi
+    persistence:
+      config:
+        enabled: true
+        existingClaim: open-webui
+        globalMounts:
+          - path: /app/backend/data
+    route:
+      app:
+        hostnames:
+          - chat.erwanleboucher.dev
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
+    service:
+      app:
+        ports:
+          http:
+            port: 8080

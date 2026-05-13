@@ -11,4 +11,5 @@ resources:
   - llama-cpp/ks.yaml
   - mcp
   - ollama/ks.yaml
+  - open-webui/ks.yaml
   - toolhive/ks.yaml

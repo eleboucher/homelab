@@ -1,0 +1,38 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: open-webui
+spec:
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: open-webui
+  components:
+    - ../../../../components/volsync
+    - ../../../../components/oidc
+  dependsOn:
+    - name: rook-ceph-cluster
+      namespace: rook-ceph
+  healthCheckExprs:
+    - apiVersion: dragonflydb.io/v1alpha1
+      kind: Dragonfly
+      failed: status.phase != 'ready'
+      current: status.phase == 'ready'
+  interval: 1h
+  path: "./kubernetes/apps/ai/open-webui/app"
+  postBuild:
+    substitute:
+      APP: open-webui
+      APP_NAMESPACE: ai
+      OIDC_CALLBACK: /oauth/oidc/callback
+      OIDC_DISPLAY_NAME: Open WebUI
+      SUBDOMAIN: chat
+  prune: true
+  sourceRef:
+    kind: OCIRepository
+    name: flux-system
+    namespace: flux-system
+  targetNamespace: ai
+  timeout: 5m
+  wait: false
