@@ -14,8 +14,6 @@ spec:
     controllers:
       bazarr:
         pod:
-          nodeSelector:
-            kubernetes.io/hostname: kharkiv
           securityContext:
             runAsGroup: 1000
             runAsNonRoot: true

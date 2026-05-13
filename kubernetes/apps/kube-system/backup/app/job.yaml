@@ -17,9 +17,6 @@ spec:
           # Run at 5:00 AM every Sunday
           schedule: "0 5 * * 0"
           concurrencyPolicy: Forbid
-        pod:
-          nodeSelector:
-            kubernetes.io/hostname: kharkiv
         containers:
           app:
             image:
