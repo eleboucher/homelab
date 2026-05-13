@@ -12,6 +12,7 @@ data:
     model:
       default: "MiniMax-M2.7"
       provider: minimax
+      context_length: 200000
     model_aliases:
       gemma:
         model: google/gemma-4-E4B-it
