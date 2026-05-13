@@ -43,10 +43,10 @@ spec:
                 chmod 600 /opt/data/.env
 
                 skill_dir=/opt/data/skills/homelab/homelab-commit-watcher
-                mkdir -p "$skill_dir" /opt/data/workspace
+                mkdir -p "$skill_dir" $skill_dir/scripts
                 cp /run/skills/homelab-commit-watcher/SKILL.md "$skill_dir/SKILL.md"
-                cp /run/skills/homelab-commit-watcher/fetch_k8s_repos.py /opt/data/workspace/fetch_k8s_repos.py
-                chmod +x /opt/data/workspace/fetch_k8s_repos.py
+                cp /run/skills/homelab-commit-watcher/fetch_k8s_repos.py "$skill_dir/scripts/fetch_k8s_repos.py"
+                chmod +x "$skill_dir/scripts/fetch_k8s_repos.py"
             securityContext:
               allowPrivilegeEscalation: false
               capabilities:
