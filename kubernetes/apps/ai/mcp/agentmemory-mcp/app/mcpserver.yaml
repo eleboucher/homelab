@@ -5,7 +5,7 @@ kind: MCPServer
 metadata:
   name: agentmemory-mcp
 spec:
-  image: registry.erwanleboucher.dev/eleboucher/agentmemory:0.9.12-fcfc7b8@sha256:9ce1f2449906f5af164f11db96cc2c9778e9c6711808496b11c11cf9a4644318
+  image: registry.erwanleboucher.dev/eleboucher/agentmemory:0.9.12-607df15@sha256:cd87a9195149bc62d8f8f537ce57db5e0541c22f2760c4c4caada90053cf0445
   transport: stdio
   proxyPort: 8080
   args:
