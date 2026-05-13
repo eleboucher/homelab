@@ -1,0 +1,183 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: mem0
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: mem0
+  interval: 15m
+  values:
+    defaultPodOptions:
+      securityContext:
+        fsGroup: 65534
+        fsGroupChangePolicy: OnRootMismatch
+        runAsGroup: 65534
+        runAsNonRoot: true
+        runAsUser: 65534
+        seccompProfile:
+          type: RuntimeDefault
+    controllers:
+      mem0:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        replicas: 1
+        strategy: Recreate
+        type: deployment
+        containers:
+          api:
+            image:
+              repository: registry.erwanleboucher.dev/eleboucher/mem0
+              tag: v2.0.2-7f443a5@sha256:aba7735b51b3b33f4bec60fcbdd500577f6823205da1395858f0629214dc1371
+            env:
+              ADMIN_API_KEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: mem0-secrets
+                    key: ADMIN_API_KEY
+              APP_DB_NAME: mem0
+              AUTH_DISABLED: "false"
+              DASHBOARD_URL: https://mem0-dashboard.erwanleboucher.dev
+              HISTORY_DB_PATH: /config/history.db
+              HOME: /config
+              JWT_SECRET:
+                valueFrom:
+                  secretKeyRef:
+                    name: mem0-secrets
+                    key: JWT_SECRET
+              MEM0_DEFAULT_EMBEDDER_MODEL: sentence-transformers/all-MiniLM-L6-v2
+              MEM0_DEFAULT_LLM_MODEL: MiniMax-M2.7
+              MEM0_TELEMETRY: "false"
+              OPENAI_API_KEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: mem0-secrets
+                    key: OPENAI_API_KEY
+              OPENAI_BASE_URL: https://api.minimax.io/v1
+              POSTGRES_COLLECTION_NAME: mem0_memories
+              POSTGRES_DB: mem0
+              POSTGRES_HOST: postgres-rw.database.svc
+              POSTGRES_PASSWORD:
+                valueFrom:
+                  secretKeyRef:
+                    name: mem0-postgres
+                    key: password
+              POSTGRES_PORT: "5432"
+              POSTGRES_USER:
+                valueFrom:
+                  secretKeyRef:
+                    name: mem0-postgres
+                    key: username
+              TZ: ${TZ}
+            probes:
+              liveness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /docs
+                    port: 8000
+                  initialDelaySeconds: 30
+                  periodSeconds: 30
+              readiness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /docs
+                    port: 8000
+                  initialDelaySeconds: 10
+                  periodSeconds: 15
+            resources:
+              requests:
+                cpu: 50m
+                memory: 256Mi
+              limits:
+                memory: 1Gi
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop:
+                  - ALL
+              readOnlyRootFilesystem: true
+          dashboard:
+            image:
+              repository: registry.erwanleboucher.dev/eleboucher/mem0-dashboard
+              tag: rolling
+            env:
+              API_INTERNAL_URL: http://localhost:8000
+              NEXT_PUBLIC_API_URL: https://mem0.erwanleboucher.dev
+              NEXT_PUBLIC_INSTANCE_NAME: Mem0
+              TZ: ${TZ}
+            probes:
+              liveness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /api/health
+                    port: 3000
+                  initialDelaySeconds: 20
+                  periodSeconds: 30
+              readiness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /api/health
+                    port: 3000
+                  initialDelaySeconds: 5
+                  periodSeconds: 15
+            resources:
+              requests:
+                cpu: 25m
+                memory: 128Mi
+              limits:
+                memory: 512Mi
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop:
+                  - ALL
+    service:
+      app:
+        controller: mem0
+        ports:
+          api:
+            port: 8000
+          dashboard:
+            port: 3000
+    route:
+      api:
+        hostnames:
+          - mem0.erwanleboucher.dev
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
+        rules:
+          - backendRefs:
+              - identifier: app
+                port: 8000
+      dashboard:
+        hostnames:
+          - mem0-dashboard.erwanleboucher.dev
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
+        rules:
+          - backendRefs:
+              - identifier: app
+                port: 3000
+    persistence:
+      config:
+        type: emptyDir
+        advancedMounts:
+          mem0:
+            api:
+              - path: /config
+      tmp:
+        type: emptyDir
+        globalMounts:
+          - path: /tmp

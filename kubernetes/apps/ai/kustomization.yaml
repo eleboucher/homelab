@@ -9,5 +9,7 @@ resources:
   - hermes/ks.yaml
   - llama-cpp/ks.yaml
   - mcp
+  - mem0/ks.yaml
   - ollama/ks.yaml
+  - text-embeddings-inference/ks.yaml
   - toolhive/ks.yaml
