@@ -28,6 +28,23 @@ spec:
         strategy: Recreate
         type: deployment
         initContainers:
+          copy-agent-source:
+            image:
+              repository: nousresearch/hermes-agent
+              tag: v2026.5.7@sha256:9462082533e603fc6ba4259c51d7722dcd8cbb0f348488ceedc35d06fa8f9324
+            command:
+              - /bin/sh
+              - -c
+              - |
+                set -e
+                cp -r /opt/hermes/. /agent-src/
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop:
+                  - ALL
+              runAsGroup: 1000
+              runAsUser: 1000
           init:
             image:
               repository: docker.io/library/alpine
@@ -107,7 +124,6 @@ spec:
               API_SERVER_ENABLED: "true"
               API_SERVER_HOST: 0.0.0.0
               GOPATH: /opt/data/go
-              HERMES_DASHBOARD: "1"
               HERMES_GID: "1000"
               HERMES_HOME: /opt/data
               HERMES_UID: "1000"
@@ -180,6 +196,39 @@ spec:
               capabilities:
                 drop:
                   - ALL
+          webui:
+            image:
+              repository: ghcr.io/nesquena/hermes-webui
+              tag: 0.51.56@sha256:ebf23470e8e70e6ce77c7fca0f1f9d3bb55b9b667539fb80b91988c253199ae1
+            env:
+              HERMES_SKIP_CHMOD: "1"
+              HERMES_WEBUI_HOST: 0.0.0.0
+              HERMES_WEBUI_PORT: "8787"
+              HERMES_WEBUI_STATE_DIR: /home/hermeswebui/.hermes/webui
+              TZ: ${TZ}
+              WANTED_GID: "1000"
+              WANTED_UID: "1000"
+            resources:
+              requests:
+                cpu: 50m
+                memory: 256Mi
+              limits:
+                memory: 2Gi
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities:
+                add:
+                  - CHOWN
+                  - DAC_OVERRIDE
+                  - FOWNER
+                  - FSETID
+                  - SETGID
+                  - SETUID
+                drop:
+                  - ALL
+              runAsGroup: 0
+              runAsNonRoot: false
+              runAsUser: 0
     service:
       app:
         controller: hermes
@@ -188,10 +237,10 @@ spec:
         ports:
           codeserver:
             port: 12321
-          dashboard:
-            port: 9119
           gateway:
             port: 8642
+          webui:
+            port: 8787
     route:
       app:
         hostnames:
@@ -202,7 +251,7 @@ spec:
         rules:
           - backendRefs:
               - identifier: app
-                port: 9119
+                port: 8787
       codeserver:
         hostnames:
           - hermes-code.erwanleboucher.dev
@@ -214,10 +263,28 @@ spec:
               - identifier: app
                 port: 12321
     persistence:
+      agent-source:
+        type: emptyDir
+        advancedMounts:
+          hermes:
+            copy-agent-source:
+              - path: /agent-src
+            webui:
+              - path: /home/hermeswebui/.hermes/hermes-agent
       data:
         existingClaim: hermes
-        globalMounts:
-          - path: /opt/data
+        advancedMounts:
+          hermes:
+            init:
+              - path: /opt/data
+            install-tools:
+              - path: /opt/data
+            app:
+              - path: /opt/data
+            codeserver:
+              - path: /opt/data
+            webui:
+              - path: /home/hermeswebui/.hermes
       config-yaml:
         type: configMap
         name: hermes-configmap
