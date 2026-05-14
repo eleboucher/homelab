@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
-"""Daily feed of commits across the k8s-at-home GitHub topic (last 24h, no bots)."""
+"""Daily feed of commits across the k8s-at-home GitHub topic (rolling 7d, no bots).
+
+Commits within the last 24h are tagged `[24h]` in the rendered bullet so the
+consuming SKILL can slice "new today" from the wider trend window."""
 
 import os
 import re
@@ -14,7 +17,10 @@ GITHUB_API = "https://api.github.com/graphql"
 TOPIC = "k8s-at-home"
 OUTPUT_DIR = Path("/tmp/commit-watcher")
 BATCH_SIZE = 15
-LOOKBACK_HOURS = 24
+# 7d window — trends emerge across the week at hobby cadence. The SKILL slices
+# the last 24h back out via the [24h] marker on each rendered bullet.
+LOOKBACK_HOURS = 168
+RECENT_HOURS = 24
 
 BOT_LOGINS = {
     "dependabot",
@@ -192,9 +198,19 @@ BOT_BRANCH_RE = re.compile(
 )
 
 # Renovate's signature commit shape — leaks through when a human rebases/squashes
-# a renovate PR under their own name. `→` is the version-bump arrow renovate emits.
+# a renovate PR under their own name. Three alternatives:
+#   - "update image <name>" / "update dependency <name>" — broad match because
+#     these phrasings are essentially renovate-only.
+#   - "update chart <name> ( … " / "update chart <name> to <digit>…" — the Helm
+#     preset's title shape. Tightened on continuation because the bare phrase
+#     "update chart" can legitimately mean "update chart values" / "update chart
+#     defaults" in human commits, which we do NOT want to drop.
+#   - Unicode right-arrows commonly emitted in renovate version-bump titles:
+#     → U+2192 (default), ➔ U+2794 (heavy wide-headed), ➜ U+279C (heavy round-tipped).
 BOT_CONTENT_RE = re.compile(
-    r"\bupdate (?:image|dependency)\b|→",
+    r"\bupdate (?:image|dependency)\b"
+    r"|\bupdate chart \S+ (?:\(|to\s+v?\d|→|➔|➜)"
+    r"|[→➔➜]",
     re.IGNORECASE,
 )
 
@@ -231,7 +247,9 @@ def render_feed(feed: list[dict], since: str, generated_at: str) -> str:
         lines.append(f"## {entry['r']}")
         for c in entry["c"]:
             stats = f"+{c['add']}/-{c['del']}, {c['files']}f"
-            lines.append(f"- {c['a']}: {c['m']} [{stats}] · {c['u']}")
+            marker = "[24h] " if c["recent"] else ""
+            date = c["d"][:10]
+            lines.append(f"- {marker}{c['a']}: {c['m']} [{stats}] · {date} · {c['u']}")
             body = _trim_body(c.get("b", ""))
             if body:
                 for line in body.splitlines():
@@ -244,6 +262,7 @@ def main() -> None:
     token = gh_token()
     now = datetime.now(timezone.utc)
     since = (now - timedelta(hours=LOOKBACK_HOURS)).isoformat()
+    recent_cutoff = now - timedelta(hours=RECENT_HOURS)
 
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -278,11 +297,15 @@ def main() -> None:
                     if is_bot(c["author"]) or is_skippable_commit(c["messageHeadline"]):
                         continue
                     user = c["author"].get("user") or {}
+                    committed = datetime.fromisoformat(
+                        c["committedDate"].replace("Z", "+00:00")
+                    )
                     commits.append(
                         {
                             "m": c["messageHeadline"],
                             "b": c.get("messageBody") or "",
                             "d": c["committedDate"],
+                            "recent": committed >= recent_cutoff,
                             "u": c["url"],
                             "a": user.get("login") or c["author"].get("name"),
                             "add": c.get("additions") or 0,
@@ -305,9 +328,10 @@ def main() -> None:
 
     home_file = Path.home() / f"commit-watcher-{now.strftime('%Y-%m-%d')}.md"
     home_file.write_text(payload)
+    recent_count = sum(1 for entry in feed for c in entry["c"] if c["recent"])
     print(
         f"Wrote {out_file} ({total_commits} commits across {len(feed)} repos, "
-        f"{len(payload)} bytes)",
+        f"{recent_count} in last {RECENT_HOURS}h, {len(payload)} bytes)",
         file=sys.stderr,
     )
     print(f"Copied to {home_file}", file=sys.stderr)
