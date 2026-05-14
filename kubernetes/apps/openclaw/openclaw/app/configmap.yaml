@@ -228,6 +228,7 @@ data:
       },
       plugins: {
         allow: [
+          "agentmemory",
           "browser",
           "discord",
           "matrix",
@@ -238,6 +239,16 @@ data:
         ],
         bundledDiscovery: "compat",
         entries: {
+          agentmemory: {
+            enabled: true,
+            config: {
+              base_url: "http://agentmemory.ai.svc.cluster.local:3111",
+              token_budget: 2000,
+              min_confidence: 0.5,
+              fallback_on_error: true,
+              timeout_ms: 5000,
+            },
+          },
           browser: { enabled: true },
           discord: { enabled: true },
           "memory-core": { enabled: true },
@@ -279,7 +290,7 @@ data:
           "skill-workshop": { enabled: true },
         },
         slots: {
-          memory: "memory-core",
+          memory: "agentmemory",
         },
       },
       session: {

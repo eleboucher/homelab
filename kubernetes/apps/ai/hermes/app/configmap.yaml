@@ -41,6 +41,7 @@ data:
         - DISCORD_WEBHOOK
         - HOMELAB_GH_TOKEN
     memory:
+      provider: agentmemory
       auto_migrate: true
       auto_summarize:
         threshold: 50
@@ -82,6 +83,8 @@ data:
     web:
       search_backend: searxng
   env: |-
+    AGENTMEMORY_URL=http://agentmemory.ai.svc.cluster.local:3111
+    AGENTMEMORY_SECRET={{ .AGENTMEMORY_SECRET }}
     LLAMA_API_KEY={{ .LLAMA_API_KEY }}
     MINIMAX_API_KEY={{ .MINIMAX_API_KEY }}
     MATRIX_HOMESERVER={{ .MATRIX_HOMESERVER }}

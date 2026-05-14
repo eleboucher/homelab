@@ -105,6 +105,15 @@ spec:
                   mkdir -p $HOMEBREW_PREFIX
                   git clone --depth 1 https://github.com/Homebrew/brew $HOMEBREW_PREFIX
                 fi
+
+                if [ ! -d /opt/data/plugins/agentmemory ]; then
+                  mkdir -p /opt/data/plugins
+                  cd /tmp
+                  rm -rf am-src
+                  git clone --depth 1 --branch v0.9.12 https://github.com/rohitg00/agentmemory am-src
+                  mv am-src/integrations/hermes /opt/data/plugins/agentmemory
+                  rm -rf am-src
+                fi
             securityContext:
               allowPrivilegeEscalation: false
               capabilities:
