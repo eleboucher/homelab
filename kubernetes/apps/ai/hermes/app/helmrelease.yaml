@@ -223,7 +223,6 @@ spec:
               repository: ghcr.io/nesquena/hermes-webui
               tag: 0.51.64@sha256:fb3e4e4cf46b2d7f502955e2e48a72368b431ece5183a9dfdc0dd86ad914ccd6
             env:
-              HERMES_WEBUI_DEFAULT_WORKSPACE: /home/hermeswebui/.hermes/workspace
               HERMES_WEBUI_HOST: 0.0.0.0
               HERMES_WEBUI_PORT: "8787"
               HERMES_WEBUI_STATE_DIR: /home/hermeswebui/.hermes/webui
@@ -239,8 +238,18 @@ spec:
             securityContext:
               allowPrivilegeEscalation: false
               capabilities:
+                add:
+                  - CHOWN
+                  - DAC_OVERRIDE
+                  - FOWNER
+                  - FSETID
+                  - SETGID
+                  - SETUID
                 drop:
                   - ALL
+              runAsGroup: 0
+              runAsNonRoot: false
+              runAsUser: 0
     service:
       app:
         controller: hermes
@@ -327,24 +336,6 @@ spec:
         type: emptyDir
         globalMounts:
           - path: /tmp
-      webui-app:
-        type: emptyDir
-        advancedMounts:
-          hermes:
-            webui:
-              - path: /app
-      webui-home:
-        type: emptyDir
-        advancedMounts:
-          hermes:
-            webui:
-              - path: /home/hermeswebui
-      webui-uv-cache:
-        type: emptyDir
-        advancedMounts:
-          hermes:
-            webui:
-              - path: /uv_cache
     rbac:
       roles:
         hermes-read-all:
