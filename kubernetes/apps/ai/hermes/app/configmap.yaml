@@ -40,6 +40,9 @@ data:
       env_passthrough:
         - DISCORD_WEBHOOK
         - HOMELAB_GH_TOKEN
+    plugins:
+      enabled:
+        - agentmemory
     memory:
       provider: agentmemory
       auto_migrate: true
@@ -47,9 +50,13 @@ data:
         threshold: 50
     compression:
       enabled: true
-      threshold: 0.5
-      target_ratio: 0.2
-      protect_last_n: 20
+      threshold: 0.8
+      target_ratio: 0.15
+      protect_last_n: 10
+    auxiliary:
+      compression:
+        model: llamacpp/google/gemma-4-E4B-it
+        provider: custom:llamacpp
     group_sessions_per_user: false
     streaming:
       enabled: false
