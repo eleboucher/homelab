@@ -74,6 +74,8 @@ metadata:
 spec:
   groupRef:
     name: mcp-tools
+  telemetryConfigRef:
+    name: prometheus
   config:
     aggregation:
       conflictResolution: prefix
