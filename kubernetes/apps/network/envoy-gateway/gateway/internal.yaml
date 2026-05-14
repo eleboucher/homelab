@@ -43,6 +43,6 @@ spec:
           from: Selector
           selector:
             matchLabels:
-              kubernetes.io/metadata.name: selfhosted
+              kubernetes.io/metadata.name: forgejo
         kinds:
           - kind: TCPRoute
