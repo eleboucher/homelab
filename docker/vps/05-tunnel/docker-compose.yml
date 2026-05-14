@@ -10,7 +10,7 @@ x-logging: &default-logging
 services:
   towonel-hub:
     # renovate: datasource=docker depName=git.erwanleboucher.dev/eleboucher/towonel-node
-    image: registry.erwanleboucher.dev/eleboucher/towonel-node:0.0.23
+    image: registry.erwanleboucher.dev/eleboucher/towonel-node:0.0.25
     container_name: towonel-hub
     restart: unless-stopped
     user: "10001:10001"

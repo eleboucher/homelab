@@ -29,11 +29,12 @@ spec:
           app:
             image:
               repository: git.erwanleboucher.dev/eleboucher/towonel-agent
-              tag: 0.0.23
+              tag: 0.0.25
             env:
               RUST_LOG: info
               TOWONEL_AGENT_SERVICES: '[{"hostname":"*.erwanleboucher.dev","origin":"envoy-external.network.svc.cluster.local:443"}]'
-              TOWONEL_AGENT_TCP_SERVICES: '[{"name":"forgejo-ssh", "origin":"envoy-external.network.svc.cluster.local:2222","listen_port":2222}]'
+              TOWONEL_AGENT_TCP_SERVICES: '[{"name":"forgejo-ssh", "origin":"envoy-external.network.svc.cluster.local:2222","listen_port":2222},{"name":"coturn-turn-tcp","origin":"coturn.matrix.svc.cluster.local:3478","listen_port":3478},{"name":"coturn-turns-tcp","origin":"coturn.matrix.svc.cluster.local:5349","listen_port":5349}]'
+              TOWONEL_AGENT_UDP_SERVICES: '[{"name":"coturn-turn-udp","origin":"coturn.matrix.svc.cluster.local:3478","listen_port":3478},{"name":"coturn-turns-udp","origin":"coturn.matrix.svc.cluster.local:5349","listen_port":5349}]'
               TOWONEL_INVITE_TOKEN:
                 valueFrom:
                   secretKeyRef:

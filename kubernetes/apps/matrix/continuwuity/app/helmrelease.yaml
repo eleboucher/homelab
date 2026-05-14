@@ -46,6 +46,9 @@ spec:
               CONDUWUIT_ALLOW_LEGACY_MEDIA: false
               CONDUWUIT_QUERY_OVER_TCP_ONLY: true
               CONDUWUIT_IP_LOOKUP_STRATEGY: "1"
+              CONDUWUIT_TURN_URIS: |
+                ["turn:turn.erwanleboucher.dev?transport=udp","turn:turn.erwanleboucher.dev?transport=tcp","turns:turn.erwanleboucher.dev?transport=udp","turns:turn.erwanleboucher.dev?transport=tcp"]
+              CONDUWUIT_TURN_TTL: "86400"
             envFrom:
               - secretRef:
                   name: continuwuity-secret
