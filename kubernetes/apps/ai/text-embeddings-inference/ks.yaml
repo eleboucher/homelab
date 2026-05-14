@@ -1,0 +1,22 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: text-embeddings-inference
+  namespace: flux-system
+spec:
+  interval: 1h
+  path: ./kubernetes/apps/ai/text-embeddings-inference/app
+  postBuild:
+    substitute:
+      APP: text-embeddings-inference
+      APP_NAMESPACE: ai
+  prune: true
+  sourceRef:
+    kind: OCIRepository
+    name: flux-system
+    namespace: flux-system
+  targetNamespace: ai
+  timeout: 5m
+  wait: false

@@ -38,13 +38,18 @@ spec:
                     name: agentmemory-secrets
                     key: AGENTMEMORY_SECRET
               AGENTMEMORY_TOOLS: all
-              EMBEDDING_PROVIDER: local
+              EMBEDDING_PROVIDER: openai
+              GRAPH_EXTRACTION_ENABLED: "true"
               III_REST_PORT: "3111"
               MINIMAX_API_KEY:
                 valueFrom:
                   secretKeyRef:
                     name: agentmemory-secrets
                     key: MINIMAX_API_KEY
+              OPENAI_API_KEY: unused
+              OPENAI_BASE_URL: http://text-embeddings-inference.ai.svc.cluster.local:8080/v1
+              OPENAI_EMBEDDING_DIMENSIONS: "384"
+              OPENAI_EMBEDDING_MODEL: sentence-transformers/all-MiniLM-L6-v2
               TZ: ${TZ}
             probes:
               liveness:

@@ -12,4 +12,5 @@ resources:
   - mcp
   - ollama/ks.yaml
   - open-webui/ks.yaml
+  - text-embeddings-inference/ks.yaml
   - toolhive/ks.yaml
