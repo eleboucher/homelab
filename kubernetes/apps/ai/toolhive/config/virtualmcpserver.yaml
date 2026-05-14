@@ -83,3 +83,13 @@ spec:
     type: anonymous
   outgoingAuth:
     source: discovered
+  podTemplateSpec:
+    spec:
+      containers:
+        - name: vmcp
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              memory: 1Gi
