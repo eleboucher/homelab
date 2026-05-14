@@ -59,6 +59,14 @@ spec:
                 cp /run/config/env /opt/data/.env
                 chmod 600 /opt/data/.env
 
+                # The agentmemory Hermes plugin imports before Hermes loads its
+                # main .env into os.environ, so it looks for ~/.agentmemory/.env
+                # as a fallback. Mirror only the relevant vars there.
+                mkdir -p /opt/data/.agentmemory
+                grep -E '^(AGENTMEMORY_URL|AGENTMEMORY_SECRET)=' /opt/data/.env \
+                  > /opt/data/.agentmemory/.env || true
+                chmod 600 /opt/data/.agentmemory/.env
+
                 skill_dir=/opt/data/skills/homelab/homelab-commit-watcher
                 mkdir -p "$skill_dir" $skill_dir/scripts
                 cp /run/skills/homelab-commit-watcher/SKILL.md "$skill_dir/SKILL.md"
@@ -113,9 +121,10 @@ spec:
                   git clone --depth 1 --branch v0.9.12 https://github.com/rohitg00/agentmemory am-src
                   mv am-src/integrations/hermes /opt/data/plugins/agentmemory
                   rm -rf am-src
-                  # Upstream is_available() probes /agentmemory/health which requires
-                  # auth — it returns 401 and the plugin marks itself unavailable.
-                  # Point the probe at /agentmemory/livez (unauthenticated) instead.
+                fi
+                # Plugin's is_available() probes /agentmemory/health which requires
+                # auth and returns 401. Swap to /agentmemory/livez (unauthenticated).
+                if [ -f /opt/data/plugins/agentmemory/__init__.py ]; then
                   sed -i 's|/agentmemory/health|/agentmemory/livez|' /opt/data/plugins/agentmemory/__init__.py
                 fi
             securityContext:
