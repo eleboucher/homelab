@@ -113,6 +113,10 @@ spec:
                   git clone --depth 1 --branch v0.9.12 https://github.com/rohitg00/agentmemory am-src
                   mv am-src/integrations/hermes /opt/data/plugins/agentmemory
                   rm -rf am-src
+                  # Upstream is_available() probes /agentmemory/health which requires
+                  # auth — it returns 401 and the plugin marks itself unavailable.
+                  # Point the probe at /agentmemory/livez (unauthenticated) instead.
+                  sed -i 's|/agentmemory/health|/agentmemory/livez|' /opt/data/plugins/agentmemory/__init__.py
                 fi
             securityContext:
               allowPrivilegeEscalation: false
