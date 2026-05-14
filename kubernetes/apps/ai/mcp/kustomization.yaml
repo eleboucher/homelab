@@ -10,7 +10,6 @@ resources:
   - grafana-mcp/ks.yaml
   - ha-mcp/ks.yaml
   - kubectl-mcp/ks.yaml
-  - memory-mcp/ks.yaml
   - seerr-mcp/ks.yaml
   - sidero-mcp/ks.yaml
   - victoria-logs-mcp/ks.yaml
