@@ -27,7 +27,7 @@ spec:
             image:
               # renovate: datasource=docker depName=coturn/coturn
               repository: docker.io/coturn/coturn
-              tag: 4.7.0
+              tag: 4.11.0
             args:
               - -c
               - /etc/coturn/turnserver.conf
