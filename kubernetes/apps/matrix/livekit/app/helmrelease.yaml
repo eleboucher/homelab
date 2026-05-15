@@ -73,6 +73,7 @@ spec:
     service:
       app:
         controller: livekit
+        forceRename: livekit
         ports:
           http:
             port: 7880
@@ -80,36 +81,3 @@ spec:
           rtc-tcp:
             port: 7881
             protocol: TCP
-          rtc-50100:
-            port: 50100
-            protocol: UDP
-          rtc-50101:
-            port: 50101
-            protocol: UDP
-          rtc-50102:
-            port: 50102
-            protocol: UDP
-          rtc-50103:
-            port: 50103
-            protocol: UDP
-          rtc-50104:
-            port: 50104
-            protocol: UDP
-          rtc-50105:
-            port: 50105
-            protocol: UDP
-          rtc-50106:
-            port: 50106
-            protocol: UDP
-          rtc-50107:
-            port: 50107
-            protocol: UDP
-          rtc-50108:
-            port: 50108
-            protocol: UDP
-          rtc-50109:
-            port: 50109
-            protocol: UDP
-          rtc-50110:
-            port: 50110
-            protocol: UDP

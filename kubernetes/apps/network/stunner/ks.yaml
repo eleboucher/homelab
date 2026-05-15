@@ -1,0 +1,43 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: stunner-app
+spec:
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: stunner
+  interval: 1h
+  path: ./kubernetes/apps/network/stunner/app
+  prune: true
+  sourceRef:
+    kind: OCIRepository
+    name: flux-system
+    namespace: flux-system
+  targetNamespace: network
+  timeout: 5m
+  wait: false
+---
+# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: stunner-config
+spec:
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: stunner
+  dependsOn:
+    - name: stunner-app
+      namespace: network
+  interval: 1h
+  path: ./kubernetes/apps/network/stunner/config
+  prune: true
+  sourceRef:
+    kind: OCIRepository
+    name: flux-system
+    namespace: flux-system
+  targetNamespace: network
+  timeout: 5m
+  wait: false

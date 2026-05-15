@@ -1,0 +1,29 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/gateway.networking.k8s.io/gateway_v1.json
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: stunner
+  annotations:
+    stunner.l7mp.io/enable-mixed-protocol-lb: "true"
+    stunner.l7mp.io/service-type: ClusterIP
+spec:
+  gatewayClassName: stunner
+  listeners:
+    - name: udp
+      port: 3478
+      protocol: TURN-UDP
+      allowedRoutes:
+        namespaces:
+          from: All
+    - name: tls
+      port: 5349
+      protocol: TURN-TLS
+      allowedRoutes:
+        namespaces:
+          from: All
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - kind: Secret
+            name: stunner-tls
