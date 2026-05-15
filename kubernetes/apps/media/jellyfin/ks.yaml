@@ -10,7 +10,7 @@ spec:
     - ../../../../components/gpu
     - ../../../../components/oidc
     - ../../../../components/volsync
-    - ../../../../components/nfs-scaler
+    - ../../../../components/zeroscaler
   interval: 1h
   path: ./kubernetes/apps/media/jellyfin/app
   dependsOn:

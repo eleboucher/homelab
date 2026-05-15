@@ -9,7 +9,7 @@ spec:
   components:
     - ../../../../components/oidc
     - ../../../../components/volsync
-    - ../../../../components/nfs-scaler
+    - ../../../../components/zeroscaler
   interval: 1h
   path: ./kubernetes/apps/downloads/qui/app
   dependsOn:

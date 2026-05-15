@@ -8,7 +8,7 @@ metadata:
 spec:
   components:
     - ../../../../components/volsync
-    - ../../../../components/nfs-scaler
+    - ../../../../components/zeroscaler
   interval: 1h
   path: ./kubernetes/apps/downloads/sabnzbd/app
   dependsOn:
