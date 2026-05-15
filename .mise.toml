@@ -1,21 +1,7 @@
-experimental_monorepo_root = true
-
-[settings]
-experimental = true
-unix_default_inline_shell_args = "bash -euo pipefail -c"
-
-[monorepo]
-config_roots = [
-    "bootstrap",
-    "kubernetes",
-    "talos",
-    "ansible",
-    "tofu/mikrotik",
-]
 
 [env]
-JUST_UNSTABLE = "1"
 MINIJINJA_CONFIG_FILE = "{{config_root}}/.minijinja.toml"
+JUST_UNSTABLE = "1"
 
 [tools]
 "uv" = "latest"
@@ -31,31 +17,3 @@ prek = "latest"
 "pipx:ansible" = "latest"
 "pipx:ansible-core" = "latest"
 "pipx:yamllint" = "latest"
-
-[tasks.log]
-description = "Log a structured message via gum"
-hide = true
-quiet = true
-usage = '''
-arg "<lvl>"
-arg "<msg>"
-arg "[args]" var=#true
-'''
-run = '''
-eval "set -- ${usage_args:-}"
-gum log -t rfc3339 -s -l "$usage_lvl" "$usage_msg" "$@"
-'''
-
-[tasks.template]
-description = "Render a Jinja2 file via minijinja-cli and inject 1Password secrets"
-hide = true
-quiet = true
-dir = "{{cwd}}"
-usage = '''
-arg "<file>"
-arg "[args]" var=#true
-'''
-run = '''
-eval "set -- ${usage_args:-}"
-minijinja-cli "$usage_file" "$@" | op inject
-'''

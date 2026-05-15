@@ -10,45 +10,43 @@ GitOps-managed Kubernetes homelab running a media server stack (Jellyfin, Sonarr
 
 ## Common Commands
 
-All commands use `mise` (task runner, experimental monorepo mode). Requires `MISE_EXPERIMENTAL=1` (or set in shell). Run `mise tasks --all` to list everything; `mise tasks` from a subdir lists that config_root's tasks.
-
-Task path syntax: `mise run //<config_root>:<task> [args...]`. Inside a subdir, `mise run :<task>` also works.
+All commands use `just` (task runner). Run `just -l` to list available commands.
 
 ### Bootstrap (initial cluster setup)
 ```bash
-mise run //bootstrap:cluster        # Run full bootstrap end-to-end
-mise run //bootstrap:nodes          # Install Talos on nodes
-mise run //bootstrap:k8s            # Bootstrap Kubernetes
-mise run //bootstrap:kubeconfig     # Fetch kubeconfig
-mise run //bootstrap:base           # Wait for nodes, apply bootstrap kustomize + CRDs
-mise run //bootstrap:apps           # Sync Helmfile apps
+just bootstrap cluster        # Run full bootstrap end-to-end
+just bootstrap nodes          # Install Talos on nodes
+just bootstrap k8s            # Bootstrap Kubernetes
+just bootstrap kubeconfig     # Fetch kubeconfig
+just bootstrap base           # Wait for nodes, apply bootstrap kustomize + CRDs
+just bootstrap apps           # Sync Helmfile apps
 ```
 
 ### Kubernetes Operations
 ```bash
-mise run //kubernetes:apply-ks <ns> <ks>  # Apply local Flux Kustomization
-mise run //kubernetes:delete-ks <ns> <ks> # Delete local Flux Kustomization
-mise run //kubernetes:sync-git            # Sync GitRepositories
-mise run //kubernetes:sync-hr             # Sync HelmReleases
-mise run //kubernetes:sync-ks             # Sync Kustomizations
-mise run //kubernetes:sync-es             # Sync ExternalSecrets
-mise run //kubernetes:sync-oci            # Sync OCIRepositories
-mise run //kubernetes:node-shell <node>   # Shell into node
-mise run //kubernetes:browse-pvc <ns> <claim>  # Browse PVC contents
-mise run //kubernetes:prune-pods          # Clean up failed/pending/succeeded pods
-mise run //kubernetes:view-secret <ns> <secret>  # View decoded secret
+just kube apply-ks <ns> <ks>  # Apply local Flux Kustomization
+just kube delete-ks <ns> <ks> # Delete local Flux Kustomization
+just kube sync-git            # Sync GitRepositories
+just kube sync-hr             # Sync HelmReleases
+just kube sync-ks             # Sync Kustomizations
+just kube sync-es             # Sync ExternalSecrets
+just kube sync-oci            # Sync OCIRepositories
+just kube node-shell <node>   # Shell into node
+just kube browse-pvc <ns> <claim>  # Browse PVC contents
+just kube prune-pods          # Clean up failed/pending/succeeded pods
+just kube view-secret <ns> <secret>  # View decoded secret
 ```
 
 ### Talos Management
 ```bash
-mise run //talos:apply-node <node>  # Apply Talos config to node
-mise run //talos:render-config <node>   # Render Talos config (dry-run)
-mise run //talos:reboot-node <node>     # Reboot node
-mise run //talos:reset-node <node>      # Reset node (wipe)
-mise run //talos:shutdown-node <node>   # Shutdown node
-mise run //talos:upgrade-k8s <version>  # Upgrade Kubernetes version
-mise run //talos:upgrade-node <node>    # Upgrade Talos on node
-mise run //talos:download-image <ver>   # Download Talos ISO
+just talos apply-node <node>  # Apply Talos config to node
+just talos render-config <node>   # Render Talos config (dry-run)
+just talos reboot-node <node>     # Reboot node
+just talos reset-node <node>      # Reset node (wipe)
+just talos shutdown-node <node>   # Shutdown node
+just talos upgrade-k8s <version>  # Upgrade Kubernetes version
+just talos upgrade-node <node>    # Upgrade Talos on node
+just talos download-image <ver>   # Download Talos ISO
 ```
 
 ## Architecture
