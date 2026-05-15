@@ -1,0 +1,73 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: lk-jwt-service
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: lk-jwt-service
+  interval: 1h
+  values:
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        seccompProfile:
+          type: RuntimeDefault
+
+    controllers:
+      lk-jwt-service:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        containers:
+          app:
+            image:
+              # renovate: datasource=docker depName=ghcr.io/element-hq/lk-jwt-service
+              repository: ghcr.io/element-hq/lk-jwt-service
+              tag: 0.3.0
+            env:
+              LIVEKIT_JWT_BIND: ":8081"
+              LIVEKIT_URL: wss://livekit.erwanleboucher.dev
+              LIVEKIT_FULL_ACCESS_HOMESERVERS: erwanleboucher.dev
+            envFrom:
+              - secretRef:
+                  name: lk-jwt-service
+            probes:
+              liveness:
+                enabled: true
+                custom: true
+                spec:
+                  tcpSocket:
+                    port: 8081
+                  initialDelaySeconds: 5
+                  periodSeconds: 30
+              readiness:
+                enabled: true
+                custom: true
+                spec:
+                  tcpSocket:
+                    port: 8081
+                  initialDelaySeconds: 3
+                  periodSeconds: 10
+            resources:
+              requests:
+                cpu: 10m
+                memory: 32Mi
+              limits:
+                memory: 128Mi
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - ALL
+
+    service:
+      app:
+        controller: lk-jwt-service
+        ports:
+          http:
+            port: 8081

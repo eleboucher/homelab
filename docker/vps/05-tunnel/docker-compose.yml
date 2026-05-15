@@ -43,6 +43,8 @@ services:
       - "3478:3478/udp"
       - "5349:5349/tcp"
       - "5349:5349/udp"
+      - "7881:7881/tcp"
+      - "50100-50110:50100-50110/udp"
     volumes:
       - /opt/towonel:/data
     healthcheck:

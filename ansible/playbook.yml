@@ -105,6 +105,11 @@
         - name: TURNS-udp
           port: 5349
           protocol: udp
+        - name: LiveKit-rtc-tcp
+          port: 7881
+        - name: LiveKit-rtc-udp
+          port: 50100:50110
+          protocol: udp
 
     - name: firewall | Enable UFW
       community.general.ufw:

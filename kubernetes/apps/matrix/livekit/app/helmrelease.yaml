@@ -1,0 +1,115 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: livekit
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: livekit
+  interval: 1h
+  values:
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        seccompProfile:
+          type: RuntimeDefault
+
+    controllers:
+      livekit:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        containers:
+          app:
+            image:
+              # renovate: datasource=docker depName=livekit/livekit-server
+              repository: docker.io/livekit/livekit-server
+              tag: v1.9.0
+            args:
+              - --config
+              - /etc/livekit.yaml
+            probes:
+              liveness:
+                enabled: true
+                custom: true
+                spec:
+                  tcpSocket:
+                    port: 7880
+                  initialDelaySeconds: 10
+                  periodSeconds: 30
+              readiness:
+                enabled: true
+                custom: true
+                spec:
+                  tcpSocket:
+                    port: 7880
+                  initialDelaySeconds: 5
+                  periodSeconds: 10
+            resources:
+              requests:
+                cpu: 100m
+                memory: 128Mi
+              limits:
+                memory: 512Mi
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - ALL
+
+    persistence:
+      config:
+        type: secret
+        name: livekit
+        globalMounts:
+          - path: /etc/livekit.yaml
+            subPath: livekit.yaml
+            readOnly: true
+
+    service:
+      app:
+        controller: livekit
+        ports:
+          http:
+            port: 7880
+            primary: true
+          rtc-tcp:
+            port: 7881
+            protocol: TCP
+          rtc-50100:
+            port: 50100
+            protocol: UDP
+          rtc-50101:
+            port: 50101
+            protocol: UDP
+          rtc-50102:
+            port: 50102
+            protocol: UDP
+          rtc-50103:
+            port: 50103
+            protocol: UDP
+          rtc-50104:
+            port: 50104
+            protocol: UDP
+          rtc-50105:
+            port: 50105
+            protocol: UDP
+          rtc-50106:
+            port: 50106
+            protocol: UDP
+          rtc-50107:
+            port: 50107
+            protocol: UDP
+          rtc-50108:
+            port: 50108
+            protocol: UDP
+          rtc-50109:
+            port: 50109
+            protocol: UDP
+          rtc-50110:
+            port: 50110
+            protocol: UDP
