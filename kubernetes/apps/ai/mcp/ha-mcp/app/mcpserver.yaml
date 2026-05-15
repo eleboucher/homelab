@@ -11,13 +11,19 @@ spec:
     name: mcp-tools
   env:
     - name: HOMEASSISTANT_URL
-      value: https://hass.jory.dev
+      value: https://home.erwanleboucher.dev
   secrets:
     - name: toolhive-home-assistant
       key: HOMEASSISTANT_TOKEN
   podTemplateSpec:
     spec:
+      volumes:
+        - name: tmp
+          emptyDir: {}
       containers:
         - name: mcp
           command:
             - ha-mcp-web
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
