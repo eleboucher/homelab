@@ -27,7 +27,7 @@ spec:
             image:
               # renovate: datasource=docker depName=ghcr.io/element-hq/lk-jwt-service
               repository: ghcr.io/element-hq/lk-jwt-service
-              tag: 0.3.0
+              tag: 0.4.4
             env:
               LIVEKIT_JWT_BIND: ":8081"
               LIVEKIT_URL: wss://livekit.erwanleboucher.dev
