@@ -16,7 +16,7 @@ services:
     ports:
       - 127.0.0.1:2375:2375
     volumes:
-      - forgejo-runner-dind-data:/var/lib/docker
+      - /opt/forgejo-runner/dind-data:/var/lib/docker
 
   forgejo-runner:
     # renovate: datasource=docker depName=data.forgejo.org/forgejo/runner
@@ -37,7 +37,7 @@ services:
     entrypoint:
       - sh
       - -c
-      - |
+      - |-
         set -e
         umask 077
         cat > /data/runner-config.yml <<EOF
@@ -69,6 +69,3 @@ services:
               token: "$${FORGEJO_RUNNER_TOKEN}"
         EOF
         exec forgejo-runner daemon --config /data/runner-config.yml
-
-volumes:
-  forgejo-runner-dind-data:

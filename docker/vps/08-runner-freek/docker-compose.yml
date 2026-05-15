@@ -14,7 +14,7 @@ services:
       - tcp://0.0.0.0:2375
       - --tls=false
     volumes:
-      - forgejo-runner-freek-dind-data:/var/lib/docker
+      - /opt/forgejo-runner-freek/dind-data:/var/lib/docker
 
   forgejo-runner-freek:
     # renovate: datasource=docker depName=data.forgejo.org/forgejo/runner
@@ -34,7 +34,7 @@ services:
     entrypoint:
       - sh
       - -c
-      - |
+      - |-
         set -e
         umask 077
         if [ ! -f /data/.runner ]; then
@@ -67,6 +67,3 @@ services:
           timeout: 3h
         EOF
         exec forgejo-runner daemon --config /data/runner-config.yml
-
-volumes:
-  forgejo-runner-freek-dind-data:
