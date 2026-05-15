@@ -273,6 +273,8 @@ SUMMARY_SYSTEM_PROMPT = (
     "markers, no trailing explanation."
 )
 
+SUMMARY_TIMEOUT = 90.0
+
 
 def summarize_commit(
     client: httpx.Client,
@@ -282,11 +284,7 @@ def summarize_commit(
     diff: str,
 ) -> str:
     """One-sentence commit summary via OpenAI-compatible chat/completions.
-
-    `client` must be a headerless httpx.Client (no GitHub Bearer token) — the
-    shared GitHub client would leak the token to a non-GitHub endpoint.
-    Returns "" on any failure; the caller treats missing summaries as "no signal".
-    """
+    `client` must NOT carry a GitHub Bearer token. Returns "" on failure."""
     if not summary_url or not summary_model or not diff:
         return ""
     payload = {
@@ -303,11 +301,13 @@ def summarize_commit(
         r = client.post(
             f"{summary_url.rstrip('/')}/chat/completions",
             json=payload,
-            timeout=15.0,
+            timeout=SUMMARY_TIMEOUT,
         )
-    except Exception:
+    except Exception as e:
+        print(f"  summarizer: request failed: {e}", file=sys.stderr)
         return ""
     if r.status_code != 200:
+        print(f"  summarizer: HTTP {r.status_code}", file=sys.stderr)
         return ""
     try:
         content = r.json()["choices"][0]["message"]["content"]
@@ -318,7 +318,6 @@ def summarize_commit(
     raw_lines = content.splitlines()
     extra_nonempty = sum(1 for s in raw_lines[1:] if s.strip())
     if extra_nonempty:
-        # Log multi-line drift — Gemma should emit one line per the prompt.
         print(
             f"  summarizer: dropped {extra_nonempty} extra non-empty line(s)",
             file=sys.stderr,
@@ -341,11 +340,9 @@ def enrich_recent_with_summaries(
     feed: list[dict],
 ) -> None:
     """Attach a `summary` field to substantive [24h] commits via REST→LLM.
-
-    `client` is the GitHub-authenticated client used for diff fetching; the LLM
-    is called through a separate headerless client so the GitHub token can't
-    leak. No-op if either env var is unset.
-    """
+    Diffs are fetched on the GitHub client; the LLM is called on a separate
+    Bearer-only client so the GH token never reaches llama-cpp. No-op if
+    SUMMARY_LLM_URL/SUMMARY_LLM_MODEL unset."""
     if not summary_url or not summary_model:
         print(
             "Summary LLM not configured (SUMMARY_LLM_URL/SUMMARY_LLM_MODEL) — "
@@ -366,9 +363,7 @@ def enrich_recent_with_summaries(
         f"Summarizing {total} substantive [24h] commits via {summary_model}...",
         file=sys.stderr,
     )
-    summarized = 0
-    # Dedicated LLM client — no GitHub token reaches llama-cpp. Bearer key is
-    # the LLM's own (SUMMARY_LLM_API_KEY, with LLAMA_API_KEY as fallback).
+
     llm_headers = {
         "Accept": "application/json",
         "Content-Type": "application/json",
@@ -381,15 +376,16 @@ def enrich_recent_with_summaries(
     ).strip()
     if llm_api_key:
         llm_headers["Authorization"] = f"Bearer {llm_api_key}"
-    with httpx.Client(headers=llm_headers, timeout=15.0) as llm_client:
+
+    summarized = 0
+    with httpx.Client(headers=llm_headers, timeout=SUMMARY_TIMEOUT) as llm_client:
         for i, c in enumerate(candidates, 1):
             if i % 50 == 0:
                 print(f"  {i}/{total}", file=sys.stderr)
-            # Expect https://github.com/<owner>/<repo>/commit/<sha>.
             parts = c["u"].rstrip("/").split("/")
             if len(parts) < 5 or parts[-2] != "commit":
                 print(
-                    f"  summarizer: unexpected commit URL shape, skipping: {c['u']}",
+                    f"  summarizer: bad commit URL, skipping: {c['u']}",
                     file=sys.stderr,
                 )
                 continue
