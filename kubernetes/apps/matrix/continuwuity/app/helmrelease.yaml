@@ -26,33 +26,8 @@ spec:
               repository: forgejo.ellis.link/continuwuation/continuwuity
               tag: v0.5.9-maxperf
             env:
-              TZ: "Europe/Paris"
-              CONDUWUIT_SERVER_NAME: erwanleboucher.dev
-              CONDUWUIT_ADDRESS: "::"
-              CONDUWUIT_PORT: &port 8080
-              CONDUWUIT_DATABASE_PATH: /data
-              CONDUWUIT_NEW_USER_DISPLAYNAME_SUFFIX: ""
-              CONDUWUIT_WELL_KNOWN__CLIENT: "https://matrix.erwanleboucher.dev"
-              CONDUWUIT_WELL_KNOWN__SERVER: "matrix.erwanleboucher.dev:443"
-              CONDUWUIT_ALLOW_ENCRYPTION: true
-              CONDUWUIT_ALLOW_FEDERATION: true
-              CONDUWUIT_ALLOW_REGISTRATION: true
-              CONDUWUIT_SUSPEND_ON_REGISTER: true
-              CONDUWUIT_FORGET_FORCED_UPON_LEAVE: true
-              CONDUWUIT_REQUIRE_AUTH_FOR_PROFILE_REQUESTS: true
-              CONDUWUIT_ALLOW_PUBLIC_ROOM_DIRECTORY_WITHOUT_AUTH: false
-              CONDUWUIT_ALLOW_PUBLIC_ROOM_DIRECTORY_OVER_FEDERATION: false
-              CONDUWUIT_LOCKDOWN_PUBLIC_ROOM_DIRECTORY: true
-              CONDUWUIT_ALLOW_LEGACY_MEDIA: false
-              CONDUWUIT_QUERY_OVER_TCP_ONLY: true
-              CONDUWUIT_IP_LOOKUP_STRATEGY: "1"
-              CONDUWUIT_TURN_URIS: |
-                ["turn:turn.erwanleboucher.dev?transport=udp","turn:turn.erwanleboucher.dev?transport=tcp","turns:turn.erwanleboucher.dev?transport=udp","turns:turn.erwanleboucher.dev?transport=tcp"]
-              CONDUWUIT_TURN_TTL: "86400"
-              CONDUWUIT_MATRIX_RTC__FOCI: '[{"type":"livekit","livekit_service_url":"https://livekit.erwanleboucher.dev"}]'
-            envFrom:
-              - secretRef:
-                  name: continuwuity-secret
+              TZ: Europe/Paris
+              CONDUWUIT_CONFIG: /etc/conduwuit/conduwuit.toml
             probes:
               liveness:
                 enabled: true
@@ -78,6 +53,13 @@ spec:
         existingClaim: "{{ .Release.Name }}"
         globalMounts:
           - path: /data
+      conduwuit-toml:
+        type: secret
+        name: continuwuity
+        globalMounts:
+          - path: /etc/conduwuit/conduwuit.toml
+            subPath: conduwuit.toml
+            readOnly: true
       tmp:
         type: emptyDir
 
@@ -91,11 +73,11 @@ spec:
         rules:
           - backendRefs:
               - identifier: app
-                port: *port
+                port: 8080
 
     service:
       app:
         controller: continuwuity
         ports:
           http:
-            port: *port
+            port: 8080

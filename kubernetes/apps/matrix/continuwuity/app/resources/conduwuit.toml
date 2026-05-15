@@ -1,0 +1,39 @@
+[global]
+server_name = "erwanleboucher.dev"
+address = "::"
+port = 8080
+database_path = "/data"
+new_user_displayname_suffix = ""
+
+allow_encryption = true
+allow_federation = true
+allow_registration = true
+suspend_on_register = true
+forget_forced_upon_leave = true
+require_auth_for_profile_requests = true
+allow_public_room_directory_over_federation = false
+lockdown_public_room_directory = true
+allow_legacy_media = false
+query_over_tcp_only = true
+ip_lookup_strategy = 1
+
+registration_token = "{{ .registration_token }}"
+emergency_password = "{{ .emergency_password }}"
+
+turn_uris = [
+    "turn:turn.erwanleboucher.dev?transport=udp",
+    "turn:turn.erwanleboucher.dev?transport=tcp",
+    "turns:turn.erwanleboucher.dev?transport=udp",
+    "turns:turn.erwanleboucher.dev?transport=tcp",
+]
+turn_secret = "{{ .turn_secret }}"
+turn_ttl = 86400
+
+[global.well_known]
+client = "https://matrix.erwanleboucher.dev"
+server = "matrix.erwanleboucher.dev:443"
+
+[global.matrix_rtc]
+foci = [
+    { type = "livekit", livekit_service_url = "https://livekit.erwanleboucher.dev" },
+]
