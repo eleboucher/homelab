@@ -49,8 +49,8 @@ spec:
               CONDUWUIT_TURN_URIS: |
                 ["turn:turn.erwanleboucher.dev?transport=udp","turn:turn.erwanleboucher.dev?transport=tcp","turns:turn.erwanleboucher.dev?transport=udp","turns:turn.erwanleboucher.dev?transport=tcp"]
               CONDUWUIT_TURN_TTL: "86400"
-              CONDUWUIT_MATRIX_RTC__FOCI: |
-                [{"type":"livekit","livekit_service_url":"https://livekit.erwanleboucher.dev"}]
+              CONDUWUIT_MATRIX_RTC__FOCI__0__TYPE: livekit
+              CONDUWUIT_MATRIX_RTC__FOCI__0__LIVEKIT_SERVICE_URL: https://livekit.erwanleboucher.dev
             envFrom:
               - secretRef:
                   name: continuwuity-secret
