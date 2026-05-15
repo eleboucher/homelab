@@ -39,6 +39,10 @@ services:
     ports:
       - "2222:2222"
       - "22222:22222"
+      - "3478:3478/tcp"
+      - "3478:3478/udp"
+      - "5349:5349/tcp"
+      - "5349:5349/udp"
     volumes:
       - /opt/towonel:/data
     healthcheck:
