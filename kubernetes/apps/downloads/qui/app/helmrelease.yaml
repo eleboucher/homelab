@@ -36,6 +36,12 @@ spec:
                 value: "/"
               - name: QUI__PORT
                 value: "8080"
+              - name: QUI__METRICS_ENABLED
+                value: "true"
+              - name: QUI__METRICS_HOST
+                value: "0.0.0.0"
+              - name: QUI__METRICS_PORT
+                value: "9000"
               - name: QUI__OIDC_CLIENT_ID
                 value: "qui"
               - name: QUI__OIDC_CLIENT_SECRET
@@ -81,6 +87,13 @@ spec:
           http:
             port: 8080
             protocol: TCP
+          metrics:
+            port: 9000
+            protocol: TCP
+    serviceMonitor:
+      app:
+        endpoints:
+          - port: metrics
     route:
       app:
         parentRefs:
