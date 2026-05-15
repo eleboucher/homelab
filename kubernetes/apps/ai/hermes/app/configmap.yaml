@@ -40,6 +40,9 @@ data:
       env_passthrough:
         - DISCORD_WEBHOOK
         - HOMELAB_GH_TOKEN
+        - LLAMA_API_KEY
+        - SUMMARY_LLM_MODEL
+        - SUMMARY_LLM_URL
     plugins:
       enabled:
         - agentmemory

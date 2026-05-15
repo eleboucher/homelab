@@ -167,6 +167,8 @@ spec:
               PATH: /opt/hermes/.venv/bin:/opt/data/.local/bin:/opt/data/.local/go/bin:/opt/data/.local/homebrew/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
               PIP_BREAK_SYSTEM_PACKAGES: "1"
               SEARXNG_URL: http://searxng.selfhosted.svc.cluster.local:8080
+              SUMMARY_LLM_MODEL: google/gemma-4-E4B-it
+              SUMMARY_LLM_URL: http://llama-cpp.ai:8080/v1
               TERM: xterm-256color
               TZ: ${TZ}
             resources:

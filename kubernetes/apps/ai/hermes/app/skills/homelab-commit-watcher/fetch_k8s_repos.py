@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
-"""Daily feed of commits across the k8s-at-home GitHub topic (rolling 7d, no bots).
-
-Commits within the last 24h are tagged `[24h]` in the rendered bullet so the
-consuming SKILL can slice "new today" from the wider trend window."""
+"""Daily feed of commits across the k8s-at-home GitHub topic. Rolling 7d window,
+bots filtered, commits in the last 24h tagged `[24h]` for the consuming SKILL."""
 
 import os
 import re
@@ -17,9 +15,7 @@ GITHUB_API = "https://api.github.com/graphql"
 TOPIC = "k8s-at-home"
 OUTPUT_DIR = Path("/tmp/commit-watcher")
 BATCH_SIZE = 15
-# 7d window — trends emerge across the week at hobby cadence. The SKILL slices
-# the last 24h back out via the [24h] marker on each rendered bullet.
-LOOKBACK_HOURS = 168
+LOOKBACK_HOURS = 168  # 7d
 RECENT_HOURS = 24
 
 BOT_LOGINS = {
@@ -87,7 +83,11 @@ def gql(client: httpx.Client, query: str, variables: dict) -> dict:
                 time.sleep(min(wait, 120))
                 continue
             if errors:
-                raise RuntimeError(f"GraphQL errors: {errors}")
+                # Surface only type+message — the raw `errors` payload can
+                # echo request headers/extensions and we never want a token
+                # to land in a stack trace.
+                safe = [(e.get("type"), e.get("message")) for e in errors]
+                raise RuntimeError(f"GraphQL errors: {safe}")
             return data["data"]
         if r.status_code in (403, 429, 502, 503, 504):
             wait = _backoff_seconds(r, attempt)
@@ -145,9 +145,9 @@ def build_commits_query(batch: list[dict]) -> str:
             f"      name\n"
             f"      target {{\n"
             f"        ... on Commit {{\n"
-            f"          history(since: $since, first: 50) {{\n"
+            f"          history(since: $since, first: 100) {{\n"
             f"            nodes {{\n"
-            f"              messageHeadline messageBody committedDate url\n"
+            f"              oid messageHeadline messageBody committedDate url\n"
             f"              additions deletions changedFilesIfAvailable\n"
             f"              author {{ name email user {{ login }} }}\n"
             f"            }}\n"
@@ -197,20 +197,14 @@ BOT_BRANCH_RE = re.compile(
     re.IGNORECASE,
 )
 
-# Renovate's signature commit shape — leaks through when a human rebases/squashes
-# a renovate PR under their own name. Three alternatives:
-#   - "update image <name>" / "update dependency <name>" — broad match because
-#     these phrasings are essentially renovate-only.
-#   - "update chart <name> ( … " / "update chart <name> to <digit>…" — the Helm
-#     preset's title shape. Tightened on continuation because the bare phrase
-#     "update chart" can legitimately mean "update chart values" / "update chart
-#     defaults" in human commits, which we do NOT want to drop.
-#   - Unicode right-arrows commonly emitted in renovate version-bump titles:
-#     → U+2192 (default), ➔ U+2794 (heavy wide-headed), ➜ U+279C (heavy round-tipped).
+# Renovate's signature commit shape — leaks through when humans squash-merge
+# renovate PRs. `update chart` is gated on a version-bump continuation since
+# the bare phrase can mean "update chart values" in human commits. The arrow
+# chars only count when adjacent to a version-like token, since humans use →
+# in legitimate headlines (e.g. "refactor: old → new").
 BOT_CONTENT_RE = re.compile(
     r"\bupdate (?:image|dependency)\b"
-    r"|\bupdate chart \S+ (?:\(|to\s+v?\d|→|➔|➜)"
-    r"|[→➔➜]",
+    r"|\bupdate chart \S+ (?:\(|to\s+v?\d|→|➔|➜)",
     re.IGNORECASE,
 )
 
@@ -226,7 +220,8 @@ def is_skippable_commit(message: str) -> bool:
     return False
 
 
-BODY_MAX_CHARS = 600
+BODY_MAX_CHARS = 1200
+DIFF_MAX_LINES = 150
 
 
 def _trim_body(body: str) -> str:
@@ -241,6 +236,176 @@ def _trim_body(body: str) -> str:
     return body[:cut].rstrip() + "\n…"
 
 
+def fetch_commit_diff(client: httpx.Client, owner: str, repo: str, sha: str) -> str:
+    """Fetch the unified diff for one commit, capped at DIFF_MAX_LINES. Returns "" on failure."""
+    url = f"https://api.github.com/repos/{owner}/{repo}/commits/{sha}"
+    try:
+        r = client.get(
+            url,
+            headers={"Accept": "application/vnd.github.diff"},
+            timeout=15.0,
+        )
+    except Exception:
+        return ""
+    if r.status_code != 200:
+        return ""
+    lines = r.text.splitlines()
+    if len(lines) <= DIFF_MAX_LINES:
+        return r.text
+    return "\n".join(lines[:DIFF_MAX_LINES]) + "\n…"
+
+
+SUMMARY_SYSTEM_PROMPT = (
+    "You are summarizing a single git commit for a homelab digest. "
+    "Read the commit headline and diff carefully and output ONE short "
+    "sentence (≤120 chars) describing what the commit actually does to "
+    "the repository. Rules:\n"
+    "- Past tense, action-led, plain prose. Peer is the implicit subject.\n"
+    "- Focus on the NET EFFECT after the diff is applied. If files are "
+    "removed, say 'removed X'. If added, say 'added X'. If both, say "
+    "'replaced X with Y' or 'switched from X to Y' when the items are "
+    "related (e.g. swapping one ingress controller for another).\n"
+    "- Name specific tools, components, namespaces, version numbers when "
+    "visible in the diff or headline.\n"
+    "- Never include URLs, file paths verbatim, code, markdown, or quotation "
+    "marks copied from the diff.\n"
+    "- Output ONLY the summary sentence. No preamble, no quotes, no list "
+    "markers, no trailing explanation."
+)
+
+
+def summarize_commit(
+    client: httpx.Client,
+    summary_url: str,
+    summary_model: str,
+    headline: str,
+    diff: str,
+) -> str:
+    """One-sentence commit summary via OpenAI-compatible chat/completions.
+
+    `client` must be a headerless httpx.Client (no GitHub Bearer token) — the
+    shared GitHub client would leak the token to a non-GitHub endpoint.
+    Returns "" on any failure; the caller treats missing summaries as "no signal".
+    """
+    if not summary_url or not summary_model or not diff:
+        return ""
+    payload = {
+        "model": summary_model,
+        "messages": [
+            {"role": "system", "content": SUMMARY_SYSTEM_PROMPT},
+            {"role": "user", "content": f"Headline: {headline}\n\nDiff:\n{diff}"},
+        ],
+        "max_tokens": 80,
+        "temperature": 0.2,
+        "stream": False,
+    }
+    try:
+        r = client.post(
+            f"{summary_url.rstrip('/')}/chat/completions",
+            json=payload,
+            timeout=15.0,
+        )
+    except Exception:
+        return ""
+    if r.status_code != 200:
+        return ""
+    try:
+        content = r.json()["choices"][0]["message"]["content"]
+    except (KeyError, IndexError, ValueError, TypeError):
+        return ""
+    if not content:
+        return ""
+    raw_lines = content.splitlines()
+    extra_nonempty = sum(1 for s in raw_lines[1:] if s.strip())
+    if extra_nonempty:
+        # Log multi-line drift — Gemma should emit one line per the prompt.
+        print(
+            f"  summarizer: dropped {extra_nonempty} extra non-empty line(s)",
+            file=sys.stderr,
+        )
+    line = next((s for s in raw_lines if s.strip()), "").strip()
+    line = line.strip("`*_\"' ").replace("`", "").replace("“", "").replace("”", "")
+    if len(line) > 200:
+        print(f"  summarizer: truncating {len(line)} → 200 chars", file=sys.stderr)
+        line = line[:197].rstrip() + "..."
+    return line
+
+
+SUMMARY_MIN_CHANGES = 5  # skip trivial commits to bound cron wall-time
+
+
+def enrich_recent_with_summaries(
+    client: httpx.Client,
+    summary_url: str,
+    summary_model: str,
+    feed: list[dict],
+) -> None:
+    """Attach a `summary` field to substantive [24h] commits via REST→LLM.
+
+    `client` is the GitHub-authenticated client used for diff fetching; the LLM
+    is called through a separate headerless client so the GitHub token can't
+    leak. No-op if either env var is unset.
+    """
+    if not summary_url or not summary_model:
+        print(
+            "Summary LLM not configured (SUMMARY_LLM_URL/SUMMARY_LLM_MODEL) — "
+            "skipping per-commit summarization",
+            file=sys.stderr,
+        )
+        return
+    candidates = [
+        c
+        for entry in feed
+        for c in entry["c"]
+        if c["recent"] and (c["add"] + c["del"]) >= SUMMARY_MIN_CHANGES
+    ]
+    if not candidates:
+        return
+    total = len(candidates)
+    print(
+        f"Summarizing {total} substantive [24h] commits via {summary_model}...",
+        file=sys.stderr,
+    )
+    summarized = 0
+    # Dedicated LLM client — no GitHub token reaches llama-cpp. Bearer key is
+    # the LLM's own (SUMMARY_LLM_API_KEY, with LLAMA_API_KEY as fallback).
+    llm_headers = {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "User-Agent": "k8s-at-home-feed/1.0 (summarizer)",
+    }
+    llm_api_key = (
+        os.environ.get("SUMMARY_LLM_API_KEY")
+        or os.environ.get("LLAMA_API_KEY")
+        or ""
+    ).strip()
+    if llm_api_key:
+        llm_headers["Authorization"] = f"Bearer {llm_api_key}"
+    with httpx.Client(headers=llm_headers, timeout=15.0) as llm_client:
+        for i, c in enumerate(candidates, 1):
+            if i % 50 == 0:
+                print(f"  {i}/{total}", file=sys.stderr)
+            # Expect https://github.com/<owner>/<repo>/commit/<sha>.
+            parts = c["u"].rstrip("/").split("/")
+            if len(parts) < 5 or parts[-2] != "commit":
+                print(
+                    f"  summarizer: unexpected commit URL shape, skipping: {c['u']}",
+                    file=sys.stderr,
+                )
+                continue
+            owner, repo_name, sha = parts[-4], parts[-3], parts[-1]
+            diff = fetch_commit_diff(client, owner, repo_name, sha)
+            if not diff:
+                continue
+            summary = summarize_commit(
+                llm_client, summary_url, summary_model, c["m"], diff
+            )
+            if summary:
+                c["summary"] = summary
+                summarized += 1
+    print(f"  done — {summarized}/{total} commits summarized", file=sys.stderr)
+
+
 def render_feed(feed: list[dict], since: str, generated_at: str) -> str:
     lines = [f"since: {since}", f"generated: {generated_at}", ""]
     for entry in feed:
@@ -250,6 +415,8 @@ def render_feed(feed: list[dict], since: str, generated_at: str) -> str:
             marker = "[24h] " if c["recent"] else ""
             date = c["d"][:10]
             lines.append(f"- {marker}{c['a']}: {c['m']} [{stats}] · {date} · {c['u']}")
+            if c.get("summary"):
+                lines.append(f"  summary: {c['summary']}")
             body = _trim_body(c.get("b", ""))
             if body:
                 for line in body.splitlines():
@@ -307,7 +474,7 @@ def main() -> None:
                             "d": c["committedDate"],
                             "recent": committed >= recent_cutoff,
                             "u": c["url"],
-                            "a": user.get("login") or c["author"].get("name"),
+                            "a": user.get("login") or c["author"].get("name") or "unknown",
                             "add": c.get("additions") or 0,
                             "del": c.get("deletions") or 0,
                             "files": c.get("changedFilesIfAvailable") or 0,
@@ -317,12 +484,19 @@ def main() -> None:
                     feed.append({"r": node["nameWithOwner"], "c": commits})
                     total_commits += len(commits)
 
-    # Sort repos by most-recent commit, then commits within each repo newest first.
-    feed.sort(key=lambda e: max(c["d"] for c in e["c"]), reverse=True)
-    for entry in feed:
-        entry["c"].sort(key=lambda c: c["d"], reverse=True)
+        feed.sort(key=lambda e: max(c["d"] for c in e["c"]), reverse=True)
+        for entry in feed:
+            entry["c"].sort(key=lambda c: c["d"], reverse=True)
+
+        summary_url = os.environ.get("SUMMARY_LLM_URL", "").strip()
+        summary_model = os.environ.get("SUMMARY_LLM_MODEL", "").strip()
+        enrich_recent_with_summaries(client, summary_url, summary_model, feed)
 
     payload = render_feed(feed, since, now.isoformat())
+    # Two output destinations by design (documented in SKILL.md):
+    #   - /tmp/commit-watcher/feed-YYYY-MM-DD.md  → primary path the SKILL reads
+    #   - ~/commit-watcher-YYYY-MM-DD.md           → mirror for direct inspection
+    #     when running the script locally (Hermes cron pod's /tmp is ephemeral).
     out_file = OUTPUT_DIR / f"feed-{now.strftime('%Y-%m-%d')}.md"
     out_file.write_text(payload)
 
