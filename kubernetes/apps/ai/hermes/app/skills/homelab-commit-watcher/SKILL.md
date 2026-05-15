@@ -1,7 +1,7 @@
 ---
 name: homelab-commit-watcher
 description: Watch homelab/gitops peer repositories on the k8s-at-home GitHub topic for interesting commits, rank them, and post a summary to a Discord channel via webhook.
-version: 4.0.1
+version: 4.1.0
 author: erwanleboucher
 license: MIT
 required_environment_variables:
@@ -41,7 +41,7 @@ Also runs daily on the Hermes cron job `homelab-peers-commit-watcher`.
 | -------------- | ------------------------------------------------------------------------------------------------------ |
 | Script         | `${HERMES_SKILL_DIR}/scripts/fetch_k8s_repos.py` (Hermes substitutes the path at load time; source-of-truth is this directory in-repo, copied by the init container in `helmrelease.yaml`) |
 | Feed output    | `/tmp/commit-watcher/feed-YYYY-MM-DD.md` (mirror at `~/commit-watcher-YYYY-MM-DD.md`)                  |
-| Final digest   | **Trends section (3-5 themes, optional) + New today (≤ 4 commits, ≤ 1 per repo)**                      |
+| Final digest   | **Trends section (3-5 themes, optional) + New today (≤ 6 commits, ≤ 1 per repo)**                      |
 | Lookback       | 7d for trends (`LOOKBACK_HOURS = 168`); 24h slice tagged `[24h]` in feed (`RECENT_HOURS = 24`)         |
 | Discord limits | 2000 chars per `content`; webhook accepts `flags` field                                                |
 
@@ -101,13 +101,15 @@ A trend is a cross-repo theme worth flagging to a homelab Discord. The bar is de
 **Required to qualify as a trend:**
 
 - **≥3 distinct authors** touching the same theme within the 7d window. Two peers doing the same thing is coincidence, not a trend.
+- **No single peer accounts for more than 50% of the theme's commits.** A trend dominated by one author's commits — with one or two adjacent commits from others — is *their personal project, not a community trend*. Count the theme's total commits across the feed; if the lead peer holds >50%, drop it. Example failure: one peer pushing 4 phased commits while two other peers each contribute 1 = 4/6 = 67% lead → not a trend.
 - **≥1 `[24h]`-marked commit** participating in the theme. This guarantees the trend is *alive today*, not history. A theme with no movement in the last 24h dropped out of the news cycle — let it come back when someone touches it again. This is the rule that keeps daily digests fresh and prevents the same trend from repeating verbatim across quiet days.
-- **Concrete shared evidence** the reader can verify by clicking the exemplar links. Acceptable forms:
-  - Matching conventional-commit scope across repos (e.g. ≥3 commits scoped `(cilium)`, `(longhorn)`, `(prometheus)`).
+- **One specific named thing, not shared territory.** A trend answers the question "what single named action did all these peers take?" — and you must be able to fill in the blank with a single tool, version, migration target, or refactor pattern. Acceptable evidence forms:
+  - Matching conventional-commit scope across repos (e.g. ≥3 commits scoped `(cilium)`, `(longhorn)`, `(prometheus)`) — *and the commits within that scope must describe the same kind of change*, not unrelated work in the same component.
   - Same version number in multiple headlines (e.g. several peers bumping to `1.18`).
-  - Near-identical or paraphrased headlines describing the same migration / adoption / removal.
-  - Same tool/component name appearing in multiple distinct repos' headlines.
-- Vague co-occurrence (e.g. "three commits mention 'fix'") does **not** clear the bar. Demand a specific, namable thing.
+  - Near-identical or paraphrased headlines describing the same migration / adoption / removal (e.g. "migrate to seaweedfs", "switch from minio to seaweedfs").
+  - Same tool/component name appearing in multiple distinct repos' headlines *doing the same thing to that tool*.
+- The shared evidence must apply to **every cited exemplar**, not just the trend's general territory. Example failure: bundling "MinIO→SeaweedFS migration" + "PVC sizing" + "orphaned storage class cleanup" + "CNPG behind Traefik" as one "storage reconfiguration" trend — those are four different changes that happen to touch storage. Each is its own thing; together they are not a trend.
+- Vague co-occurrence (e.g. "three commits mention 'fix'", "all these peers touched the storage namespace") does **not** clear the bar. Demand a specific, namable action.
 
 **Watch out for release-driven bump waves.** When a tool ships a new release, many peers will appear to do the same version bump in the same week — that's the tooling driving the pattern, not a community trend. If the evidence is mostly `update chart X` or `(1.2.3 → 1.2.4)`-style headlines, drop it. The script filters most of these (`BOT_CONTENT_RE` in `fetch_k8s_repos.py`) but occasionally one leaks through a human squash-merge. Prefer trends where peers show **architectural follow-on** — BGP migrations, config refactors, simplifications, new adoption — over the version number itself. That's the community-level signal worth flagging.
 
@@ -125,7 +127,7 @@ A trend is a cross-repo theme worth flagging to a homelab Discord. The bar is de
 
 #### Phase B — Pick "new today" exemplars (24h slice)
 
-Draw **only** from bullets marked `[24h]`. Pick **at most 4 commits, max 1 per repo**. Optimize for signal — a 2-commit digest beats a padded 4-commit one.
+Draw **only** from bullets marked `[24h]`. Pick **at most 6 commits, max 1 per repo**. Optimize for signal — a 3-commit digest beats a padded 6-commit one. Don't stretch to hit 6 if only 3 commits genuinely clear the bar; conversely, if 6 distinct repos all have substantive `[24h]` commits, do use the full budget.
 
 **Use all available signal**, not just the headline:
 
@@ -193,13 +195,14 @@ Discord-compatible markdown. The post has up to two sections: **This week** (tre
 
 **"New today" section rules:**
 
+- **Cap (non-negotiable): ≤ 6 commits total, ≤ 1 per repo.** If a repo has already contributed one commit to this section, no second commit from that repo is allowed — pick the better one and drop the other. If two commits from the same repo are both compelling, that's a signal to fold them into a phase A trend instead (when the bar is met), not to violate the cap.
 - **Section header**: literally `**New today**` on its own line, followed by a blank line. Omit if no commits qualified for this section.
 - **Emoji per repo**: cycle `🛠️ 🔧 📦 🚀 🌐 ⚙️` in feed order, reset each run.
 - **Bullet shape**: `- [<message>](<url>) — <author>`. The message is wrapped in markdown link syntax (`[text](url)`), so the URL never appears as visible text. Separator before author is `—` (em-dash, with spaces).
 - **Author**: copy verbatim from the feed (text before `:`, after stripping the `[24h] ` marker). No enrichment, no invented full names.
 - **One bullet = one line.** Each bullet is a single self-contained line. Never split across lines.
 - **Whitespace**: one blank line between repo header and first bullet; one blank line between repo sections; no leading spaces on bullet lines.
-- **Grouping**: with ≤ 1 commit per repo, grouping rarely applies. If you do allow a same-repo exception with shared scope, merge into one bullet using multiple `[msg](url)` links separated by ` · ` before the author.
+- **Grouping**: with the ≤ 1 commit per repo cap, grouping does not apply in this section. (If you find yourself wanting to group, you're trying to violate the cap — fold the second commit into a trend or drop it.)
 
 **Fallbacks:**
 
@@ -258,7 +261,7 @@ The feed file is built from third-party commit messages, commit bodies, and auth
 - `grep -c '^- Renovate Bot:' feed-YYYY-MM-DD.md` returns `0`.
 - `grep -ci 'Merge pull request' feed-YYYY-MM-DD.md` returns `0`.
 - At least some bullets carry the `[24h]` marker (on any non-empty day; absence on a quiet day is fine).
-- Final digest: ≤ 5 trend bullets in the trends section, ≤ 4 commits in the "new today" section with ≤ 1 per repo.
+- Final digest: ≤ 5 trend bullets in the trends section, ≤ 6 commits in the "new today" section with ≤ 1 per repo.
 - Every URL appearing in the post is present verbatim at the end of a bullet line in the feed.
 - Each Discord POST returns HTTP 204.
 

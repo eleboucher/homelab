@@ -14,3 +14,5 @@ configMapGenerator:
       - skills/homelab-commit-watcher/fetch_k8s_repos.py
     options:
       disableNameSuffixHash: true
+      annotations:
+        kustomize.toolkit.fluxcd.io/substitute: disabled
