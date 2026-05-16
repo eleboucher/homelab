@@ -26,5 +26,13 @@
       "datasourceTemplate": "{{datasource}}",
       "versioningTemplate": "semver"
     }
+  ],
+  "packageRules": [
+    {
+      "description": "llama.cpp uses build-number tags with variant prefix",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["ghcr.io/ggml-org/llama.cpp"],
+      "versioning": "regex:^server-intel-b(?<patch>\\d+)$"
+    }
   ]
 }
