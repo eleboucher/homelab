@@ -6,14 +6,13 @@ metadata:
 data:
   presets.ini: |-
     [google/gemma-4-E4B-it]
-    model              = /models/models--unsloth--gemma-4-E4B-it-GGUF/model.gguf
-    mmproj             = /models/models--unsloth--gemma-4-E4B-it-GGUF/mmproj.gguf
-    ctx-size           = 32768
-    mmap               = false
-    sleep-idle-seconds = 300
-    temp               = 1.0
-    top-k              = 64
-    top-p              = 0.95
+    model    = /models/models--unsloth--gemma-4-E4B-it-GGUF/model.gguf
+    mmproj   = /models/models--unsloth--gemma-4-E4B-it-GGUF/mmproj.gguf
+    ctx-size = 32768
+    mmap     = false
+    temp     = 1.0
+    top-k    = 64
+    top-p    = 0.95
 
     [qwen/qwen3.6-27B:general]
     model                = /models/models--unsloth--Qwen3.6-27B-GGUF/model.gguf
@@ -22,7 +21,6 @@ data:
     cache-type-k         = q8_0
     cache-type-v         = q8_0
     mmap                 = false
-    sleep-idle-seconds   = 300
     temp                 = 0.7
     top-k                = 20
     top-p                = 0.8
