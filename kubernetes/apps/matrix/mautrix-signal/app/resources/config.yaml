@@ -101,7 +101,7 @@ encryption:
     send: unverified
     share: cross-signed-tofu
 
-env_config_prefix: MAUTRIX_SIGNAL
+env_config_prefix: MAUTRIX_SIGNAL_
 
 logging:
   min_level: info
