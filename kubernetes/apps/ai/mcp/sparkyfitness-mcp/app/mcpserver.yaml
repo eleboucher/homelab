@@ -10,8 +10,6 @@ spec:
   mcpPort: 3001
   groupRef:
     name: mcp-tools
-  externalAuthConfigRef:
-    name: sparkyfitness-mcp-auth
   permissionProfile:
     type: builtin
     name: network
