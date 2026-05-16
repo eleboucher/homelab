@@ -54,7 +54,7 @@ spec:
           app:
             image:
               repository: ghcr.io/ggml-org/llama.cpp
-              tag: server-intel-b9174@sha256:9f0d701a2a61d6500e9f2d12ec9930395249915220b4eafd8ddbbae93c59a812
+              tag: server-vulkan-b9174@sha256:8d0b822f79462b6a376e5f91944a078721a3e9289ce3dd20ed8a41660ee8c664
             args:
               - --models-preset
               - /config/presets.ini
@@ -73,9 +73,6 @@ spec:
               LLAMA_ARG_HOST: 0.0.0.0
               LLAMA_ARG_PORT: "8080"
               LLAMA_OFFLINE: "1"
-              ONEAPI_DEVICE_SELECTOR: level_zero:0
-              SYCL_CACHE_PERSISTENT: "0"
-              ZES_ENABLE_SYSMAN: "1"
             probes:
               liveness:
                 enabled: true
