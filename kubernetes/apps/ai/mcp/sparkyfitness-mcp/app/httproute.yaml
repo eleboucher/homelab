@@ -1,0 +1,16 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/gateway.networking.k8s.io/httproute_v1.json
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: sparkyfitness-mcp
+spec:
+  hostnames:
+    - sparkyfitness-mcp.erwanleboucher.dev
+  parentRefs:
+    - name: envoy-internal
+      namespace: network
+  rules:
+    - backendRefs:
+        - name: mcp-sparkyfitness-mcp-proxy
+          port: 8080
