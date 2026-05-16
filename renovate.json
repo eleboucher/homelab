@@ -3,6 +3,7 @@
   "extends": [
     "local>eleboucher/renovate-config",
     "local>eleboucher/homelab//.renovate/automerge.json5",
+    "local>eleboucher/homelab//.renovate/cnpg.json5",
     "local>eleboucher/homelab//.renovate/groups.json5",
     "local>eleboucher/homelab//.renovate/overrides.json5",
     "local>eleboucher/homelab//.renovate/talosFactory.json5"
@@ -25,14 +26,6 @@
       ],
       "datasourceTemplate": "{{datasource}}",
       "versioningTemplate": "semver"
-    }
-  ],
-  "packageRules": [
-    {
-      "description": "llama.cpp uses build-number tags with variant prefix",
-      "matchDatasources": ["docker"],
-      "matchPackageNames": ["ghcr.io/ggml-org/llama.cpp"],
-      "versioning": "regex:^server-intel-b(?<patch>\\d+)$"
     }
   ]
 }

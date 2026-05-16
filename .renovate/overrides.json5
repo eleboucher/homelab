@@ -16,6 +16,27 @@
              matchDatasources: ["docker"],
              matchPackageNames: ["ghcr.io/mogenius/helm-charts/renovate-operator"],
              sourceUrl: "https://github.com/mogenius/renovate-operator",
-        }
+        },
+        {
+            description: "llama.cpp uses build-number tags with variant prefix",
+            matchDatasources: ["docker"],
+            matchPackageNames: ["ghcr.io/ggml-org/llama.cpp"],
+            versioning: "regex:^server-intel-b(?<patch>\\d+)$",
+        },
+        {
+            description: "Tags shaped semver/calver + '-<commit-sha>' (sha varies per release so default compatibility logic blocks updates)",
+            matchDatasources: ["docker"],
+            matchPackageNames: [
+                "ghcr.io/searxng/searxng",
+                "registry.erwanleboucher.dev/eleboucher/agentmemory",
+            ],
+            versioning: "regex:^(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)-[a-f0-9]+$",
+        },
+        {
+            description: "phanpy uses calver '.<commit-sha>' (dot-separated sha suffix)",
+            matchDatasources: ["docker"],
+            matchPackageNames: ["ghcr.io/jjgadgets/phanpy"],
+            versioning: "regex:^(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)\\.[a-f0-9]+$",
+        },
     ],
 }
