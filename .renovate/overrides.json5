@@ -16,6 +16,12 @@
              matchDatasources: ["docker"],
              matchPackageNames: ["ghcr.io/mogenius/helm-charts/renovate-operator"],
              sourceUrl: "https://github.com/mogenius/renovate-operator",
-        }
+        },
+        {
+            description: "llama.cpp uses build-number tags with variant prefix",
+            matchDatasources: ["docker"],
+            matchPackageNames: ["ghcr.io/ggml-org/llama.cpp"],
+            versioning: "regex:^server-intel-b(?<patch>\\d+)$",
+        },
     ],
 }
