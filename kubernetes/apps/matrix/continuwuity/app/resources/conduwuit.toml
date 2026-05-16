@@ -18,7 +18,7 @@ max_request_size = 20971520
 dns_cache_entries = 1_000_000
 dns_timeout = 60
 query_over_tcp_only = true
-gip_lookup_strategy = 1
+ip_lookup_strategy = 1
 
 # User settings
 allow_encryption = true
