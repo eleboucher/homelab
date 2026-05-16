@@ -34,7 +34,7 @@ spec:
             command:
               - /usr/bin/mautrix-signal
             env:
-              MAUTRIX_SIGNAL_DATABASE_URI:
+              MAUTRIX_SIGNAL_DATABASE__URI:
                 valueFrom:
                   secretKeyRef:
                     name: mautrix-signal-postgres
