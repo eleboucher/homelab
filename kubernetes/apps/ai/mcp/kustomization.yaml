@@ -13,4 +13,5 @@ resources:
   - searxng-mcp/ks.yaml
   - seerr-mcp/ks.yaml
   - sidero-mcp/ks.yaml
+  - sparkyfitness-mcp/ks.yaml
   - victoria-logs-mcp/ks.yaml
