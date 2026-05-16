@@ -26,7 +26,7 @@ spec:
             image:
               # renovate: datasource=docker depName=dock.mau.dev/mautrix/signal
               repository: dock.mau.dev/mautrix/signal
-              tag: v0.2605.0@sha256:24ac347858e4c522bd1292e8cae344d736840036760944b9abc0d94f1561d41a
+              tag: v26.02.2@sha256:577e37ad5f41bfd72a236e6ab4a1b1b2d4f960890ff0767ed3b0b7cbb6817c29
             args:
               - -c=/data/config.yaml
               - -r=/data/registration.yaml
