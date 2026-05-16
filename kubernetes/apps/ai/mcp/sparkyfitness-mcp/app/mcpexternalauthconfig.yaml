@@ -1,0 +1,12 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/toolhive.stacklok.dev/mcpexternalauthconfig_v1alpha1.json
+apiVersion: toolhive.stacklok.dev/v1alpha1
+kind: MCPExternalAuthConfig
+metadata:
+  name: sparkyfitness-mcp-auth
+spec:
+  type: bearerToken
+  bearerToken:
+    tokenSecretRef:
+      name: sparkyfitness-mcp
+      key: api-key
