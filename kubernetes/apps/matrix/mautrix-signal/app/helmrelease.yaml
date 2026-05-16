@@ -1,0 +1,95 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: mautrix-signal
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: mautrix-signal
+  interval: 1h
+  values:
+    defaultPodOptions:
+      securityContext:
+        fsGroup: 1337
+        fsGroupChangePolicy: OnRootMismatch
+        runAsGroup: 1337
+        runAsNonRoot: true
+        runAsUser: 1337
+    controllers:
+      app:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        containers:
+          app:
+            image:
+              # renovate: datasource=docker depName=dock.mau.dev/mautrix/signal
+              repository: dock.mau.dev/mautrix/signal
+              tag: v0.2605.0@sha256:24ac347858e4c522bd1292e8cae344d736840036760944b9abc0d94f1561d41a
+            args:
+              - -c=/data/config.yaml
+              - -r=/data/registration.yaml
+              - -n
+            command:
+              - /usr/bin/mautrix-signal
+            env:
+              MAUTRIX_SIGNAL_DATABASE_URI:
+                valueFrom:
+                  secretKeyRef:
+                    name: mautrix-signal-postgres
+                    key: url
+            probes:
+              liveness:
+                enabled: true
+                custom: true
+                spec:
+                  tcpSocket:
+                    port: 29328
+                  initialDelaySeconds: 30
+                  periodSeconds: 30
+              readiness:
+                enabled: true
+                custom: true
+                spec:
+                  tcpSocket:
+                    port: 29328
+                  initialDelaySeconds: 10
+                  periodSeconds: 10
+            resources:
+              requests:
+                cpu: 25m
+                memory: 128Mi
+              limits:
+                memory: 512Mi
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - "ALL"
+    persistence:
+      config:
+        type: secret
+        name: mautrix-signal
+        globalMounts:
+          - path: /data/config.yaml
+            subPath: config.yaml
+            readOnly: true
+          - path: /data/registration.yaml
+            subPath: registration.yaml
+            readOnly: true
+      data:
+        type: emptyDir
+        globalMounts:
+          - path: /data
+      tmp:
+        type: emptyDir
+        globalMounts:
+          - path: /tmp
+    service:
+      app:
+        controller: app
+        ports:
+          appservice:
+            port: 29328

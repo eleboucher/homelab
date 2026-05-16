@@ -1,0 +1,19 @@
+---
+id: signal
+url: http://mautrix-signal.matrix.svc:29328
+as_token: "{{ .AS_TOKEN }}"
+hs_token: "{{ .HS_TOKEN }}"
+sender_localpart: signalbot
+rate_limited: false
+namespaces:
+  users:
+    - regex: "@signalbot:erwanleboucher.dev"
+      exclusive: true
+    - regex: "@signal_.*:erwanleboucher.dev"
+      exclusive: true
+  aliases: []
+  rooms: []
+de.sorunome.msc2409.push_ephemeral: true
+push_ephemeral: true
+org.matrix.msc3202: true
+receive_ephemeral: true

@@ -1,0 +1,110 @@
+---
+network:
+  displayname_template: '{{`{{or .ProfileName .PhoneNumber "Unknown user"}}`}}'
+  use_contact_avatars: false
+  sync_contacts_on_startup: true
+  use_outdated_profiles: false
+  number_in_topic: true
+  device_name: mautrix-signal
+  note_to_self_avatar: mxc://maunium.net/REBIVrqjZwmaWpssCZpBlmlL
+  location_format: 'https://www.google.com/maps/place/%[1]s,%[2]s'
+  disappear_view_once: false
+  extev_polls: false
+
+bridge:
+  command_prefix: '!signal'
+  personal_filtering_spaces: true
+  private_chat_portal_meta: true
+  bridge_status_notices: errors
+  tag_only_on_create: true
+  mute_only_on_create: true
+  kick_matrix_users: true
+  cleanup_on_logout:
+    enabled: false
+    manual:
+      private: nothing
+      relayed: nothing
+      shared_no_users: nothing
+      shared_has_users: nothing
+    bad_credentials:
+      private: nothing
+      relayed: nothing
+      shared_no_users: nothing
+      shared_has_users: nothing
+  relay:
+    enabled: false
+  permissions:
+    "erwanleboucher.dev": user
+
+database:
+  type: postgres
+  uri: postgres://placeholder
+  max_open_conns: 5
+  max_idle_conns: 1
+
+homeserver:
+  address: http://continuwuity.matrix.svc:8080
+  domain: erwanleboucher.dev
+  software: standard
+  async_media: false
+
+appservice:
+  address: http://mautrix-signal.matrix.svc:29328
+  hostname: 0.0.0.0
+  port: 29328
+  id: signal
+  bot:
+    username: signalbot
+    displayname: Signal bridge bot
+    avatar: mxc://maunium.net/wPJgTQbZOtpBFmDNkiNEMDUp
+  ephemeral_events: true
+  async_transactions: false
+  as_token: "{{ .AS_TOKEN }}"
+  hs_token: "{{ .HS_TOKEN }}"
+  username_template: signal_{{`{{.}}`}}
+
+matrix:
+  message_status_events: false
+  delivery_receipts: false
+  message_error_notices: true
+  sync_direct_chat_list: true
+  federate_rooms: true
+  upload_file_threshold: 5242880
+
+provisioning:
+  shared_secret: "{{ .PROVISIONING_SHARED_SECRET }}"
+  allow_matrix_auth: true
+
+public_media:
+  enabled: false
+
+direct_media:
+  enabled: false
+
+backfill:
+  enabled: true
+  max_initial_messages: 50
+  max_catchup_messages: 500
+
+double_puppet:
+  allow_discovery: false
+
+encryption:
+  allow: true
+  default: true
+  require: false
+  appservice: false
+  allow_key_sharing: true
+  pickle_key: "{{ .PICKLE_KEY }}"
+  verification_levels:
+    receive: unverified
+    send: unverified
+    share: cross-signed-tofu
+
+env_config_prefix: MAUTRIX_SIGNAL
+
+logging:
+  min_level: info
+  writers:
+    - type: stdout
+      format: pretty-colored

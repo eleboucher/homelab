@@ -9,4 +9,5 @@ resources:
   - heisenbridge/ks.yaml
   - livekit/ks.yaml
   - lk-jwt-service/ks.yaml
+  - mautrix-signal/ks.yaml
   - namespace.yaml
