@@ -8,6 +8,8 @@ spec:
   dependsOn:
     - name: toolhive-config
       namespace: ai
+    - name: sparkyfitness-reflect
+      namespace: selfhosted
   interval: 1h
   path: ./kubernetes/apps/ai/mcp/sparkyfitness-mcp/app
   prune: true

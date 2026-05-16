@@ -18,10 +18,25 @@ spec:
       value: http
     - name: SPARKY_FITNESS_MCP_PORT
       value: "3001"
+    - name: SPARKY_FITNESS_DB_HOST
+      value: postgres-rw.database.svc
+    - name: SPARKY_FITNESS_DB_PORT
+      value: "5432"
+    - name: SPARKY_FITNESS_DB_NAME
+      value: sparkyfitness
+    - name: SPARKY_FITNESS_DB_USER
+      value: sparkyfitness
+    - name: SPARKY_FITNESS_SERVER_HOST
+      value: sparkyfitness.selfhosted.svc.cluster.local
+    - name: SPARKY_FITNESS_SERVER_PORT
+      value: "3010"
   secrets:
+    - name: sparkyfitness-postgres
+      key: password
+      targetEnvName: SPARKY_FITNESS_DB_PASSWORD
     - name: sparkyfitness-mcp
-      key: api-key
-      targetEnvName: SPARKY_FITNESS_API_KEY
+      key: BETTER_AUTH_SECRET
+      targetEnvName: BETTER_AUTH_SECRET
   podTemplateSpec:
     spec:
       containers:
