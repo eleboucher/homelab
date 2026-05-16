@@ -9,6 +9,7 @@ resources:
   - agentmemory/ks.yaml
   - hermes/ks.yaml
   - llama-cpp/ks.yaml
+  - llama-cpp-vulkan/ks.yaml
   - mcp
   - ollama/ks.yaml
   - open-webui/ks.yaml

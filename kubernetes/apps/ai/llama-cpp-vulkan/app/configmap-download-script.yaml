@@ -1,0 +1,63 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: llama-cpp-vulkan-download-script
+data:
+  download-model.sh: |-
+    #!/bin/sh
+    set -eu
+
+    ref="$1"
+    case "$ref" in
+      */*:*) ;;
+      *)
+        echo "error: expected vendor/model:quantization, got '$ref'" >&2
+        exit 1
+        ;;
+    esac
+
+    repo="$${ref%:*}"
+    quant="$${ref##*:}"
+
+    echo ">> $repo  quant=$quant"
+    snap=$(hf download "$repo" --include "*$${quant}*.gguf" --format quiet)
+    snap=$(cd "$snap" && pwd)
+    model_dir=$(dirname "$(dirname "$snap")")
+    snap_rel="snapshots/$(basename "$snap")"
+
+    main_gguf=$(ls "$snap"/*"$${quant}"*.gguf 2>/dev/null | head -n1)
+    if [ -n "$main_gguf" ]; then
+      ln -sfn "$snap_rel/$(basename "$main_gguf")" "$model_dir/model.gguf"
+      echo ">> linked model.gguf -> $snap_rel/$(basename "$main_gguf")"
+    fi
+
+    bits() {
+      tag=$(printf '%s' "$${1%.gguf}" | sed -E 's/.*[-.]([A-Za-z0-9_]+)$/\1/')
+      n=$(printf '%s' "$tag" | grep -oE '[0-9]+' | head -n1)
+      printf '%s' "$${n:-0}"
+    }
+
+    available=$(hf download "$repo" --dry-run --include "mmproj*.gguf" 2>/dev/null \
+      | awk '/^mmproj.*\.gguf/ {print $1}')
+    if [ -z "$available" ]; then
+      echo ">> no mmproj in $repo"
+      exit 0
+    fi
+
+    model_bits=$(bits "$quant")
+    pick=""
+    best_diff=""
+    for f in $available; do
+      fb=$(bits "$f")
+      diff=$(( fb > model_bits ? fb - model_bits : model_bits - fb ))
+      if [ -z "$best_diff" ] || [ "$diff" -lt "$best_diff" ]; then
+        pick="$f"
+        best_diff="$diff"
+      fi
+    done
+
+    echo ">> mmproj: $pick (bits=$(bits "$pick") vs model=$model_bits)"
+    hf download "$repo" "$pick" --format quiet >/dev/null
+    ln -sfn "$snap_rel/$pick" "$model_dir/mmproj.gguf"
+    echo ">> linked mmproj.gguf -> $snap_rel/$pick"
