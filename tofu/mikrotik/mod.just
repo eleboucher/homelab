@@ -1,43 +1,41 @@
-set lazy
-set positional-arguments
 set quiet
 set shell := ['bash', '-euo', 'pipefail', '-c']
 
-tofu_dir := justfile_dir() + '/tofu/mikrotik'
-op_run   := 'op run --env-file=' + tofu_dir + '/op.env --'
+op_run := 'op run --env-file=' + source_directory() + '/op.env --'
 
 [doc('Initialize the working directory and download providers')]
 init *args:
-    cd "{{ tofu_dir }}" && {{ op_run }} tofu init "$@"
+    cd "{{ source_directory() }}" && {{ op_run }} tofu init {{ args }}
 
 [doc('Format all .tf files')]
 fmt *args:
-    cd "{{ tofu_dir }}" && tofu fmt -recursive "$@"
+    cd "{{ source_directory() }}" && tofu fmt -recursive {{ args }}
 
 [doc('Validate the configuration')]
 validate:
-    cd "{{ tofu_dir }}" && {{ op_run }} tofu validate
+    cd "{{ source_directory() }}" && {{ op_run }} tofu validate
 
 [doc('Show planned changes; writes plan.tfplan')]
 plan *args:
-    cd "{{ tofu_dir }}" && {{ op_run }} tofu plan -out=plan.tfplan "$@"
+    cd "{{ source_directory() }}" && {{ op_run }} tofu plan -out=plan.tfplan {{ args }}
 
+[confirm('Apply tofu changes to Mikrotik router [y|N] ?')]
 [doc('Apply the saved plan')]
 apply *args:
-    cd "{{ tofu_dir }}" && {{ op_run }} tofu apply "$@"
+    cd "{{ source_directory() }}" && {{ op_run }} tofu apply {{ args }}
 
 [doc('Show current state or a resource (read-only)')]
 show *args:
-    cd "{{ tofu_dir }}" && {{ op_run }} tofu show "$@"
+    cd "{{ source_directory() }}" && {{ op_run }} tofu show {{ args }}
 
 [doc('Drop into an env-populated shell for ad-hoc tofu/router commands')]
 shell:
-    cd "{{ tofu_dir }}" && {{ op_run }} bash
+    cd "{{ source_directory() }}" && {{ op_run }} bash
 
 [doc('Refresh state from the router (read-only)')]
 refresh:
-    cd "{{ tofu_dir }}" && {{ op_run }} tofu apply -refresh-only
+    cd "{{ source_directory() }}" && {{ op_run }} tofu apply -refresh-only
 
 [doc('Pass-through any tofu subcommand, e.g. just mikrotik run state list')]
 run *args:
-    cd "{{ tofu_dir }}" && {{ op_run }} tofu "$@"
+    cd "{{ source_directory() }}" && {{ op_run }} tofu {{ args }}

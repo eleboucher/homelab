@@ -1,22 +1,20 @@
-set lazy
-set positional-arguments
 set quiet
+set script-interpreter := ['bash', '-euo', 'pipefail']
 set shell := ['bash', '-euo', 'pipefail', '-c']
-
-ansible_dir := justfile_dir() + '/ansible'
 
 [doc('Install Ansible collections required for VPS playbook')]
 install-collections:
-    ansible-galaxy collection install -r "{{ ansible_dir }}/requirements.yml"
+    ansible-galaxy collection install -r "{{ source_directory() }}/requirements.yml"
 
+[confirm('Install Pangolin on ' + ip + ' [y|N] ?')]
 [doc('Install Pangolin on VPS and save info to 1Password')]
 install ip: install-collections
-    ansible-playbook -i "{{ ip }}," "{{ ansible_dir }}/playbook.yml"
+    ansible-playbook -i "{{ ip }}," "{{ source_directory() }}/playbook.yml"
 
+[confirm('Deploy compose directly to ' + ip + ' (bypasses doco-cd/git) [y|N] ?')]
 [doc('Emergency: SCP compose file to VPS and run docker compose up directly (bypasses doco-cd/git)')]
+[script]
 deploy-direct ip:
-    #!/usr/bin/env bash
-    set -euo pipefail
     tmpdir=$(mktemp -d)
     trap "rm -rf $tmpdir" EXIT
     printf '%s\n' \
@@ -34,6 +32,7 @@ deploy-direct ip:
     scp "{{ justfile_directory() }}/docker/vps/01-pangolin/docker-compose.yml" "{{ ip }}:/tmp/pangolin-compose.yml"
     ssh "{{ ip }}" "sudo mv /tmp/.pangolin.env $deploy_dir/.env && sudo mv /tmp/pangolin-compose.yml $deploy_dir/docker-compose.yml && sudo bash -c \"cd $deploy_dir && docker compose down --remove-orphans && docker compose up -d\""
 
+[confirm('Trigger doco-cd deployment on ' + ip + ' [y|N] ?')]
 [doc('Trigger a doco-cd deployment via the API')]
 deploy ip:
     api_key=$(op read "op://kubernetes/doco-cd/api_secret") && \

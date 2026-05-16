@@ -26,11 +26,7 @@ just bootstrap apps           # Sync Helmfile apps
 ```bash
 just kube apply-ks <ns> <ks>  # Apply local Flux Kustomization
 just kube delete-ks <ns> <ks> # Delete local Flux Kustomization
-just kube sync-git            # Sync GitRepositories
-just kube sync-hr             # Sync HelmReleases
-just kube sync-ks             # Sync Kustomizations
-just kube sync-es             # Sync ExternalSecrets
-just kube sync-oci            # Sync OCIRepositories
+just kube sync <resource>     # Sync a Flux resource (hr|ks|gitrepo|ocirepo|es); optionally pass <ns> <name>
 just kube node-shell <node>   # Shell into node
 just kube browse-pvc <ns> <claim>  # Browse PVC contents
 just kube prune-pods          # Clean up failed/pending/succeeded pods

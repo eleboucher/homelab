@@ -1,21 +1,17 @@
-set lazy
-set positional-arguments
+set no-exit-message
 set quiet
 set script-interpreter := ['bash', '-euo', 'pipefail']
 set shell := ['bash', '-euo', 'pipefail', '-c']
 
-bootstrap_dir := justfile_dir() + '/bootstrap'
-kubernetes_dir := justfile_dir() + '/kubernetes'
 controller := `talosctl config info -o yaml | yq -e '.endpoints[0]'`
 nodes := `talosctl config info -o yaml | yq -e '.nodes | join (" ")'`
 
 [private]
-[script]
 default:
     just -l bootstrap
 
+[confirm('Bootstrap cluster? [y|N]')]
 [doc('Bootstrap a Talos & Kubernetes cluster end-to-end')]
-[script]
 cluster: nodes k8s (kubeconfig "node") base apps kubeconfig
 
 [private]
@@ -23,7 +19,7 @@ cluster: nodes k8s (kubeconfig "node") base apps kubeconfig
 nodes:
     just log info "Running stage..." "stage" "$(basename "$0")"
     for n in {{ nodes }}; do
-        if ! op=$(just talos apply-node "$n" --insecure 2>&1); then
+        if ! op=$(just --yes talos apply-node "$n" --insecure 2>&1); then
             if [[ "$op" == *"certificate required"* ]]; then
                 just log info "Talos already configured, skipping apply of config" "stage" "$(basename "$0")" "node" "$n"
                 continue
@@ -37,7 +33,7 @@ nodes:
 k8s:
     just log info "Running stage..." "stage" "$(basename "$0")"
     just log info "Starting Kubernetes bootstrap on controller {{ controller }}" "stage" "$(basename "$0")"
-    until op=$(talosctl -n 192.168.1.41 bootstrap 2>&1 || true) && [[ "$op" == *"AlreadyExists"* ]]; do
+    until op=$(talosctl -n "{{ controller }}" bootstrap 2>&1 || true) && [[ "$op" == *"AlreadyExists"* ]]; do
         just log info "Kubernetes bootstrap in progress. Retrying in 5 seconds..." "stage" "$(basename "$0")"
         sleep 5
     done
@@ -59,10 +55,10 @@ kubeconfig lb="cilium":
 [script]
 base: ready
     just log info "Running stage..." "stage" "$(basename "$0")"
-    if ! kustomize build {{ bootstrap_dir }}/kustomize/apps | just template - | kubectl apply --server-side --field-manager bootstrap --force-conflicts -f -; then
+    if ! kustomize build {{ source_directory() }}/kustomize/apps | just template - | kubectl apply --server-side --force-conflicts -f -; then
         just log fatal "Failed to apply base manifests" "stage" "$(basename "$0")"
     fi
-    if ! helmfile -f "{{ bootstrap_dir }}/helmfile/crds.yaml" template -q | yq ea -e 'select(.kind == "CustomResourceDefinition")' | kubectl apply --server-side --field-manager bootstrap --force-conflicts -f -; then
+    if ! helmfile -f "{{ source_directory() }}/helmfile/crds.yaml" template -q | yq ea -e 'select(.kind == "CustomResourceDefinition")' | kubectl apply --server-side --force-conflicts -f -; then
         just log fatal "Failed to apply crds" "stage" "$(basename "$0")"
     fi
 
@@ -70,7 +66,7 @@ base: ready
 [script]
 apps:
     just log info "Running stage..." "stage" "$(basename "$0")"
-    if ! helmfile -f "{{ bootstrap_dir }}/helmfile/apps.yaml" sync --hide-notes; then
+    if ! helmfile -f "{{ source_directory() }}/helmfile/apps.yaml" sync --hide-notes; then
         just log fatal "Failed to sync helmfile" "stage" "$(basename "$0")"
     fi
 

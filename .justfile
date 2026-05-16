@@ -2,35 +2,36 @@
 
 set lazy
 set quiet
-set script-interpreter := ['bash', '-euo', 'pipefail']
 set shell := ['bash', '-euo', 'pipefail', '-c']
 
-[group: 'bootstrap']
+# Bootstrap Recipes
+[group: 'Bootstrap']
 mod bootstrap "bootstrap"
 
-[group: 'k8s']
+# Kube Recipes
+[group: 'Kube']
 mod kube "kubernetes"
 
-[group: 'talos']
+# Talos Recipes
+[group: 'Talos']
 mod talos "talos"
 
-[group: 'ansible']
+# Ansible Recipes
+[group: 'Ansible']
 mod ansible 'ansible'
 
-[group: 'mikrotik']
+# Mikrotik Recipes
+[group: 'Mikrotik']
 mod mikrotik 'tofu/mikrotik'
 
 [private]
-[script]
 default:
     just -l
 
 [private]
-[script]
 log lvl msg *args:
     gum log -t rfc3339 -s -l "{{ lvl }}" "{{ msg }}" {{ args }}
 
 [private]
-[script]
 template file *args:
     minijinja-cli "{{ file }}" {{ args }} | op inject
