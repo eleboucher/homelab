@@ -1,21 +1,38 @@
 [global]
 server_name = "erwanleboucher.dev"
-address = "::"
+address = ["0.0.0.0"]
 port = 8080
-database_path = "/data"
-new_user_displayname_suffix = ""
 
+database_path = "/data"
+database_backup_path = "/backups"
+database_backups_to_keep = 1
+
+rocksdb_compression_algo = "zstd"
+rocksdb_compression_level = 32767
+rocksdb_bottommost_compression_level = 32767
+rocksdb_bottommost_compression = true
+
+max_request_size = 20971520
+
+# DNS Optimisation
+dns_cache_entries = 1_000_000
+dns_timeout = 60
+query_over_tcp_only = true
+ip_lookup_strategy = 3
+
+# User settings
 allow_encryption = true
 allow_federation = true
 allow_registration = true
-suspend_on_register = true
-forget_forced_upon_leave = true
-require_auth_for_profile_requests = true
+new_user_displayname_suffix = ""
+suspend_on_register = false
+
+allow_legacy_media = true
 allow_public_room_directory_over_federation = false
 lockdown_public_room_directory = true
-allow_legacy_media = false
-query_over_tcp_only = true
-ip_lookup_strategy = 1
+require_auth_for_profile_requests = true
+trusted_servers = ["bi-vibes.com", "codestorm.net"]
+
 
 registration_token = "{{ .registration_token }}"
 emergency_password = "{{ .emergency_password }}"
