@@ -1,0 +1,135 @@
+---
+network:
+  os_name: Mautrix-WhatsApp bridge
+  browser_name: unknown
+  displayname_template: '{{`{{or .BusinessName .PushName .Phone .RedactedPhone "Unknown user"}}`}} (WA)'
+  call_start_notices: true
+  identity_change_notices: false
+  send_presence_on_typing: false
+  enable_status_broadcast: true
+  disable_status_broadcast_send: true
+  mute_status_broadcast: true
+  pinned_tag: m.favourite
+  status_broadcast_tag: m.lowpriority
+  whatsapp_thumbnail: false
+  url_previews: false
+  extev_polls: false
+  disable_view_once: false
+  force_active_delivery_receipts: false
+  direct_media_auto_request: true
+  initial_auto_reconnect: true
+  use_whatsapp_retry_store: false
+  animated_sticker:
+    target: webp
+    args:
+      width: 320
+      height: 320
+      fps: 25
+  history_sync:
+    max_initial_conversations: -1
+    request_full_sync: false
+    dispatch_wait: 1m
+    media_requests:
+      auto_request_media: true
+      request_method: immediate
+      request_local_time: 120
+      max_async_handle: 2
+    backwards_on_demand: false
+
+bridge:
+  command_prefix: '!wa'
+  personal_filtering_spaces: true
+  private_chat_portal_meta: true
+  bridge_status_notices: errors
+  tag_only_on_create: true
+  mute_only_on_create: true
+  kick_matrix_users: true
+  cleanup_on_logout:
+    enabled: false
+    manual:
+      private: nothing
+      relayed: nothing
+      shared_no_users: nothing
+      shared_has_users: nothing
+    bad_credentials:
+      private: nothing
+      relayed: nothing
+      shared_no_users: nothing
+      shared_has_users: nothing
+  relay:
+    enabled: false
+  permissions:
+    "erwanleboucher.dev": user
+
+database:
+  type: postgres
+  uri: postgres://placeholder
+  max_open_conns: 5
+  max_idle_conns: 1
+
+homeserver:
+  address: http://continuwuity.matrix.svc:8080
+  domain: erwanleboucher.dev
+  software: standard
+  async_media: false
+
+appservice:
+  address: http://mautrix-whatsapp.matrix.svc:29318
+  hostname: 0.0.0.0
+  port: 29318
+  id: whatsapp
+  bot:
+    username: whatsappbot
+    displayname: WhatsApp bridge bot
+    avatar: mxc://maunium.net/NeXNQarUbrlYBiPCpprYsRqr
+  ephemeral_events: true
+  async_transactions: false
+  as_token: "{{ .AS_TOKEN }}"
+  hs_token: "{{ .HS_TOKEN }}"
+  username_template: whatsapp_{{`{{.}}`}}
+
+matrix:
+  message_status_events: false
+  delivery_receipts: false
+  message_error_notices: true
+  sync_direct_chat_list: true
+  federate_rooms: true
+  upload_file_threshold: 5242880
+
+provisioning:
+  shared_secret: "{{ .PROVISIONING_SHARED_SECRET }}"
+  allow_matrix_auth: true
+
+public_media:
+  enabled: false
+
+direct_media:
+  enabled: false
+
+backfill:
+  enabled: true
+  max_initial_messages: 50
+  max_catchup_messages: 500
+
+double_puppet:
+  allow_discovery: false
+
+encryption:
+  allow: true
+  default: true
+  require: false
+  appservice: false
+  allow_key_sharing: true
+  pickle_key: "{{ .PICKLE_KEY }}"
+  verification_levels:
+    receive: unverified
+    send: unverified
+    share: cross-signed-tofu
+
+env_config_prefix: MAUTRIX_WHATSAPP_
+
+logging:
+  min_level: info
+  writers:
+    - type: stdout
+      format: pretty-colored

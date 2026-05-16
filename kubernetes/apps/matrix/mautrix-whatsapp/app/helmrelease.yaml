@@ -1,0 +1,95 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: mautrix-whatsapp
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: mautrix-whatsapp
+  interval: 1h
+  values:
+    defaultPodOptions:
+      securityContext:
+        fsGroup: 1337
+        fsGroupChangePolicy: OnRootMismatch
+        runAsGroup: 1337
+        runAsNonRoot: true
+        runAsUser: 1337
+    controllers:
+      app:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        containers:
+          app:
+            image:
+              # renovate: datasource=docker depName=dock.mau.dev/mautrix/whatsapp
+              repository: dock.mau.dev/mautrix/whatsapp
+              tag: v0.2605.0@sha256:d126438cc0eb989c31ff32ab66a95a16d1fc47198eaabcba0fb4f4672e7a3412
+            args:
+              - -c=/data/config.yaml
+              - -r=/data/registration.yaml
+              - -n
+            command:
+              - /usr/bin/mautrix-whatsapp
+            env:
+              MAUTRIX_WHATSAPP_DATABASE__URI:
+                valueFrom:
+                  secretKeyRef:
+                    name: mautrix-whatsapp-postgres
+                    key: url
+            probes:
+              liveness:
+                enabled: true
+                custom: true
+                spec:
+                  tcpSocket:
+                    port: 29318
+                  initialDelaySeconds: 30
+                  periodSeconds: 30
+              readiness:
+                enabled: true
+                custom: true
+                spec:
+                  tcpSocket:
+                    port: 29318
+                  initialDelaySeconds: 10
+                  periodSeconds: 10
+            resources:
+              requests:
+                cpu: 25m
+                memory: 128Mi
+              limits:
+                memory: 512Mi
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - "ALL"
+    persistence:
+      config:
+        type: secret
+        name: mautrix-whatsapp
+        globalMounts:
+          - path: /data/config.yaml
+            subPath: config.yaml
+            readOnly: true
+          - path: /data/registration.yaml
+            subPath: registration.yaml
+            readOnly: true
+      data:
+        type: emptyDir
+        globalMounts:
+          - path: /data
+      tmp:
+        type: emptyDir
+        globalMounts:
+          - path: /tmp
+    service:
+      app:
+        controller: app
+        ports:
+          appservice:
+            port: 29318

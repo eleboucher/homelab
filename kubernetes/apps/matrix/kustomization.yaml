@@ -10,4 +10,5 @@ resources:
   - livekit/ks.yaml
   - lk-jwt-service/ks.yaml
   - mautrix-signal/ks.yaml
+  - mautrix-whatsapp/ks.yaml
   - namespace.yaml
