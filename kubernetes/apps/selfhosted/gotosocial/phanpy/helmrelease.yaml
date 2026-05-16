@@ -16,7 +16,7 @@ spec:
           main:
             image:
               repository: "ghcr.io/jjgadgets/phanpy"
-              tag: 2025.10.09.1897f38
+              tag: 2026.01.31.8b98d5a
             env:
               PHANPY_WEBSITE: "phanpy.erwanleboucher.dev"
               PHANPY_DEFAULT_INSTANCE: "gts.erwanleboucher.dev"
