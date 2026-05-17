@@ -2,41 +2,10 @@
     $schema: "https://docs.renovatebot.com/renovate-schema.json",
     packageRules: [
         {
-            description: "Override Helmfile Dependency Name",
-            matchDatasources: [
-                "docker"
-            ],
-            matchManagers: [
-                "helmfile"
-            ],
-            overrideDepName: "{{packageName}}",
-        },
-        {
-             description: "Override Renovate Operator source",
-             matchDatasources: ["docker"],
-             matchPackageNames: ["ghcr.io/mogenius/helm-charts/renovate-operator"],
-             sourceUrl: "https://github.com/mogenius/renovate-operator",
-        },
-        {
-            description: "llama.cpp uses build-number tags with variant prefix (intel, vulkan, ...). Capture the variant as 'compatibility' so Renovate only proposes upgrades within the same variant stream.",
+            description: "agentmemory uses semver + '-<commit-sha>' tags",
             matchDatasources: ["docker"],
-            matchPackageNames: ["ghcr.io/ggml-org/llama.cpp"],
-            versioning: "regex:^server-(?<compatibility>[a-z]+)-b(?<patch>\\d+)$",
-        },
-        {
-            description: "Tags shaped semver/calver + '-<commit-sha>' (sha varies per release so default compatibility logic blocks updates)",
-            matchDatasources: ["docker"],
-            matchPackageNames: [
-                "ghcr.io/searxng/searxng",
-                "registry.erwanleboucher.dev/eleboucher/agentmemory",
-            ],
+            matchPackageNames: ["registry.erwanleboucher.dev/eleboucher/agentmemory"],
             versioning: "regex:^(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)-[a-f0-9]+$",
-        },
-        {
-            description: "phanpy uses calver '.<commit-sha>' (dot-separated sha suffix)",
-            matchDatasources: ["docker"],
-            matchPackageNames: ["ghcr.io/jjgadgets/phanpy"],
-            versioning: "regex:^(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)\\.[a-f0-9]+$",
         },
     ],
 }
