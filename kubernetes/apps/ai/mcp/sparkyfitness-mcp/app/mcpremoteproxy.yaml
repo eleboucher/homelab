@@ -7,7 +7,7 @@ metadata:
 spec:
   groupRef:
     name: mcp-tools
-  remoteUrl: http://sparkyfitness-mcp.selfhosted.svc.cluster.local:3001/mcp
+  remoteUrl: https://sparkyfitness-mcp.erwanleboucher.dev/mcp
   transport: streamable-http
   headerForward:
     addHeadersFromSecret:
