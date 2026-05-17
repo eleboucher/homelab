@@ -15,12 +15,14 @@ data:
     top-p    = 0.95
 
     [qwen/qwen3.6-27B:general]
-    model                = /models/models--unsloth--Qwen3.6-27B-GGUF/model.gguf
-    mmproj               = /models/models--unsloth--Qwen3.6-27B-GGUF/mmproj.gguf
+    model                = /models/models--unsloth--Qwen3.6-27B-MTP-GGUF/model.gguf
+    mmproj               = /models/models--unsloth--Qwen3.6-27B-MTP-GGUF/mmproj.gguf
     ctx-size             = 32768
     cache-type-k         = q8_0
     cache-type-v         = q8_0
     mmap                 = false
+    spec-type            = draft-mtp
+    spec-draft-n-max     = 2
     temp                 = 0.7
     top-k                = 20
     top-p                = 0.8

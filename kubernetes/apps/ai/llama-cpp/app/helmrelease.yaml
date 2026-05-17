@@ -39,7 +39,7 @@ spec:
                 uv pip install --system --no-cache huggingface_hub
                 for ref in \
                   unsloth/gemma-4-E4B-it-GGUF:UD-Q8_K_XL \
-                  unsloth/Qwen3.6-27B-GGUF:UD-Q3_K_XL
+                  unsloth/Qwen3.6-27B-MTP-GGUF:UD-Q3_K_XL
                 do
                   download-model "$ref"
                 done
