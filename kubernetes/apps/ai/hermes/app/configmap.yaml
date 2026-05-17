@@ -6,67 +6,43 @@ metadata:
 data:
   config.yaml: |-
     custom_providers:
-      - name: llamacpp
-        base_url: http://llama-cpp.ai:8080/v1
-        key_env: LLAMA_API_KEY
-      - name: minimax
-        base_url: https://api.minimax.io/v1
-        key_env: MINIMAX_API_KEY
-        models:
-          MiniMax-M2.7:
-            context_length: 204800
-          MiniMax-M2.7-highspeed:
-            context_length: 204800
+      - name: litellm
+        base_url: http://litellm.ai:4000/v1
+        key_env: LITELLM_API_KEY
     model:
-      default: "MiniMax-M2.7"
-      provider: custom:minimax
+      default: minimax/MiniMax-M2.7
+      provider: custom:litellm
     model_aliases:
       gemma:
-        model: google/gemma-4-E4B-it
-        provider: custom:llamacpp
+        model: gemma
+        provider: custom:litellm
       qwen:
-        model: qwen/qwen3.6-27B:general
-        provider: custom:llamacpp
+        model: qwen
+        provider: custom:litellm
+      minimax:
+        model: minimax/MiniMax-M2.7
+        provider: custom:litellm
     fallback_providers:
-      - provider: custom:llamacpp
-        model: qwen/qwen3.6-27B:general
-      - provider: custom:llamacpp
-        model: google/gemma-4-E4B-it
+      - provider: custom:litellm
+        model: qwen
+      - provider: custom:litellm
+        model: gemma
     terminal:
-      backend: local
+      backend: docker
+      docker_image: nikolaik/python-nodejs:python3.11-nodejs20
       cwd: /opt/data/workspace
       timeout: 180
       persistent_shell: true
-      env_passthrough:
-        - DISCORD_WEBHOOK
-        - HOMELAB_GH_TOKEN
-        - LLAMA_API_KEY
-        - SUMMARY_LLM_MODEL
-        - SUMMARY_LLM_URL
-    plugins:
-      enabled:
-        - agentmemory
     memory:
-      provider: agentmemory
       auto_migrate: true
       auto_summarize:
         threshold: 50
     compression:
       enabled: true
-      threshold: 0.8
-      target_ratio: 0.15
-      protect_last_n: 10
-    auxiliary:
-      compression:
-        model: llamacpp/google/gemma-4-E4B-it
-        provider: custom:llamacpp
-    group_sessions_per_user: false
     streaming:
       enabled: false
     security:
       redact_secrets: true
-      tirith_enabled: true
-      tirith_fail_open: true
     privacy:
       redact_pii: true
     agent:
@@ -75,7 +51,6 @@ data:
       restart_drain_timeout: 60
       api_max_retries: 2
       reasoning_effort: medium
-      tool_use_enforcement: auto
     platforms:
       matrix:
         enabled: true
@@ -93,15 +68,10 @@ data:
     web:
       search_backend: searxng
   env: |-
-    AGENTMEMORY_URL=http://agentmemory.ai.svc.cluster.local:3111
-    AGENTMEMORY_SECRET={{ .AGENTMEMORY_SECRET }}
-    LLAMA_API_KEY={{ .LLAMA_API_KEY }}
-    MINIMAX_API_KEY={{ .MINIMAX_API_KEY }}
+    LITELLM_API_KEY={{ .LITELLM_MASTER_KEY }}
     MATRIX_HOMESERVER={{ .MATRIX_HOMESERVER }}
     MATRIX_ACCESS_TOKEN={{ .MATRIX_ACCESS_TOKEN }}
     MATRIX_USER_ID={{ .MATRIX_USER_ID }}
     MATRIX_ALLOWED_USERS={{ .MATRIX_ALLOWED_USERS }}
-    MATRIX_HOME_ROOM={{ .MATRIX_HOME_ROOM }}
-    MATRIX_HOME_ROOM_THREAD_ID={{ .MATRIX_HOME_ROOM_THREAD_ID }}
     API_SERVER_KEY={{ .API_SERVER_KEY }}
     GATEWAY_ALLOWED_USERS={{ .GATEWAY_ALLOWED_USERS }}

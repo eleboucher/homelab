@@ -3,25 +3,25 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: llama-cpp
+  name: llama-cpp-gemma
 spec:
   chartRef:
     kind: OCIRepository
-    name: llama-cpp
+    name: llama-cpp-gemma
   interval: 1h
   values:
     controllers:
-      llama-cpp:
+      llama-cpp-gemma:
         pod:
           nodeSelector:
             kubernetes.io/hostname: paris
           resourceClaims:
             - name: gpu
-              resourceClaimTemplateName: llama-cpp-gpu
+              resourceClaimTemplateName: llama-cpp-gemma-gpu
           securityContext:
             supplementalGroups:
-              - 44 # video
-              - 992 # render
+              - 44
+              - 992
         annotations:
           reloader.stakater.com/auto: "true"
         replicas: 1
@@ -37,18 +37,13 @@ spec:
               - -ec
               - |
                 uv pip install --system --no-cache huggingface_hub
-                for ref in \
-                  unsloth/gemma-4-E4B-it-GGUF:UD-Q8_K_XL \
-                  unsloth/Qwen3.6-27B-MTP-GGUF:UD-Q3_K_XL
-                do
-                  download-model "$ref"
-                done
+                download-model unsloth/gemma-4-E4B-it-GGUF:UD-Q8_K_XL
             env:
               HUGGINGFACE_HUB_CACHE: /models
               HF_TOKEN:
                 valueFrom:
                   secretKeyRef:
-                    name: llama-cpp-secret
+                    name: llama-cpp-gemma-secret
                     key: HF_TOKEN
         containers:
           app:
@@ -56,19 +51,31 @@ spec:
               repository: ghcr.io/ggml-org/llama.cpp
               tag: server-vulkan-b9191@sha256:9fbcff1679e0150936c491540989f8cd7195d3cb6cd299b606ad32c14cdf5934
             args:
-              - --models-preset
-              - /config/presets.ini
-              - --models-max
-              - "1"
+              - --metrics
+              - --model
+              - /models/models--unsloth--gemma-4-E4B-it-GGUF/model.gguf
+              - --mmproj
+              - /models/models--unsloth--gemma-4-E4B-it-GGUF/mmproj.gguf
+              - --ctx-size
+              - "32768"
+              - --no-mmap
               - --flash-attn
               - on
               - --sleep-idle-seconds
               - "300"
+              - --temp
+              - "1.0"
+              - --top-k
+              - "64"
+              - --top-p
+              - "0.95"
+              - --alias
+              - gemma
             env:
               LLAMA_API_KEY:
                 valueFrom:
                   secretKeyRef:
-                    name: llama-cpp-secret
+                    name: llama-cpp-gemma-secret
                     key: LLAMA_API_KEY
               LLAMA_ARG_HOST: 0.0.0.0
               LLAMA_ARG_PORT: "8080"
@@ -111,30 +118,23 @@ spec:
                 cpu: 100m
                 memory: 512Mi
               limits:
-                memory: 40Gi
+                memory: 20Gi
             securityContext:
               privileged: true
     service:
       app:
-        controller: llama-cpp
+        controller: llama-cpp-gemma
         ports:
           http:
             port: 8080
             protocol: TCP
     persistence:
-      config:
-        type: configMap
-        name: llama-cpp-config
-        globalMounts:
-          - path: /config/presets.ini
-            subPath: presets.ini
-            readOnly: true
       download-script:
         type: configMap
-        name: llama-cpp-download-script
+        name: llama-cpp-gemma-download-script
         defaultMode: 0o755
         advancedMounts:
-          llama-cpp:
+          llama-cpp-gemma:
             download-models:
               - path: /usr/bin/download-model
                 subPath: download-model.sh
@@ -142,10 +142,10 @@ spec:
       models:
         type: persistentVolumeClaim
         accessMode: ReadWriteOnce
-        size: 100Gi
+        size: 20Gi
         storageClass: ceph-block
         advancedMounts:
-          llama-cpp:
+          llama-cpp-gemma:
             app:
               - path: /models
                 readOnly: true

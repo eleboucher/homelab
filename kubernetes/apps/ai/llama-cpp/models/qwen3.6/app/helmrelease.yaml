@@ -1,0 +1,179 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: llama-cpp-qwen
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: llama-cpp-qwen
+  interval: 1h
+  values:
+    controllers:
+      llama-cpp-qwen:
+        pod:
+          nodeSelector:
+            kubernetes.io/hostname: paris
+          resourceClaims:
+            - name: gpu
+              resourceClaimTemplateName: llama-cpp-qwen-gpu
+          securityContext:
+            supplementalGroups:
+              - 44
+              - 992
+        annotations:
+          reloader.stakater.com/auto: "true"
+        replicas: 1
+        strategy: Recreate
+        type: deployment
+        initContainers:
+          download-models:
+            image:
+              repository: ghcr.io/astral-sh/uv
+              tag: python3.14-alpine
+            command:
+              - /bin/sh
+              - -ec
+              - |
+                uv pip install --system --no-cache huggingface_hub
+                download-model unsloth/Qwen3.6-27B-MTP-GGUF:UD-Q3_K_XL
+            env:
+              HUGGINGFACE_HUB_CACHE: /models
+              HF_TOKEN:
+                valueFrom:
+                  secretKeyRef:
+                    name: llama-cpp-qwen-secret
+                    key: HF_TOKEN
+        containers:
+          app:
+            image:
+              repository: ghcr.io/ggml-org/llama.cpp
+              tag: server-vulkan-b9191@sha256:9fbcff1679e0150936c491540989f8cd7195d3cb6cd299b606ad32c14cdf5934
+            args:
+              - --metrics
+              - --model
+              - /models/models--unsloth--Qwen3.6-27B-MTP-GGUF/model.gguf
+              - --mmproj
+              - /models/models--unsloth--Qwen3.6-27B-MTP-GGUF/mmproj.gguf
+              - --ctx-size
+              - "32768"
+              - --cache-type-k
+              - q8_0
+              - --cache-type-v
+              - q8_0
+              - --no-mmap
+              - --spec-type
+              - draft-mtp
+              - --spec-draft-n-max
+              - "2"
+              - --flash-attn
+              - on
+              - --sleep-idle-seconds
+              - "300"
+              - --temp
+              - "0.7"
+              - --top-k
+              - "20"
+              - --top-p
+              - "0.8"
+              - --min-p
+              - "0.0"
+              - --presence-penalty
+              - "1.5"
+              - --repeat-penalty
+              - "1.0"
+              - --chat-template-kwargs
+              - '{"enable_thinking":false}'
+              - --alias
+              - qwen
+            env:
+              LLAMA_API_KEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: llama-cpp-qwen-secret
+                    key: LLAMA_API_KEY
+              LLAMA_ARG_HOST: 0.0.0.0
+              LLAMA_ARG_PORT: "8080"
+              LLAMA_OFFLINE: "1"
+            probes:
+              liveness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /health
+                    port: 8080
+                  failureThreshold: 3
+                  periodSeconds: 30
+                  timeoutSeconds: 5
+              readiness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /health
+                    port: 8080
+                  failureThreshold: 3
+                  periodSeconds: 10
+                  timeoutSeconds: 5
+              startup:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /health
+                    port: 8080
+                  failureThreshold: 60
+                  periodSeconds: 10
+                  timeoutSeconds: 5
+            resources:
+              claims:
+                - name: gpu
+              requests:
+                cpu: 100m
+                memory: 512Mi
+              limits:
+                memory: 40Gi
+            securityContext:
+              privileged: true
+    service:
+      app:
+        controller: llama-cpp-qwen
+        ports:
+          http:
+            port: 8080
+            protocol: TCP
+    persistence:
+      download-script:
+        type: configMap
+        name: llama-cpp-qwen-download-script
+        defaultMode: 0o755
+        advancedMounts:
+          llama-cpp-qwen:
+            download-models:
+              - path: /usr/bin/download-model
+                subPath: download-model.sh
+                readOnly: true
+      models:
+        type: persistentVolumeClaim
+        accessMode: ReadWriteOnce
+        size: 50Gi
+        storageClass: ceph-block
+        advancedMounts:
+          llama-cpp-qwen:
+            app:
+              - path: /models
+                readOnly: true
+            download-models:
+              - path: /models
+                readOnly: false
+      render-device:
+        type: hostPath
+        hostPath: /dev/dri/renderD128
+        globalMounts:
+          - path: /dev/dri/renderD128
+      tmpfs:
+        type: emptyDir
+        globalMounts:
+          - path: /tmp

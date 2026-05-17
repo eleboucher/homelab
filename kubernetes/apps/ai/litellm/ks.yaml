@@ -3,22 +3,15 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: hermes
+  name: litellm
   namespace: flux-system
 spec:
-  components:
-    - ../../../../components/volsync
-  dependsOn:
-    - name: litellm
-    - name: rook-ceph-cluster
-      namespace: rook-ceph
   interval: 15m
-  path: ./kubernetes/apps/ai/hermes/app
+  path: ./kubernetes/apps/ai/litellm/app
   postBuild:
     substitute:
-      APP: hermes
+      APP: litellm
       APP_NAMESPACE: ai
-      VOLSYNC_CAPACITY: 20Gi
   prune: true
   sourceRef:
     kind: OCIRepository

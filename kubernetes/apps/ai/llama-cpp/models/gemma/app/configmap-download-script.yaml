@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: llama-cpp-download-script
+  name: llama-cpp-gemma-download-script
 data:
   download-model.sh: |-
     #!/bin/sh

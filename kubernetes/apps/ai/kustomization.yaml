@@ -8,7 +8,8 @@ resources:
   - namespace.yaml
   - agentmemory/ks.yaml
   - hermes/ks.yaml
-  - llama-cpp/ks.yaml
+  - litellm/ks.yaml
+  - llama-cpp
   - mcp
   - ollama/ks.yaml
   - open-webui/ks.yaml

@@ -1,0 +1,81 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/batch/job_v1.json
+# Ad-hoc MTP benchmark. NOT part of the Flux Kustomization — apply manually:
+#
+#   kubectl -n ai scale deploy/llama-cpp-qwen --replicas=0
+#   kubectl -n ai apply -f kubernetes/apps/ai/llama-cpp/models/qwen3.6/benchmark/llama-bench.yaml
+#   kubectl -n ai logs -f job/llama-bench-qwen
+#   kubectl -n ai delete -f kubernetes/apps/ai/llama-cpp/models/qwen3.6/benchmark/llama-bench.yaml
+#   kubectl -n ai scale deploy/llama-cpp-qwen --replicas=1
+#
+# llama-bench itself does not yet support --spec-type (see ggml-org/llama.cpp#22947),
+# so this Job runs llama-cli twice on the same prompt — once without MTP, once with —
+# and prints the eval tokens/sec line from each run so you can compare.
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: llama-bench-qwen
+  namespace: ai
+spec:
+  backoffLimit: 0
+  ttlSecondsAfterFinished: 3600
+  template:
+    spec:
+      restartPolicy: Never
+      nodeSelector:
+        kubernetes.io/hostname: paris
+      resourceClaims:
+        - name: gpu
+          resourceClaimTemplateName: llama-cpp-qwen-gpu
+      securityContext:
+        supplementalGroups:
+          - 44
+          - 992
+      containers:
+        - name: bench
+          image: ghcr.io/ggml-org/llama.cpp:full-vulkan-b9191
+          command:
+            - /bin/sh
+            - -ec
+            - |
+              MODEL=/models/models--unsloth--Qwen3.6-27B-MTP-GGUF/model.gguf
+              PROMPT="Write a detailed 400-word essay about the history of the printing press."
+              COMMON="-m $MODEL -ngl 999 -c 4096 -n 256 -t 8 --temp 0 --no-display-prompt -p \"$PROMPT\""
+
+              echo "===================================================="
+              echo "Run 1/2: baseline (no MTP)"
+              echo "===================================================="
+              eval "llama-cli $COMMON" 2>&1 | tail -n 30
+
+              echo
+              echo "===================================================="
+              echo "Run 2/2: MTP enabled (--spec-type draft-mtp -ndmax 2)"
+              echo "===================================================="
+              eval "llama-cli $COMMON --spec-type draft-mtp --spec-draft-n-max 2" 2>&1 | tail -n 30
+          resources:
+            claims:
+              - name: gpu
+            requests:
+              cpu: 100m
+              memory: 512Mi
+            limits:
+              memory: 40Gi
+          securityContext:
+            privileged: true
+          volumeMounts:
+            - name: models
+              mountPath: /models
+              readOnly: true
+            - name: render
+              mountPath: /dev/dri/renderD128
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: models
+          persistentVolumeClaim:
+            claimName: llama-cpp-qwen-models
+        - name: render
+          hostPath:
+            path: /dev/dri/renderD128
+        - name: tmp
+          emptyDir: {}

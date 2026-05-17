@@ -7,7 +7,11 @@ repos:
         entry: kubeconform -strict -ignore-missing-schemas -schema-location "https://k8s-schemas.home-operations.com/{{.Group}}/{{.ResourceKind}}_{{.ResourceAPIVersion}}.json"
         language: system
         files: ^kubernetes/.+\.ya?ml$
-        exclude: (/config/|/resources/|kustomization\.ya?ml$|namespace\.ya?ml$|/components/|hooks.ya?ml$)
+        # discord-alert.yaml uses flux-operator-extended event sources (FluxInstance,
+        # ResourceSet, ResourceSetInputProvider) that the upstream notification-controller
+        # CRD doesn't list in its enum. flux-operator adds them at install time via runtime
+        # patches; the upstream-sourced schema can't see those, so skip just this file.
+        exclude: (/config/|/resources/|kustomization\.ya?ml$|namespace\.ya?ml$|/components/|hooks.ya?ml$|/flux-instance/app/alerts/discord-alert\.ya?ml$)
       - id: yamllint
         name: YAML Lint
         entry: yamllint

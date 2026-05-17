@@ -31,7 +31,7 @@ data:
             includeReasoning: true,
           },
           imageModel: {
-            primary: "llamacpp/google/gemma-4-E4B-it",
+            primary: "litellm/gemma",
           },
           maxConcurrent: 4,
           memorySearch: {
@@ -46,19 +46,19 @@ data:
             },
           },
           model: {
-            primary: "minimax/MiniMax-M2.7",
+            primary: "litellm/minimax/MiniMax-M2.7",
             fallbacks: [
-              "llamacpp/qwen/qwen3.6-27B:general",
-              "llamacpp/google/gemma-4-E4B-it",
+              "litellm/qwen",
+              "litellm/gemma",
             ],
           },
           models: {
-            "llamacpp/google/gemma-4-E4B-it": { alias: "gemma" },
-            "llamacpp/qwen/qwen3.6-27B:general": { alias: "qwen" },
-            "minimax/MiniMax-M2.7": { alias: "minimax" },
+            "litellm/gemma": { alias: "gemma" },
+            "litellm/qwen": { alias: "qwen" },
+            "litellm/minimax/MiniMax-M2.7": { alias: "minimax" },
           },
           subagents: {
-            model: { primary: "minimax/MiniMax-M2.7" },
+            model: { primary: "litellm/minimax/MiniMax-M2.7" },
             archiveAfterMinutes: 120,
             maxConcurrent: 3,
             thinking: "medium",
@@ -80,34 +80,36 @@ data:
             },
             heartbeat: {
               every: "60m",
-              model: "minimax/MiniMax-M2.7",
+              model: "litellm/minimax/MiniMax-M2.7",
               activeHours: { start: "06:00", end: "23:00" },
             },
           },
         ],
       },
       bindings: [
-        { agentId: "main", match: { channel: "discord" } },
+        { agentId: "main", match: { channel: "discord", accountId: "default" } },
         { agentId: "main", match: { channel: "matrix" } },
       ],
       channels: {
         discord: {
           enabled: true,
-          token: "{{ .DISCORD_TOKEN }}",
-          dmPolicy: "pairing",
-          dm: {
-            enabled: true,
-            allowFrom: ["178154257042636800"],
-          },
+          defaultAccount: "default",
           groupPolicy: "allowlist",
-          guilds: {
-            "1503020857423822858": {
-              requireMention: false,
+          accounts: {
+            default: {
+              token: "{{ .DISCORD_TOKEN }}",
+              guilds: {
+                "1441534507017703547": {
+                  channels: {
+                    "1501981764430594189": { enabled: true },
+                  },
+                },
+              },
             },
           },
         },
         matrix: {
-          enabled: false,
+          enabled: true,
           accessToken: "{{ .MATRIX_ACCESS_TOKEN }}",
           autoJoin: "always",
           dm: {
@@ -133,8 +135,7 @@ data:
       },
       auth: {
         profiles: {
-          "llamacpp:default": { provider: "llamacpp", mode: "api_key" },
-          "minimax:default": { provider: "minimax", mode: "api_key" },
+          "litellm:default": { provider: "litellm", mode: "api_key" },
         },
       },
       hooks: {
@@ -149,13 +150,13 @@ data:
       models: {
         mode: "merge",
         providers: {
-          llamacpp: {
+          litellm: {
             api: "openai-responses",
-            apiKey: "{{ .LLAMA_API_KEY }}",
-            baseUrl: "http://llama-cpp.ai:8080/v1",
+            apiKey: "{{ .LITELLM_MASTER_KEY }}",
+            baseUrl: "http://litellm.ai:4000/v1",
             models: [
               {
-                id: "google/gemma-4-E4B-it",
+                id: "gemma",
                 name: "Gemma 4 E4B",
                 reasoning: false,
                 input: ["text", "image"],
@@ -165,7 +166,7 @@ data:
                 compat: { supportsUsageInStreaming: true },
               },
               {
-                id: "qwen/qwen3.6-27B:general",
+                id: "qwen",
                 name: "Qwen3.6 27B",
                 reasoning: false,
                 input: ["text"],
@@ -174,15 +175,8 @@ data:
                 maxTokens: 8192,
                 compat: { supportsUsageInStreaming: true },
               },
-            ],
-          },
-          minimax: {
-            api: "anthropic-messages",
-            apiKey: "{{ .MINIMAX_API_KEY }}",
-            baseUrl: "https://api.minimax.io/anthropic",
-            models: [
               {
-                id: "MiniMax-M2.7",
+                id: "minimax/MiniMax-M2.7",
                 name: "MiniMax M2.7",
                 reasoning: true,
                 input: ["text"],
@@ -196,7 +190,7 @@ data:
         },
       },
       messages: {
-        groupChat: { visibleReplies: "automatic" },
+        groupChat: { visibleReplies: "message_tool" },
       },
       mcp: {
         servers: {
@@ -228,7 +222,6 @@ data:
       },
       plugins: {
         allow: [
-          "agentmemory",
           "browser",
           "discord",
           "matrix",
@@ -239,16 +232,6 @@ data:
         ],
         bundledDiscovery: "compat",
         entries: {
-          agentmemory: {
-            enabled: true,
-            config: {
-              base_url: "http://agentmemory.ai.svc.cluster.local:3111",
-              token_budget: 2000,
-              min_confidence: 0.5,
-              fallback_on_error: true,
-              timeout_ms: 5000,
-            },
-          },
           browser: { enabled: true },
           discord: { enabled: true },
           "memory-core": { enabled: true },
@@ -290,7 +273,7 @@ data:
           "skill-workshop": { enabled: true },
         },
         slots: {
-          memory: "agentmemory",
+          memory: "memory-core",
         },
       },
       session: {
