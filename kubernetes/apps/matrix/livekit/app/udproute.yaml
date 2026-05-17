@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/stunner.l7mp.io/udproute_v1.json
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/stunner.l7mp.io/udproute_v1.json
 apiVersion: stunner.l7mp.io/v1
 kind: UDPRoute
 metadata:

@@ -1,6 +1,6 @@
 ---
 
-# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/cilium.io/ciliumloadbalancerippool_v2.json
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/cilium.io/ciliumloadbalancerippool_v2.json
 apiVersion: cilium.io/v2
 kind: CiliumLoadBalancerIPPool
 metadata:
@@ -10,7 +10,7 @@ spec:
   blocks:
     - cidr: "192.168.69.0/24"
 ---
-# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/cilium.io/ciliumloadbalancerippool_v2.json
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/cilium.io/ciliumloadbalancerippool_v2.json
 apiVersion: cilium.io/v2
 kind: CiliumLoadBalancerIPPool
 metadata:
@@ -23,7 +23,7 @@ spec:
     matchLabels:
       expose/vx0: "true"
 ---
-# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/cilium.io/ciliumbgpadvertisement_v2.json
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/cilium.io/ciliumbgpadvertisement_v2.json
 apiVersion: cilium.io/v2
 kind: CiliumBGPAdvertisement
 metadata:
@@ -40,7 +40,7 @@ spec:
         matchExpressions:
           - {key: somekey, operator: NotIn, values: ["never-used-value"]}
 ---
-# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/cilium.io/ciliumbgppeerconfig_v2.json
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/cilium.io/ciliumbgppeerconfig_v2.json
 apiVersion: cilium.io/v2
 kind: CiliumBGPPeerConfig
 metadata:
@@ -58,7 +58,7 @@ spec:
     holdTimeSeconds: 90
     keepAliveTimeSeconds: 60
 ---
-# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/cilium.io/ciliumbgpclusterconfig_v2.json
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/cilium.io/ciliumbgpclusterconfig_v2.json
 apiVersion: cilium.io/v2
 kind: CiliumBGPClusterConfig
 metadata:

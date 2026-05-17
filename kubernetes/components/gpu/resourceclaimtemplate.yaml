@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/resource.k8s.io/resourceclaimtemplate_v1.json
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/resource.k8s.io/resourceclaimtemplate_v1.json
 apiVersion: resource.k8s.io/v1
 kind: ResourceClaimTemplate
 metadata:

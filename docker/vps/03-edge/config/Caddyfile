@@ -71,12 +71,6 @@ tunnel.erwanleboucher.dev {
 	reverse_proxy towonel-hub:8443
 }
 
-k8s-schemas.erwanleboucher.dev {
-	reverse_proxy http://k8s-schemas.s3-website.rbx.io.cloud.ovh.net {
-		header_up Host k8s-schemas.s3-website.rbx.io.cloud.ovh.net
-	}
-}
-
 openpgpkey.erwanleboucher.dev {
 	header Access-Control-Allow-Origin *
 	header Access-Control-Allow-Headers *

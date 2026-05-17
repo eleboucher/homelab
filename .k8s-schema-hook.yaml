@@ -1,5 +1,5 @@
 ---
-domain: k8s-schemas.erwanleboucher.dev
+domain: k8s-schemas.home-operations.com
 
 overrides:
   - name: kustomize

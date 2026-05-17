@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/generators.external-secrets.io/clustergenerator_v1alpha1.json
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/generators.external-secrets.io/clustergenerator_v1alpha1.json
 apiVersion: generators.external-secrets.io/v1alpha1
 kind: ClusterGenerator
 metadata:
