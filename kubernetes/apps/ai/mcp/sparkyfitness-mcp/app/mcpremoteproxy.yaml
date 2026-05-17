@@ -1,0 +1,17 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.erwanleboucher.dev/toolhive.stacklok.dev/mcpremoteproxy_v1alpha1.json
+apiVersion: toolhive.stacklok.dev/v1alpha1
+kind: MCPRemoteProxy
+metadata:
+  name: sparkyfitness-mcp
+spec:
+  groupRef:
+    name: mcp-tools
+  remoteUrl: http://sparkyfitness-mcp.selfhosted.svc.cluster.local:3001/mcp
+  transport: streamable-http
+  headerForward:
+    addHeadersFromSecret:
+      - headerName: Authorization
+        valueSecretRef:
+          name: sparkyfitness-mcp
+          key: authorization

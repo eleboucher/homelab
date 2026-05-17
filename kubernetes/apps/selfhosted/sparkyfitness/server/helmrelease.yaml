@@ -59,12 +59,57 @@ spec:
                 memory: 384Mi
               limits:
                 memory: 768Mi
+          mcp:
+            image:
+              # renovate: datasource=docker depName=docker.io/codewithcj/sparkyfitness_mcp
+              repository: docker.io/codewithcj/sparkyfitness_mcp
+              tag: dev@sha256:8cd75265415714fa2bef1819105459dd8b12536131f6c9f6831b233df8874997
+            env:
+              MCP_TRANSPORT: http
+              SPARKY_FITNESS_MCP_PORT: "3001"
+              SPARKY_FITNESS_DB_HOST: postgres-rw.database.svc
+              SPARKY_FITNESS_DB_PORT: "5432"
+              SPARKY_FITNESS_DB_NAME: sparkyfitness
+              SPARKY_FITNESS_DB_USER: sparkyfitness
+              SPARKY_FITNESS_DB_PASSWORD:
+                valueFrom:
+                  secretKeyRef:
+                    name: sparkyfitness-postgres
+                    key: password
+              SPARKY_FITNESS_SERVER_HOST: sparkyfitness.selfhosted.svc.cluster.local
+              SPARKY_FITNESS_SERVER_PORT: "3010"
+              TZ: "Europe/Paris"
+            envFrom:
+              - secretRef:
+                  name: sparkyfitness-secrets
+            resources:
+              requests:
+                cpu: 10m
+                memory: 128Mi
+              limits:
+                memory: 256Mi
     service:
       main:
         controller: main
         ports:
           http:
             port: 3010
+      mcp:
+        controller: main
+        ports:
+          http:
+            port: 3001
+    route:
+      mcp:
+        hostnames:
+          - sparkyfitness-mcp.erwanleboucher.dev
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
+        rules:
+          - backendRefs:
+              - identifier: mcp
+                port: 3001
     persistence:
       uploads:
         type: persistentVolumeClaim
