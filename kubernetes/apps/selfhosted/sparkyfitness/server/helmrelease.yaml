@@ -63,7 +63,7 @@ spec:
             image:
               # renovate: datasource=docker depName=docker.io/codewithcj/sparkyfitness_mcp
               repository: docker.io/codewithcj/sparkyfitness_mcp
-              tag: dev@sha256:8cd75265415714fa2bef1819105459dd8b12536131f6c9f6831b233df8874997
+              tag: dev@sha256:8b70237f04fc2e09576d6ff8305ea9ae3445916b28f0d8c76564d1def3177913
             env:
               MCP_TRANSPORT: http
               SPARKY_FITNESS_MCP_PORT: "3001"
