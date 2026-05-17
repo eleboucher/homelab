@@ -54,7 +54,7 @@ spec:
           app:
             image:
               repository: ghcr.io/ggml-org/llama.cpp
-              tag: server-vulkan-b9174@sha256:8d0b822f79462b6a376e5f91944a078721a3e9289ce3dd20ed8a41660ee8c664
+              tag: server-vulkan-b9191@sha256:9fbcff1679e0150936c491540989f8cd7195d3cb6cd299b606ad32c14cdf5934
             args:
               - --models-preset
               - /config/presets.ini
