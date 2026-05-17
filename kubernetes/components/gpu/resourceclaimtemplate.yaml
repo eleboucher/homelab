@@ -11,4 +11,7 @@ spec:
         - name: gpu
           exactly:
             deviceClassName: gpu.intel.com
-            allocationMode: All
+            capacity:
+              requests:
+                memory: 1Gi
+                millicores: 100

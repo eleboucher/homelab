@@ -3,14 +3,13 @@
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: &app llama-cpp-qwen
-  labels: &labels
-    app.kubernetes.io/instance: *app
-    app.kubernetes.io/name: *app
+  name: llama-cpp
+  labels:
+    app.kubernetes.io/name: llama-cpp
 spec:
   selector:
     matchLabels:
-      !!merge <<: *labels
+      app.kubernetes.io/name: llama-cpp
   namespaceSelector:
     matchNames:
       - ai
@@ -25,5 +24,5 @@ spec:
       authorization:
         type: Bearer
         credentials:
-          name: llama-cpp-qwen-secret
+          name: llama-cpp-secret
           key: LLAMA_API_KEY
