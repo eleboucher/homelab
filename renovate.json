@@ -2,13 +2,7 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "local>eleboucher/renovate-config",
-    "github>home-operations/renovate-presets:cnpg",
-    "github>home-operations/renovate-presets:helmfile",
-    "github>home-operations/renovate-presets:llama-cpp",
-    "github>home-operations/renovate-presets:phanpy",
-    "github>home-operations/renovate-presets:renovate-operator",
-    "github>home-operations/renovate-presets:searxng",
-    "github>home-operations/renovate-presets:talos-factory",
+    "github>home-operations/renovate-presets",
     "local>eleboucher/homelab//.renovate/automerge.json5",
     "local>eleboucher/homelab//.renovate/groups.json5",
     "local>eleboucher/homelab//.renovate/overrides.json5"
