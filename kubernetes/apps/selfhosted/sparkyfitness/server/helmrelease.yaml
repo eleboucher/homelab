@@ -94,10 +94,7 @@ spec:
         ports:
           http:
             port: 3010
-      mcp:
-        controller: main
-        ports:
-          http:
+          mcp:
             port: 3001
     route:
       mcp:
@@ -108,7 +105,7 @@ spec:
             namespace: network
         rules:
           - backendRefs:
-              - identifier: mcp
+              - identifier: main
                 port: 3001
     persistence:
       uploads:
