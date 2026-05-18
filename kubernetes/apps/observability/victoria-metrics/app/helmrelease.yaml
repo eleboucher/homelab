@@ -96,6 +96,11 @@ spec:
         enabled: true
         spec:
           allowCrossNamespaceImport: true
+    defaultRules:
+      rules:
+        NodeMemoryHighUtilization:
+          spec:
+            expr: (100 - ((node_memory_MemAvailable_bytes{job="node-exporter"} / node_memory_MemTotal_bytes{job="node-exporter"}) * 100)) > 95
     defaultDatasources:
       grafanaOperator:
         enabled: true
