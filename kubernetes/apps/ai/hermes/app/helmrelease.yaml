@@ -223,7 +223,7 @@ spec:
           webui:
             image:
               repository: ghcr.io/nesquena/hermes-webui
-              tag: 0.51.85@sha256:dfb1fc519609e157e00059f0550aea67be693527df0d54ebd80f4f09e70ad82f
+              tag: 0.51.89@sha256:041f3049c2205689a539dfac82a14e49f3f4c3b2c1d8d47fe251e7794a912176
             env:
               HERMES_WEBUI_HOST: 0.0.0.0
               HERMES_WEBUI_PORT: "8787"
