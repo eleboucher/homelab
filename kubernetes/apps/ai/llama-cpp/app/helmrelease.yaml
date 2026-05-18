@@ -87,7 +87,7 @@ spec:
               - --flash-attn
               - on
               - --sleep-idle-seconds
-              - "300"
+              - "60"
               - --temp
               - "0.7"
               - --top-k
@@ -170,7 +170,7 @@ spec:
               - --flash-attn
               - on
               - --sleep-idle-seconds
-              - "300"
+              - "60"
               - --temp
               - "1.0"
               - --top-k
