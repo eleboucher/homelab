@@ -149,9 +149,9 @@ spec:
                 - name: gpu
               requests:
                 cpu: 100m
-                memory: 512Mi
+                memory: 8Gi
               limits:
-                memory: 40Gi
+                memory: 20Gi
             securityContext:
               privileged: true
           gemma:
@@ -224,9 +224,9 @@ spec:
                 - name: gpu
               requests:
                 cpu: 100m
-                memory: 512Mi
+                memory: 4Gi
               limits:
-                memory: 20Gi
+                memory: 12Gi
             securityContext:
               privileged: true
     service:
