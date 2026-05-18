@@ -16,6 +16,7 @@ max_request_size = 20971520
 
 # DNS Optimisation
 dns_timeout = 60
+dns_min_ttl = 30
 query_over_tcp_only = true
 ip_lookup_strategy = 1
 
