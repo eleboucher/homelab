@@ -41,7 +41,7 @@ data:
     terminal:
       backend: local
       cwd: /opt/data/workspace
-      timeout: 180
+      timeout: 900
       persistent_shell: true
     memory:
       provider: agentmemory
@@ -82,6 +82,8 @@ data:
     AGENTMEMORY_URL=http://agentmemory.ai.svc.cluster.local:3111
     AGENTMEMORY_SECRET={{ .AGENTMEMORY_SECRET }}
     LITELLM_API_KEY={{ .LITELLM_MASTER_KEY }}
+    OPENAI_API_KEY={{ .LITELLM_MASTER_KEY }}
+    OPENAI_BASE_URL=http://litellm.ai:4000/v1
     SUMMARY_LLM_API_KEY={{ .LITELLM_MASTER_KEY }}
     MATRIX_HOMESERVER={{ .MATRIX_HOMESERVER }}
     MATRIX_ACCESS_TOKEN={{ .MATRIX_ACCESS_TOKEN }}
