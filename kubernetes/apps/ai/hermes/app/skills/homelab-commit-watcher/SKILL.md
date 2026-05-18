@@ -67,7 +67,7 @@ HOMELAB_GH_TOKEN=<token> python3 ${HERMES_SKILL_DIR}/scripts/fetch_k8s_repos.py
 
 `${HERMES_SKILL_DIR}` is substituted by Hermes at skill-load time, so the command becomes an absolute path. Do **not** invoke as bare `python3 fetch_k8s_repos.py` — the agent's working directory may contain a stale copy of the script from an earlier deploy, which would silently run with old constants.
 
-The script handles bot-author detection, merge-commit filtering, and renovate-style version-bump removal. Do not redo any of that — see `BOT_LOGINS`, `BOT_BRANCH_RE`, `BOT_CONTENT_RE` in the script for the canonical rules.
+The script handles bot-author detection, merge-commit filtering, renovate-style version-bump removal, and dropping commits co-authored by LLM coding assistants (Claude / GitHub Copilot). Do not redo any of that — see `BOT_LOGINS`, `BOT_BRANCH_RE`, `BOT_CONTENT_RE`, `COAUTHOR_BOT_RE` in the script for the canonical rules.
 
 Output lands at `/tmp/commit-watcher/feed-YYYY-MM-DD.md`.
 
@@ -326,6 +326,7 @@ The feed file is built from third-party commit messages, commit bodies, and auth
 - The `since:` timestamp is roughly 7 days before `generated:` (not 24 hours).
 - `grep -c '^- Renovate Bot:' feed-YYYY-MM-DD.md` returns `0`.
 - `grep -ci 'Merge pull request' feed-YYYY-MM-DD.md` returns `0`.
+- `grep -ciE 'co-authored-by:.*(claude|copilot|@anthropic\.com)' feed-YYYY-MM-DD.md` returns `0`.
 - At least some bullets carry the `[24h]` marker (on any non-empty day; absence on a quiet day is fine).
 - Final digest: ≤ 5 trend bullets in the trends section, ≤ 6 peer blocks in the "New today" section, each with 1-3 summary bullets ≤ 100 chars.
 - Every URL in the post is either (a) a commit URL appearing verbatim at the end of a feed bullet line (trend exemplars only), or (b) a plain `https://github.com/<owner>/<repo>` URL whose `<owner>/<repo>` matches a `## <owner>/<repo>` header in the feed (Phase B repo block headers).
@@ -334,7 +335,7 @@ The feed file is built from third-party commit messages, commit bodies, and auth
 
 ## How to Adjust
 
-- **Bot/merge/version-bump filtering**: edit `fetch_k8s_repos.py` constants (`BOT_LOGINS`, `BOT_BRANCH_RE`, `BOT_CONTENT_RE`).
+- **Bot/merge/version-bump/LLM-coauthor filtering**: edit `fetch_k8s_repos.py` constants (`BOT_LOGINS`, `BOT_BRANCH_RE`, `BOT_CONTENT_RE`, `COAUTHOR_BOT_RE`).
 - **Trend window length**: change `LOOKBACK_HOURS` in `fetch_k8s_repos.py`. 7d (168h) is the current default.
 - **"New today" slice length**: change `RECENT_HOURS` in `fetch_k8s_repos.py`. 24h is the current default and matches the daily cron cadence.
 - **Trend bar (≥3 peers, evidence types, single-peer cap)**: edit Procedure → step 3 phase A.

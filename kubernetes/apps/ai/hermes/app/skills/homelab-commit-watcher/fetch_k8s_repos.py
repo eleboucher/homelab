@@ -208,14 +208,25 @@ BOT_CONTENT_RE = re.compile(
     re.IGNORECASE,
 )
 
+# Drop commits where an LLM coding assistant is credited as co-author — they're
+# not a peer's own work for the purposes of this digest. Matches the trailer
+# line by name (claude, copilot, github copilot) or by Anthropic's noreply
+# email, which is the unique signal for Claude Code regardless of model alias.
+COAUTHOR_BOT_RE = re.compile(
+    r"co-authored-by:[^\n]*(?:\bclaude\b|\bcopilot\b|@anthropic\.com)",
+    re.IGNORECASE,
+)
 
-def is_skippable_commit(message: str) -> bool:
-    msg = message.lstrip().lower()
+
+def is_skippable_commit(headline: str, body: str = "") -> bool:
+    msg = headline.lstrip().lower()
     if msg.startswith("merge pull request"):
         return True
-    if BOT_BRANCH_RE.search(message):
+    if BOT_BRANCH_RE.search(headline):
         return True
-    if BOT_CONTENT_RE.search(message):
+    if BOT_CONTENT_RE.search(headline):
+        return True
+    if body and COAUTHOR_BOT_RE.search(body):
         return True
     return False
 
@@ -457,7 +468,9 @@ def main() -> None:
                 history = target.get("history", {}).get("nodes", [])
                 commits = []
                 for c in history:
-                    if is_bot(c["author"]) or is_skippable_commit(c["messageHeadline"]):
+                    if is_bot(c["author"]) or is_skippable_commit(
+                        c["messageHeadline"], c.get("messageBody") or ""
+                    ):
                         continue
                     user = c["author"].get("user") or {}
                     committed = datetime.fromisoformat(
