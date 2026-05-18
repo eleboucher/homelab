@@ -128,16 +128,17 @@ spec:
                   sed -i 's|/agentmemory/health|/agentmemory/livez|' /opt/data/plugins/agentmemory/__init__.py
                 fi
 
-                # /opt/hermes/.venv is read-only — install matrix encryption deps
-                # into the data PVC and surface them via PYTHONPATH on the app container.
-                site_packages=/opt/data/.local/lib/python3.13/site-packages
-                if [ ! -d "$site_packages/mautrix" ]; then
-                  mkdir -p "$site_packages"
-                  UV_CACHE_DIR=/tmp/uv-cache UV_LINK_MODE=copy uv pip install \
-                    --python /opt/hermes/.venv/bin/python \
-                    --target "$site_packages" \
-                    "mautrix[encryption]"
-                fi
+                # /opt/hermes (incl. .venv) is now mounted from the agent-source emptyDir,
+                # populated by copy-agent-source and owned by UID 1000 — so we can install
+                # the platform.matrix feature deps (see hermes-agent#25495) directly into
+                # the real venv instead of side-loading via PYTHONPATH.
+                UV_CACHE_DIR=/tmp/uv-cache UV_LINK_MODE=copy uv pip install \
+                  --python /opt/hermes/.venv/bin/python \
+                  "mautrix[encryption]" \
+                  Markdown \
+                  aiosqlite \
+                  asyncpg \
+                  aiohttp-socks
             securityContext:
               allowPrivilegeEscalation: false
               capabilities:
@@ -177,10 +178,9 @@ spec:
               MATRIX_ENCRYPTION: "true"
               PATH: /opt/hermes/.venv/bin:/opt/data/.local/bin:/opt/data/.local/go/bin:/opt/data/.local/homebrew/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
               PIP_BREAK_SYSTEM_PACKAGES: "1"
-              PYTHONPATH: /opt/data/.local/lib/python3.13/site-packages
               SEARXNG_URL: http://searxng.selfhosted.svc.cluster.local:8080
-              SUMMARY_LLM_MODEL: google/gemma-4-E4B-it
-              SUMMARY_LLM_URL: http://llama-cpp.ai:8080/v1
+              SUMMARY_LLM_MODEL: gemma
+              SUMMARY_LLM_URL: http://litellm.ai:4000/v1
               TERM: xterm-256color
               TZ: ${TZ}
             resources:
@@ -307,6 +307,10 @@ spec:
           hermes:
             copy-agent-source:
               - path: /agent-src
+            install-tools:
+              - path: /opt/hermes
+            app:
+              - path: /opt/hermes
             webui:
               - path: /home/hermeswebui/.hermes/hermes-agent
       data:

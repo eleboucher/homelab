@@ -11,18 +11,30 @@ data:
           model: openai/gemma
           api_base: http://llama-cpp-gemma.ai:8080/v1
           api_key: os.environ/LLAMA_API_KEY
+        model_info:
+          max_tokens: 32768
+          max_input_tokens: 32768
+          max_output_tokens: 8192
 
       - model_name: qwen
         litellm_params:
           model: openai/qwen
           api_base: http://llama-cpp-qwen.ai:8080/v1
           api_key: os.environ/LLAMA_API_KEY
+        model_info:
+          max_tokens: 32768
+          max_input_tokens: 32768
+          max_output_tokens: 8192
 
       - model_name: minimax/MiniMax-M2.7
         litellm_params:
           model: minimax/MiniMax-M2.7
           api_base: https://api.minimax.io/v1
           api_key: os.environ/MINIMAX_API_KEY
+        model_info:
+          max_tokens: 204800
+          max_input_tokens: 192000
+          max_output_tokens: 16384
 
     general_settings:
       health_check_endpoint: /v1/health
