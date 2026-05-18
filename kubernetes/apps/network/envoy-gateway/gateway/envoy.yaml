@@ -34,6 +34,7 @@ spec:
               bytes_received: "%BYTES_RECEIVED%"
               bytes_sent: "%BYTES_SENT%"
               duration: "%DURATION%"
+              envoy_route: "%ROUTE_NAME%"
               message: "%REQ(:METHOD)% %REQ(X-ENVOY-ORIGINAL-PATH?:PATH)% %RESPONSE_CODE%"
               response_code: "%RESPONSE_CODE%"
               response_flags: "%RESPONSE_FLAGS%"

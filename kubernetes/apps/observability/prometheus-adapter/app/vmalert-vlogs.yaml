@@ -7,7 +7,7 @@ metadata:
 spec:
   datasource:
     url: http://victoria-logs-client.observability.svc.cluster.local:9428
-  evaluationInterval: 30s
+  evaluationInterval: 15s
   extraArgs:
     remoteWrite.disablePathAppend: "true"
     rule.defaultRuleType: vlogs

@@ -9,12 +9,12 @@ metadata:
 spec:
   groups:
     - name: envoy-route-requests-vlogs
-      interval: 30s
+      interval: 15s
       type: vlogs
       rules:
         - record: envoy_route_requests_log
           expr: |-
-            kubernetes.pod_namespace:network kubernetes.container_name:envoy authority:* _time:2m
-            | extract "<route_name>.erwanleboucher.dev" from authority
+            kubernetes.pod_namespace:network kubernetes.container_name:envoy envoy_route:httproute/* _time:2m
+            | extract "httproute/<_>/<route_name>/rule/<_>" from envoy_route
             | filter route_name:*
             | stats by(route_name) count() value
