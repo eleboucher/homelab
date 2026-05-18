@@ -6,5 +6,4 @@ namespace: jobs
 
 resources:
   - namespace.yaml
-  - k8s-schemas/ks.yaml
   - mikrotik-cert-sync/ks.yaml
