@@ -11,6 +11,7 @@ spec:
   interval: 30m
   timeout: 15m
   values:
+    metricsRelistInterval: 10s
     prometheus:
       url: http://vmsingle-victoria-metrics.observability.svc.cluster.local
       port: 8428

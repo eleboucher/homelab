@@ -12,12 +12,14 @@ spec:
     - ../../../../components/volsync
     - ../../../../components/oidc
     - ../../../../components/postgres/cert
-    - ../../../../components/envoy-zeroscaler
+    - ../../../../components/keda-http-scaler
   dependsOn:
     - name: cnpg-cluster
       namespace: database
     - name: dragonfly
       namespace: database
+    - name: keda-http-add-on
+      namespace: flux-system
     - name: rook-ceph-cluster
       namespace: rook-ceph
   interval: 1h
@@ -28,6 +30,7 @@ spec:
       APP_NAMESPACE: selfhosted
       APP_UID: "1000"
       APP_GID: "65542"
+      HTTP_SCALER_PORT: "8000"
       VOLSYNC_CAPACITY: 15Gi
       OIDC_DISPLAY_NAME: "Paperless"
       OIDC_CALLBACK: /accounts/oidc/kanidm/login/callback/

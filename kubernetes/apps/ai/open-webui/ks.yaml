@@ -11,8 +11,10 @@ spec:
   components:
     - ../../../../components/volsync
     - ../../../../components/oidc
-    - ../../../../components/envoy-zeroscaler
+    - ../../../../components/keda-http-scaler
   dependsOn:
+    - name: keda-http-add-on
+      namespace: flux-system
     - name: rook-ceph-cluster
       namespace: rook-ceph
   healthCheckExprs:
@@ -26,6 +28,7 @@ spec:
     substitute:
       APP: open-webui
       APP_NAMESPACE: ai
+      HTTP_SCALER_PORT: "8080"
       OIDC_CALLBACK: /oauth/oidc/callback
       OIDC_DISPLAY_NAME: Open WebUI
       SUBDOMAIN: chat

@@ -1,0 +1,19 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/http.keda.sh/httpscaledobject_v1alpha1.json
+apiVersion: http.keda.sh/v1alpha1
+kind: HTTPScaledObject
+metadata:
+  name: ${APP}
+spec:
+  hosts:
+    - ${SUBDOMAIN:=${APP}}.erwanleboucher.dev
+  replicas:
+    max: 1
+    min: 0
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: ${CONTROLLER:=Deployment}
+    name: ${APP}
+    port: ${HTTP_SCALER_PORT}
+    service: ${HTTP_SCALER_SERVICE:=${APP}}
+  scaledownPeriod: ${HTTP_SCALER_SCALEDOWN:=180}

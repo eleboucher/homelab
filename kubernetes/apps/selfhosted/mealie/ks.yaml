@@ -9,10 +9,12 @@ spec:
     - ../../../../components/oidc
     - ../../../../components/postgres/cert
     - ../../../../components/volsync
-    - ../../../../components/envoy-zeroscaler
+    - ../../../../components/keda-http-scaler
   dependsOn:
     - name: cnpg-cluster
       namespace: database
+    - name: keda-http-add-on
+      namespace: flux-system
     - name: rook-ceph-cluster
       namespace: rook-ceph
   interval: 1h
@@ -21,6 +23,7 @@ spec:
     substitute:
       APP: *app
       APP_NAMESPACE: selfhosted
+      HTTP_SCALER_PORT: "9000"
       OIDC_CALLBACK: /login
       OIDC_DISPLAY_NAME: Mealie
       OIDC_LEGACY_CRYPTO: "true"
