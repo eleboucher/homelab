@@ -127,6 +127,17 @@ spec:
                 if [ -f /opt/data/plugins/agentmemory/__init__.py ]; then
                   sed -i 's|/agentmemory/health|/agentmemory/livez|' /opt/data/plugins/agentmemory/__init__.py
                 fi
+
+                # /opt/hermes/.venv is read-only — install matrix encryption deps
+                # into the data PVC and surface them via PYTHONPATH on the app container.
+                site_packages=/opt/data/.local/lib/python3.13/site-packages
+                if [ ! -d "$site_packages/mautrix" ]; then
+                  mkdir -p "$site_packages"
+                  UV_CACHE_DIR=/tmp/uv-cache UV_LINK_MODE=copy uv pip install \
+                    --python /opt/hermes/.venv/bin/python \
+                    --target "$site_packages" \
+                    "mautrix[encryption]"
+                fi
             securityContext:
               allowPrivilegeEscalation: false
               capabilities:
@@ -166,6 +177,7 @@ spec:
               MATRIX_ENCRYPTION: "true"
               PATH: /opt/hermes/.venv/bin:/opt/data/.local/bin:/opt/data/.local/go/bin:/opt/data/.local/homebrew/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
               PIP_BREAK_SYSTEM_PACKAGES: "1"
+              PYTHONPATH: /opt/data/.local/lib/python3.13/site-packages
               SEARXNG_URL: http://searxng.selfhosted.svc.cluster.local:8080
               SUMMARY_LLM_MODEL: google/gemma-4-E4B-it
               SUMMARY_LLM_URL: http://llama-cpp.ai:8080/v1
@@ -225,9 +237,12 @@ spec:
               repository: ghcr.io/nesquena/hermes-webui
               tag: 0.51.89@sha256:041f3049c2205689a539dfac82a14e49f3f4c3b2c1d8d47fe251e7794a912176
             env:
+              # upstream entrypoint uses `su -c`, HOME stays /root → .env missed
+              HERMES_HOME: /home/hermeswebui/.hermes
               HERMES_WEBUI_HOST: 0.0.0.0
               HERMES_WEBUI_PORT: "8787"
               HERMES_WEBUI_STATE_DIR: /home/hermeswebui/.hermes/webui
+              HOME: /home/hermeswebui
               TZ: ${TZ}
               WANTED_GID: "1000"
               WANTED_UID: "1000"
