@@ -1,10 +1,10 @@
 ---
 working_dir: ./docker/vps
-auto_discover: true
 reconciliation:
   enabled: true
   interval: 3600
-auto_discover_opts:
+auto_discovery:
+  enabled: true
   depth: 1
   delete: true
 force_recreate: false
