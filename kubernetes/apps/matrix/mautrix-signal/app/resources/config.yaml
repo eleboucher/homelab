@@ -49,7 +49,7 @@ homeserver:
   async_media: false
 
 appservice:
-  address: http://mautrix-signal.matrix.svc.cluster.local:29328
+  address: http://mautrix-signal.matrix.svc:29328
   hostname: 0.0.0.0
   port: 29328
   id: signal

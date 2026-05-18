@@ -74,10 +74,10 @@ homeserver:
   async_media: false
 
 appservice:
-  address: http://mautrix-whatsapp.matrix.svc.cluster.local:29318
+  address: http://mautrix-whatsapp.matrix.svc:29318
   hostname: 0.0.0.0
   port: 29318
-  id: whatsapp2
+  id: whatsapp
   bot:
     username: whatsappbot
     displayname: WhatsApp bridge bot

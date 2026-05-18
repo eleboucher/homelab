@@ -1,6 +1,6 @@
 ---
 id: signal
-url: http://mautrix-signal.matrix.svc.cluster.local:29328
+url: http://mautrix-signal.matrix.svc:29328
 as_token: "{{ .AS_TOKEN }}"
 hs_token: "{{ .HS_TOKEN }}"
 sender_localpart: signalbot
