@@ -30,7 +30,7 @@ spec:
           app:
             image:
               repository: registry.erwanleboucher.dev/eleboucher/agentmemory
-              tag: 0.9.18-8b17cbc@sha256:76bd1399c9b8b791c845c54bc34e9425d911827e73a10ab3f2f2e5cdf77dc411
+              tag: 0.9.19-da8bc86@sha256:e9357135e43524c8491b963c29c1a94ea3dfa7fd42024fd24d17b5f356117945
             command:
               - /usr/bin/catatonit
               - --
