@@ -220,6 +220,12 @@ spec:
     vmalert:
       spec:
         evaluationInterval: 30s
+        ruleSelector:
+          matchExpressions:
+            - key: vmalert-datasource
+              operator: NotIn
+              values:
+                - vlogs
     vmauth:
       enabled: true
       spec:
@@ -233,7 +239,7 @@ spec:
               url_prefix: http://vmsingle-victoria-metrics.observability.svc.cluster.local:8428
             - src_paths:
                 - /select/logsql/.*
-              url_prefix: http://victoria-logs.observability.svc.cluster.local:9428
+              url_prefix: http://victoria-logs-client.observability.svc.cluster.local:9428
     vmsingle:
       enabled: true
       spec:

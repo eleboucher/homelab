@@ -9,6 +9,7 @@ spec:
     - ../../../../components/oidc
     - ../../../../components/postgres/cert
     - ../../../../components/volsync
+    - ../../../../components/envoy-zeroscaler
   dependsOn:
     - name: cnpg-cluster
       namespace: database

@@ -1,0 +1,16 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/operator.victoriametrics.com/vmrule_v1beta1.json
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMRule
+metadata:
+  name: prometheus-adapter-rules
+spec:
+  groups:
+    - name: envoy-route-requests
+      interval: 30s
+      rules:
+        - record: envoy_route_requests_cluster
+          expr: |-
+            sum by (route_name) (increase(envoy_cluster_upstream_rq_total{route_name!=""}[30s]))
+            or
+            sum by (route_name) (envoy_cluster_membership_healthy{route_name!=""} * 0)

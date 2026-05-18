@@ -23,3 +23,13 @@ spec:
           name:
             as: probe_success
           metricsQuery: max_over_time(<<.Series>>{<<.LabelMatchers>>}[1m])
+        - seriesQuery: '{__name__=~"envoy_route_requests_(log|cluster)"}'
+          resources:
+            namespaced: false
+          name:
+            matches: ^envoy_route_requests_.*$
+            as: envoy_route_requests
+          metricsQuery: |-
+            max by (route_name) (envoy_route_requests_log{<<.LabelMatchers>>})
+            or
+            max by (route_name) (envoy_route_requests_cluster{<<.LabelMatchers>>})

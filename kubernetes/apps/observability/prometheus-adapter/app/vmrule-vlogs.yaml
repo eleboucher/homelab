@@ -1,0 +1,20 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/operator.victoriametrics.com/vmrule_v1beta1.json
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMRule
+metadata:
+  name: prometheus-adapter-rules-vlogs
+  labels:
+    vmalert-datasource: vlogs
+spec:
+  groups:
+    - name: envoy-route-requests-vlogs
+      interval: 30s
+      type: vlogs
+      rules:
+        - record: envoy_route_requests_log
+          expr: |-
+            kubernetes.pod_namespace:network kubernetes.container_name:envoy authority:* _time:2m
+            | extract "<route_name>.erwanleboucher.dev" from authority
+            | filter route_name:*
+            | stats by(route_name) count() value
