@@ -14,7 +14,7 @@ spec:
     - ../../../../components/keda-http-scaler
   dependsOn:
     - name: keda-http-add-on
-      namespace: flux-system
+      namespace: observability
     - name: rook-ceph-cluster
       namespace: rook-ceph
   healthCheckExprs:

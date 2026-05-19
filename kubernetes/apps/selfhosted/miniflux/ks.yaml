@@ -20,7 +20,7 @@ spec:
     - name: external-secrets
       namespace: security
     - name: keda-http-add-on
-      namespace: flux-system
+      namespace: observability
   interval: 1h
   path: "./kubernetes/apps/selfhosted/miniflux/app"
   postBuild:
