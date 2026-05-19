@@ -24,7 +24,7 @@ services:
 
   iroh-relay:
     # renovate: datasource=docker depName=registry.erwanleboucher.dev/eleboucher/iroh-relay
-    image: registry.erwanleboucher.dev/eleboucher/iroh-relay:0.98.2
+    image: registry.erwanleboucher.dev/eleboucher/iroh-relay:0.98.2-8974d20
     container_name: iroh-relay
     restart: unless-stopped
     depends_on:
