@@ -1,0 +1,60 @@
+---
+name: iroh-relay
+
+x-logging: &default-logging
+  driver: json-file
+  options:
+    max-size: "10m"
+    max-file: "3"
+
+services:
+  iroh-relay-config:
+    image: docker.io/library/alpine:3.23
+    container_name: iroh-relay-config
+    command:
+      - sh
+      - -c
+      - apk add --no-cache gettext && envsubst < /tpl/relay.toml.template > /out/relay.toml
+    environment:
+      TOWONEL_ACME_EMAIL: ${TOWONEL_ACME_EMAIL}
+    volumes:
+      - ./config/relay.toml.template:/tpl/relay.toml.template:ro
+      - iroh-relay-config:/out
+    restart: "no"
+
+  iroh-relay:
+    # renovate: datasource=docker depName=registry.erwanleboucher.dev/eleboucher/iroh-relay
+    image: registry.erwanleboucher.dev/eleboucher/iroh-relay:0.98.2
+    container_name: iroh-relay
+    restart: unless-stopped
+    depends_on:
+      iroh-relay-config:
+        condition: service_completed_successfully
+    command:
+      - --config-path
+      - /etc/iroh-relay/relay.toml
+    environment:
+      RUST_LOG: info
+    expose:
+      - "8443"
+      - "9090"
+    ports:
+      - "${VPS_IP}:7842:7842/udp"
+    volumes:
+      - iroh-relay-config:/etc/iroh-relay:ro
+      - iroh-relay-data:/data
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+          cpus: "1.0"
+    logging: *default-logging
+
+volumes:
+  iroh-relay-config:
+  iroh-relay-data:
+
+networks:
+  default:
+    name: edge
+    external: true

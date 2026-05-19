@@ -38,3 +38,7 @@ spec:
       recordType: A
       targets:
         - ${VPS_IP}
+    - dnsName: relay.towonel.erwanleboucher.dev
+      recordType: A
+      targets:
+        - ${VPS_IP}

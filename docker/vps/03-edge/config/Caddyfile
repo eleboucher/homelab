@@ -12,6 +12,12 @@
 					upstream 127.0.0.1:8443
 				}
 			}
+			@relay tls sni relay.towonel.erwanleboucher.dev
+			route @relay {
+				proxy {
+					upstream iroh-relay:8443
+				}
+			}
 			@tls tls
 			route @tls {
 				proxy {

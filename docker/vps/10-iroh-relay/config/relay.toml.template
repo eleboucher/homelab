@@ -1,0 +1,12 @@
+enable_quic_addr_discovery = true
+http_bind_addr = "0.0.0.0:8080"
+metrics_bind_addr = "0.0.0.0:9090"
+
+[tls]
+hostname = "relay.towonel.erwanleboucher.dev"
+cert_mode = "LetsEncrypt"
+cert_dir = "/data/certs"
+contact = "${TOWONEL_ACME_EMAIL}"
+https_bind_addr = "0.0.0.0:8443"
+quic_bind_addr = "0.0.0.0:7842"
+prod_tls = true
