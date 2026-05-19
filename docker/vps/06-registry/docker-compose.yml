@@ -40,7 +40,7 @@ services:
       POSTGRES_PASSWORD: apoci
       POSTGRES_DB: apoci
     volumes:
-      - /opt/apoci/postgres-data:/var/lib/postgresql/data
+      - /opt/apoci/postgres-root:/var/lib/postgresql
     healthcheck:
       test:
         - CMD-SHELL
