@@ -36,6 +36,7 @@ BOT_LOGINS = {
     "snyk-bot",
     "mend-bot",
     "step-security-bot",
+    "argocd-image-updater",
     # LLM coding assistants showing up as primary authors, not just co-authors.
     "claude",
     "copilot",
@@ -206,13 +207,28 @@ BOT_BRANCH_RE = re.compile(
 )
 
 # Renovate's signature commit shape — leaks through when humans squash-merge
-# renovate PRs. `update chart` is gated on a version-bump continuation since
-# the bare phrase can mean "update chart values" in human commits. The arrow
-# chars only count when adjacent to a version-like token, since humans use →
-# in legitimate headlines (e.g. "refactor: old → new").
+# renovate PRs. `update chart`/`update helm release` are gated on a version-bump
+# continuation since the bare phrases can mean "update chart values" in human
+# commits. The arrow chars only count when adjacent to a version-like token,
+# since humans use → in legitimate headlines (e.g. "refactor: old → new").
 BOT_CONTENT_RE = re.compile(
     r"\bupdate (?:image|dependency)\b"
-    r"|\bupdate chart \S+ (?:\(|to\s+v?\d|→|➔|➜)",
+    r"|\bupdate (?:chart|helm release) \S+ (?:\(|to\s+v?\d|→|➔|➜)"
+    r"|\bupdate (?:container image|\S+ docker tag)\b"
+    r"|\bautomatic update of\b",
+    re.IGNORECASE,
+)
+
+# Conventional-commit scopes used by renovate/dependabot — leak through under
+# human authors after squash-merge. Defined here (re-used by compute_active_scopes
+# below) so is_skippable_commit can drop them.
+SCOPE_RE = re.compile(r"^[a-zA-Z][\w-]*\(([^)]+)\)!?:")
+BOT_SCOPES = {"deps", "renovate", "dependencies", "dependabot"}
+
+# Merge commits — branch syncs, squash-merge artifacts, auto-update batch
+# commits. Almost always non-substantive noise in a digest.
+MERGE_PREFIX_RE = re.compile(
+    r"^\s*merge\s+(?:pull request|branch|remote-tracking|tag|auto-update)\b",
     re.IGNORECASE,
 )
 
@@ -227,13 +243,17 @@ COAUTHOR_BOT_RE = re.compile(
 
 
 def is_skippable_commit(headline: str, body: str = "") -> bool:
-    msg = headline.lstrip().lower()
-    if msg.startswith("merge pull request"):
+    if MERGE_PREFIX_RE.match(headline):
         return True
     if BOT_BRANCH_RE.search(headline):
         return True
     if BOT_CONTENT_RE.search(headline):
         return True
+    scope_match = SCOPE_RE.match(headline)
+    if scope_match:
+        for scope in scope_match.group(1).split(","):
+            if scope.strip().lower() in BOT_SCOPES:
+                return True
     if body and COAUTHOR_BOT_RE.search(body):
         return True
     return False
@@ -437,13 +457,9 @@ DIGEST_MIN_PEERS = 3
 DIGEST_CONCURRENCY = max(1, int(os.environ.get("DIGEST_CONCURRENCY", "1")))
 DIGEST_BATCH_SIZE = max(1, int(os.environ.get("DIGEST_BATCH_SIZE", "5")))
 DIGEST_TIMEOUT = 180.0
-# Renovate/dependabot scopes — not real cross-peer trends.
-BOT_SCOPES = {"deps", "renovate", "dependencies", "dependabot"}
 THINK_BLOCK_RE = re.compile(
     r"<think(?:ing)?>.*?</think(?:ing)?>", re.DOTALL | re.IGNORECASE
 )
-
-SCOPE_RE = re.compile(r"^[a-zA-Z][\w-]*\(([^)]+)\)!?:")
 
 
 def _trim_digest_body(body: str) -> str:
@@ -919,6 +935,13 @@ def main() -> None:
                         c["messageHeadline"], c.get("messageBody") or ""
                     ):
                         continue
+                    add = c.get("additions") or 0
+                    deletions = c.get("deletions") or 0
+                    files = c.get("changedFilesIfAvailable") or 0
+                    # Empty commits (merges that resolved cleanly, --allow-empty
+                    # tag commits) carry no payload worth digesting.
+                    if add == 0 and deletions == 0 and files == 0:
+                        continue
                     user = c["author"].get("user") or {}
                     committed = datetime.fromisoformat(
                         c["committedDate"].replace("Z", "+00:00")
@@ -933,9 +956,9 @@ def main() -> None:
                             "a": user.get("login")
                             or c["author"].get("name")
                             or "unknown",
-                            "add": c.get("additions") or 0,
-                            "del": c.get("deletions") or 0,
-                            "files": c.get("changedFilesIfAvailable") or 0,
+                            "add": add,
+                            "del": deletions,
+                            "files": files,
                         }
                     )
                 if commits:
