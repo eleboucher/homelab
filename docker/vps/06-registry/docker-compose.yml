@@ -3,8 +3,8 @@ name: registry
 
 services:
   apoci:
-    # renovate: datasource=docker depName=git.erwanleboucher.dev/eleboucher/apoci
-    image: git.erwanleboucher.dev/eleboucher/apoci:0.0.36
+    # renovate: datasource=docker depName=registry.mortebrume.eu/erwanleboucher.dev/eleboucher/apoci
+    image: registry.mortebrume.eu/erwanleboucher.dev/eleboucher/apoci:0.0.37
     container_name: apoci
     restart: unless-stopped
     user: "1000:1000"
