@@ -11,6 +11,7 @@ spec:
   components:
     - ../../../../components/postgres/cert
     - ../../../../components/oidc
+    - ../../../../components/keda-http-scaler
   dependsOn:
     - name: cnpg-cluster
       namespace: database
@@ -18,12 +19,15 @@ spec:
       namespace: rook-ceph
     - name: external-secrets
       namespace: security
+    - name: keda-http-add-on
+      namespace: flux-system
   interval: 1h
   path: "./kubernetes/apps/selfhosted/miniflux/app"
   postBuild:
     substitute:
       APP: miniflux
       APP_NAMESPACE: selfhosted
+      HTTP_SCALER_PORT: "8080"
       OIDC_CALLBACK: /oauth2/oidc/callback
       SUBDOMAIN: rss
       OIDC_SCOPES: '["openid", "profile", "email", "groups"]'

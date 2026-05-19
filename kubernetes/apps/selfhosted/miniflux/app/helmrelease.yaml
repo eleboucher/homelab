@@ -16,13 +16,14 @@ spec:
           reloader.stakater.com/auto: "true"
         containers:
           app:
-            image:
+            image: &minifluxImage
               repository: ghcr.io/miniflux/miniflux
               tag: 2.3.0-distroless@sha256:3a95fd1f9f75eb55b880004aee4084bb94ad60d8349de302e0b86f8620612311
             env:
               BASE_URL: https://rss.erwanleboucher.dev
               CREATE_ADMIN: "1"
               DISABLE_LOCAL_AUTH: "1"
+              DISABLE_SCHEDULER_SERVICE: "1"
               RUN_MIGRATIONS: "1"
               OAUTH2_PROVIDER: oidc
               OAUTH2_REDIRECT_URL: https://rss.erwanleboucher.dev/oauth2/oidc/callback
@@ -40,7 +41,7 @@ spec:
                   secretKeyRef:
                     name: kanidm-miniflux-oidc
                     key: client-secret
-              DATABASE_URL:
+              DATABASE_URL: &dbUrl
                 valueFrom:
                   secretKeyRef:
                     name: miniflux-postgres
@@ -59,10 +60,49 @@ spec:
                 memory: 32Mi
               limits:
                 memory: 64Mi
-            securityContext:
+            securityContext: &restrictedSecurity
               readOnlyRootFilesystem: true
               allowPrivilegeEscalation: false
               capabilities: {drop: ["ALL"]}
+      refresh:
+        type: cronjob
+        cronjob: &cronDefaults
+          schedule: "*/15 * * * *"
+          concurrencyPolicy: Forbid
+          successfulJobsHistory: 1
+          failedJobsHistory: 1
+        containers:
+          app:
+            image: *minifluxImage
+            args: ["-refresh-feeds"]
+            env: &cronEnv
+              RUN_MIGRATIONS: "1"
+              TZ: Europe/Paris
+              DATABASE_URL: *dbUrl
+            resources:
+              requests:
+                cpu: 10m
+                memory: 64Mi
+              limits:
+                memory: 256Mi
+            securityContext: *restrictedSecurity
+      cleanup:
+        type: cronjob
+        cronjob:
+          <<: *cronDefaults
+          schedule: "0 4 * * *"
+        containers:
+          app:
+            image: *minifluxImage
+            args: ["-run-cleanup-tasks"]
+            env: *cronEnv
+            resources:
+              requests:
+                cpu: 10m
+                memory: 32Mi
+              limits:
+                memory: 128Mi
+            securityContext: *restrictedSecurity
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true
