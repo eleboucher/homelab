@@ -35,6 +35,30 @@ data:
       compression:
         provider: custom:litellm
         model: minimax/MiniMax-M2.7
+      web_extract:
+        provider: custom:litellm
+        model: minimax/MiniMax-M2.7
+      session_search:
+        provider: custom:litellm
+        model: minimax/MiniMax-M2.7
+      vision:
+        provider: custom:litellm
+        model: minimax/MiniMax-M2.7
+      goal_judge:
+        provider: custom:litellm
+        model: minimax/MiniMax-M2.7
+      title_generator:
+        provider: custom:litellm
+        model: minimax/MiniMax-M2.7
+      profile_describer:
+        provider: custom:litellm
+        model: minimax/MiniMax-M2.7
+      triage_specifier:
+        provider: custom:litellm
+        model: minimax/MiniMax-M2.7
+      kanban_decomposer:
+        provider: custom:litellm
+        model: minimax/MiniMax-M2.7
     plugins:
       enabled:
         - agentmemory
@@ -89,5 +113,7 @@ data:
     MATRIX_ACCESS_TOKEN={{ .MATRIX_ACCESS_TOKEN }}
     MATRIX_USER_ID={{ .MATRIX_USER_ID }}
     MATRIX_ALLOWED_USERS={{ .MATRIX_ALLOWED_USERS }}
+    MATRIX_HOME_ROOM={{ .MATRIX_HOME_ROOM }}
+    MATRIX_HOME_ROOM_THREAD_ID={{ .MATRIX_HOME_ROOM_THREAD_ID }}
     API_SERVER_KEY={{ .API_SERVER_KEY }}
     GATEWAY_ALLOWED_USERS={{ .GATEWAY_ALLOWED_USERS }}
