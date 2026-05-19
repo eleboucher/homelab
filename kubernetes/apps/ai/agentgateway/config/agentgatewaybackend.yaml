@@ -1,0 +1,53 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/agentgateway.dev/agentgatewaybackend_v1alpha1.json
+apiVersion: agentgateway.dev/v1alpha1
+kind: AgentgatewayBackend
+metadata:
+  name: llm
+spec:
+  ai:
+    groups:
+      - providers:
+          - name: gemma
+            openai:
+              model: gemma
+            host: llama-cpp-gemma.ai.svc.cluster.local
+            port: 8080
+            policies:
+              auth:
+                secretRef:
+                  name: llama-auth
+      - providers:
+          - name: qwen
+            openai:
+              model: qwen
+            host: llama-cpp-qwen.ai.svc.cluster.local
+            port: 8080
+            policies:
+              auth:
+                secretRef:
+                  name: llama-auth
+      - providers:
+          - name: minimax
+            openai:
+              model: MiniMax-M2.7
+            host: api.minimax.io
+            port: 443
+            policies:
+              auth:
+                secretRef:
+                  name: minimax-auth
+              tls:
+                sni: api.minimax.io
+      - providers:
+          - name: minimax-anthropic
+            anthropic: {}
+            host: api.minimax.io
+            port: 443
+            pathPrefix: /anthropic
+            policies:
+              auth:
+                secretRef:
+                  name: minimax-anthropic-auth
+              tls:
+                sni: api.minimax.io
