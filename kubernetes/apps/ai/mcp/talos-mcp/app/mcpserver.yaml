@@ -5,7 +5,7 @@ kind: MCPServer
 metadata:
   name: talos-mcp
 spec:
-  image: registry.erwanleboucher.dev/eleboucher/talos-mcp:0.0.1
+  image: registry.erwanleboucher.dev/eleboucher/talos-mcp:0.0.2
   transport: streamable-http
   mcpPort: 8080
   groupRef:
