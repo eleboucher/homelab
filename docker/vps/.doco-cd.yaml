@@ -2,7 +2,6 @@
 working_dir: ./docker/vps
 reconciliation:
   enabled: true
-  interval: 3600
 auto_discovery:
   enabled: true
   depth: 1
