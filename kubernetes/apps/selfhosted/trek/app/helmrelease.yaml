@@ -97,10 +97,6 @@ spec:
         parentRefs:
           - name: envoy-external
             namespace: network
-        rules:
-          - backendRefs:
-              - name: trek-anubis
-                port: 8080
     service:
       app:
         controller: trek

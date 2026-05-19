@@ -12,7 +12,7 @@ spec:
       namespace: network
   rules:
     - backendRefs:
-        - name: forgejo-anubis
-          port: 8080
+        - name: forgejo-http
+          port: 3000
       timeouts:
         request: 300s

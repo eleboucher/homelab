@@ -96,16 +96,12 @@ spec:
                 memory: 1Gi
             securityContext: *sec
     route:
-      main:
+      app:
         parentRefs:
           - name: envoy-external
             namespace: network
         hostnames:
           - streamystats.erwanleboucher.dev
-        rules:
-          - backendRefs:
-              - name: streamystats-anubis
-                port: 8080
 
     service:
       frontend:
