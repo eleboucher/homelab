@@ -66,6 +66,7 @@ data:
       backend: local
       cwd: /opt/data/workspace
       timeout: 900
+      lifetime_seconds: 1800
       persistent_shell: true
     memory:
       provider: agentmemory

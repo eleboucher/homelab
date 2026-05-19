@@ -188,6 +188,7 @@ spec:
               SUMMARY_LLM_MODEL: minimax/MiniMax-M2.7
               SUMMARY_LLM_URL: http://litellm.ai:4000/v1
               TERM: xterm-256color
+              TERMINAL_MAX_FOREGROUND_TIMEOUT: "1800"
               TZ: ${TZ}
             resources:
               requests:
