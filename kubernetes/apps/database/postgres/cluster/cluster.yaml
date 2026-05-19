@@ -60,7 +60,7 @@ spec:
         ld_library_path:
           - system
         image:
-          reference: ghcr.io/cloudnative-pg/postgis-extension-testing:3.6.3-18-trixie@sha256:d57f07621a016ff09a01996f6d98827b56d81804854be3fcf35b1b18f06f955d
+          reference: ghcr.io/cloudnative-pg/postgis-extension-testing:3.6.3-18-trixie@sha256:da50db1aeb8835385f799a91581500001ce440b3ddc1773d6b8ca2563d183728
       - name: vchord
         image:
           reference: ghcr.io/tensorchord/vchord-scratch:pg18-v1.1.1@sha256:bdea43bed2a414e21bbf71767bf6f0739747ac480b267b51772dc214ac28dcb3
