@@ -35,6 +35,8 @@ metrics:
 
 federation:
   autoAccept: mutual
+  excludedRepos:
+    - eleboucher/agentmemory
 
 upstreams:
   enabled: true
