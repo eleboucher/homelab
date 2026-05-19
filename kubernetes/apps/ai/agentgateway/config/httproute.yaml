@@ -1,4 +1,6 @@
 ---
+# External-facing route. Hostnames here drive the external-dns record
+# (resolves to the agentgateway-proxy LoadBalancer IP, e.g. 192.168.69.122).
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/gateway.networking.k8s.io/httproute_v1.json
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
@@ -18,19 +20,21 @@ spec:
           group: agentgateway.dev
           kind: AgentgatewayBackend
 ---
+# In-cluster catch-all so callers using the Service DNS (hermes hitting
+# agentgateway-proxy.ai.svc.cluster.local) still reach the backend.
+# No hostnames here = no external-dns record, no conflict with the route above.
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/gateway.networking.k8s.io/httproute_v1.json
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
-  name: agentgateway-internal-edge
+  name: llm-internal
 spec:
   parentRefs:
-    - name: envoy-internal
-      namespace: network
-  hostnames:
-    - gateway.erwanleboucher.dev
-    - litellm.erwanleboucher.dev
+    - name: agentgateway-proxy
+      kind: Gateway
+      group: gateway.networking.k8s.io
   rules:
     - backendRefs:
-        - name: agentgateway
-          port: 80
+        - name: llm
+          group: agentgateway.dev
+          kind: AgentgatewayBackend

@@ -44,7 +44,7 @@ spec:
             anthropic: {}
             host: api.minimax.io
             port: 443
-            pathPrefix: /anthropic
+            path: /anthropic
             policies:
               auth:
                 secretRef:

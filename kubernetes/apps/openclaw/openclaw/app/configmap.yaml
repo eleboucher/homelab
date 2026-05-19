@@ -153,7 +153,7 @@ data:
           litellm: {
             api: "openai-responses",
             apiKey: "{{ .LITELLM_MASTER_KEY }}",
-            baseUrl: "http://litellm.ai:4000/v1",
+            baseUrl: "http://agentgateway-proxy.ai.svc.cluster.local/v1",
             request: { allowPrivateNetwork: true },
             models: [
               {
