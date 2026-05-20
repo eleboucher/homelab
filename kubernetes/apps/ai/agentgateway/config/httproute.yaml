@@ -20,6 +20,14 @@ spec:
     - matches:
         - path:
             type: PathPrefix
+            value: /v1/models
+      backendRefs:
+        - name: llm-minimax
+          group: agentgateway.dev
+          kind: AgentgatewayBackend
+    - matches:
+        - path:
+            type: PathPrefix
             value: /anthropic
       backendRefs:
         - name: llm-minimax-anthropic
@@ -67,6 +75,14 @@ spec:
       kind: Gateway
       group: gateway.networking.k8s.io
   rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /v1/models
+      backendRefs:
+        - name: llm-minimax
+          group: agentgateway.dev
+          kind: AgentgatewayBackend
     - matches:
         - path:
             type: PathPrefix
