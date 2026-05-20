@@ -66,15 +66,17 @@ spec:
               capabilities: {drop: ["ALL"]}
       refresh:
         type: cronjob
-        cronjob: &cronDefaults
+        cronjob:
+          !!merge <<: &cronDefaults
+            concurrencyPolicy: Forbid
+            successfulJobsHistory: 1
+            failedJobsHistory: 1
           schedule: "*/15 * * * *"
-          concurrencyPolicy: Forbid
-          successfulJobsHistory: 1
-          failedJobsHistory: 1
         containers:
           app:
             image: *minifluxImage
-            args: ["-refresh-feeds"]
+            args:
+              - "-refresh-feeds"
             env: &cronEnv
               RUN_MIGRATIONS: "1"
               TZ: Europe/Paris
@@ -89,12 +91,13 @@ spec:
       cleanup:
         type: cronjob
         cronjob:
-          <<: *cronDefaults
+          !!merge <<: *cronDefaults
           schedule: "0 4 * * *"
         containers:
           app:
             image: *minifluxImage
-            args: ["-run-cleanup-tasks"]
+            args:
+              - "-run-cleanup-tasks"
             env: *cronEnv
             resources:
               requests:
@@ -112,6 +115,7 @@ spec:
         fsGroupChangePolicy: OnRootMismatch
     service:
       app:
+        controller: miniflux
         ports:
           http:
             port: &port 8080
