@@ -12,7 +12,6 @@ services:
       VPS_LOCAL_HOSTS: >-
         registry.erwanleboucher.dev
         doco-cd.erwanleboucher.dev
-        towonel.erwanleboucher.dev
         openpgpkey.erwanleboucher.dev
         www.erwanleboucher.dev
         erwanleboucher.dev

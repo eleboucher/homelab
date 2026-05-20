@@ -69,14 +69,6 @@ doco-cd.erwanleboucher.dev {
 	reverse_proxy doco-cd:80
 }
 
-towonel.erwanleboucher.dev {
-	reverse_proxy towonel-hub:8443
-}
-
-tunnel.erwanleboucher.dev {
-	reverse_proxy towonel-hub:8443
-}
-
 openpgpkey.erwanleboucher.dev {
 	header Access-Control-Allow-Origin *
 	header Access-Control-Allow-Headers *
