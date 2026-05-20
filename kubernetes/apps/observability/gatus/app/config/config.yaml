@@ -43,6 +43,17 @@ endpoints:
       dns-resolver: tcp://1.1.1.1:53
     conditions:
       - "[STATUS] == 200"
+
+  - name: iroh-relay
+    group: external
+    url: https://relay.towonel.erwanleboucher.dev/
+    interval: 1m
+    client:
+      dns-resolver: tcp://1.1.1.1:53
+    conditions:
+      - "[STATUS] == 200"
+      - "[BODY] == pat(*Iroh Relay*)"
+      - "[CERTIFICATE_EXPIRATION] > 168h"
 metrics: true
 
 storage:

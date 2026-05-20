@@ -6,4 +6,5 @@ resources:
   - ./externalsecret.yaml
   - ./gateway.yaml
   - ./agentgatewaybackend.yaml
+  - ./agentgatewaypolicy.yaml
   - ./httproute.yaml
