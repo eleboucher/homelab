@@ -13,5 +13,4 @@ spec:
             deviceClassName: gpu.intel.com
             capacity:
               requests:
-                memory: 1Gi
                 millicores: 100
