@@ -10,3 +10,11 @@ contact = "${TOWONEL_ACME_EMAIL}"
 https_bind_addr = "0.0.0.0:8443"
 quic_bind_addr = "0.0.0.0:7842"
 prod_tls = true
+
+[limits]
+accept_conn_limit = 20.0
+accept_conn_burst = 100
+
+[limits.client.rx]
+bytes_per_second = 5242880
+max_burst_bytes = 20971520

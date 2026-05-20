@@ -36,6 +36,7 @@ services:
     environment:
       RUST_LOG: info
     expose:
+      - "8080"
       - "8443"
       - "9090"
     ports:
@@ -43,10 +44,28 @@ services:
     volumes:
       - iroh-relay-config:/etc/iroh-relay:ro
       - iroh-relay-data:/data
+    healthcheck:
+      test:
+        - "CMD"
+        - "wget"
+        - "-q"
+        - "-O"
+        - "/dev/null"
+        - "-T"
+        - "3"
+        - "http://127.0.0.1:8080/"
+      interval: 30s
+      timeout: 5s
+      start_period: 30s
+      retries: 3
+    labels:
+      - prometheus.scrape=true
+      - prometheus.port=9090
+      - prometheus.job=iroh-relay
     deploy:
       resources:
         limits:
-          memory: 256M
+          memory: 512M
           cpus: "1.0"
     logging: *default-logging
 
