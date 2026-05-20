@@ -5,6 +5,7 @@
 
 	layer4 {
 		:443 {
+			matching_timeout 15s
 			@local tls sni {$VPS_LOCAL_HOSTS}
 			route @local {
 				proxy {
