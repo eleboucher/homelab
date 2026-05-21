@@ -75,6 +75,8 @@ spec:
         containers:
           app:
             image: *minifluxImage
+            command: &minifluxCmd
+              - "/usr/bin/miniflux"
             args:
               - "-refresh-feeds"
             env: &cronEnv
@@ -96,6 +98,7 @@ spec:
         containers:
           app:
             image: *minifluxImage
+            command: *minifluxCmd
             args:
               - "-run-cleanup-tasks"
             env: *cronEnv
