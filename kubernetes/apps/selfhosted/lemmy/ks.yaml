@@ -1,0 +1,30 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: &app lemmy
+spec:
+  components:
+    - ../../../../components/postgres/cert
+    - ../../../../components/volsync
+  dependsOn:
+    - name: cnpg-cluster
+      namespace: database
+    - name: rook-ceph-cluster
+      namespace: rook-ceph
+  interval: 1h
+  path: ./kubernetes/apps/selfhosted/lemmy/app
+  postBuild:
+    substitute:
+      APP: *app
+      APP_NAMESPACE: selfhosted
+      VOLSYNC_CAPACITY: 20Gi
+  prune: true
+  sourceRef:
+    kind: OCIRepository
+    name: flux-system
+    namespace: flux-system
+  targetNamespace: selfhosted
+  timeout: 5m
+  wait: false
