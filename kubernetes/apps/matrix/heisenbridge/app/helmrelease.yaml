@@ -48,6 +48,8 @@ spec:
             targetPort: 9898
     route:
       app:
+        annotations:
+          gatus.home-operations.com/enabled: "false"
         hostnames:
           - matrix.erwanleboucher.dev
         parentRefs:
