@@ -6,7 +6,7 @@ metadata:
   name: &app lemmy
 spec:
   components:
-    - ../../../../components/postgres/cert
+    - ../../../../components/postgres/pass
     - ../../../../components/volsync
   dependsOn:
     - name: cnpg-cluster
