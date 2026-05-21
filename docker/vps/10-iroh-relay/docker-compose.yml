@@ -53,7 +53,7 @@ services:
         - "/dev/null"
         - "-T"
         - "3"
-        - "http://127.0.0.1:8080/"
+        - "http://127.0.0.1:8080/generate_204"
       interval: 30s
       timeout: 5s
       start_period: 30s
