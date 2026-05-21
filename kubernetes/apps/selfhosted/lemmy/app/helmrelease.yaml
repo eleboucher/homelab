@@ -122,6 +122,14 @@ spec:
               - identifier: app
                 port: 8536
           - matches:
+              - headers:
+                  - name: Accept
+                    type: RegularExpression
+                    value: application/.*
+            backendRefs:
+              - identifier: app
+                port: 8536
+          - matches:
               - path:
                   type: PathPrefix
                   value: /api
