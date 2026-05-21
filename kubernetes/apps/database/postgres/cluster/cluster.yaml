@@ -84,6 +84,11 @@ spec:
         login: true
         superuser: false
         disablePassword: false
+      - name: lemmy
+        ensure: present
+        login: true
+        superuser: true
+        disablePassword: false
       - name: mealie
         ensure: present
         login: true
