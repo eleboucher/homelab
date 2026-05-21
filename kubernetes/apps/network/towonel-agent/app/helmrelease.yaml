@@ -35,6 +35,7 @@ spec:
               TOWONEL_AGENT_SERVICES: '[{"hostname":"*.erwanleboucher.dev","origin":"envoy-external.network.svc.cluster.local:443"}]'
               TOWONEL_AGENT_TCP_SERVICES: '[{"name":"forgejo-ssh", "origin":"envoy-external.network.svc.cluster.local:2222","listen_port":2222},{"name":"coturn-turns-tcp","origin":"stunner.network.svc.cluster.local:5349","listen_port":5349}]'
               TOWONEL_AGENT_UDP_SERVICES: '[{"name":"coturn-turn-udp","origin":"stunner.network.svc.cluster.local:3478","listen_port":3478}]'
+              TOWONEL_AGENT_DIAL_EDGE: "true"
               TOWONEL_INVITE_TOKEN:
                 valueFrom:
                   secretKeyRef:
