@@ -59,18 +59,26 @@
 			}
 		}
 	}
+
+	log default {
+		output stdout
+		format json
+	}
 }
 
 
 registry.erwanleboucher.dev {
+	log
 	reverse_proxy apoci:5000
 }
 
 doco-cd.erwanleboucher.dev {
+	log
 	reverse_proxy doco-cd:80
 }
 
 openpgpkey.erwanleboucher.dev {
+	log
 	header Access-Control-Allow-Origin *
 	header Access-Control-Allow-Headers *
 	header Access-Control-Allow-Methods "GET, OPTIONS"
@@ -84,10 +92,13 @@ openpgpkey.erwanleboucher.dev {
 }
 
 www.erwanleboucher.dev {
+	log
 	redir https://erwanleboucher.dev{uri} permanent
 }
 
 erwanleboucher.dev {
+	log
+
 	# WKD direct — OpenPGP keys from S3, with CORS.
 	@wkd path /.well-known/openpgpkey/*
 	handle @wkd {
@@ -130,6 +141,7 @@ erwanleboucher.dev {
 
 
 :8082 {
+	log
 	reverse_proxy http://erwanleboucher.dev.s3-website.rbx.io.cloud.ovh.net {
 		header_up Host erwanleboucher.dev.s3-website.rbx.io.cloud.ovh.net
 	}
