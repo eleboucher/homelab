@@ -10,7 +10,7 @@ x-logging: &default-logging
 services:
   towonel-hub:
     # renovate: datasource=docker depName=registry.erwanleboucher.dev/eleboucher/towonel-node
-    image: registry.erwanleboucher.dev/eleboucher/towonel-node:0.0.35
+    image: registry.erwanleboucher.dev/eleboucher/towonel-node:0.0.37
     container_name: towonel-hub
     restart: unless-stopped
     user: "10001:10001"
@@ -26,6 +26,11 @@ services:
       TOWONEL_EDGE_HEALTH_LISTEN_ADDR: 0.0.0.0:9092
       TOWONEL_EDGE_PROXY_PROTOCOL: "true"
       TOWONEL_EDGE_TLS_HTTP_LISTEN_ADDR: 0.0.0.0:8081
+      # Pin the iroh QUIC port so reverse-dial agents
+      # (TOWONEL_AGENT_DIAL_EDGE) can reach it through the firewall hole
+      # below. Hub derives `tunnel.erwanleboucher.dev:51820` from
+      # EDGE_ADVERTISED_ADDRESSES + this port. Needs towonel >= 0.0.36.
+      TOWONEL_EDGE_IROH_PORT: "51820"
     expose:
       - "4443"
       - "8081"
@@ -34,6 +39,7 @@ services:
       - "22222:22222"
       - "3478:3478/udp"
       - "5349:5349/tcp"
+      - "51820:51820/udp"
     volumes:
       - /opt/towonel:/data
     healthcheck:
