@@ -57,7 +57,7 @@ spec:
               LEMMY__EMAIL__SMTP_FROM_ADDRESS: noreply@lemmy.erwanleboucher.dev
               LEMMY__HOSTNAME: lemmy.erwanleboucher.dev
               LEMMY__PICTRS__URL: http://lemmy-pictrs:8080/
-              LEMMY__DATABASE__URI:
+              LEMMY_DATABASE_URL:
                 valueFrom:
                   secretKeyRef:
                     name: lemmy-postgres
