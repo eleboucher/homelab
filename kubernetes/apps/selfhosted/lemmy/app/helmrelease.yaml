@@ -83,7 +83,7 @@ spec:
               tag: 1.0.0-beta.0
             env:
               LEMMY_UI_BACKEND: https://lemmy.erwanleboucher.dev
-              LEMMY_UI_BACKEND_INTERNAL: http://lemmy:8536
+              LEMMY_UI_BACKEND_INTERNAL: http://lemmy-app:8536
             resources:
               requests:
                 cpu: 50m
