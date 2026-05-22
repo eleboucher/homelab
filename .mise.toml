@@ -1,9 +1,11 @@
 
 [env]
+_.python.venv = { path = "{{config_root}}/.venv", create = true }
 MINIJINJA_CONFIG_FILE = "{{config_root}}/.minijinja.toml"
 JUST_UNSTABLE = "1"
 
 [tools]
+"python" = "latest"
 "uv" = "latest"
 kustomize = "5.8.1"
 "pipx:flux-local" = "latest"
