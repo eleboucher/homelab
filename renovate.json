@@ -2,20 +2,11 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "local>eleboucher/renovate-config",
-    "github>home-operations/renovate-presets",
+    "github>home-operations/renovate-presets#1.3.1",
     "local>eleboucher/homelab//.renovate/automerge.json5",
     "local>eleboucher/homelab//.renovate/groups.json5",
     "local>eleboucher/homelab//.renovate/overrides.json5"
   ],
-  "flux": {
-    "managerFilePatterns": ["/\\.yaml(?:\\.j2)?$/"]
-  },
-  "helm-values": {
-    "managerFilePatterns": ["/\\.yaml(?:\\.j2)?$/"]
-  },
-  "kubernetes": {
-    "managerFilePatterns": ["/\\.yaml(?:\\.j2)?$/"]
-  },
   "customManagers": [
     {
       "customType": "regex",
