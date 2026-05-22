@@ -2,8 +2,7 @@
 # yaml-language-server: $schema=https://json.schemastore.org/helmfile
 bases:
   - defaults.yaml
----
-# yaml-language-server: $schema=https://json.schemastore.org/helmfile
+
 helmDefaults:
   cleanupOnFail: true
   forceConflicts: true
@@ -43,6 +42,13 @@ releases:
     needs:
       - kube-system/cilium
 
+  - name: spegel
+    namespace: kube-system
+    inherit:
+      - template: default
+    needs:
+      - kube-system/coredns
+
   - name: cert-manager
     namespace: cert-manager
     inherit:
@@ -73,7 +79,7 @@ releases:
           - postsync
         showlogs: true
     needs:
-      - kube-system/cilium
+      - kube-system/spegel
 
   - name: external-secrets
     namespace: security
