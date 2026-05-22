@@ -1,7 +1,7 @@
 ---
 # yaml-language-server: $schema=https://json.schemastore.org/helmfile
 bases:
-  - _defaults.yaml
+  - defaults.yaml
 ---
 # yaml-language-server: $schema=https://json.schemastore.org/helmfile
 helmDefaults:
