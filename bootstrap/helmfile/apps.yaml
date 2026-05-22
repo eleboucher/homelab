@@ -15,22 +15,27 @@ releases:
     inherit:
       - template: default
     hooks:
-      - # Wait for Cilium CRDs to be available
-        command: bash
+      - # Wait for CRDs to be available
+        command: kubectl
         args:
-          - -c
-          - until kubectl get crd ciliumloadbalancerippools.cilium.io ciliumbgpadvertisements.cilium.io ciliumbgppeerconfigs.cilium.io ciliumbgpclusterconfigs.cilium.io &>/dev/null; do sleep 5; done
+          - wait
+          - --for=create
+          - crd/ciliumbgpadvertisements.cilium.io
+          - crd/ciliumbgpclusterconfigs.cilium.io
+          - crd/ciliumbgppeerconfigs.cilium.io
+          - crd/ciliumloadbalancerippools.cilium.io
+          - --timeout=2m
         events:
           - postsync
         showlogs: true
-      - # Apply Cilium Resources
+      - # Apply Resources
         command: kubectl
         args:
           - apply
-          - --namespace=kube-system
+          - --namespace={{ .Release.Namespace }}
           - --server-side
-          - --field-manager=kustomize-controller
-          - --filename=../../kubernetes/apps/kube-system/cilium/app/networks.yaml
+          - --force-conflicts
+          - --filename=../../kubernetes/apps/{{ .Release.Namespace }}/{{ .Release.Name }}/app/networks.yaml
         events:
           - postsync
         showlogs: true
@@ -70,7 +75,7 @@ releases:
             kubectl wait --for=condition=Available deployment/cert-manager-webhook -n cert-manager --timeout=120s
             # Apply ClusterIssuers
             echo "Applying ClusterIssuers..."
-            kubectl apply -f ../../kubernetes/apps/cert-manager/cert-manager/app/clusterissuer-selfsigned.yaml
+            kubectl apply -f ../../kubernetes/apps/cert-manager/cert-manager/app/selfsigned.yaml
             # Wait for internal-ca certificate to be ready
             echo "Waiting for internal-ca certificate..."
             kubectl wait --for=condition=Ready certificate/internal-ca -n cert-manager --timeout=120s
