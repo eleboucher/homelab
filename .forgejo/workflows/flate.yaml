@@ -1,6 +1,6 @@
 ---
 # yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
-name: Flux Local
+name: Flate
 
 on:
   pull_request:
@@ -13,7 +13,7 @@ concurrency:
 
 jobs:
   filter:
-    name: Flux Local - Filter
+    name: Flate - Filter
     runs-on: ubuntu-latest
     outputs:
       changed-files: ${{ steps.changed-files.outputs.changed_files }}
@@ -27,27 +27,44 @@ jobs:
   test:
     if: ${{ needs.filter.outputs.changed-files != '[]' }}
     needs: filter
-    name: Flux Local - Test
+    name: Flate - Test ${{ matrix.resource }}
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        resource:
+          - helmrelease
+          - kustomization
+      fail-fast: false
     steps:
-      - name: Checkout
+      - name: Checkout Pull Request Branch
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
+          path: pull
           persist-credentials: false
 
-      - name: Run flux-local test
-        shell: bash
-        run: |-
-          flux-local test --enable-helm --all-namespaces --sources "flux-system=." --path kubernetes/flux/cluster -v
+      - name: Checkout Default Branch
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          path: default
+          persist-credentials: false
+          ref: ${{ forgejo.event.repository.default_branch }}
+
+      - name: Run flate test
+        uses: docker://ghcr.io/home-operations/flate:0.1.3
+        with:
+          args: >-
+            test ${{ matrix.resource }}
+            --path ./pull
+            --path-orig ./default
 
   diff:
     if: ${{ needs.filter.outputs.changed-files != '[]' }}
     needs: filter
-    name: Flux Local - Diff ${{ matrix.resources }}
+    name: Flate - Diff ${{ matrix.resource }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        resources:
+        resource:
           - helmrelease
           - kustomization
       max-parallel: 4
@@ -66,32 +83,30 @@ jobs:
           persist-credentials: false
           ref: ${{ forgejo.event.repository.default_branch }}
 
-      - name: Run flux-local diff
-        shell: bash
-        working-directory: pull
-        run: |-
-          flux-local diff ${{ matrix.resources }} \
-            --unified 6 \
-            --sources "flux-system=." \
-            --path kubernetes/flux/cluster \
-            --path-orig ../default/kubernetes/flux/cluster \
-            --strip-attrs "helm.sh/chart,checksum/config,app.kubernetes.io/version,chart" \
-            --limit-bytes 10000 \
-            --all-namespaces \
+      - name: Run flate diff
+        uses: docker://ghcr.io/home-operations/flate:0.1.3
+        with:
+          args: >-
+            diff ${{ matrix.resource }}
+            --limit-bytes 10000
             --output-file diff.patch
+            --path ./pull
+            --path-orig ./default
+            --strip-attrs "helm.sh/chart,checksum/config,app.kubernetes.io/version,chart"
+            --unified 6
 
       - name: Generate Diff
         id: diff
         run: |
           {
               echo 'diff<<EOF'
-              cat pull/diff.patch
+              cat diff.patch
               echo EOF
           } >> "${FORGEJO_OUTPUT}";
           {
-              echo "## Flux ${{ matrix.resources }} diff"
+              echo "## Flux ${{ matrix.resource }} diff"
               echo '```diff'
-              cat pull/diff.patch
+              cat diff.patch
               echo '```'
           } >> "${FORGEJO_STEP_SUMMARY}"
 
@@ -100,7 +115,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.BOTOWL_TOKEN }}
           PR_NUMBER: ${{ forgejo.event.pull_request.number }}
-          HEADER: "${{ forgejo.event.pull_request.number }}/kubernetes/${{ matrix.resources }}"
+          HEADER: "${{ forgejo.event.pull_request.number }}/kubernetes/${{ matrix.resource }}"
           DIFF_CONTENT: ${{ steps.diff.outputs.diff }}
         run: |-
           MARKER="<!-- sticky-comment: ${HEADER} -->"
