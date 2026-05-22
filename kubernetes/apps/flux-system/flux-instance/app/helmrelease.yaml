@@ -14,8 +14,6 @@ spec:
     commonAnnotations:
       fluxcd.controlplane.io/reconcileArtifactEvery: 1h
     instance:
-      distribution:
-        version: 2.x
       components:
         - source-controller
         - kustomize-controller
