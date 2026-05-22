@@ -1,4 +1,9 @@
 ---
+# yaml-language-server: $schema=https://json.schemastore.org/helmfile
+bases:
+  - _defaults.yaml
+---
+# yaml-language-server: $schema=https://json.schemastore.org/helmfile
 
 # This helmfile is for extracting and installing Custom Resource Definitions (CRDs) from Helm charts.
 # It is not intended to be used with helmfile apply or helmfile sync.
@@ -21,10 +26,10 @@ releases:
 
   - name: envoy-gateway
     namespace: network
-    chart: oci://docker.io/envoyproxy/gateway-helm
-    version: 1.8.0
+    inherit:
+      - template: default
 
   - name: kube-prometheus-stack
     namespace: observability
-    chart: oci://ghcr.io/prometheus-community/charts/kube-prometheus-stack
-    version: 85.2.2
+    inherit:
+      - template: default
