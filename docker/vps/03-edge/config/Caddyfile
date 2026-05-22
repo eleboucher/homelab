@@ -37,7 +37,10 @@
 			}
 			@http http
 			route @http {
-				proxy towonel-hub:8081
+				proxy {
+					proxy_protocol v2
+					upstream towonel-hub:8081
+				}
 			}
 		}
 	}
