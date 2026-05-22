@@ -38,6 +38,14 @@
       "automergeType": "pr"
     },
     {
+      "description": "Auto-merge Renovate Presents",
+      "matchManagers": ["renovate-config"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "automerge": true,
+      "automergeType": "branch",
+      "ignoreTests": true
+    },
+    {
       "description": "Auto-merge high-cadence packages weekly",
       "matchDatasources": ["docker"],
       "automerge": true,
