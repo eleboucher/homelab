@@ -49,13 +49,11 @@ jobs:
           persist-credentials: false
           ref: ${{ forgejo.event.repository.default_branch }}
 
+      - name: Install flate
+        run: go install github.com/home-operations/flate/cmd/flate@v0.1.3
+
       - name: Run flate test
-        uses: docker://ghcr.io/home-operations/flate:0.1.3
-        with:
-          args: >-
-            test ${{ matrix.resource }}
-            --path ./pull
-            --path-orig ./default
+        run: flate test ${{ matrix.resource }} --path ./pull --path-orig ./default
 
   diff:
     if: ${{ needs.filter.outputs.changed-files != '[]' }}
@@ -83,17 +81,11 @@ jobs:
           persist-credentials: false
           ref: ${{ forgejo.event.repository.default_branch }}
 
+      - name: Install flate
+        run: go install github.com/home-operations/flate/cmd/flate@v0.1.3
+
       - name: Run flate diff
-        uses: docker://ghcr.io/home-operations/flate:0.1.3
-        with:
-          args: >-
-            diff ${{ matrix.resource }}
-            --limit-bytes 10000
-            --output-file diff.patch
-            --path ./pull
-            --path-orig ./default
-            --strip-attrs "helm.sh/chart,checksum/config,app.kubernetes.io/version,chart"
-            --unified 6
+        run: flate diff ${{ matrix.resource }} --limit-bytes 10000 --output-file diff.patch --path ./pull --path-orig ./default --strip-attrs helm.sh/chart,checksum/config,app.kubernetes.io/version,chart --unified 6
 
       - name: Generate Diff
         id: diff
