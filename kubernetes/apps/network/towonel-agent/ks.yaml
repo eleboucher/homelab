@@ -11,9 +11,7 @@ spec:
     substitute:
       APP: towonel-agent
       APP_NAMESPACE: network
-    substituteFrom:
-      - kind: Secret
-        name: towonel-agent-secret
+      VPS_IP: 92.222.247.160
   prune: true
   sourceRef:
     kind: OCIRepository
