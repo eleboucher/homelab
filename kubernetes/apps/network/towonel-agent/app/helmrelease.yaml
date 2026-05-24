@@ -28,8 +28,8 @@ spec:
         containers:
           app:
             image:
-              repository: git.erwanleboucher.dev/eleboucher/towonel-agent
-              tag: 0.0.43
+              repository: codeberg.org/towonel/towonel-agent
+              tag: sha-15420a819aa371f7c4f68d28dc3fce76e5b287fa
             env:
               RUST_LOG: info
               TOWONEL_AGENT_SERVICES: '[{"hostname":"*.erwanleboucher.dev","origin":"envoy-external.network.svc.cluster.local:443"}]'
