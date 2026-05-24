@@ -15,6 +15,7 @@ services:
         openpgpkey.erwanleboucher.dev
         www.erwanleboucher.dev
         erwanleboucher.dev
+        towonel.erwanleboucher.dev
     ports:
       - "${VPS_IP}:80:80"
       - "${VPS_IP}:443:443"
