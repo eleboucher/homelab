@@ -38,7 +38,8 @@ spec:
                 set -euo pipefail
                 mkdir -p /home/node/.openclaw
                 cp /run/config/openclaw.json /home/node/.openclaw/openclaw.json
-                chmod 600 /home/node/.openclaw/openclaw.json
+                chown 1000:100 /home/node/.openclaw/openclaw.json
+                chmod 400 /home/node/.openclaw/openclaw.json
             securityContext:
               allowPrivilegeEscalation: false
               capabilities:
@@ -162,28 +163,25 @@ spec:
             command:
               - /bin/sh
               - -c
-              - exec node dist/index.js gateway --bind lan
+              - |
+                # Start gateway
+                exec node dist/index.js gateway --bind lan
             env:
-              AGENTMEMORY_URL: http://agentmemory.ai.svc.cluster.local:3111
-              BROWSER_WS_ENDPOINT: ws://localhost:9222
+              OPENCLAW_LOG_LEVEL: debug
+              BROWSER_WS_ENDPOINT: "ws://localhost:9222"
+              DOCKER_HOST: "tcp://localhost:2376"
               DOCKER_CERT_PATH: /certs/client
-              DOCKER_HOST: tcp://localhost:2376
               DOCKER_TLS_VERIFY: "1"
               GOPATH: /home/node/go
-              HOME: /home/node
+              HOME: &homepath /home/node
               HOMEBREW_CELLAR: /home/node/.local/homebrew/Cellar
               HOMEBREW_PREFIX: /home/node/.local/homebrew
               HOMEBREW_REPOSITORY: /home/node/.local/homebrew
-              OPENCLAW_EXTENSION_API_PATH: /app/dist/extensionAPI.js
-              OPENCLAW_GATEWAY_PORT: "18789"
-              OPENCLAW_LOG_LEVEL: info
+              OPENCLAW_GATEWAY_PORT: &port 18789
               PATH: /home/node/.local/bin:/home/node/.local/go/bin:/home/node/.local/homebrew/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
               PIP_BREAK_SYSTEM_PACKAGES: "1"
               TERM: xterm-256color
               TZ: ${TZ}
-            envFrom:
-              - secretRef:
-                  name: openclaw
             resources:
               requests:
                 cpu: 500m
