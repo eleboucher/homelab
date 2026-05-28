@@ -45,7 +45,7 @@ jobs:
           fetch-depth: 0
 
       - name: Install flate
-        uses: https://github.com/home-operations/flate/action@aef47adc856bb97038ff321e5136cf65e0fa23cf # 0.1.27
+        uses: https://github.com/home-operations/flate/action@02a264ddeba1f36350b243b7ee4ff1af8497bfba # 0.1.28
 
       - name: Run flate test
         run: flate test ${{ matrix.resource }} --path ./kubernetes/flux/cluster --base ${{ github.event.repository.default_branch }}
