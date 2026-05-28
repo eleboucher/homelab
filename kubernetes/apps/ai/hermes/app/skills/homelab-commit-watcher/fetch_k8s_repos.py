@@ -16,7 +16,7 @@ from pathlib import Path
 import httpx
 
 GITHUB_API = "https://api.github.com/graphql"
-TOPIC = "k8s-at-home"
+TOPICS = ["k8s-at-home", "kubesearch"]
 OUTPUT_DIR = Path("/tmp/commit-watcher")
 BATCH_SIZE = 15
 BATCH_CONCURRENCY = 4
@@ -125,9 +125,7 @@ query($q: String!, $cursor: String) {
 
 
 def fetch_repos(client: httpx.Client, since: str) -> list[dict]:
-    # `pushed:>=<date>` drops repos with no activity in the lookback window before
-    # we spend rate-limit budget on their commit history.
-    query = f"topic:{TOPIC} pushed:>={since[:10]}"
+    query = f"topic:{','.join(TOPICS)} pushed:>={since[:10]}"
     repos: list[dict] = []
     cursor = None
     while True:
@@ -537,8 +535,7 @@ async def _digest_batch(
     request = [(entry["r"], today, week) for entry, today, week in batch]
     async with sem:
         print(
-            f"  digest batch {batch_idx + 1}/{total_batches} "
-            f"({len(batch)} repos)...",
+            f"  digest batch {batch_idx + 1}/{total_batches} ({len(batch)} repos)...",
             file=sys.stderr,
         )
         result = await _gemma_digest(client, summary_url, summary_model, request)
@@ -593,7 +590,9 @@ async def run_digests(feed: list[dict], summary_url: str, summary_model: str) ->
     async with httpx.AsyncClient(headers=headers, timeout=DIGEST_TIMEOUT) as client:
         await asyncio.gather(
             *(
-                _digest_batch(client, sem, summary_url, summary_model, i, len(batches), b)
+                _digest_batch(
+                    client, sem, summary_url, summary_model, i, len(batches), b
+                )
                 for i, b in enumerate(batches)
             ),
             return_exceptions=True,
@@ -665,7 +664,7 @@ def main() -> None:
     transport = httpx.HTTPTransport(retries=2)
     with httpx.Client(headers=headers, timeout=60.0, transport=transport) as client:
         print(
-            f"Fetching repos in topic:{TOPIC} pushed since {since[:10]}...",
+            f"Fetching repos in topics:{','.join(TOPICS)} pushed since {since[:10]}...",
             file=sys.stderr,
         )
         repos = fetch_repos(client, since)
