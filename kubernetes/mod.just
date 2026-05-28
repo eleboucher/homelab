@@ -12,16 +12,15 @@ default:
     just -l kube
 
 [doc('Apply local Flux Kustomization')]
-[script]
 apply-ks ns ks:
     just kube render-local-ks "{{ ns }}" "{{ ks }}" | kubectl apply --server-side --force-conflicts --field-manager=kustomize-controller -f -
 
 [doc('Browse a PVC')]
-[script]
-browse-pvc namespace claim:
-    kubectl run -n {{ namespace }} browse-pvc-{{ claim }} -it --rm --restart=Never \
+browse-pvc ns claim:
+    kubectl run -n {{ ns }} browse-pvc-{{ claim }} -it --rm --restart=Never \
         --image=mirror.gcr.io/alpine:latest \
         --overrides='{"spec":{"containers":[{"name":"browse-pvc-{{ claim }}","image":"mirror.gcr.io/alpine:latest","stdin":true,"tty":true,"command":["/bin/sh"],"workingDir":"/mnt","volumeMounts":[{"mountPath":"/mnt","name":"data"}]}],"volumes":[{"name":"data","persistentVolumeClaim":{"claimName":"{{ claim }}"}}]}}'
+
 
 [doc('Debug a node')]
 [script]
@@ -34,10 +33,6 @@ debug-node node:
 delete-ks ns ks:
     just kube render-local-ks "{{ ns }}" "{{ ks }}" | kubectl delete -f -
 
-[doc('Restart Home Assistant VM (fixes Bluetooth USB passthrough)')]
-[script]
-restart-ha:
-    kubectl virt restart home-assistant -n home-assistant
 
 [doc('Prune pods in Failed, Pending, or Succeeded state')]
 [script]
@@ -71,6 +66,5 @@ view-secret namespace secret:
     kubectl view-secret -n {{ namespace }} {{ secret }}
 
 [private]
-[script]
 render-local-ks ns ks:
-    flux-local build ks --namespace "{{ ns }}" --sources "flux-system=." --path "{{ kubernetes_dir }}/flux/cluster" "{{ ks }}"
+    flate build ks --namespace "{{ ns }}" --output yaml "{{ ks }}"
