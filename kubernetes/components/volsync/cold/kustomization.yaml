@@ -1,0 +1,10 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/kustomization
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+resources:
+  - ../base
+  - ./cronjob-restart-app.yaml
+  - ./rbac-app-restart.yaml
+patches:
+  - path: ./pvc-annotation-patch.yaml

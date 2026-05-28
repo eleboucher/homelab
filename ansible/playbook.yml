@@ -12,7 +12,7 @@
       ansible.builtin.ping:
 
     - name: Read secrets from 1Password
-      ansible.builtin.shell: "op read 'op://kubernetes/{{ item.key }}' < /dev/null"
+      ansible.builtin.shell: "vals get 'ref+op://kubernetes/{{ item.key }}' < /dev/null"
       delegate_to: localhost
       become: false
       loop:

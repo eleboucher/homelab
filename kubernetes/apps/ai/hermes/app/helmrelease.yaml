@@ -191,7 +191,7 @@ spec:
                 memory: 2Gi
               limits:
                 cpu: 4
-                memory: 16Gi
+                memory: 8Gi
             securityContext:
               allowPrivilegeEscalation: false
               capabilities:
@@ -237,7 +237,7 @@ spec:
           webui:
             image:
               repository: ghcr.io/nesquena/hermes-webui
-              tag: 0.51.124@sha256:583eb4155332b6520717c5ee715c0ec835196cc125c65c58fd5ca4c6356d4707
+              tag: 0.51.145@sha256:c1936db0bb3ed412928a6c69802f1ae844e08f9b572bf9fe8af9d6191db131ca
             env:
               # upstream entrypoint uses `su -c`, HOME stays /root → .env missed
               HERMES_HOME: /home/hermeswebui/.hermes

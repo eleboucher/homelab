@@ -8,7 +8,7 @@ spec:
   interval: 1h
   path: ./kubernetes/apps/observability/gatus/app
   components:
-    - ../../../../components/volsync
+    - ../../../../components/volsync/hot
   dependsOn:
     - name: rook-ceph-cluster
       namespace: rook-ceph

@@ -17,12 +17,14 @@ spec:
     - name: RENOVATE_REDIS_URL
       value: "redis://dragonfly.database.svc:6379/2"
   image: ghcr.io/renovatebot/renovate:43.101.1
-  parallelism: 5
+  parallelism: 3
   resources:
     requests:
-      cpu: 100m
+      cpu: 500m
       memory: 128Mi
-  schedule: 0 * * * *
+    limits:
+      cpu: "2"
+  schedule: 30 * * * *
   secretRef: renovate-secret
   webhook:
     enabled: true

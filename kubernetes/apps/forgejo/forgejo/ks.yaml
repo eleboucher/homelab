@@ -11,7 +11,7 @@ spec:
   components:
     - ../../../../components/anubis
     - ../../../../components/postgres/cert
-    - ../../../../components/volsync
+    - ../../../../components/volsync/hot
     - ../../../../components/oidc
   dependsOn:
     - name: cnpg-cluster

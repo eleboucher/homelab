@@ -9,6 +9,7 @@ resources:
   - external-dns/ks.yaml
   - envoy-gateway/ks.yaml
   - rathole/ks.yaml
+  - rathole-towonel/ks.yaml
   - stunner/ks.yaml
   - towonel-agent/ks.yaml
   - wg-portal/ks.yaml

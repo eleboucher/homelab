@@ -1,0 +1,81 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/batch/cronjob_v1.json
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: volsync-cold-snapshot-local
+spec:
+  schedule: "${VOLSYNC_CRON_LOCAL:='0 * * * *'}"
+  failedJobsHistoryLimit: 3
+  successfulJobsHistoryLimit: 1
+  concurrencyPolicy: "Forbid"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          serviceAccountName: volsync-restart-${APP}
+          restartPolicy: OnFailure
+          containers:
+            - name: cold-snapshot-restart-controller-${APP}
+              image: ghcr.io/fhoekstra/kubectl-shell:v1.36.1-1
+              env:
+                - name: NAMESPACE
+                  valueFrom:
+                    fieldRef:
+                      fieldPath: metadata.namespace
+                - name: STATEFULSET
+                  value: "${STATEFULSET:=${APP}}"
+                - name: PVC
+                  value: "${CLAIM:=${APP}}"
+              command:
+                - /bin/sh
+                - -c
+                - |-
+                  TIMEOUT=900 # 15 minutes max wait for VolSync to pause
+
+                  echo "NAMESPACE: $NAMESPACE"
+                  echo "PVC: $PVC"
+                  echo "STATEFULSET: $STATEFULSET"
+                  echo "Waiting for VolSync to pause (status=WaitingForTrigger)..."
+                  START=$(date +%s)
+                  while true; do
+                    STATUS=$(kubectl get pvc $PVC -n $NAMESPACE -o jsonpath='{.metadata.annotations.volsync\.backube/latest-copy-status}' 2>/dev/null)
+                    CURRENT=$(date +%s)
+                    ELAPSED=$((CURRENT - START))
+
+                    if [ "$STATUS" = "WaitingForTrigger" ]; then
+                      echo "VolSync is ready. Proceeding."
+                      break
+                    elif [ $ELAPSED -gt $TIMEOUT ]; then
+                      echo "Timeout waiting for VolSync to pause. Aborting."
+                      exit 1
+                    fi
+                    sleep 5
+                  done
+
+                  # Scale to zero
+                  kubectl scale sts $STATEFULSET -n $NAMESPACE --replicas=0 || exit 1
+
+                  # Wait for pods to terminate
+                  kubectl wait pods -l app.kubernetes.io/name=${APP} -n $NAMESPACE --for=delete --timeout=300s || exit 1
+
+                  # Trigger VolSync copy
+                  TIMESTAMP=$(date +%s)
+                  kubectl annotate pvc $PVC -n $NAMESPACE \
+                    volsync.backube/copy-trigger="$TIMESTAMP" --overwrite
+
+                  # Wait for snapshot completion (poll status)
+                  while true; do
+                    STATUS=$(kubectl get pvc $PVC -n $NAMESPACE -o jsonpath='{.metadata.annotations.volsync\.backube/latest-copy-status}')
+                    if [ "$STATUS" = "Completed" ]; then
+                      break
+                    fi
+                    sleep 10
+                  done
+
+                  # Scale back up
+                  kubectl scale sts $STATEFULSET -n $NAMESPACE --replicas=1
+
+                  # Cleanup trigger annotation (optional, keeps PVC clean)
+                  kubectl annotate pvc $PVC -n $NAMESPACE \
+                    volsync.backube/copy-trigger-

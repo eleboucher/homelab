@@ -10,7 +10,7 @@ spec:
       app.kubernetes.io/name: bluesky
   components:
     - ../../../../components/postgres/cert
-    - ../../../../components/volsync
+    - ../../../../components/volsync/hot
   dependsOn:
     - name: cnpg-cluster
       namespace: database

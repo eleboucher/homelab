@@ -4,15 +4,11 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
   - agentmemory-mcp/ks.yaml
-  - arr-mcp/ks.yaml
   - context7-mcp/ks.yaml
   - github-mcp/ks.yaml
   - grafana-mcp/ks.yaml
   - ha-mcp/ks.yaml
-  - kubectl-mcp/ks.yaml
   - searxng-mcp/ks.yaml
-  - seerr-mcp/ks.yaml
   - sidero-mcp/ks.yaml
-  - sparkyfitness-mcp/ks.yaml
   - talos-mcp/ks.yaml
   - victoria-logs-mcp/ks.yaml

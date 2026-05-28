@@ -110,6 +110,9 @@ spec:
 
     route:
       app:
+        annotations:
+          gatus.home-operations.com/endpoint: |-
+            path: ""
         parentRefs:
           - name: envoy-external
             namespace: network

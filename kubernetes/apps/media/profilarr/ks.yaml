@@ -8,7 +8,7 @@ metadata:
 spec:
   interval: 1h
   components:
-    - ../../../../components/volsync
+    - ../../../../components/volsync/hot
     - ../../../../components/zeroscaler
   path: ./kubernetes/apps/media/profilarr/app
   dependsOn:

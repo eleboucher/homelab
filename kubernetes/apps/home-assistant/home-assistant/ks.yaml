@@ -9,7 +9,7 @@ spec:
     labels:
       app.kubernetes.io/name: home-assistant
   components:
-    - ../../../../components/volsync
+    - ../../../../components/volsync/hot
     - ../../../../components/oidc
   dependsOn:
     - name: rook-ceph-cluster

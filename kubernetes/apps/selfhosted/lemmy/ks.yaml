@@ -7,7 +7,7 @@ metadata:
 spec:
   components:
     - ../../../../components/postgres/pass
-    - ../../../../components/volsync
+    - ../../../../components/volsync/hot
   dependsOn:
     - name: cnpg-cluster
       namespace: database

@@ -3,18 +3,17 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: seerr-mcp
+  name: opentelemetry-collector
 spec:
   dependsOn:
-    - name: toolhive-config
-      namespace: ai
+    - name: tempo
+    - name: victoria-logs
   interval: 1h
-  path: ./kubernetes/apps/ai/mcp/seerr-mcp/app
+  path: ./kubernetes/apps/observability/opentelemetry-collector/app
   prune: true
   sourceRef:
     kind: OCIRepository
     name: flux-system
     namespace: flux-system
-  targetNamespace: ai
-  timeout: 5m
+  targetNamespace: observability
   wait: false

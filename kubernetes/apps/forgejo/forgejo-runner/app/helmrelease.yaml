@@ -59,6 +59,8 @@ spec:
                   requests:
                     cpu: 100m
                     memory: 256Mi
+            nodeSelector:
+              kubernetes.io/hostname: paris
             restartPolicy: Never
           podspec-dind.yaml: |-
             initContainers:
@@ -119,6 +121,8 @@ spec:
                 emptyDir: {}
               - name: docker-certs
                 emptyDir: {}
+            nodeSelector:
+              kubernetes.io/hostname: paris
             restartPolicy: Never
     controllers:
       forgejo-runner:

@@ -1,0 +1,67 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: tempo
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: tempo
+  interval: 1h
+  values:
+    fullnameOverride: tempo
+    config: |
+      memberlist:
+        cluster_label: "{{ .Release.Name }}.{{ .Release.Namespace }}"
+      multitenancy_enabled: false
+      usage_report:
+        reporting_enabled: false
+      compactor:
+        compaction:
+          block_retention: 168h
+      distributor:
+        receivers:
+          otlp:
+            protocols:
+              grpc:
+                endpoint: 0.0.0.0:4317
+              http:
+                endpoint: 0.0.0.0:4318
+      ingester: {}
+      storage:
+        trace:
+          backend: local
+          local:
+            path: /var/tempo/traces
+          wal:
+            path: /var/tempo/wal
+      querier: {}
+      query_frontend: {}
+      metrics_generator:
+        processor:
+          span_metrics:
+            histogram_buckets: [0.002, 0.004, 0.008, 0.016, 0.032, 0.064, 0.128, 0.256, 0.512, 1.024, 2.048, 4.096]
+          service_graphs:
+            histogram_buckets: [0.1, 0.2, 0.4, 0.8, 1.6, 3.2, 6.4, 12.8]
+        registry:
+          collection_interval: 15s
+        storage:
+          path: /var/tempo/generator/wal
+          remote_write:
+            - url: http://vmsingle-victoria-metrics.observability.svc.cluster.local:8428/api/v1/write
+              send_exemplars: true
+      overrides:
+        defaults:
+          metrics_generator:
+            processors: [service-graphs, span-metrics]
+    persistence:
+      enabled: true
+      storageClassName: ceph-block
+      size: 10Gi
+    metrics_generator_storage:
+      enabled: true
+      storageClassName: ceph-block
+      size: 10Gi
+    serviceMonitor:
+      enabled: true

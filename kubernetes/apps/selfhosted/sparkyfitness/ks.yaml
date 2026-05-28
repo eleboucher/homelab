@@ -9,7 +9,7 @@ spec:
     labels:
       app.kubernetes.io/name: sparkyfitness
   components:
-    - ../../../../components/volsync
+    - ../../../../components/volsync/hot
     - ../../../../components/postgres/pass
   dependsOn:
     - name: cnpg-cluster

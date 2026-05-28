@@ -8,7 +8,7 @@ spec:
   components:
     - ../../../../components/oidc
     - ../../../../components/postgres/cert
-    - ../../../../components/volsync
+    - ../../../../components/volsync/hot
     - ../../../../components/keda-http-scaler
   dependsOn:
     - name: cnpg-cluster

@@ -9,7 +9,7 @@ spec:
     labels:
       app.kubernetes.io/name: open-webui
   components:
-    - ../../../../components/volsync
+    - ../../../../components/volsync/hot
     - ../../../../components/oidc
     - ../../../../components/keda-http-scaler
   dependsOn:

@@ -18,14 +18,14 @@ deploy-direct ip:
     tmpdir=$(mktemp -d)
     trap "rm -rf $tmpdir" EXIT
     printf '%s\n' \
-        "OVH_APPLICATION_KEY=$(op read 'op://kubernetes/ovh/OVH_APPLICATION_KEY')" \
-        "OVH_APPLICATION_SECRET=$(op read 'op://kubernetes/ovh/OVH_APPLICATION_SECRET')" \
-        "OVH_CONSUMER_KEY=$(op read 'op://kubernetes/ovh/OVH_CONSUMER_KEY')" \
-        "PANGOLIN_SECRET=$(op read 'op://kubernetes/pangolin/server_secret')" \
-        "MAXMIND_ACCOUNT_ID=$(op read 'op://kubernetes/pangolin/maxmind_account_id')" \
-        "MAXMIND_LICENSE_KEY=$(op read 'op://kubernetes/pangolin/maxmind_key')" \
-        "CROWDSEC_API_KEY=$(op read 'op://kubernetes/pangolin/crowdsec_api_key')" \
-        "ANUBIS_ED25519_PRIVATE_KEY_HEX=$(op read 'op://kubernetes/anubis/ED25519_PRIVATE_KEY_HEX')" \
+        "OVH_APPLICATION_KEY=$(vals get 'ref+op://kubernetes/ovh/OVH_APPLICATION_KEY')" \
+        "OVH_APPLICATION_SECRET=$(vals get 'ref+op://kubernetes/ovh/OVH_APPLICATION_SECRET')" \
+        "OVH_CONSUMER_KEY=$(vals get 'ref+op://kubernetes/ovh/OVH_CONSUMER_KEY')" \
+        "PANGOLIN_SECRET=$(vals get 'ref+op://kubernetes/pangolin/server_secret')" \
+        "MAXMIND_ACCOUNT_ID=$(vals get 'ref+op://kubernetes/pangolin/maxmind_account_id')" \
+        "MAXMIND_LICENSE_KEY=$(vals get 'ref+op://kubernetes/pangolin/maxmind_key')" \
+        "CROWDSEC_API_KEY=$(vals get 'ref+op://kubernetes/pangolin/crowdsec_api_key')" \
+        "ANUBIS_ED25519_PRIVATE_KEY_HEX=$(vals get 'ref+op://kubernetes/anubis/ED25519_PRIVATE_KEY_HEX')" \
         > "$tmpdir/.env"
     deploy_dir="/var/lib/docker/volumes/doco-cd_data/_data/git.erwanleboucher.dev/eleboucher/homelab/docker/vps/01-pangolin"
     scp "$tmpdir/.env" "{{ ip }}:/tmp/.pangolin.env"
@@ -35,7 +35,7 @@ deploy-direct ip:
 [confirm('Trigger doco-cd deployment on ' + ip + ' [y|N] ?')]
 [doc('Trigger a doco-cd deployment via the API')]
 deploy ip:
-    api_key=$(op read "op://kubernetes/doco-cd/api_secret") && \
+    api_key=$(vals get "ref+op://kubernetes/doco-cd/api_secret") && \
     ssh "{{ ip }}" "curl --silent --fail --request POST \
       --url 'http://localhost:8080/v1/api/poll/run?wait=true' \
       --header 'content-type: application/json' \

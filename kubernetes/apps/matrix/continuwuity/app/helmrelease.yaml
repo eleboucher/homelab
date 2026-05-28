@@ -20,6 +20,7 @@ spec:
 
     controllers:
       continuwuity:
+        type: statefulset
         containers:
           app:
             image:

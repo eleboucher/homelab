@@ -8,7 +8,7 @@ metadata:
 spec:
   components:
     - ../../../../components/oidc/envoy
-    - ../../../../components/volsync
+    - ../../../../components/volsync/hot
     - ../../../../components/zeroscaler
   interval: 1h
   path: ./kubernetes/apps/media/sonarr/app

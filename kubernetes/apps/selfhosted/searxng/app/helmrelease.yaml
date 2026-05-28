@@ -107,7 +107,7 @@ spec:
           main:
             image:
               repository: ghcr.io/searxng/searxng
-              tag: 2026.5.23-323ce7600@sha256:d137e9b7877b7982c5e8ccf878fda0a05d3c8564ebace7f66424a5a19a3c29d9
+              tag: 2026.5.26-3db8b424a@sha256:9a02b1119e4928f7a4029f6a769e8741359e258792302bac80d2965c39a16493
             env:
               SEARXNG_BASE_URL: https://search.erwanleboucher.dev
               SEARXNG_PORT: &httpPort 8080

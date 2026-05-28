@@ -9,7 +9,7 @@ spec:
     labels:
       app.kubernetes.io/name: continuwuity
   components:
-    - ../../../../components/volsync
+    - ../../../../components/volsync/cold
   dependsOn:
     - name: rook-ceph-cluster
       namespace: rook-ceph
@@ -17,6 +17,7 @@ spec:
   path: "./kubernetes/apps/matrix/continuwuity/app"
   postBuild:
     substitute:
+      VOLSYNC_CRON_LOCAL: "20 23,3,9 * * *"
       APP: continuwuity
       APP_NAMESPACE: matrix
       VOLSYNC_CAPACITY: 5Gi

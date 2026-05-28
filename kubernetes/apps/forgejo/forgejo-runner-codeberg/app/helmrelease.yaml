@@ -39,7 +39,7 @@ spec:
                   namespace: forgejo
                   poll_timeout: 10m
             runner:
-              capacity: 2
+              capacity: 4
               labels:
                 - ubuntu-latest:k8s:/config/podspec-default.yaml
                 - default:k8s:/config/podspec-default.yaml
@@ -61,6 +61,8 @@ spec:
                   requests:
                     cpu: 100m
                     memory: 256Mi
+            nodeSelector:
+              kubernetes.io/hostname: paris
             restartPolicy: Never
           podspec-dind.yaml: |-
             initContainers:
@@ -121,6 +123,8 @@ spec:
                 emptyDir: {}
               - name: docker-certs
                 emptyDir: {}
+            nodeSelector:
+              kubernetes.io/hostname: paris
             restartPolicy: Never
     controllers:
       forgejo-runner-codeberg:

@@ -193,6 +193,8 @@ spec:
     vmagent:
       spec:
         scrapeInterval: 30s
+        externalLabels:
+          cluster: homelab
         extraArgs:
           promscrape.dropOriginalLabels: "true"
           promscrape.streamParse: "true"

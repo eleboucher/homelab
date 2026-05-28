@@ -14,6 +14,8 @@ spec:
     global:
       image:
         registry: quay.io
+    kubernetes:
+      extraFields: '{"cluster":"homelab"}'
     podMonitor:
       enabled: true
     remoteWrite:

@@ -1,0 +1,15 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/grafana.integreatly.org/grafanadatasource_v1beta1.json
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDatasource
+metadata:
+  name: tempo-datasource
+spec:
+  datasource:
+    access: proxy
+    type: tempo
+    name: Tempo
+    url: http://tempo.observability.svc.cluster.local:3200
+  instanceSelector:
+    matchLabels:
+      dashboards: grafana

@@ -12,6 +12,10 @@ spec:
   values:
     clusterName: rook-ceph
     cephClusterSpec:
+      cephConfig:
+        osd:
+          osd_heartbeat_grace: "60"
+          osd_op_thread_suicide_timeout: "300"
       cleanupPolicy:
         wipeDevicesFromOtherClusters: true
       crashCollector:

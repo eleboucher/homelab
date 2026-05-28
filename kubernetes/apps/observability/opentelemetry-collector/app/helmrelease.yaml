@@ -1,0 +1,63 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: opentelemetry-collector
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: opentelemetry-collector
+  interval: 1h
+  values:
+    fullnameOverride: opentelemetry-collector
+    image:
+      # renovate: datasource=docker depName=docker.io/otel/opentelemetry-collector-contrib
+      repository: docker.io/otel/opentelemetry-collector-contrib
+    mode: deployment
+    replicaCount: 1
+    config:
+      receivers:
+        otlp:
+          protocols:
+            http:
+              endpoint: 0.0.0.0:4318
+      processors:
+        batch: {}
+      exporters:
+        otlphttp/tempo:
+          endpoint: http://tempo.observability.svc.cluster.local:4318
+        otlphttp/vlogs:
+          logs_endpoint: http://victoria-logs-client.observability.svc.cluster.local:9428/insert/opentelemetry/v1/logs
+      service:
+        pipelines:
+          traces:
+            receivers:
+              - otlp
+            processors:
+              - batch
+            exporters:
+              - otlphttp/tempo
+          logs:
+            receivers:
+              - otlp
+            processors:
+              - batch
+            exporters:
+              - otlphttp/vlogs
+    ports:
+      otlp:
+        enabled: false
+      otlp-http:
+        enabled: true
+        containerPort: 4318
+        servicePort: 4318
+        protocol: TCP
+      jaeger-compact:
+        enabled: false
+      jaeger-thrift:
+        enabled: false
+      jaeger-grpc:
+        enabled: false
+      zipkin:
+        enabled: false
