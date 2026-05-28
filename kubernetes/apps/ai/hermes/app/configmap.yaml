@@ -7,7 +7,7 @@ data:
   config.yaml: |-
     custom_providers:
       - name: litellm
-        base_url: http://agentgateway-proxy.ai.svc.cluster.local/v1
+        base_url: http://litellm.ai:4000/v1
         key_env: LITELLM_API_KEY
         models:
           minimax/MiniMax-M2.7:
@@ -68,8 +68,6 @@ data:
       timeout: 900
       lifetime_seconds: 1800
       persistent_shell: true
-    memory:
-      provider: agentmemory
     compression:
       enabled: true
       protect_first_n: 0
@@ -104,11 +102,9 @@ data:
     web:
       search_backend: searxng
   env: |-
-    AGENTMEMORY_URL=http://agentmemory.ai.svc.cluster.local:3111
-    AGENTMEMORY_SECRET={{ .AGENTMEMORY_SECRET }}
     LITELLM_API_KEY={{ .LITELLM_MASTER_KEY }}
     OPENAI_API_KEY={{ .LITELLM_MASTER_KEY }}
-    OPENAI_BASE_URL=http://agentgateway-proxy.ai.svc.cluster.local/v1
+    OPENAI_BASE_URL=http://litellm.ai:4000/v1
     SUMMARY_LLM_API_KEY={{ .LITELLM_MASTER_KEY }}
     MATRIX_HOMESERVER={{ .MATRIX_HOMESERVER }}
     MATRIX_ACCESS_TOKEN={{ .MATRIX_ACCESS_TOKEN }}
