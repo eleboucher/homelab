@@ -14,15 +14,8 @@ data:
             reserveTokensFloor: 8000,
             timeoutSeconds: 900,
           },
-          contextPruning: {
-            hardClear: { enabled: true, placeholder: "[Old tool result cleared]" },
-            hardClearRatio: 0.5,
-            keepLastAssistants: 3,
-            minPrunableToolChars: 50000,
-            mode: "cache-ttl",
-            softTrim: { headChars: 1500, maxChars: 4000, tailChars: 1500 },
-            softTrimRatio: 0.3,
-            ttl: "1h",
+          contextPruning: { mode: "off" },
+          compaction: { mode: "default", reserveTokensFloor: 30000, memoryFlush: { enabled: true, softThresholdTokens: 80000, prompt: "Extract key decisions, state changes, lessons, blockers to memory/YYYY-MM-DD.md. Format: ## [HH:MM] Topic. Skip routine work. NO_FLUSH if nothing important.", systemPrompt: "Compacting session context. Extract only what's worth remembering. No fluff." },
           },
           heartbeat: {
             directPolicy: "allow",
@@ -57,15 +50,19 @@ data:
             "litellm/qwen": { alias: "qwen" },
             "litellm/minimax/MiniMax-M2.7": { alias: "minimax" },
           },
-          subagents: {
-            model: { primary: "litellm/minimax/MiniMax-M2.7" },
-            archiveAfterMinutes: 120,
-            maxConcurrent: 3,
-            thinking: "medium",
+          heartbeat: {
+            every: "60m",
+            model: "litellm-anthropic/MiniMax-M2.7",
+            directPolicy: "allow",
+            lightContext: true,
+            isolatedSession: false,
+            includeReasoning: false,
           },
-          thinkingDefault: "medium",
+          contextInjection: "always",
+          bootstrapMaxChars: 50000,
+          bootstrapTotalMaxChars: 100000,
+          thinkingDefault: "high",
           timeoutSeconds: 600,
-          workspace: "/home/node/.openclaw/workspace",
         },
         list: [
           {
@@ -129,8 +126,8 @@ data:
           },
         },
       },
+
       models: {
-        mode: "merge",
         providers: {
           litellm: {
             api: "openai-responses",
@@ -173,7 +170,8 @@ data:
         },
       },
       messages: {
-        groupChat: { visibleReplies: "message_tool" },
+        ackReactionScope: "group-mentions",
+        responsePrefix: "[{model}]"
       },
       mcp: {
         servers: {
@@ -204,16 +202,6 @@ data:
         },
       },
       plugins: {
-        allow: [
-          "browser",
-          "discord",
-          "matrix",
-          "memory-core",
-          "memory-wiki",
-          "searxng",
-          "skill-workshop",
-        ],
-        bundledDiscovery: "compat",
         entries: {
           browser: { enabled: true },
           discord: { enabled: true },
@@ -290,7 +278,6 @@ data:
           enabled: true,
           allowFrom: {
             discord: ["178154257042636800"],
-            matrix: ["@genesixx:erwanleboucher.dev"],
           },
         },
         web: {
