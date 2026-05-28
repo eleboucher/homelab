@@ -102,15 +102,6 @@ spec:
                   cd -
                 fi
 
-                if [ ! -d /home/node/.openclaw/extensions/agentmemory ]; then
-                  mkdir -p /home/node/.openclaw/extensions
-                  cd /tmp
-                  rm -rf am-src
-                  git clone --depth 1 --branch v0.9.12 https://github.com/rohitg00/agentmemory am-src
-                  mv am-src/integrations/openclaw /home/node/.openclaw/extensions/agentmemory
-                  rm -rf am-src
-                fi
-
                 export PATH=/home/node/.local/bin:$PATH
             securityContext:
               allowPrivilegeEscalation: false

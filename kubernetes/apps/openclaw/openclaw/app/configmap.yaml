@@ -88,7 +88,6 @@ data:
       },
       bindings: [
         { agentId: "main", match: { channel: "discord", accountId: "default" } },
-        { agentId: "main", match: { channel: "matrix" } },
       ],
       channels: {
         discord: {
@@ -108,29 +107,12 @@ data:
             },
           },
         },
-        matrix: {
-          enabled: true,
-          accessToken: "{{ .MATRIX_ACCESS_TOKEN }}",
-          autoJoin: "always",
-          dm: {
-            allowFrom: ["@genesixx:erwanleboucher.dev"],
-            policy: "pairing",
-            sessionScope: "per-room",
-          },
-          encryption: true,
-          groupAllowFrom: ["@genesixx:erwanleboucher.dev"],
-          groupPolicy: "allowlist",
-          homeserver: "http://continuwuity.matrix.svc.cluster.local:8080",
-          network: { dangerouslyAllowPrivateNetwork: true },
-          userId: "{{ .MATRIX_USER_ID }}",
-        },
       },
       commands: {
         native: "auto",
         nativeSkills: "auto",
         allowFrom: {
           discord: ["user:178154257042636800"],
-          matrix: ["user:@genesixx:erwanleboucher.dev"],
         },
       },
       auth: {
