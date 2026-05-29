@@ -11,5 +11,5 @@ spec:
     operation: copy
   ref:
     # renovate: datasource=docker depName=ghcr.io/open-telemetry/opentelemetry-helm-charts/opentelemetry-collector
-    tag: 0.157.1
+    tag: 0.157.2
   url: oci://ghcr.io/open-telemetry/opentelemetry-helm-charts/opentelemetry-collector
