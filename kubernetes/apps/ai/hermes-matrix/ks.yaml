@@ -1,0 +1,34 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: &app hermes-matrix
+  namespace: flux-system
+spec:
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *app
+  components:
+    - ../../../../components/volsync/hot
+  dependsOn:
+    # Needs the main agent's API server (proxy mode forwards plaintext to it).
+    - name: hermes
+    # Needs the homeserver reachable to sync.
+    - name: continuwuity
+      namespace: matrix
+  interval: 1h
+  path: ./kubernetes/apps/ai/hermes-matrix/app
+  postBuild:
+    substitute:
+      APP: *app
+      APP_NAMESPACE: ai
+      VOLSYNC_CAPACITY: 1Gi
+  prune: true
+  sourceRef:
+    kind: OCIRepository
+    name: flux-system
+    namespace: flux-system
+  targetNamespace: ai
+  timeout: 5m
+  wait: false

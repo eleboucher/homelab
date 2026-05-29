@@ -11,7 +11,6 @@ spec:
   interval: 15m
   values:
     defaultPodOptions:
-      shareProcessNamespace: true
       terminationGracePeriodSeconds: 120
       securityContext:
         fsGroup: 1000
@@ -127,18 +126,6 @@ spec:
                 if [ -f /opt/data/plugins/agentmemory/__init__.py ]; then
                   sed -i 's|/agentmemory/health|/agentmemory/livez|' /opt/data/plugins/agentmemory/__init__.py
                 fi
-
-                # /opt/hermes (incl. .venv) is now mounted from the agent-source emptyDir,
-                # populated by copy-agent-source and owned by UID 1000 — so we can install
-                # the platform.matrix feature deps (see hermes-agent#25495) directly into
-                # the real venv instead of side-loading via PYTHONPATH.
-                UV_CACHE_DIR=/tmp/uv-cache UV_LINK_MODE=copy uv pip install \
-                  --python /opt/hermes/.venv/bin/python \
-                  "mautrix[encryption]" \
-                  Markdown \
-                  aiosqlite \
-                  asyncpg \
-                  aiohttp-socks
             securityContext:
               allowPrivilegeEscalation: false
               capabilities:
@@ -176,7 +163,6 @@ spec:
                   secretKeyRef:
                     name: hermes-config
                     key: DISCORD_WEBHOOK
-              MATRIX_ENCRYPTION: "true"
               PATH: /opt/hermes/.venv/bin:/opt/data/.local/bin:/opt/data/.local/go/bin:/opt/data/.local/homebrew/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
               PIP_BREAK_SYSTEM_PACKAGES: "1"
               SEARXNG_URL: http://searxng.selfhosted.svc.cluster.local:8080
