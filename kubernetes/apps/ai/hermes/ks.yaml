@@ -9,7 +9,7 @@ spec:
   components:
     - ../../../../components/volsync/hot
   dependsOn:
-    - name: agentgateway-config
+    - name: litellm
     - name: rook-ceph-cluster
       namespace: rook-ceph
   interval: 15m
