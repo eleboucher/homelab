@@ -58,6 +58,7 @@ spec:
               - |
                 set -euo pipefail
                 mkdir -p /home/node/.openclaw
+                chmod 700 /home/node/.openclaw
                 cp /run/config/openclaw.json /home/node/.openclaw/openclaw.json
                 chown 1000:100 /home/node/.openclaw/openclaw.json
                 chmod 400 /home/node/.openclaw/openclaw.json
