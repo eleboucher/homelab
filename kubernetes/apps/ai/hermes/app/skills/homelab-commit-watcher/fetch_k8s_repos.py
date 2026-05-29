@@ -83,7 +83,20 @@ def _is_rate_limit_error(errors: list[dict]) -> bool:
 
 def gql(client: httpx.Client, query: str, variables: dict) -> dict:
     for attempt in range(5):
-        r = client.post(GITHUB_API, json={"query": query, "variables": variables})
+        # Transport-level failures (RemoteProtocolError on a dropped chunked
+        # response, connection resets, read timeouts) raise out of .post and
+        # aren't covered by HTTPTransport(retries=...) once the response has
+        # started streaming — retry them here so one flaky GitHub response
+        # doesn't abort the whole fetch (which left the daily feed empty).
+        try:
+            r = client.post(GITHUB_API, json={"query": query, "variables": variables})
+        except httpx.TransportError as e:
+            if attempt == 4:
+                raise
+            wait = min(2**attempt, 120)
+            print(f"  transport error ({type(e).__name__}): retry in {wait}s", file=sys.stderr)
+            time.sleep(wait)
+            continue
         if r.status_code == 200:
             data = r.json()
             errors = data.get("errors")
