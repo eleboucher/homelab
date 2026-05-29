@@ -27,6 +27,27 @@ spec:
         strategy: Recreate
         type: deployment
         initContainers:
+          fix-perms:
+            image:
+              repository: docker.io/library/alpine
+              tag: "3.23"
+            command:
+              - sh
+              - -c
+              - |
+                set -euo pipefail
+                chown 1000:100 /home/node/.openclaw
+                chmod 700 /home/node/.openclaw
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop:
+                  - ALL
+                add:
+                  - CHOWN
+                  - FOWNER
+              runAsGroup: 0
+              runAsUser: 0
           init:
             image:
               repository: docker.io/library/alpine

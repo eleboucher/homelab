@@ -90,15 +90,18 @@ data:
         discord: {
           enabled: true,
           defaultAccount: "default",
-          groupPolicy: "allowlist",
+          groupPolicy: "open",
           accounts: {
             default: {
               token: "{{ .DISCORD_TOKEN }}",
               guilds: {
                 "1441534507017703547": {
                   channels: {
-                    "1501981764430594189": { enabled: true },
+                    "1501981764430594189": { enabled: true, requireMention: false },
                   },
+                },
+                "1503020857423822858": {
+                  requireMention: false,
                 },
               },
             },
@@ -157,15 +160,15 @@ data:
               }
             ],
           },
-        },
-        "litellm-anthropic": {
-          baseUrl: "http://litellm.llm:4000",
-          apiKey: "$${LITELLM_API_KEY}",
-          api: "anthropic-messages",
-          timeoutSeconds: 600,
-          models: [
-            { id: "MiniMax-M2.7", name: "MiniMax M2.7 via LiteLLM", reasoning: true, input: ["text"], cost: { input: 15, output: 60, cacheRead: 2, cacheWrite: 10 }, contextWindow: 204800, maxTokens: 32768, },
-          ],
+          "litellm-anthropic": {
+            baseUrl: "http://litellm.ai:4000",
+            apiKey: "{{ .LITELLM_MASTER_KEY }}",
+            api: "anthropic-messages",
+            timeoutSeconds: 600,
+            models: [
+              { id: "MiniMax-M2.7", name: "MiniMax M2.7 via LiteLLM", reasoning: true, input: ["text"], cost: { input: 15, output: 60, cacheRead: 2, cacheWrite: 10 }, contextWindow: 204800, maxTokens: 32768, },
+            ],
+          },
         },
       },
       messages: {
