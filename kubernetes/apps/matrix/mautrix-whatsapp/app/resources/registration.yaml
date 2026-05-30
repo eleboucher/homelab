@@ -1,5 +1,5 @@
 ---
-id: whatsapp
+id: whatsapp2
 url: http://mautrix-whatsapp.matrix.svc:29318
 as_token: "{{ .AS_TOKEN }}"
 hs_token: "{{ .HS_TOKEN }}"

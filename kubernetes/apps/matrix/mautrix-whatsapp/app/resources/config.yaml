@@ -77,7 +77,7 @@ appservice:
   address: http://mautrix-whatsapp.matrix.svc:29318
   hostname: 0.0.0.0
   port: 29318
-  id: whatsapp
+  id: whatsapp2
   bot:
     username: whatsappbot
     displayname: WhatsApp bridge bot
@@ -129,7 +129,7 @@ encryption:
 env_config_prefix: MAUTRIX_WHATSAPP_
 
 logging:
-  min_level: info
+  min_level: debug
   writers:
     - type: stdout
       format: pretty-colored
