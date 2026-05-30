@@ -145,7 +145,7 @@ spec:
           runner:
             image:
               repository: git.erwanleboucher.dev/eleboucher/runner
-              tag: sha-63d5504927ba6b9d511c0972beaf4ff5b3705f82
+              tag: v12.10.2
             command:
               - sh
               - -ec
@@ -170,7 +170,7 @@ spec:
           k8s-plugin:
             image:
               repository: git.erwanleboucher.dev/eleboucher/runner-k8s-plugin
-              tag: sha-f7ab06b75887e5497c9f9f9bef641aafb2ae3e1c
+              tag: v12.10.2
             args:
               - --listen
               - unix:///plugin/forgejo-runner-k8s.sock
@@ -193,30 +193,38 @@ spec:
           type: Role
           rules:
             - apiGroups:
-                - ""
+                - "batch"
               resources:
-                - "pods"
+                - jobs
               verbs:
-                - "list"
-                - "watch"
-                - "create"
-                - "get"
-                - "delete"
+                - create
+                - get
+                - list
+                - watch
+                - delete
             - apiGroups:
                 - ""
               resources:
-                - "pods/exec"
+                - pods
               verbs:
-                - "create"
-                - "get"
+                - list
+                - watch
+                - get
             - apiGroups:
                 - ""
               resources:
-                - "pods/log"
+                - pods/exec
               verbs:
-                - "list"
-                - "watch"
-                - "get"
+                - create
+                - get
+            - apiGroups:
+                - ""
+              resources:
+                - pods/log
+              verbs:
+                - list
+                - watch
+                - get
       bindings:
         forgejo-runner-codeberg:
           type: RoleBinding
