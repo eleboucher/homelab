@@ -170,7 +170,7 @@ spec:
           k8s-plugin:
             image:
               repository: git.erwanleboucher.dev/eleboucher/runner-k8s-plugin
-              tag: v12.10.2
+              tag: 12.10.3
             args:
               - --listen
               - unix:///plugin/forgejo-runner-k8s.sock
