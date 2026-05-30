@@ -341,6 +341,12 @@ spec:
           hermes:
             init:
               - path: /run/skills/homelab-commit-watcher
+      run:
+        type: emptyDir
+        advancedMounts:
+          hermes:
+            app:
+              - path: /run
       tmp:
         type: emptyDir
         globalMounts:
