@@ -181,9 +181,19 @@ spec:
             securityContext:
               allowPrivilegeEscalation: false
               capabilities:
+                add:
+                  - CHOWN
+                  - DAC_OVERRIDE
+                  - FOWNER
+                  - FSETID
+                  - SETGID
+                  - SETUID
                 drop:
                   - ALL
               readOnlyRootFilesystem: false
+              runAsGroup: 0
+              runAsNonRoot: false
+              runAsUser: 0
           codeserver:
             image:
               repository: ghcr.io/coder/code-server
