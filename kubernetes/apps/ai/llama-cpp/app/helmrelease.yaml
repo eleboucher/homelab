@@ -66,7 +66,7 @@ spec:
           qwen:
             image:
               repository: ghcr.io/ggml-org/llama.cpp
-              tag: server-vulkan-b9404@sha256:411f8ba6e8cafd0771a0d62cde7bd968bf5169d9c0784d4f804ba26421305832
+              tag: server-vulkan-b9426@sha256:dca559dd886b415b4ced54f09197a2d84b55c432736a3a3fccca82359444f50c
             args:
               - --metrics
               - --model
@@ -157,7 +157,7 @@ spec:
           gemma:
             image:
               repository: ghcr.io/ggml-org/llama.cpp
-              tag: server-vulkan-b9404@sha256:411f8ba6e8cafd0771a0d62cde7bd968bf5169d9c0784d4f804ba26421305832
+              tag: server-vulkan-b9426@sha256:dca559dd886b415b4ced54f09197a2d84b55c432736a3a3fccca82359444f50c
             args:
               - --metrics
               - --model
