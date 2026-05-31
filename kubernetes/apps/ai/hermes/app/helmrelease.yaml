@@ -141,6 +141,7 @@ spec:
             args:
               - gateway
               - run
+              - --no-supervise
             env:
               API_SERVER_ENABLED: "true"
               API_SERVER_HOST: 0.0.0.0
