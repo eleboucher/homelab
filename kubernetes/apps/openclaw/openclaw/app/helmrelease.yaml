@@ -72,7 +72,7 @@ spec:
           install-tools:
             image:
               repository: ghcr.io/openclaw/openclaw
-              tag: 2026.5.27@sha256:95f4e860a1490e6e83f095d0bb1d2b5c7ac74e1cb62eedad08deb179e831a6de
+              tag: 2026.5.28@sha256:dbad4655fb87aa8d8662323daf9f46f4721504324e22c9f99d84849e609f5b2c
             command:
               - /bin/sh
               - -c
@@ -181,7 +181,7 @@ spec:
           app:
             image:
               repository: ghcr.io/openclaw/openclaw
-              tag: 2026.5.27@sha256:95f4e860a1490e6e83f095d0bb1d2b5c7ac74e1cb62eedad08deb179e831a6de
+              tag: 2026.5.28@sha256:dbad4655fb87aa8d8662323daf9f46f4721504324e22c9f99d84849e609f5b2c
             command:
               - /bin/sh
               - -c
