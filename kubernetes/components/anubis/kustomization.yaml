@@ -8,7 +8,7 @@ patches:
   - target:
       group: helm.toolkit.fluxcd.io
       kind: HelmRelease
-      annotationSelector: '!anubis.home/skip-route-patch'
+      annotationSelector: "!anubis.home/skip-route-patch"
     patch: |
       - op: add
         path: /spec/values/route/app/rules

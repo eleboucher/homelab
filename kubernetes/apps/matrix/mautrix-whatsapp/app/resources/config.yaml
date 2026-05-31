@@ -37,7 +37,7 @@ network:
     backwards_on_demand: false
 
 bridge:
-  command_prefix: '!wa'
+  command_prefix: "!wa"
   personal_filtering_spaces: true
   private_chat_portal_meta: true
   bridge_status_notices: errors

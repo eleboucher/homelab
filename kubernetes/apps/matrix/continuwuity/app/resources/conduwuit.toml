@@ -37,10 +37,10 @@ registration_token = "{{ .registration_token }}"
 emergency_password = "{{ .emergency_password }}"
 
 turn_uris = [
-    "turn:turn.erwanleboucher.dev?transport=udp",
-    "turn:turn.erwanleboucher.dev?transport=tcp",
-    "turns:turn.erwanleboucher.dev?transport=udp",
-    "turns:turn.erwanleboucher.dev?transport=tcp",
+  "turn:turn.erwanleboucher.dev?transport=udp",
+  "turn:turn.erwanleboucher.dev?transport=tcp",
+  "turns:turn.erwanleboucher.dev?transport=udp",
+  "turns:turn.erwanleboucher.dev?transport=tcp",
 ]
 turn_secret = "{{ .turn_secret }}"
 turn_ttl = 86400
@@ -50,6 +50,4 @@ client = "https://matrix.erwanleboucher.dev"
 server = "matrix.erwanleboucher.dev:443"
 
 [global.matrix_rtc]
-foci = [
-    { type = "livekit", livekit_service_url = "https://livekit.erwanleboucher.dev" },
-]
+foci = [{ type = "livekit", livekit_service_url = "https://livekit.erwanleboucher.dev" }]

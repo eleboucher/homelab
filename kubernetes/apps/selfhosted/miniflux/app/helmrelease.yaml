@@ -63,7 +63,7 @@ spec:
             securityContext: &restrictedSecurity
               readOnlyRootFilesystem: true
               allowPrivilegeEscalation: false
-              capabilities: {drop: ["ALL"]}
+              capabilities: { drop: ["ALL"] }
       refresh:
         type: cronjob
         cronjob:

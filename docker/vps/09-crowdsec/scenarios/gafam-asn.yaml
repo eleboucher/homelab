@@ -1,7 +1,7 @@
 ---
 type: trigger
 name: custom/gafam-asn
-description: 'Ban traffic from GAFAM (Google, Apple, Facebook/Meta, Amazon, Microsoft) AS numbers'
+description: "Ban traffic from GAFAM (Google, Apple, Facebook/Meta, Amazon, Microsoft) AS numbers"
 filter: >-
   evt.Meta.ASNumber in [
     "15169", "396982",

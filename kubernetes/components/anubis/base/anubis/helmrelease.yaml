@@ -21,7 +21,7 @@ spec:
               tag: v1.25.0
             env:
               BIND: ":8080"
-              DIFFICULTY: "${ANUBIS_DIFFICULTY:=\"4\"}"
+              DIFFICULTY: '${ANUBIS_DIFFICULTY:="4"}'
               ED25519_PRIVATE_KEY_HEX:
                 valueFrom:
                   secretKeyRef:

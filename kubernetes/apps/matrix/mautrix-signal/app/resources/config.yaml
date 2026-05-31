@@ -7,12 +7,12 @@ network:
   number_in_topic: true
   device_name: mautrix-signal
   note_to_self_avatar: mxc://maunium.net/REBIVrqjZwmaWpssCZpBlmlL
-  location_format: 'https://www.google.com/maps/place/%[1]s,%[2]s'
+  location_format: "https://www.google.com/maps/place/%[1]s,%[2]s"
   disappear_view_once: false
   extev_polls: false
 
 bridge:
-  command_prefix: '!signal'
+  command_prefix: "!signal"
   personal_filtering_spaces: true
   private_chat_portal_meta: true
   bridge_status_notices: errors

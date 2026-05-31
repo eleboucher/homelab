@@ -16,12 +16,12 @@
       delegate_to: localhost
       become: false
       loop:
-        - {key: "doco-cd/github-token", var: "github_token"}
-        - {key: "doco-cd/credential", var: "op_sa_token"}
-        - {key: "doco-cd/api_secret", var: "api_secret"}
-        - {key: "doco-cd/webhook_secret", var: "webhook_secret"}
-        - {key: "towonel-tunnel/CROWDSEC_FW_API_KEY", var: "crowdsec_fw_api_key"}
-        - {key: "towonel-tunnel/ip", var: "vps_ip"}
+        - { key: "doco-cd/github-token", var: "github_token" }
+        - { key: "doco-cd/credential", var: "op_sa_token" }
+        - { key: "doco-cd/api_secret", var: "api_secret" }
+        - { key: "doco-cd/webhook_secret", var: "webhook_secret" }
+        - { key: "towonel-tunnel/CROWDSEC_FW_API_KEY", var: "crowdsec_fw_api_key" }
+        - { key: "towonel-tunnel/ip", var: "vps_ip" }
       register: secrets_raw
 
     - name: Set secret facts

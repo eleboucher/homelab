@@ -15,7 +15,7 @@ spec:
       APP: *app
       APP_NAMESPACE: ${APP_NAMESPACE}
       ANUBIS_TARGET: ${ANUBIS_TARGET}
-      ANUBIS_DIFFICULTY: "${ANUBIS_DIFFICULTY:=\"4\"}"
+      ANUBIS_DIFFICULTY: '${ANUBIS_DIFFICULTY:="4"}'
   prune: true
   retryInterval: 2m
   sourceRef:

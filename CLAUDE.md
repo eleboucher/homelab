@@ -13,6 +13,7 @@ GitOps-managed Kubernetes homelab running a media server stack (Jellyfin, Sonarr
 All commands use `just` (task runner). Run `just -l` to list available commands.
 
 ### Bootstrap (initial cluster setup)
+
 ```bash
 just bootstrap cluster        # Run full bootstrap end-to-end
 just bootstrap nodes          # Install Talos on nodes
@@ -23,6 +24,7 @@ just bootstrap apps           # Sync Helmfile apps
 ```
 
 ### Kubernetes Operations
+
 ```bash
 just kube apply-ks <ns> <ks>  # Apply local Flux Kustomization
 just kube delete-ks <ns> <ks> # Delete local Flux Kustomization
@@ -34,6 +36,7 @@ just kube view-secret <ns> <secret>  # View decoded secret
 ```
 
 ### Talos Management
+
 ```bash
 just talos apply-node <node>  # Apply Talos config to node
 just talos render-config <node>   # Render Talos config (dry-run)
@@ -79,6 +82,7 @@ talos/
 ## Key Patterns
 
 **App Structure:** Each app in `kubernetes/apps/` typically has:
+
 - `kustomization.yaml` - Kustomize config
 - `ks.yaml` - Flux Kustomization CRD
 - `helmrelease.yaml` - Helm release config
@@ -94,6 +98,7 @@ talos/
 ## Validation
 
 Pre-commit hooks enforce:
+
 - YAML schema validation (kubeconform)
 - YAML linting and formatting
 
@@ -104,12 +109,14 @@ Pre-commit hooks enforce:
 Default: Sort all fields alphabetically unless overridden below.
 
 **Kubernetes resource ordering:**
+
 1. `apiVersion`
 2. `kind`
 3. `metadata`
 4. `spec`
 
 **Metadata section ordering:**
+
 1. `name`
 2. `namespace`
 3. `annotations`
@@ -122,6 +129,7 @@ Applies to HelmReleases using `oci://ghcr.io/bjw-s-labs/helm/app-template` (iden
 **`enabled` field:** Always first within its section.
 
 **`spec` section ordering:**
+
 1. `chartRef`
 2. `interval`
 3. `dependsOn`
@@ -130,28 +138,34 @@ Applies to HelmReleases using `oci://ghcr.io/bjw-s-labs/helm/app-template` (iden
 6. `values`
 
 **`spec.values` ordering:**
+
 1. `defaultPodOptions`
 2. Other fields alphabetically
 
 **`spec.values.controllers.*` ordering:**
+
 1. `pod`
 2. Other fields alphabetically
 3. `initContainers`
 4. `containers`
 
 **`spec.values.controllers.*.containers.*` ordering:**
+
 1. `image`
 2. Other fields alphabetically
 
 **`resources` sections ordering:**
+
 1. `requests`
 2. `limits`
 
 **`spec.values.service.*` ordering:**
+
 1. `type`
 2. Other fields alphabetically
 
 **`persistence.*` ordering:**
+
 1. `type`
 2. Other fields alphabetically
 3. `globalMounts`

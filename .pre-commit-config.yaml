@@ -2,18 +2,12 @@
 repos:
   - repo: local
     hooks:
-      - id: yamllint
-        name: YAML Lint
-        entry: yamllint
+      - id: oxfmt
+        name: oxfmt
+        entry: oxfmt
         language: system
         exclude: ^config/
-        files: .+\.ya?ml$
-      - id: yamlfmt
-        name: YAML Format
-        entry: yamlfmt
-        language: system
-        exclude: ^config/
-        files: .+\.ya?ml$
+        files: \.(ya?ml|json|json5|jsonc|md|markdown)$
       - id: k8s-schema-hook
         name: K8s Schema Hook
         entry: hooks/k8s_yaml_schema.py --config .k8s-schema-hook.yaml

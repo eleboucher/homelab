@@ -7,7 +7,7 @@
 After first deployment, recover both built-in accounts:
 
 ```bash
-kubectl exec -n security -it statefulset/kanidm -- kanidmd recover-account admin 
+kubectl exec -n security -it statefulset/kanidm -- kanidmd recover-account admin
 kubectl exec -n security -it statefulset/kanidm -- kanidmd recover-account idm_admin
 ```
 
