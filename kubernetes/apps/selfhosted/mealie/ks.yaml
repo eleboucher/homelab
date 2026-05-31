@@ -9,7 +9,7 @@ spec:
     - ../../../../components/oidc
     - ../../../../components/postgres/cert
     - ../../../../components/volsync/hot
-    - ../../../../components/keda-http-scaler
+    - ../../../../components/keda-http
   dependsOn:
     - name: cnpg-cluster
       namespace: database

@@ -11,7 +11,7 @@ spec:
   components:
     - ../../../../components/volsync/hot
     - ../../../../components/oidc
-    - ../../../../components/keda-http-scaler
+    - ../../../../components/keda-http
   dependsOn:
     - name: keda-http-add-on
       namespace: observability

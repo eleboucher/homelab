@@ -11,7 +11,7 @@ spec:
   components:
     - ../../../../components/postgres/cert
     - ../../../../components/oidc
-    - ../../../../components/keda-http-scaler
+    - ../../../../components/keda-http
   dependsOn:
     - name: cnpg-cluster
       namespace: database

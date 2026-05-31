@@ -3,7 +3,8 @@
 apiVersion: kustomize.config.k8s.io/v1alpha1
 kind: Component
 resources:
-  - ./httpscaledobject.yaml
+  - ./interceptorroute.yaml
+  - ./scaledobject.yaml
 patches:
   - target:
       group: helm.toolkit.fluxcd.io
@@ -16,3 +17,5 @@ patches:
               - name: keda-add-ons-http-interceptor-proxy
                 namespace: observability
                 port: 8080
+            timeouts:
+              request: 0s
