@@ -85,6 +85,10 @@ spec:
     type: anonymous
   outgoingAuth:
     source: discovered
+  sessionStorage:
+    provider: redis
+    address: dragonfly.database:6379
+    keyPrefix: "mcp-gateway-internal:"
   podTemplateSpec:
     spec:
       containers:
