@@ -1,8 +1,0 @@
----
-# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/refs/heads/master/v1.34.0/persistentvolumeclaim-v1.json
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: "${APP}"
-  annotations:
-    volsync.backube/use-copy-trigger: ""

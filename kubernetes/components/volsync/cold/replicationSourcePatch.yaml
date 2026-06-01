@@ -1,0 +1,9 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/volsync.backube/replicationsource_v1alpha1.json
+apiVersion: volsync.backube/v1alpha1
+kind: ReplicationSource
+metadata:
+  name: "${APP}"
+spec:
+  trigger:
+    schedule: "0 5 * * *"

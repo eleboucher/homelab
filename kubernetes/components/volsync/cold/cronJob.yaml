@@ -3,12 +3,12 @@
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: volsync-cold-snapshot-local
+  name: volsync-cold-snapshot
 spec:
-  schedule: "${VOLSYNC_CRON_LOCAL:='0 * * * *'}"
+  schedule: "30 5 * * *"
   failedJobsHistoryLimit: 3
   successfulJobsHistoryLimit: 1
-  concurrencyPolicy: "Forbid"
+  concurrencyPolicy: Forbid
   jobTemplate:
     spec:
       template:
@@ -26,7 +26,7 @@ spec:
                 - name: STATEFULSET
                   value: "${STATEFULSET:=${APP}}"
                 - name: PVC
-                  value: "${CLAIM:=${APP}}"
+                  value: "${VOLSYNC_CLAIM:=${APP}}"
               command:
                 - /bin/sh
                 - -c

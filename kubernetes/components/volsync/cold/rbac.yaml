@@ -46,7 +46,6 @@ metadata:
 subjects:
   - kind: ServiceAccount
     name: volsync-restart-${APP}
-    namespace: ${APP_NAMESPACE:-${APP}}
 roleRef:
   kind: Role
   name: volsync-restart-${APP}
