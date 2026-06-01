@@ -1,44 +1,49 @@
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/kashalls/kromgo/main/config.schema.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/home-operations/kromgo/main/config.schema.json
+defaults:
+  hidden: false
+
 badge:
-  font: Verdana.ttf
   size: 12
 
 metrics:
   - name: talos_version
     query: label_replace(node_os_info{name="Talos"}, "version_id", "$1", "version_id", "v(.+)")
-    label: version_id
+    value: labels["version_id"]
     title: Talos
 
   - name: kubernetes_version
     query: label_replace(kubernetes_build_info{service="kubernetes"}, "git_version", "$1", "git_version", "v(.+)")
-    label: git_version
+    value: labels["git_version"]
     title: Kubernetes
 
   - name: flux_version
     query: label_replace(flux_instance_info, "revision", "$1", "revision", "v(.+)@sha256:.+")
-    label: revision
+    value: labels["revision"]
     title: Flux
 
   - name: mkt_version
     query: label_replace(mktxp_system_uptime, "short_version", "$1", "version", "([^ ]+).*")
-    label: short_version
+    value: labels["short_version"]
     title: MikroTik
 
   - name: cluster_node_count
     query: count(count by (node) (kube_node_status_condition{condition="Ready"}))
+    color: '"green"'
     title: Nodes
 
   - name: cluster_pod_count
     query: sum(kube_pod_status_phase{phase="Running"})
+    value: humanizeNumber(result)
+    color: '"green"'
     title: Pods
-    history:
+    timeseries:
       enabled: true
       maxDuration: "7d"
 
   - name: github_last_push_info
     query: label_replace(topk(1, github_last_push_info), "short_repo", "$1", "repo", ".+/(.+)")
-    label: short_repo
+    value: labels["short_repo"]
     title: Last Push
 
   - name: github_last_push_timestamp
@@ -46,16 +51,16 @@ metrics:
     title: Last Push Age
 
   - name: gh_contributions_year
-    query: avg (gh_contributions_year)
+    query: avg(gh_contributions_year)
     title: GH Contributions (1y)
-    history:
+    timeseries:
       enabled: true
       maxDuration: "1y"
 
   - name: github_followers
     query: github_followers
     title: Followers
-    history:
+    timeseries:
       enabled: true
       maxDuration: "0"
 
@@ -66,121 +71,63 @@ metrics:
   - name: github_stars_total
     query: github_stars_total
     title: Stars
-    history:
+    timeseries:
       enabled: true
       maxDuration: "0"
 
   - name: cluster_latency_over_7d
     query: quantile(0.99, gatus_results_duration_seconds)
+    value: string(result) + "s"
+    color: 'result <= 300 ? "green" : result <= 700 ? "orange" : "red"'
     title: Gateway Latency
-    suffix: "s"
-    history:
+    timeseries:
       enabled: true
       maxDuration: "7d"
-    colors:
-      - color: "green"
-        min: 0
-        max: 300
-      - color: "orange"
-        min: 301
-        max: 700
-      - color: "red"
-        min: 701
-        max: 9999
 
   - name: cluster_cpu_usage
     query: round(avg(instance:node_cpu_utilisation:rate5m) * 100, 0.1)
+    value: string(result) + "%"
+    color: 'result <= 35 ? "green" : result <= 75 ? "orange" : "red"'
     title: CPU
-    suffix: "%"
-    history:
+    timeseries:
       enabled: true
       maxDuration: "7d"
-    colors:
-      - color: "green"
-        min: 0
-        max: 35
-      - color: "orange"
-        min: 36
-        max: 75
-      - color: "red"
-        min: 76
-        max: 9999
 
   - name: cluster_memory_usage
     query: round(sum(node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes) / sum(node_memory_MemTotal_bytes) * 100, 0.1)
+    value: string(result) + "%"
+    color: 'result <= 49 ? "green" : result <= 75 ? "orange" : "red"'
     title: Memory
-    suffix: "%"
-    history:
+    timeseries:
       enabled: true
       maxDuration: "7d"
-    colors:
-      - color: "green"
-        min: 0
-        max: 49
-      - color: "orange"
-        min: 50
-        max: 75
-      - color: "red"
-        min: 76
-        max: 9999
 
   - name: cluster_age_days
-    query: round((time() - max(kube_node_created) ) / 86400)
+    query: round((time() - max(kube_node_created)) / 86400)
+    value: string(result) + "d"
+    color: 'result <= 180 ? "green" : result <= 360 ? "orange" : "red"'
     title: Age
-    suffix: "d"
-    colors:
-      - color: "green"
-        min: 0
-        max: 180
-      - color: "orange"
-        min: 181
-        max: 360
-      - color: "red"
-        min: 361
-        max: 9999
 
   - name: cluster_uptime_days
     query: round(avg(node_time_seconds - node_boot_time_seconds) / 86400)
-    suffix: "d"
-    colors:
-      - color: "green"
-        min: 0
-        max: 180
-      - color: "orange"
-        min: 181
-        max: 360
-      - color: "red"
-        min: 361
-        max: 9999
+    value: string(result) + "d"
+    color: 'result <= 180 ? "green" : result <= 360 ? "orange" : "red"'
+    title: Uptime
 
   - name: cluster_alert_count
     query: ALERTS{alertstate="firing"} - 1
+    color: 'result < 1 ? "green" : "red"'
     title: Alerts
-    colors:
-      - color: "green"
-        min: 0
-        max: 0
-      - color: "red"
-        min: 1
-        max: 9999
+
   - name: global_sla
     query: |
       sum(increase(gatus_results_total{success="true"}[7d]))
       /
       sum(increase(gatus_results_total[7d]))
       * 100
+    value: string(result) + "%"
+    color: 'result >= 99.9 ? "green" : result >= 99.0 ? "orange" : "red"'
     title: SLA (7d)
-    suffix: "%"
-    history:
+    timeseries:
       enabled: true
       maxDuration: "7d"
-    colors:
-      - color: "green"
-        min: 99.9
-        max: 100
-      - color: "orange"
-        min: 99.0
-        max: 99.89
-      - color: "red"
-        min: 0
-        max: 98.9

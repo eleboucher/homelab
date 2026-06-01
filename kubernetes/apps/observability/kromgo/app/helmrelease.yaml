@@ -10,29 +10,25 @@ spec:
     name: kromgo
   interval: 30m
   values:
+    defaultPodOptions:
+      securityContext:
+        runAsGroup: 1000
+        runAsNonRoot: true
+        runAsUser: 1000
     controllers:
       kromgo:
-        pod:
-          securityContext:
-            runAsGroup: 1000
-            runAsNonRoot: true
-            runAsUser: 1000
         annotations:
           reloader.stakater.com/auto: "true"
-        replicas: 1
         strategy: RollingUpdate
-
         containers:
-          kromgo:
+          app:
             image:
-              repository: ghcr.io/kashalls/kromgo
-              tag: v0.10.0
+              repository: ghcr.io/home-operations/kromgo
+              tag: 0.11.0@sha256:760f2154d7fb65123fa0d6a1be131a5c1014ebfcfcd81a1178e98fd6f0da0bd3
             env:
               PROMETHEUS_URL: http://vmsingle-victoria-metrics.observability.svc.cluster.local:8428
-              SERVER_HOST: 0.0.0.0
-              SERVER_PORT: &port 8080
-              HEALTH_HOST: 0.0.0.0
-              HEALTH_PORT: &hport 8888
+              SERVER_PORT: &port 80
+              HEALTH_PORT: &healthPort 8080
             probes:
               liveness: &probes
                 enabled: true
@@ -40,7 +36,7 @@ spec:
                 spec:
                   httpGet:
                     path: /readyz
-                    port: *hport
+                    port: *healthPort
                   initialDelaySeconds: 0
                   periodSeconds: 10
                   timeoutSeconds: 1
@@ -49,14 +45,12 @@ spec:
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
-              capabilities:
-                drop:
-                  - "ALL"
+              capabilities: {drop: ["ALL"]}
             resources:
               requests:
-                memory: 10M
+                cpu: 10m
               limits:
-                memory: 64M
+                memory: 64Mi
     persistence:
       config-file:
         type: configMap
@@ -87,14 +81,12 @@ spec:
                     - "*"
                   maxAge: 86400
             backendRefs:
-              - name: kromgo
+              - identifier: app
                 port: *port
-
     service:
       app:
         ports:
           http:
             port: *port
-            primary: true
           health:
-            port: *hport
+            port: *healthPort
