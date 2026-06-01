@@ -19,7 +19,7 @@ spec:
     substitute:
       APP: garage
       APP_NAMESPACE: garage-system
-      VOLSYNC_CAPACITY: 20Gi
+      VOLSYNC_CAPACITY: 50Gi
   prune: true
   sourceRef:
     kind: OCIRepository
