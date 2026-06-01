@@ -9,7 +9,7 @@ JUST_UNSTABLE = "1"
 "uv" = "latest"
 kustomize = "5.8.1"
 "aqua:opentofu/opentofu" = "1"
-"github:oxc-project/oxc" = { version = "latest", asset_pattern = "oxfmt-*", version_prefix = "apps_v" }
+oxfmt = "latest"
 "aqua:yannh/kubeconform" = "latest"
 "aqua:mikefarah/yq" = "latest"
 prek = "latest"

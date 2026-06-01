@@ -1,0 +1,20 @@
+pre-commit:
+  parallel: true
+  jobs:
+    - name: oxfmt
+      glob: "*.{yml,yaml,json,json5,jsonc,md,markdown}"
+      exclude:
+        - "config/**"
+      run: mise exec -- oxfmt {staged_files}
+
+    - name: k8s-schema-hook
+      glob: "kubernetes/**/*.{yml,yaml}"
+      run: hooks/.venv/bin/python hooks/k8s_yaml_schema.py --config .k8s-schema-hook.yaml {staged_files}
+
+    - name: tofu-fmt
+      glob: "tofu/**/*.tf"
+      run: tofu -chdir=tofu/mikrotik fmt -check -recursive
+
+    - name: tofu-validate
+      glob: "tofu/mikrotik/**/*.tf"
+      run: tofu -chdir=tofu/mikrotik validate

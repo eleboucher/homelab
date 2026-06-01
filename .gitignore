@@ -2,6 +2,7 @@
 .pytest_cache/
 .task/
 .venv/
+hooks/.venv/
 *.crt
 *.iso
 *.key
