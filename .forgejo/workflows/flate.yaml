@@ -47,6 +47,10 @@ jobs:
 
       - name: Install flate
         uses: https://github.com/home-operations/flate/action@90c0478740457fe22b4063a5c51689045c721f57 # 0.1.36
+        with:
+          # Defaults to ${{ github.token }} — a Forgejo-issued token that github.com
+          # rejects (401). flate's release is public, so force the unauthenticated path.
+          token: ""
 
       - name: Run flate test
         run: flate test ${{ matrix.resource }} --path ./kubernetes/flux/cluster --base ${{ forgejo.event.repository.default_branch }}
