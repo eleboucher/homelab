@@ -40,6 +40,9 @@ spec:
       query_frontend: {}
       metrics_generator:
         processor:
+          local_blocks:
+            filter_server_spans: false
+            flush_to_storage: true
           span_metrics:
             histogram_buckets: [0.002, 0.004, 0.008, 0.016, 0.032, 0.064, 0.128, 0.256, 0.512, 1.024, 2.048, 4.096]
           service_graphs:
@@ -54,7 +57,7 @@ spec:
       overrides:
         defaults:
           metrics_generator:
-            processors: [service-graphs, span-metrics]
+            processors: [local-blocks, service-graphs, span-metrics]
     persistence:
       enabled: true
       storageClassName: ceph-block
