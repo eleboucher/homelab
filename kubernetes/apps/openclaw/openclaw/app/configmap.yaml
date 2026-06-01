@@ -39,7 +39,7 @@ data:
             },
           },
           model: {
-            primary: "litellm-anthropic/MiniMax-M2.7",
+            primary: "litellm-anthropic/MiniMax-M3",
             fallbacks: [
               "litellm/qwen",
               "litellm/gemma",
@@ -48,11 +48,11 @@ data:
           models: {
             "litellm/gemma": { alias: "gemma" },
             "litellm/qwen": { alias: "qwen" },
-            "litellm-anthropic/MiniMax-M2.7": { alias: "minimax", params: { cache_prompt: true } },
+            "litellm-anthropic/MiniMax-M3": { alias: "minimax", params: { cache_prompt: true } },
           },
           heartbeat: {
             every: "60m",
-            model: "litellm-anthropic/MiniMax-M2.7",
+            model: "litellm-anthropic/MiniMax-M3",
             directPolicy: "allow",
             lightContext: true,
             isolatedSession: false,
@@ -77,7 +77,7 @@ data:
             },
             heartbeat: {
               every: "60m",
-              model: "litellm-anthropic/MiniMax-M2.7",
+              model: "litellm-anthropic/MiniMax-M3",
               activeHours: { start: "06:00", end: "23:00" },
             },
           },
@@ -166,7 +166,7 @@ data:
             api: "anthropic-messages",
             timeoutSeconds: 600,
             models: [
-              { id: "MiniMax-M2.7", name: "MiniMax M2.7 via LiteLLM", reasoning: true, input: ["text"], cost: { input: 15, output: 60, cacheRead: 2, cacheWrite: 10 }, contextWindow: 204800, maxTokens: 32768, },
+              { id: "MiniMax-M3", name: "MiniMax M3 via LiteLLM", reasoning: true, input: ["text", "image"], cost: { input: 15, output: 60, cacheRead: 2, cacheWrite: 10 }, contextWindow: 1000000, maxTokens: 32768, },
             ],
           },
         },

@@ -26,24 +26,24 @@ data:
           max_input_tokens: 32768
           max_output_tokens: 8192
 
-      - model_name: minimax/MiniMax-M2.7
+      - model_name: minimax/MiniMax-M3
         litellm_params:
-          model: minimax/MiniMax-M2.7
+          model: minimax/MiniMax-M3
           api_base: https://api.minimax.io/v1
           api_key: os.environ/MINIMAX_API_KEY
         model_info:
-          max_tokens: 204800
+          max_tokens: 1000000
           max_input_tokens: 192000
           max_output_tokens: 16384
 
-      - model_name: MiniMax-M2.7
+      - model_name: MiniMax-M3
         litellm_params:
-          model: minimax/MiniMax-M2.7
+          model: minimax/MiniMax-M3
           api_base: https://api.minimax.io/anthropic/v1/messages
           api_key: os.environ/MINIMAX_API_KEY
         model_info:
           mode: messages
-          max_input_tokens: 204800
+          max_input_tokens: 1000000
           max_output_tokens: 131072
           supports_function_calling: true
           supports_prompt_caching: true

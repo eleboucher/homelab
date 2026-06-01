@@ -10,12 +10,12 @@ data:
         base_url: http://litellm.ai:4000/v1
         key_env: LITELLM_API_KEY
         models:
-          minimax/MiniMax-M2.7:
-            context_length: 204800
+          minimax/MiniMax-M3:
+            context_length: 1000000
     model:
-      default: minimax/MiniMax-M2.7
+      default: minimax/MiniMax-M3
       provider: custom:litellm
-      context_length: 204800
+      context_length: 1000000
     model_aliases:
       gemma:
         model: gemma
@@ -24,7 +24,7 @@ data:
         model: qwen
         provider: custom:litellm
       minimax:
-        model: minimax/MiniMax-M2.7
+        model: minimax/MiniMax-M3
         provider: custom:litellm
     fallback_providers:
       - provider: custom:litellm
@@ -34,31 +34,31 @@ data:
     auxiliary:
       compression:
         provider: custom:litellm
-        model: minimax/MiniMax-M2.7
+        model: minimax/MiniMax-M3
       web_extract:
         provider: custom:litellm
-        model: minimax/MiniMax-M2.7
+        model: minimax/MiniMax-M3
       session_search:
         provider: custom:litellm
-        model: minimax/MiniMax-M2.7
+        model: minimax/MiniMax-M3
       vision:
         provider: custom:litellm
-        model: minimax/MiniMax-M2.7
+        model: minimax/MiniMax-M3
       goal_judge:
         provider: custom:litellm
-        model: minimax/MiniMax-M2.7
+        model: minimax/MiniMax-M3
       title_generator:
         provider: custom:litellm
-        model: minimax/MiniMax-M2.7
+        model: minimax/MiniMax-M3
       profile_describer:
         provider: custom:litellm
-        model: minimax/MiniMax-M2.7
+        model: minimax/MiniMax-M3
       triage_specifier:
         provider: custom:litellm
-        model: minimax/MiniMax-M2.7
+        model: minimax/MiniMax-M3
       kanban_decomposer:
         provider: custom:litellm
-        model: minimax/MiniMax-M2.7
+        model: minimax/MiniMax-M3
     plugins:
       enabled:
         - agentmemory
