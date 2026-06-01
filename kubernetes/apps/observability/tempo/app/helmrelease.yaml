@@ -54,6 +54,8 @@ spec:
           remote_write:
             - url: http://vmsingle-victoria-metrics.observability.svc.cluster.local:8428/api/v1/write
               send_exemplars: true
+        traces_storage:
+          path: /var/tempo/generator/traces
       overrides:
         defaults:
           metrics_generator:
