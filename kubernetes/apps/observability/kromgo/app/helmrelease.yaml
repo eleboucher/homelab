@@ -24,7 +24,7 @@ spec:
           app:
             image:
               repository: ghcr.io/home-operations/kromgo
-              tag: 0.13.1@sha256:060aa614945c4ae5c72ea7b480300c146856b10f34ac3703badbe244b34a4ed7
+              tag: 0.14.0@sha256:94ee0e2561048dc4637ca21b9926b76d87c15baf951678c7febb852269b7e10b
             env:
               PROMETHEUS_URL: http://vmsingle-victoria-metrics.observability.svc.cluster.local:8428
               SERVER_PORT: &port 80
