@@ -8,7 +8,7 @@ spec:
   replicas: 1
   args:
     - --maxmemory=$(MAX_MEMORY)Mi
-    - --proactor_threads=2
+    - --proactor_threads=1
     - --default_lua_flags=allow-undeclared-keys
   networkPolicyEnabled: false
   resources:
