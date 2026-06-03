@@ -47,8 +47,7 @@ badges:
 
   - title: Last Push Age
     id: github_last_push_timestamp
-    query: time() - topk(1, github_last_push_info)
-    valueExpr: humanizeDuration(result)
+    query: topk(1, github_last_push_info)
 
   - title: GH Contributions (1y)
     id: gh_contributions_year
@@ -121,16 +120,6 @@ graphs:
     id: gh_contributions_year
     query: avg(gh_contributions_year)
     maxDuration: "1y"
-
-  - title: Followers
-    id: github_followers
-    query: github_followers
-    maxDuration: "0"
-
-  - title: Stars
-    id: github_stars_total
-    query: github_stars_total
-    maxDuration: "0"
 
   - title: Gateway Latency
     id: cluster_latency_over_7d
