@@ -1,0 +1,23 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: piefed-config
+data:
+  SERVER_NAME: piefed.erwanleboucher.dev
+  CACHE_TYPE: RedisCache
+  CACHE_REDIS_URL: redis://piefed-dragonfly.selfhosted:6379/0
+  CELERY_BROKER_URL: redis://piefed-dragonfly.selfhosted:6379/1
+  NOTIF_SERVER: https://piefed.erwanleboucher.dev
+  MAIL_SERVER: smtp-relay.selfhosted.svc.cluster.local
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: piefed-crontab
+data:
+  crontab: |-
+    5 2 * * * flask daily-maintenance
+    5 4 * * 1 flask remove_orphan_files
+    1 */6 * * * flask send_missed_notifs && flask process_email_bounces && flask clean_up_old_activities
+    * * * * * flask send-queue

@@ -1,0 +1,195 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: piefed
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: piefed
+  interval: 30m
+  values:
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65534
+        runAsGroup: 65534
+        fsGroup: 65534
+        fsGroupChangePolicy: OnRootMismatch
+    controllers:
+      piefed:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        replicas: 1
+        strategy: Recreate
+        containers:
+          app:
+            image: &image
+              repository: registry.erwanleboucher.dev/eleboucher/piefed
+              tag: v1.6.27-5841009
+            envFrom: &envFrom
+              - configMapRef:
+                  name: piefed-config
+              - secretRef:
+                  name: piefed
+            env: &dbEnv
+              DATABASE_URL:
+                valueFrom:
+                  secretKeyRef:
+                    name: piefed-postgres
+                    key: url
+            probes:
+              startup:
+                enabled: true
+                custom: true
+                spec:
+                  tcpSocket:
+                    port: 5000
+                  periodSeconds: 10
+                  failureThreshold: 60
+              liveness:
+                enabled: true
+                custom: true
+                spec:
+                  tcpSocket:
+                    port: 5000
+                  periodSeconds: 30
+                  failureThreshold: 5
+              readiness:
+                enabled: true
+                custom: true
+                spec:
+                  tcpSocket:
+                    port: 5000
+                  periodSeconds: 15
+            resources:
+              requests:
+                cpu: 100m
+                memory: 512Mi
+              limits:
+                memory: 1536Mi
+            securityContext: &securityContext
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop:
+                  - ALL
+
+          celery:
+            image: *image
+            command:
+              - /usr/bin/catatonit
+              - --
+              - ./entrypoint_celery.sh
+            envFrom: *envFrom
+            env: *dbEnv
+            resources:
+              requests:
+                cpu: 100m
+                memory: 256Mi
+              limits:
+                memory: 1Gi
+            securityContext: *securityContext
+
+          notifs:
+            image: *image
+            command:
+              - /usr/bin/catatonit
+              - --
+              - ./entrypoint_async.sh
+            envFrom: *envFrom
+            env: *dbEnv
+            probes:
+              liveness:
+                enabled: true
+                custom: true
+                spec:
+                  tcpSocket:
+                    port: 8000
+                  initialDelaySeconds: 30
+                  periodSeconds: 30
+              readiness:
+                enabled: true
+                custom: true
+                spec:
+                  tcpSocket:
+                    port: 8000
+                  initialDelaySeconds: 15
+                  periodSeconds: 15
+            resources:
+              requests:
+                cpu: 25m
+                memory: 128Mi
+              limits:
+                memory: 256Mi
+            securityContext: *securityContext
+
+          cron:
+            image: *image
+            command:
+              - /usr/bin/catatonit
+              - --
+              - supercronic
+              - /app/crontab/crontab
+            envFrom: *envFrom
+            env: *dbEnv
+            resources:
+              requests:
+                cpu: 25m
+                memory: 128Mi
+              limits:
+                memory: 512Mi
+            securityContext: *securityContext
+
+    persistence:
+      media:
+        existingClaim: piefed
+        advancedMounts:
+          piefed:
+            app:
+              - path: /app/app/static/media
+            celery:
+              - path: /app/app/static/media
+            cron:
+              - path: /app/app/static/media
+      crontab:
+        type: configMap
+        name: piefed-crontab
+        advancedMounts:
+          piefed:
+            cron:
+              - path: /app/crontab
+
+    route:
+      app:
+        annotations:
+          gatus.home-operations.com/endpoint: |-
+            path: ""
+        parentRefs:
+          - name: envoy-external
+            namespace: network
+        hostnames:
+          - piefed.erwanleboucher.dev
+        rules:
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /notifications
+            backendRefs:
+              - identifier: notifs
+                port: 8000
+          - backendRefs:
+              - identifier: app
+                port: 5000
+
+    service:
+      app:
+        controller: piefed
+        ports:
+          http:
+            port: 5000
+      notifs:
+        controller: piefed
+        ports:
+          http:
+            port: 8000

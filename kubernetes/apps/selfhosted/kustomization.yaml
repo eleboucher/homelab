@@ -13,11 +13,11 @@ resources:
   - homepage/ks.yaml
   - immich/ks.yaml
   - mealie/ks.yaml
-  - lemmy/ks.yaml
   - miniflux/ks.yaml
   - obsidian-livesync/ks.yaml
   - namespace.yaml
   - paperless/ks.yaml
+  - piefed/ks.yaml
   - searxng/ks.yaml
   - smtp-relay/ks.yaml
   - sparkyfitness/ks.yaml
