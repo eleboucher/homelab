@@ -11,8 +11,6 @@ spec:
   interval: 30m
   releaseName: rook-ceph
   values:
-    csi:
-      cephFSKernelMountOptions: ms_mode=prefer-crc
     image:
       repository: ghcr.io/rook/ceph
     monitoring:
