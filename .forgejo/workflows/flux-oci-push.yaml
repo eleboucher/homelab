@@ -24,7 +24,7 @@ jobs:
     outputs:
       digest-url: ${{ steps.push.outputs.digest-url }}
     steps:
-      - uses: https://data.forgejo.org/actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: https://data.forgejo.org/actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
 
       - name: Install Flux CLI
         run: |
