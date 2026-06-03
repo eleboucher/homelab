@@ -27,8 +27,8 @@ spec:
       APP: *app
       APP_NAMESPACE: selfhosted
       VOLSYNC_CAPACITY: 20Gi
-      VOLSYNC_PUID: "65534"
-      VOLSYNC_PGID: "65534"
+      VOLSYNC_PUID: "1000"
+      VOLSYNC_PGID: "1000"
   prune: true
   sourceRef:
     kind: OCIRepository
