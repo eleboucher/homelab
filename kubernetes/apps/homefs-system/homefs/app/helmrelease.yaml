@@ -9,7 +9,9 @@ spec:
     kind: OCIRepository
     name: homefs
   values:
-    # Per-node storage topology — the single source of truth.
+    image:
+      repository: ghcr.io/eleboucher/homefs
+      tag: main
     nodes:
       kharkiv:
         backend: lvmthin
