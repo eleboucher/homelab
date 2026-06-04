@@ -12,7 +12,7 @@ spec:
     image:
       # Pin the mutable :main tag by digest — IfNotPresent never re-pulls a
       # cached tag, so pods silently run stale builds otherwise.
-      tag: main@sha256:97ca303215043c2ab6bc4d8dc3290b7af3e648b247d5307d324cd845af2a4293
+      tag: main@sha256:9e689201cd2e2419b6717b1533fc48ea0398a332aad54b08213c45cb4adc5fbe
     nodes:
       kharkiv:
         backend: lvmthin
