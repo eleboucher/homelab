@@ -1,0 +1,74 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/monitoring.coreos.com/prometheusrule_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: towonel-hub-rules
+spec:
+  groups:
+    - name: towonel-hub.rules
+      rules:
+        - alert: TowonelHubMetricsAbsent
+          expr: |-
+            absent(towonel_hub_is_leader{cluster="towonel-ops"})
+          for: 10m
+          annotations:
+            summary: >-
+              No towonel hub metrics received for 10 minutes — the hub is down,
+              its scrape is broken, or the rathole remote-write tunnel is down
+          labels:
+            severity: critical
+
+        - alert: TowonelHubNoLeader
+          expr: |-
+            max(towonel_hub_is_leader{cluster="towonel-ops"}) == 0
+          for: 5m
+          annotations:
+            summary: >-
+              No towonel hub replica is the active leader — route rebuilds and
+              leader-gated work are stalled
+          labels:
+            severity: critical
+
+        - alert: TowonelHubHigh5xx
+          expr: |-
+            sum by (endpoint) (rate(towonel_hub_requests_total{cluster="towonel-ops", status=~"5.."}[5m])) > 0.1
+          for: 10m
+          annotations:
+            summary: >-
+              Towonel hub is returning {{ $value | humanize }} 5xx/s on {{ $labels.endpoint }}
+          labels:
+            severity: critical
+
+        - alert: TowonelHubRateLimiting
+          expr: |-
+            sum by (endpoint) (rate(towonel_hub_requests_total{cluster="towonel-ops", status="429"}[5m])) > 0.2
+          for: 15m
+          annotations:
+            summary: >-
+              Towonel hub is rate-limiting {{ $value | humanize }} req/s (429) on
+              {{ $labels.endpoint }} — agents or users are being throttled
+          labels:
+            severity: warning
+
+        - alert: TowonelHubEntriesRejected
+          expr: |-
+            sum by (reason) (rate(towonel_hub_entries_rejected_total{cluster="towonel-ops"}[5m])) > 0.2
+          for: 15m
+          annotations:
+            summary: >-
+              Towonel hub is rejecting {{ $value | humanize }} signed config entries/s
+              with reason {{ $labels.reason }}
+          labels:
+            severity: warning
+
+        - alert: TowonelHubOidcJwksStale
+          expr: |-
+            time() - max by (provider) (towonel_hub_oidc_jwks_last_refresh_success_timestamp_seconds{cluster="towonel-ops"}) > 86400
+          for: 1h
+          annotations:
+            summary: >-
+              OIDC metadata for {{ $labels.provider }} has not refreshed in over 24h
+              (refresh interval is 12h) — OIDC logins may start failing
+          labels:
+            severity: warning
