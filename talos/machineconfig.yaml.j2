@@ -68,6 +68,15 @@ machine:
   kubelet:
     defaultRuntimeSeccompProfileEnabled: true
     disableManifestsDirectory: true
+    extraMounts:
+      # openebs-hostpath basePath — /var/mnt is read-only for kubelet unless bind-mounted
+      - destination: /var/mnt/local-hostpath
+        type: bind
+        source: /var/mnt/local-hostpath
+        options:
+          - bind
+          - rshared
+          - rw
     extraConfig:
       imageGCHighThresholdPercent: 70
       imageGCLowThresholdPercent: 50
