@@ -11,12 +11,6 @@ machine:
     rules:
       - SUBSYSTEM=="drm", KERNEL=="renderD*", GROUP="992", MODE="0660"
 ---
-apiVersion: v1alpha1
-kind: VolumeConfig
-name: EPHEMERAL
-provisioning:
-  maxSize: 400GiB
----
 # SAMSUNG MZ7KM1T9 (1.92TB SATA SSD) is used whole-disk for the
 # OpenEBS ZFS pool (zfspv-pool) — created out-of-band, no Talos volume config.
 apiVersion: v1alpha1
