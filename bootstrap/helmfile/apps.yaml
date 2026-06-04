@@ -102,6 +102,35 @@ releases:
       - template: default
     needs:
       - security/external-secrets
+    # Mirror the Flux postRenderers from the HelmRelease (helmfile doesn't apply them):
+    # inject credentials via envFrom instead of the op-credentials file volume.
+    jsonPatches:
+      - target:
+          group: apps
+          version: v1
+          kind: Deployment
+          name: onepassword-connect
+        patch:
+          - op: remove
+            path: /spec/template/spec/containers/0/env/0
+          - op: remove
+            path: /spec/template/spec/containers/1/env/1
+          - op: add
+            path: /spec/template/spec/containers/0/envFrom
+            value:
+              - secretRef:
+                  name: onepassword-credentials-secret
+          - op: add
+            path: /spec/template/spec/containers/1/envFrom
+            value:
+              - secretRef:
+                  name: onepassword-credentials-secret
+          - op: remove
+            path: /spec/template/spec/containers/0/volumeMounts/1
+          - op: remove
+            path: /spec/template/spec/containers/1/volumeMounts/1
+          - op: remove
+            path: /spec/template/spec/volumes/1
     hooks:
       - # Apply ClusterSecretStore
         command: kubectl
