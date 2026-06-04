@@ -27,7 +27,7 @@ spec:
       APP: forgejo
       ANUBIS_TARGET: "http://forgejo-http.forgejo.svc:3000"
       APP_NAMESPACE: forgejo
-      VOLSYNC_CAPACITY: 20Gi
+      VOLSYNC_CAPACITY: 30Gi
       OIDC_CALLBACK: /user/oauth2/kanidm/callback
       SUBDOMAIN: git
       OIDC_CLIENT_ID_KEY: key
