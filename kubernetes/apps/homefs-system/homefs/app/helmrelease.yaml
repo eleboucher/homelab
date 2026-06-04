@@ -9,6 +9,10 @@ spec:
     kind: OCIRepository
     name: homefs
   values:
+    image:
+      # Pin the mutable :main tag by digest — IfNotPresent never re-pulls a
+      # cached tag, so pods silently run stale builds otherwise.
+      tag: main@sha256:97ca303215043c2ab6bc4d8dc3290b7af3e648b247d5307d324cd845af2a4293
     nodes:
       kharkiv:
         backend: lvmthin
