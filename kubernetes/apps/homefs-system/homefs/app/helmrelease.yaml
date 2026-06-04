@@ -9,19 +9,6 @@ spec:
     kind: OCIRepository
     name: homefs
   values:
-    image:
-      repository: ghcr.io/eleboucher/homefs
-      tag: sha256-2cf1af323905073e69fc232229ae3a8d06428aeab2139b27469970e0d89adbaa
-    sidecars:
-      provisioner:
-        image: registry.k8s.io/sig-storage/csi-provisioner:v6.2.0
-        timeout: 120s
-      registrar:
-        image: registry.k8s.io/sig-storage/csi-node-driver-registrar:v2.17.0
-      snapshotter:
-        image: registry.k8s.io/sig-storage/csi-snapshotter:v8.5.0
-      resizer:
-        image: registry.k8s.io/sig-storage/csi-resizer:v2.1.0
     nodes:
       kharkiv:
         backend: lvmthin
@@ -32,5 +19,12 @@ spec:
     storageClass:
       create: true
       name: homefs-local
-      # openebs-zfs stays the cluster default during the alpha.
       isDefault: false
+    replicatedStorageClass:
+      create: true
+      name: homefs-replicated
+      isDefault: false
+      quorum: last-man-standing
+    volumeSnapshotClass:
+      create: true
+      name: homefs-snap

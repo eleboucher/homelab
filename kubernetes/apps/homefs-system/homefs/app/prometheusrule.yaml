@@ -1,0 +1,44 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/monitoring.coreos.com/prometheusrule_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: homefs-rules
+spec:
+  groups:
+    - name: homefs.rules
+      rules:
+        - alert: HomefsSplitBrain
+          expr: |-
+            max by (volume) (homefs_volume_split_brain) == 1
+          annotations:
+            summary: >-
+              Volume {{ $labels.volume }} is split-brain: DRBD refused to
+              reconnect after divergence. Pick the losing node and run
+              `drbdadm connect --discard-my-data <volume>` there — its
+              post-split writes will be discarded.
+          labels:
+            severity: critical
+
+        - alert: HomefsReplicaDisconnected
+          expr: |-
+            min by (volume) (homefs_volume_connected) == 0
+          for: 5m
+          annotations:
+            summary: >-
+              Volume {{ $labels.volume }} has lost a replication link for
+              5 minutes — writes are no longer reaching both nodes
+              (last-man-standing mode keeps serving from the survivor)
+          labels:
+            severity: warning
+
+        - alert: HomefsReplicaNotUpToDate
+          expr: |-
+            min by (volume) (homefs_volume_up_to_date) == 0
+          for: 15m
+          annotations:
+            summary: >-
+              A replica of volume {{ $labels.volume }} has not been
+              UpToDate for 15 minutes — resync is stuck or a leg is failing
+          labels:
+            severity: warning
