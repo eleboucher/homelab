@@ -12,7 +12,17 @@ apiVersion: v1alpha1
 kind: VolumeConfig
 name: EPHEMERAL
 provisioning:
-  maxSize: 100GiB
+  maxSize: 175GiB
+---
+apiVersion: v1alpha1
+kind: RawVolumeConfig
+name: homefs
+provisioning:
+  diskSelector:
+    match: system_disk
+  grow: false
+  minSize: 750GiB
+  maxSize: 750GiB
 ---
 apiVersion: v1alpha1
 kind: LinkAliasConfig
