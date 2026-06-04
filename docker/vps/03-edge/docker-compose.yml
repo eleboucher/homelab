@@ -4,7 +4,7 @@ name: edge
 services:
   caddy:
     # renovate: datasource=docker depName=ghcr.io/bjw-s-labs/caddy-l4
-    image: ghcr.io/bjw-s-labs/caddy-l4:2.11.2
+    image: ghcr.io/bjw-s-labs/caddy-l4:2.11.4
     container_name: caddy
     restart: unless-stopped
     environment:
