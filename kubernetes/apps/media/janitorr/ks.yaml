@@ -9,10 +9,16 @@ spec:
   interval: 1h
   path: ./kubernetes/apps/media/janitorr/app
   dependsOn:
+    - name: bazarr
     - name: external-secrets
       namespace: security
+    - name: jellyfin
+    - name: jellyseerr
     - name: openebs
       namespace: openebs-system
+    - name: radarr
+    - name: sonarr
+    - name: streamystats
   postBuild:
     substitute:
       APP: janitorr
