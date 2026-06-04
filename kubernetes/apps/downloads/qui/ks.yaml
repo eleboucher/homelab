@@ -27,6 +27,8 @@ spec:
       OIDC_SHORT_USERNAME: "true"
       VOLSYNC_CAPACITY: 2Gi
       VOLSYNC_SCHEDULE: "20 1-23/2 * * *"
+      VOLSYNC_STORAGECLASS: homefs-replicated
+      VOLSYNC_SNAPSHOTCLASS: homefs-snap
   prune: true
   sourceRef:
     kind: OCIRepository
