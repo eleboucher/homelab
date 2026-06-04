@@ -9,8 +9,8 @@ spec:
   components:
     - ../../../../components/gpu
   dependsOn:
-    - name: rook-ceph-cluster
-      namespace: rook-ceph
+    - name: openebs
+      namespace: openebs-system
   interval: 1h
   path: ./kubernetes/apps/ai/llama-cpp/app
   postBuild:

@@ -311,7 +311,7 @@ spec:
         accessMode: ReadWriteOnce
         forceRename: openclaw-home
         size: 20Gi
-        storageClass: ceph-block
+        storageClass: openebs-zfs
         globalMounts:
           - path: /home/node
       config:

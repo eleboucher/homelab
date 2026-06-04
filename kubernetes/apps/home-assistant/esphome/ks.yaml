@@ -12,8 +12,8 @@ spec:
   components:
     - ../../../../components/volsync/hot
   dependsOn:
-    - name: rook-ceph-cluster
-      namespace: rook-ceph
+    - name: openebs
+      namespace: openebs-system
   path: "./kubernetes/apps/home-assistant/esphome/app"
   postBuild:
     substitute:

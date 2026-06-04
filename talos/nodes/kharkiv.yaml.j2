@@ -1,9 +1,6 @@
 ---
 machine:
-  type: controlplane
-  certSANs:
-    - 127.0.0.1
-    - 192.168.1.41
+  type: worker
   install:
     diskSelector:
       serial: 2526511B4465
@@ -16,15 +13,6 @@ kind: VolumeConfig
 name: EPHEMERAL
 provisioning:
   maxSize: 100GiB
----
-apiVersion: v1alpha1
-kind: RawVolumeConfig
-name: rook-osd
-provisioning:
-  diskSelector:
-    match: disk.serial == "2526511B4465"
-  minSize: 500GiB
-  maxSize: 800GiB
 ---
 apiVersion: v1alpha1
 kind: LinkAliasConfig

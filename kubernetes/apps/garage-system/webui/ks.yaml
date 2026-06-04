@@ -9,8 +9,8 @@ spec:
     labels:
       app.kubernetes.io/name: webui
   dependsOn:
-    - name: rook-ceph-cluster
-      namespace: rook-ceph
+    - name: openebs
+      namespace: openebs-system
   interval: 1h
   path: "./kubernetes/apps/garage-system/webui/app"
   postBuild:

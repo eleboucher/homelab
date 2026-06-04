@@ -13,8 +13,8 @@ spec:
       namespace: database
     - name: dragonfly-operator
       namespace: dragonfly-system
-    - name: rook-ceph-cluster
-      namespace: rook-ceph
+    - name: openebs
+      namespace: openebs-system
   healthCheckExprs:
     - apiVersion: dragonflydb.io/v1alpha1
       kind: Dragonfly

@@ -81,13 +81,13 @@ spec:
       data:
         accessMode: ReadWriteOnce
         size: 5Gi
-        storageClass: ceph-block
+        storageClass: openebs-zfs
         globalMounts:
           - path: /app/data
       uploads:
         accessMode: ReadWriteOnce
         size: 5Gi
-        storageClass: ceph-block
+        storageClass: openebs-zfs
         globalMounts:
           - path: /app/uploads
     route:

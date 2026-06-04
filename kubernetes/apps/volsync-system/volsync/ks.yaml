@@ -8,8 +8,8 @@ spec:
   interval: 1h
   path: ./kubernetes/apps/volsync-system/volsync/app
   dependsOn:
-    - name: rook-ceph-cluster
-      namespace: rook-ceph
+    - name: openebs
+      namespace: openebs-system
     - name: snapshot-controller
       namespace: kube-system
   healthChecks:

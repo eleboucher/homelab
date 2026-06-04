@@ -15,7 +15,6 @@ locals {
   static_dns_records = {
     "router.erwanleboucher.dev" = "192.168.1.2"
     "kharkiv.k8s.internal"      = "192.168.1.41"
-    "le-havre.k8s.internal"     = "192.168.1.7"
     "paris.k8s.internal"        = "192.168.1.42"
     "normandie.internal"        = "192.168.1.40"
   }
@@ -29,12 +28,10 @@ resource "routeros_ip_dns_record" "static" {
   address = each.value
 }
 
-# Round-robin A records for the Kubernetes API across all control planes.
+# A record for the Kubernetes API — paris is the sole control plane.
 # Already covered by the apiserver certSANs in talos/machineconfig.yaml.j2.
 locals {
   k8s_api_endpoints = toset([
-    "192.168.1.7",
-    "192.168.1.41",
     "192.168.1.42",
   ])
 }

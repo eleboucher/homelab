@@ -12,8 +12,8 @@ spec:
   dependsOn:
     - name: cnpg-cluster
       namespace: database
-    - name: rook-ceph-cluster
-      namespace: rook-ceph
+    - name: openebs
+      namespace: openebs-system
   interval: 1h
   path: ./kubernetes/apps/selfhosted/gotosocial/server
   postBuild:

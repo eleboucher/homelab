@@ -38,11 +38,10 @@ The cluster is built on **Talos Linux**, an immutable and minimal OS, and manage
 
 My cluster is a hybrid setup running on bare metal and virtualized nodes.
 
-| Node         | OS          | Hardware          | Specs           | Role            | Storage                                           |
-| :----------- | :---------- | :---------------- | :-------------- | :-------------- | :------------------------------------------------ |
-| **kharkiv**  | Talos Linux | Intel i5 12th Gen | 8C / 16T / 32GB | `control-plane` |                                                   |
-| **le-havre** | Talos Linux | Intel N150        | 4C / 4T / 32GB  | `control-plane` | SATA SSD (Rook OSD)                               |
-| **paris**    | Talos Linux | AMD Ryzen 5 5600X | 6C / 12T / 48GB | `control-plane` | Samsung MZ7KM1T9 SSD (Rook OSD) + SATA media disk |
+| Node        | OS          | Hardware          | Specs           | Role            | Storage                                                            |
+| :---------- | :---------- | :---------------- | :-------------- | :-------------- | :----------------------------------------------------------------- |
+| **kharkiv** | Talos Linux | Intel i5 12th Gen | 8C / 16T / 47GB | `worker`        |                                                                    |
+| **paris**   | Talos Linux | AMD Ryzen 5 5600X | 6C / 12T / 48GB | `control-plane` | 256GB NVMe (system) + Samsung MZ7KM1T9 SSD (ZFS) + SATA media disk |
 
 ---
 

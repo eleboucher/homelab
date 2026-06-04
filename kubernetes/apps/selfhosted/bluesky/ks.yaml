@@ -16,8 +16,8 @@ spec:
       namespace: database
     - name: garage
       namespace: garage-system
-    - name: rook-ceph-cluster
-      namespace: rook-ceph
+    - name: openebs
+      namespace: openebs-system
   interval: 1h
   path: "./kubernetes/apps/selfhosted/bluesky/app"
   postBuild:

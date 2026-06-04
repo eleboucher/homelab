@@ -10,8 +10,8 @@ spec:
     - ../../../../components/volsync/hot
   dependsOn:
     - name: litellm
-    - name: rook-ceph-cluster
-      namespace: rook-ceph
+    - name: openebs
+      namespace: openebs-system
   interval: 15m
   path: ./kubernetes/apps/ai/hermes/app
   postBuild:

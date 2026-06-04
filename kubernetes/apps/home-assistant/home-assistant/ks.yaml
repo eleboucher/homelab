@@ -12,8 +12,8 @@ spec:
     - ../../../../components/volsync/hot
     - ../../../../components/oidc
   dependsOn:
-    - name: rook-ceph-cluster
-      namespace: rook-ceph
+    - name: openebs
+      namespace: openebs-system
   interval: 1h
   path: "./kubernetes/apps/home-assistant/home-assistant/app"
   postBuild:

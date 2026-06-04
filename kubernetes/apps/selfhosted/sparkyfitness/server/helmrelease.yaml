@@ -117,7 +117,7 @@ spec:
       backup:
         accessMode: ReadWriteOnce
         size: 15Gi
-        storageClass: ceph-block
+        storageClass: openebs-zfs
         globalMounts:
           - path: /app/SparkyFitnessServer/backup
       tmp:

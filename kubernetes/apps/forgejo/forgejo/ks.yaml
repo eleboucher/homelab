@@ -18,8 +18,8 @@ spec:
       namespace: database
     - name: dragonfly
       namespace: database
-    - name: rook-ceph-cluster
-      namespace: rook-ceph
+    - name: openebs
+      namespace: openebs-system
   interval: 1h
   path: "./kubernetes/apps/forgejo/forgejo/app"
   postBuild:

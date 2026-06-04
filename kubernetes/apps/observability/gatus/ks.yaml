@@ -10,8 +10,8 @@ spec:
   components:
     - ../../../../components/volsync/hot
   dependsOn:
-    - name: rook-ceph-cluster
-      namespace: rook-ceph
+    - name: openebs
+      namespace: openebs-system
   postBuild:
     substitute:
       APP: gatus

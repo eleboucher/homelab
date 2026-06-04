@@ -10,6 +10,7 @@ customization:
     - usbcore.autosuspend=-1 # Disable USB autosuspend
     - sysctl.kernel.kexec_load_disabled=1
     - talos.dashboard.disabled=1
+    - zfs.zfs_arc_max=8589934592 # Cap ZFS ARC at 8GiB
   systemExtensions:
         officialExtensions:
             - siderolabs/amd-ucode
@@ -21,3 +22,4 @@ customization:
             - siderolabs/nfsrahead
             - siderolabs/util-linux-tools
             - siderolabs/xe
+            - siderolabs/zfs

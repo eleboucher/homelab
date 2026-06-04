@@ -45,13 +45,6 @@ kubeconfig:
             kubectl rollout restart -n "$ns" deploy ds
         fi
     done
-    if kubectl get ns rook-ceph >/dev/null 2>&1; then
-        kubectl rollout restart -n rook-ceph \
-            deploy/ceph-csi-controller-manager \
-            deploy/rook-ceph-operator \
-            deploy/rook-ceph.cephfs.csi.ceph.com-ctrlplugin \
-            deploy/rook-ceph.rbd.csi.ceph.com-ctrlplugin
-    fi
 
 [confirm('Reset node ' + node + ' [y|N] ?')]
 [doc('Reset a node')]

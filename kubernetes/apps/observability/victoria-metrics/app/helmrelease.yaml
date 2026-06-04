@@ -28,7 +28,7 @@ spec:
         storage:
           volumeClaimTemplate:
             spec:
-              storageClassName: ceph-block
+              storageClassName: openebs-zfs
               resources:
                 requests:
                   storage: 5Gi
@@ -255,7 +255,7 @@ spec:
           limits:
             memory: 3Gi
         storage:
-          storageClassName: ceph-block
+          storageClassName: openebs-zfs
           resources:
             requests:
               storage: 50Gi

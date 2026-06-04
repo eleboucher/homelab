@@ -19,10 +19,8 @@ locals {
       mtu         = 9000
     }
     ether2 = {
-      comment     = "bond-le-havre member"
-      bridge_port = false
-      l2mtu       = 9216
-      mtu         = 9000
+      comment  = "Access port"
+      untagged = "vlan10-mgmt"
     }
     ether3 = {
       comment     = "bond-kharkiv member"
@@ -31,10 +29,8 @@ locals {
       mtu         = 9000
     }
     ether4 = {
-      comment     = "bond-le-havre member"
-      bridge_port = false
-      l2mtu       = 9216
-      mtu         = 9000
+      comment  = "Access port"
+      untagged = "vlan10-mgmt"
     }
     ether5 = {
       comment  = "Access port"
@@ -68,14 +64,6 @@ locals {
     bond-kharkiv = {
       comment              = "Kharkiv LACP (Management + Storage)"
       slaves               = ["ether1", "ether3"]
-      mode                 = "802.3ad"
-      transmit_hash_policy = "layer-3-and-4"
-      mtu                  = 9000
-      untagged             = "vlan10-mgmt"
-    }
-    bond-le-havre = {
-      comment              = "Le-Havre LACP (Management + Storage)"
-      slaves               = ["ether2", "ether4"]
       mode                 = "802.3ad"
       transmit_hash_policy = "layer-3-and-4"
       mtu                  = 9000

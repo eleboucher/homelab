@@ -49,11 +49,6 @@ locals {
       comment    = "home assistant kubevirt"
       lease_time = null
     }
-    "192.168.1.7" = {
-      mac        = "6C:1F:F7:6B:4C:04"
-      comment    = "le-havre"
-      lease_time = "4w2d"
-    }
     "192.168.1.42" = {
       mac        = "C4:62:37:09:DF:FF"
       comment    = "paris"

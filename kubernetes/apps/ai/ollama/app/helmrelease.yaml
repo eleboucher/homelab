@@ -60,6 +60,6 @@ spec:
         accessMode: ReadWriteOnce
         enabled: true
         size: 10Gi
-        storageClass: ceph-block
+        storageClass: openebs-zfs
         globalMounts:
           - path: /root/.ollama

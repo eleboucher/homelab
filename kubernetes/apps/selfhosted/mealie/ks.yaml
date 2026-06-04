@@ -15,8 +15,8 @@ spec:
       namespace: database
     - name: keda-http-add-on
       namespace: observability
-    - name: rook-ceph-cluster
-      namespace: rook-ceph
+    - name: openebs
+      namespace: openebs-system
   interval: 1h
   path: ./kubernetes/apps/selfhosted/mealie/app
   postBuild:

@@ -39,8 +39,7 @@ resource "routeros_interface_vlan" "vlans" {
 locals {
   # Short bond label used in the bridge-port comment, matches what's on the device so import is drift-free.
   bond_short_labels = {
-    bond-kharkiv  = "Kharkiv"
-    bond-le-havre = "Le-Havre"
+    bond-kharkiv = "Kharkiv"
   }
 
   bridge_port_members = merge(

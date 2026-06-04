@@ -62,11 +62,11 @@ spec:
             processors: [local-blocks, service-graphs, span-metrics]
     persistence:
       enabled: true
-      storageClassName: ceph-block
-      size: 10Gi
+      storageClassName: openebs-zfs
+      size: 20Gi
     metrics_generator_storage:
       enabled: true
-      storageClassName: ceph-block
+      storageClassName: openebs-zfs
       size: 10Gi
     serviceMonitor:
       enabled: true

@@ -89,35 +89,6 @@ resource "routeros_routing_bgp_connection" "kharkiv" {
   }
 }
 
-resource "routeros_routing_bgp_connection" "le_havre" {
-  name          = "to-le-havre"
-  as            = "64513"
-  instance      = routeros_routing_bgp_instance.k8s.name
-  routing_table = "main"
-  disabled      = false
-
-  remote {
-    address = "192.168.1.7"
-    as      = "64514"
-  }
-
-  local {
-    role = "ebgp"
-  }
-
-  input {
-    filter = "bgp-in-cilium"
-  }
-
-  output {
-    filter_chain = "bgp-out-cilium"
-  }
-
-  lifecycle {
-    ignore_changes = [add_path_out, local, remote]
-  }
-}
-
 resource "routeros_routing_bgp_connection" "paris" {
   name          = "to-paris"
   as            = "64513"

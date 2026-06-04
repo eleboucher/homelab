@@ -16,8 +16,8 @@ spec:
       namespace: network
     - name: external-secrets
       namespace: security
-    - name: rook-ceph-cluster
-      namespace: rook-ceph
+    - name: openebs
+      namespace: openebs-system
   interval: 1h
   path: ./kubernetes/apps/selfhosted/trek/app
   postBuild:
