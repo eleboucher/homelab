@@ -57,6 +57,11 @@ machine:
     image: factory.talos.dev/metal-installer/{{ ENV.SCHEMATIC }}:v1.13.2
   kernel:
     modules:
+      - name: dm_thin_pool # homefs lvmthin backend
+      - name: drbd # homefs replication
+        parameters:
+          - usermode_helper=disabled # required on Talos (no usermodehelper)
+      - name: drbd_transport_tcp
       - name: nbd
       - name: nfsd
       - name: zfs

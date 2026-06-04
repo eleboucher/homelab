@@ -1,0 +1,24 @@
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: homefs
+spec:
+  interval: 1h
+  chartRef:
+    kind: OCIRepository
+    name: homefs
+  values:
+    # Per-node storage topology — the single source of truth.
+    nodes:
+      kharkiv:
+        backend: lvmthin
+        device: /dev/disk/by-partlabel/r-homefs
+      paris:
+        backend: zfs
+        zfsDataset: data-pool/homefs
+    storageClass:
+      create: true
+      name: homefs-local
+      # openebs-zfs stays the cluster default during the alpha.
+      isDefault: false
