@@ -1,11 +1,11 @@
 [global]
 server_name = "erwanleboucher.dev"
-address = ["0.0.0.0"]
+address = ["::"]
 port = 8080
 
 database_path = "/data"
 database_backup_path = "/backups"
-database_backups_to_keep = 1
+database_backups_to_keep = 3
 
 rocksdb_compression_algo = "zstd"
 rocksdb_compression_level = 32767

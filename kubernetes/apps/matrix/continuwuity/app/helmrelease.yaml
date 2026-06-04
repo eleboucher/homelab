@@ -1,4 +1,3 @@
----
 # yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
@@ -17,7 +16,6 @@ spec:
         runAsGroup: 1000
         fsGroup: 1000
         fsGroupChangePolicy: OnRootMismatch
-
     controllers:
       continuwuity:
         type: statefulset
@@ -46,7 +44,6 @@ spec:
               capabilities:
                 drop:
                   - "ALL"
-
     persistence:
       config:
         enabled: true
@@ -54,6 +51,9 @@ spec:
         existingClaim: "{{ .Release.Name }}"
         globalMounts:
           - path: /data
+            subPath: data
+          - path: /backups
+            subPath: backups
       conduwuit-toml:
         type: secret
         name: continuwuity
@@ -63,7 +63,6 @@ spec:
             readOnly: true
       tmp:
         type: emptyDir
-
     route:
       app:
         hostnames:
@@ -75,7 +74,6 @@ spec:
           - backendRefs:
               - identifier: app
                 port: 8080
-
     service:
       app:
         controller: continuwuity
