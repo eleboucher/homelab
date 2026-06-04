@@ -4,6 +4,7 @@ global:
   external_labels:
     instance: edge-vps
     location: ovh
+    cluster: edge-vps
 
 remote_write:
   - url: http://rathole:9090/api/v1/write
