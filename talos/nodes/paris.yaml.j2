@@ -6,7 +6,7 @@ machine:
     - 192.168.1.42
   install:
     diskSelector:
-      transport: nvme # 256GB system NVMe
+      type: nvme # 256GB system NVMe
   udev:
     rules:
       - SUBSYSTEM=="drm", KERNEL=="renderD*", GROUP="992", MODE="0660"
