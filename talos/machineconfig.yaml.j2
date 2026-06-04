@@ -77,9 +77,6 @@ machine:
   sysctls:
     fs.inotify.max_user_instances: "8192"
     fs.inotify.max_user_watches: "1048576"
-    # Diagnostic: let kernel oops be logged instead of immediate panic+reboot,
-    # so the trace makes it to KmsgLog/VictoriaLogs. Revert once root cause is found.
-    kernel.panic_on_oops: "0"
     net.core.default_qdisc: fq
     net.core.rmem_max: "67108864"
     net.core.wmem_max: "67108864"
