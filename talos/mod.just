@@ -70,12 +70,24 @@ upgrade-node node *args:
 [doc('Create the OpenEBS ZFS pool on a node (wipes the target disk)')]
 [script]
 zpool-create node disk:
+    # Talos has no shell on the host; exec the extension's zpool binary directly via nsenter
     overrides="$(jq -n --arg node "{{ node }}" --arg disk "{{ disk }}" \
-        '{spec:{nodeName:$node,hostNetwork:true,hostPID:true,containers:[{name:"zpool",image:"alpine:3.21",securityContext:{privileged:true},command:["nsenter","-t","1","-m","-u","-i","-n","--","sh","-c",("zpool create -f -o ashift=12 -O compression=zstd -O atime=off -O xattr=sa data-pool " + $disk + " && zpool status data-pool")]}]}}')"
+        '{spec:{nodeName:$node,hostNetwork:true,hostPID:true,containers:[{name:"zpool",image:"alpine:3.21",securityContext:{privileged:true},command:["nsenter","-t","1","-m","-u","-i","-n","--","/usr/local/sbin/zpool","create","-f","-o","ashift=12","-O","compression=zstd","-O","atime=off","-O","xattr=sa","data-pool",$disk]}]}}')"
     kubectl run "zpool-create-{{ node }}" --restart=Never --image=alpine:3.21 --overrides="$overrides"
     kubectl wait --for=jsonpath='{.status.phase}'=Succeeded "pod/zpool-create-{{ node }}" --timeout=120s
     kubectl logs "zpool-create-{{ node }}"
     kubectl delete pod "zpool-create-{{ node }}"
+    just talos zpool-status "{{ node }}"
+
+[doc('Show ZFS pool status on a node')]
+[script]
+zpool-status node:
+    overrides="$(jq -n --arg node "{{ node }}" \
+        '{spec:{nodeName:$node,hostNetwork:true,hostPID:true,containers:[{name:"zpool",image:"alpine:3.21",securityContext:{privileged:true},command:["nsenter","-t","1","-m","-u","-i","-n","--","/usr/local/sbin/zpool","status"]}]}}')"
+    kubectl run "zpool-status-{{ node }}" --restart=Never --image=alpine:3.21 --overrides="$overrides"
+    kubectl wait --for=jsonpath='{.status.phase}'=Succeeded "pod/zpool-status-{{ node }}" --timeout=120s
+    kubectl logs "zpool-status-{{ node }}"
+    kubectl delete pod "zpool-status-{{ node }}"
 
 [private]
 schematic-id:
