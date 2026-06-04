@@ -19,7 +19,6 @@ resources:
   - namespace.yaml
   - node-exporter/ks.yaml
   - opentelemetry-collector/ks.yaml
-  - prometheus-adapter/ks.yaml
   - silence-operator/ks.yaml
   - smartctl-exporter/ks.yaml
   - tempo/ks.yaml

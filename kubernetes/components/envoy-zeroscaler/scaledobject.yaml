@@ -1,0 +1,43 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/keda.sh/scaledobject_v1alpha1.json
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: ${APP}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: ${CONTROLLER:=Deployment}
+    name: ${APP}
+  minReplicaCount: 0
+  maxReplicaCount: 1
+  pollingInterval: 15
+  cooldownPeriod: ${ENVOY_SCALE_DOWN_WINDOW:=180}
+  triggers:
+    - type: prometheus
+      metadata:
+        serverAddress: http://vmsingle-victoria-metrics.observability.svc.cluster.local:8428
+        query: |-
+          max(
+            envoy_route_requests_log{route_name="${ENVOY_ROUTE_NAME:=${APP}}"}
+            or
+            envoy_route_requests_cluster{route_name="${ENVOY_ROUTE_NAME:=${APP}}"}
+          )
+        threshold: "1"
+  advanced:
+    horizontalPodAutoscalerConfig:
+      behavior:
+        scaleDown:
+          policies:
+            - type: Pods
+              value: 1
+              periodSeconds: 60
+          selectPolicy: Max
+          stabilizationWindowSeconds: 0
+        scaleUp:
+          policies:
+            - type: Pods
+              value: 1
+              periodSeconds: 15
+          selectPolicy: Max
+          stabilizationWindowSeconds: 0
