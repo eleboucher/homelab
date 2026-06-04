@@ -51,7 +51,6 @@ spec:
         existingClaim: "{{ .Release.Name }}"
         globalMounts:
           - path: /data
-            subPath: data
           - path: /backups
             subPath: backups
       conduwuit-toml:
