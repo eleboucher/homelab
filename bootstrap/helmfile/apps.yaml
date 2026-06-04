@@ -53,6 +53,9 @@ releases:
       - template: default
     needs:
       - kube-system/coredns
+    # Spegel is p2p and never becomes Ready on a single-node cluster; don't block bootstrap on it
+    wait: false
+    waitForJobs: false
 
   - name: cert-manager
     namespace: cert-manager
