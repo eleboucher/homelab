@@ -9,6 +9,21 @@ spec:
     kind: OCIRepository
     name: k8tz
   interval: 30m
+  postRenderers:
+    - kustomize:
+        patches:
+          # Skip kubernetes e2e test namespaces: the injected subPath
+          # mount makes the framework's ephemeral-container retests
+          # invalid (subPath is forbidden on ephemeral containers).
+          - target:
+              kind: MutatingWebhookConfiguration
+              name: k8tz
+            patch: |
+              - op: add
+                path: /webhooks/0/namespaceSelector/matchExpressions/-
+                value:
+                  key: e2e-framework
+                  operator: DoesNotExist
   values:
     namespace: null
     createNamespace: false
