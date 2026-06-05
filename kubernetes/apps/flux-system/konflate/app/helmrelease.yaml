@@ -14,9 +14,6 @@ spec:
       repo: forgejo://git.erwanleboucher.dev/eleboucher/homelab
     httpRoute:
       enabled: true
-      annotations:
-        gatus.home-operations.com/endpoint: |-
-          conditions: ["[STATUS] == 200"]
       hostnames:
         - konflate.erwanleboucher.dev
       parentRefs:
