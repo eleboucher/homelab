@@ -8,9 +8,13 @@ spec:
   chartRef:
     kind: OCIRepository
     name: homefs
+  install:
+    crds: CreateReplace
+  upgrade:
+    crds: CreateReplace
   values:
     image:
-      tag: main@sha256:bf3c07c5508c9df84fd5a89a3c8b278ecca153d0d102af21996bb143c7453c7f
+      tag: main@sha256:f1eb014093623c40e7fae8ab2d989f1c15ada3f4f5edd5e4d3f68ced7647b943
     nodes:
       kharkiv:
         backend: lvmthin
