@@ -10,9 +10,7 @@ spec:
     name: homefs
   values:
     image:
-      # Pin the mutable :main tag by digest — IfNotPresent never re-pulls a
-      # cached tag, so pods silently run stale builds otherwise.
-      tag: main@sha256:e161467813a152fcb265a6685ab74a0f703f9351df5b25b5eca834302cbee25a
+      tag: main@sha256:1a8e4c6850a0b6ee8e3b7122e1d991a88bdea8056029a5b983ad868b5cd683e7
     nodes:
       kharkiv:
         backend: lvmthin
