@@ -1,0 +1,76 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: minimax-shim
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: minimax-shim
+  interval: 15m
+  values:
+    controllers:
+      minimax-shim:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        replicas: 1
+        strategy: RollingUpdate
+        containers:
+          app:
+            image:
+              repository: git.erwanleboucher.dev/eleboucher/minimax-shim
+              tag: latest
+            env:
+              ADDR: ":8080"
+              PUBLIC_URL: https://shim.erwanleboucher.dev
+              MEDIA_DIR: /data/minimax-media
+              VIDEO_TIMEOUT: 20m
+              SHIM_API_KEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: minimax-shim
+                    key: SHIM_API_KEY
+            envFrom:
+              - secretRef:
+                  name: minimax-shim
+            probes:
+              liveness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /healthz
+                    port: 8080
+                  initialDelaySeconds: 5
+                  periodSeconds: 10
+                  failureThreshold: 3
+              readiness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /healthz
+                    port: 8080
+                  initialDelaySeconds: 5
+                  periodSeconds: 10
+                  failureThreshold: 3
+            resources:
+              requests:
+                cpu: 50m
+                memory: 128Mi
+              limits:
+                memory: 512Mi
+    service:
+      app:
+        controller: minimax-shim
+        ports:
+          http:
+            port: 8080
+    persistence:
+      media:
+        type: persistentVolumeClaim
+        accessMode: ReadWriteOnce
+        size: 20Gi
+        storageClass: openebs-hostpath
+        globalMounts:
+          - path: /data/minimax-media
