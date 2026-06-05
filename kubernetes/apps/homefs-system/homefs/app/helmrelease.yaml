@@ -10,7 +10,7 @@ spec:
     name: homefs
   values:
     image:
-      tag: main@sha256:1a8e4c6850a0b6ee8e3b7122e1d991a88bdea8056029a5b983ad868b5cd683e7
+      tag: main@sha256:bf3c07c5508c9df84fd5a89a3c8b278ecca153d0d102af21996bb143c7453c7f
     nodes:
       kharkiv:
         backend: lvmthin
