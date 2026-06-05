@@ -14,7 +14,7 @@ spec:
     crds: CreateReplace
   values:
     image:
-      tag: main@sha256:e6539c65d28d3c9d08d1551b83b9479e29470d7b7ae8d16e70942d77e6568784
+      tag: main@sha256:ea18878012d11cece1bf85aca37a84732d03a6f12326754210a125dbb2941827
     nodes:
       kharkiv:
         backend: lvmthin
