@@ -18,8 +18,8 @@ spec:
         containers:
           app:
             image:
-              repository: git.erwanleboucher.dev/eleboucher/minimax-shim
-              tag: latest
+              repository: registry.erwanleboucher.dev/eleboucher/minimax-shim
+              tag: 0.0.1
             env:
               ADDR: ":8080"
               PUBLIC_URL: https://shim.erwanleboucher.dev
