@@ -5,7 +5,6 @@ kind: Gateway
 metadata:
   name: stunner
   annotations:
-    stunner.l7mp.io/enable-mixed-protocol-lb: "true"
     stunner.l7mp.io/service-type: ClusterIP
 spec:
   gatewayClassName: stunner
