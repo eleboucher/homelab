@@ -1,0 +1,42 @@
+---
+# Catch-all for HTTP/2 connection coalescing (RFC 9113 §9.1.2, GEP-3567).
+# Browsers reuse connections to this gateway (wildcard cert) for hostnames it
+# does not serve (VPS-hosted: apex, registry, towonel, doco-cd, ...). Envoy
+# answers 404 instead of 421 (envoyproxy/envoy#6767), so clients never retry.
+# This route returns 421 for any hostname without a more specific HTTPRoute,
+# making browsers retry on a fresh connection that routes to the right origin.
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/gateway.envoyproxy.io/httproutefilter_v1alpha1.json
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: HTTPRouteFilter
+metadata:
+  name: misdirected-request
+spec:
+  directResponse:
+    body:
+      type: Inline
+      inline: "421 misdirected request: this gateway does not serve the requested host\n"
+    contentType: text/plain
+    statusCode: 421
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/gateway.networking.k8s.io/httproute_v1.json
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: misdirected-request
+  annotations:
+    external-dns.alpha.kubernetes.io/controller: none
+spec:
+  hostnames:
+    - erwanleboucher.dev
+    - "*.erwanleboucher.dev"
+  parentRefs:
+    - name: envoy-external
+      namespace: network
+      sectionName: https
+  rules:
+    - filters:
+        - type: ExtensionRef
+          extensionRef:
+            group: gateway.envoyproxy.io
+            kind: HTTPRouteFilter
+            name: misdirected-request

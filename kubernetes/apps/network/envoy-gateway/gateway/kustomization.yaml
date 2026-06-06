@@ -9,6 +9,7 @@ resources:
   - ./grafanadashboard.yaml
   - ./https-redirect.yaml
   - ./internal.yaml
+  - ./misdirected.yaml
   - ./podmonitor.yaml
 configMapGenerator:
   - name: envoy-external-extensions
