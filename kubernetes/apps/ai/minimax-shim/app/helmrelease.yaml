@@ -25,11 +25,6 @@ spec:
               PUBLIC_URL: https://shim.erwanleboucher.dev
               MEDIA_DIR: /data/minimax-media
               VIDEO_TIMEOUT: 20m
-              SHIM_API_KEY:
-                valueFrom:
-                  secretKeyRef:
-                    name: minimax-shim
-                    key: SHIM_API_KEY
             envFrom:
               - secretRef:
                   name: minimax-shim

@@ -77,7 +77,3 @@ spec:
         ports:
           http:
             port: 7880
-            primary: true
-          rtc-tcp:
-            port: 7881
-            protocol: TCP
