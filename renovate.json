@@ -28,7 +28,9 @@
         "/kube-prometheus-stack/",
         "ghcr.io/mogenius/helm-charts/renovate-operator",
         "ghcr.io/nesquena/hermes-webui",
-        "ghcr.io/ggml-org/llama.cpp"
+        "ghcr.io/ggml-org/llama.cpp",
+        "ghcr.io/home-operations/charts/konflate",
+        "ollama/ollama"
       ],
       "automerge": true,
       "automergeType": "pr"
