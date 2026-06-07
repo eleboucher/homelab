@@ -1,0 +1,10 @@
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: towonel-cosign-pub
+type: Opaque
+# Public cosign verification key, also published at https://towonel.dev/cosign.pub.
+# Not secret; used by the OCIRepository to verify the chart signature.
+data:
+  cosign.pub: LS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS0KTUZrd0V3WUhLb1pJemowQ0FRWUlLb1pJemowREFRY0RRZ0FFbS9vbUwxY25HUEhZZXNjZkljVzNSZjc2OU80KworNCtONDNJZ0t5dzIyWGhqYnVCR3BHRWgvL2ZpdTJCWkRiU3Avb3FvNDJ5ajMwZTFuZldsVDAyU21BPT0KLS0tLS1FTkQgUFVCTElDIEtFWS0tLS0tCg==
