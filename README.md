@@ -8,18 +8,18 @@ _Powered by [Talos](https://talos.dev), [Flux](https://fluxcd.io), and [Kubernet
 
 <br />
 
-[![Talos](https://img.shields.io/endpoint?url=https%3A%2F%2Fkromgo.erwanleboucher.dev%2Ftalos_version&style=for-the-badge&logo=talos&logoColor=white&color=blue&label=%20)](https://talos.dev)
-[![Kubernetes](https://img.shields.io/endpoint?url=https%3A%2F%2Fkromgo.erwanleboucher.dev%2Fkubernetes_version&style=for-the-badge&logo=kubernetes&logoColor=white&color=blue&label=%20)](https://kubernetes.io)
-[![Flux](https://img.shields.io/endpoint?url=https%3A%2F%2Fkromgo.erwanleboucher.dev%2Fflux_version&style=for-the-badge&logo=flux&logoColor=white&color=blue&label=%20)](https://fluxcd.io)
+[![Talos](https://kromgo.erwanleboucher.dev/badges/talos_version)](https://talos.dev)
+[![Kubernetes](https://kromgo.erwanleboucher.dev/badges/kubernetes_version)](https://kubernetes.io)
+[![Flux](https://kromgo.erwanleboucher.dev/badges/flux_version)](https://fluxcd.io)
 
 <p align="center">
-  <a href="https://github.com/kashalls/kromgo/"><img src="https://kromgo.erwanleboucher.dev/cluster_age_days?format=badge&label=Age" alt="Age"></a>
-  <a href="https://github.com/kashalls/kromgo/"><img src="https://kromgo.erwanleboucher.dev/cluster_node_count?format=badge&label=Nodes" alt="Nodes"></a>
-  <a href="https://github.com/kashalls/kromgo/"><img src="https://kromgo.erwanleboucher.dev/cluster_pod_count?format=badge&label=Pods" alt="Pods"></a>
-  <a href="https://github.com/kashalls/kromgo/"><img src="https://kromgo.erwanleboucher.dev/cluster_alert_count?format=badge&label=Alerts" alt="Alerts"></a>
+  <a href="https://github.com/home-operations/kromgo/"><img src="https://kromgo.erwanleboucher.dev/badges/cluster_age_days" alt="Age"></a>
+  <a href="https://github.com/home-operations/kromgo/"><img src="https://kromgo.erwanleboucher.dev/badges/cluster_node_count" alt="Nodes"></a>
+  <a href="https://github.com/home-operations/kromgo/"><img src="https://kromgo.erwanleboucher.dev/badges/cluster_pod_count" alt="Pods"></a>
+  <a href="https://github.com/home-operations/kromgo/"><img src="https://kromgo.erwanleboucher.dev/badges/cluster_alert_count" alt="Alerts"></a>
   <br />
-  <a href="https://github.com/kashalls/kromgo/"><img src="https://kromgo.erwanleboucher.dev/cluster_cpu_usage?format=badge&label=CPU" alt="CPU"></a>
-  <a href="https://github.com/kashalls/kromgo/"><img src="https://kromgo.erwanleboucher.dev/cluster_memory_usage?format=badge&label=Memory" alt="Memory"></a>
+  <a href="https://github.com/home-operations/kromgo/"><img src="https://kromgo.erwanleboucher.dev/badges/cluster_cpu_usage" alt="CPU"></a>
+  <a href="https://github.com/home-operations/kromgo/"><img src="https://kromgo.erwanleboucher.dev/badges/cluster_memory_usage" alt="Memory"></a>
 </p>
 
 </div>
