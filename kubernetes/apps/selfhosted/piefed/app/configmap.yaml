@@ -5,6 +5,7 @@ metadata:
   name: piefed-config
 data:
   SERVER_NAME: piefed.erwanleboucher.dev
+  ENABLE_ALPHA_API: "true"
   CACHE_TYPE: RedisCache
   CACHE_REDIS_URL: redis://piefed-dragonfly.selfhosted:6379/0
   CELERY_BROKER_URL: redis://piefed-dragonfly.selfhosted:6379/1
