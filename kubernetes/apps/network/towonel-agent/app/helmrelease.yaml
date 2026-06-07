@@ -1,4 +1,4 @@
-# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/helm.toolkit.fluxcd.io/helmrelease_v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
@@ -9,97 +9,30 @@ spec:
     name: towonel-agent
   interval: 1h
   values:
-    defaultPodOptions:
-      automountServiceAccountToken: false
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 10001
-        runAsGroup: 10001
-        fsGroup: 10001
-        seccompProfile:
-          type: RuntimeDefault
-    controllers:
-      towonel-agent:
-        type: deployment
-        replicas: 2
-        annotations:
-          reloader.stakater.com/auto: "true"
-        containers:
-          app:
-            image:
-              repository: codeberg.org/towonel/towonel-agent
-              tag: 0.1.26
-            env:
-              NODE_NAME:
-                valueFrom:
-                  fieldRef:
-                    fieldPath: spec.nodeName
-              POD_NAMESPACE:
-                valueFrom:
-                  fieldRef:
-                    fieldPath: metadata.namespace
-              RUST_LOG: info
-              TOWONEL_AGENT_HEALTH_LISTEN_ADDR: 0.0.0.0:9090
-              TOWONEL_AGENT_SERVICES: '[{"hostname":"*.erwanleboucher.dev","origin":"envoy-external.network.svc.cluster.local:443"}]'
-              TOWONEL_AGENT_TCP_SERVICES: '[{"name":"forgejo-ssh", "origin":"envoy-external.network.svc.cluster.local:2222","listen_port":2222},{"name":"stunner-turns-tls","origin":"stunner.network.svc.cluster.local:5349","listen_port":5349}]'
-              TOWONEL_AGENT_UDP_SERVICES: '[{"name":"stunner-turn-udp","origin":"stunner.network.svc.cluster.local:3478","listen_port":3478}]'
-              TOWONEL_INVITE_TOKEN:
-                valueFrom:
-                  secretKeyRef:
-                    name: towonel-agent-secret
-                    key: TOWONEL_INVITE_TOKEN
-            probes:
-              liveness:
-                enabled: true
-                custom: true
-                spec:
-                  httpGet:
-                    path: /healthz
-                    port: 9090
-                  initialDelaySeconds: 10
-                  periodSeconds: 30
-                  timeoutSeconds: 3
-                  failureThreshold: 3
-              readiness:
-                enabled: true
-                custom: true
-                spec:
-                  httpGet:
-                    path: /healthz
-                    port: 9090
-                  initialDelaySeconds: 3
-                  periodSeconds: 10
-                  timeoutSeconds: 3
-                  failureThreshold: 3
-              startup:
-                enabled: true
-                custom: true
-                spec:
-                  httpGet:
-                    path: /healthz
-                    port: 9090
-                  initialDelaySeconds: 2
-                  periodSeconds: 2
-                  failureThreshold: 30
-            securityContext:
-              allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
-              capabilities:
-                drop:
-                  - "ALL"
-            resources:
-              requests:
-                cpu: 50m
-                memory: 128Mi
-              limits:
-                memory: 256Mi
-    service:
-      app:
-        ports:
-          http:
-            port: 9090
-    serviceMonitor:
-      app:
-        endpoints:
-          - port: http
-            interval: 1m
+    replicaCount: 2
+    deploymentAnnotations:
+      reloader.stakater.com/auto: "true"
+    agent:
+      logLevel: info
+      healthPort: 9090
+      services:
+        - hostname: "*.erwanleboucher.dev"
+          origin: envoy-external.network.svc.cluster.local:443
+      tcpServices:
+        - name: forgejo-ssh
+          origin: envoy-external.network.svc.cluster.local:2222
+          listen_port: 2222
+        - name: stunner-turns-tls
+          origin: stunner.network.svc.cluster.local:5349
+          listen_port: 5349
+      udpServices:
+        - name: stunner-turn-udp
+          origin: stunner.network.svc.cluster.local:3478
+          listen_port: 3478
+      inviteTokenSecret:
+        name: towonel-agent-secret
+        key: TOWONEL_INVITE_TOKEN
+    monitoring:
+      serviceMonitor:
+        enabled: true
+        interval: 1m
