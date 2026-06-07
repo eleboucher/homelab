@@ -9,6 +9,18 @@ spec:
     kind: OCIRepository
     name: tempo
   interval: 1h
+  postRenderers:
+    - kustomize:
+        patches:
+          # The chart's ServiceMonitor unconditionally scrapes the
+          # jaeger-metrics port, but the service only exposes it when
+          # tempoQuery is enabled — drop the dead endpoint.
+          - target:
+              kind: ServiceMonitor
+              name: tempo
+            patch: |
+              - op: remove
+                path: /spec/endpoints/1
   values:
     fullnameOverride: tempo
     config: |
