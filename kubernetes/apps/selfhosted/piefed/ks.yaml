@@ -5,6 +5,7 @@ metadata:
   name: &app piefed
 spec:
   components:
+    - ../../../../components/anubis
     - ../../../../components/postgres/pass
     - ../../../../components/volsync/hot
   dependsOn:
@@ -24,6 +25,7 @@ spec:
   postBuild:
     substitute:
       APP: *app
+      ANUBIS_TARGET: http://piefed.selfhosted.svc:5000
       APP_NAMESPACE: selfhosted
       VOLSYNC_CAPACITY: 20Gi
       VOLSYNC_PUID: "1000"
