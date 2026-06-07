@@ -36,3 +36,12 @@ spec:
       serviceMonitor:
         enabled: true
         interval: 1m
+      prometheusRule:
+        enabled: true
+      dashboards:
+        enabled: true
+        grafanaOperator:
+          enabled: true
+          allowCrossNamespaceImport: true
+          matchLabels:
+            dashboards: grafana
