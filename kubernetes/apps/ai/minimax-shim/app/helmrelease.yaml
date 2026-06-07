@@ -61,6 +61,13 @@ spec:
         ports:
           http:
             port: 8080
+    route:
+      app:
+        hostnames:
+          - shim.erwanleboucher.dev
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
     persistence:
       media:
         type: persistentVolumeClaim
