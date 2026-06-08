@@ -41,7 +41,7 @@ spec:
                   secretKeyRef:
                     name: piefed-postgres
                     key: url
-              GUNICORN_CMD_ARGS: --workers=2
+              GUNICORN_CMD_ARGS: --workers=1 --threads=4
             probes:
               startup:
                 enabled: true
@@ -87,8 +87,10 @@ spec:
               - -A
               - celery_worker_docker.celery
               - worker
-              - --concurrency=2
+              - --concurrency=1
               - --queues=celery,background,send
+              - --max-tasks-per-child=100
+              - --max-memory-per-child=300000
             envFrom: *envFrom
             env:
               DATABASE_URL: *dbEnv
@@ -97,7 +99,7 @@ spec:
                 cpu: 100m
                 memory: 256Mi
               limits:
-                memory: 1Gi
+                memory: 512Mi
             securityContext: *securityContext
 
           notifs:
@@ -149,7 +151,7 @@ spec:
                 cpu: 25m
                 memory: 64Mi
               limits:
-                memory: 384Mi
+                memory: 256Mi
             securityContext: *securityContext
 
     persistence:
