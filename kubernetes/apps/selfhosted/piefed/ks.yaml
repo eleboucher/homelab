@@ -30,20 +30,6 @@ spec:
       VOLSYNC_CAPACITY: 20Gi
       VOLSYNC_PUID: "1000"
       VOLSYNC_PGID: "1000"
-      VOLSYNC_STORAGECLASS: homefs-replicated
-      VOLSYNC_SNAPSHOTCLASS: homefs-snap
-  patches:
-    # backups frozen until the DRBD listener use-after-free fix ships
-    # (siderolabs/talos#12968): every volsync run snapshots+clones a DRBD
-    # volume, which can crash the node
-    - patch: |
-        apiVersion: volsync.backube/v1alpha1
-        kind: ReplicationSource
-        metadata:
-          name: piefed
-        spec:
-          trigger:
-            schedule: "20 4 1 1 *"
   prune: true
   sourceRef:
     kind: OCIRepository
