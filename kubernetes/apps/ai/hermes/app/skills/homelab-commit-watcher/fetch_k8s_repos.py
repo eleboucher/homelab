@@ -616,6 +616,17 @@ def _render_digest_line(slice_key: str, digest: dict | None) -> str | None:
     return f"{slice_key}: {prose}"
 
 
+def _render_commit_bullet(repo: str, c: dict) -> str:
+    # The commit URL must stay the LAST field on the line — the SKILL's security
+    # check ("URLs in the post must appear verbatim in the feed") relies on it.
+    marker = "[24h] " if c["recent"] else ""
+    url = f"https://github.com/{repo}/commit/{c['oid']}"
+    return (
+        f"- {marker}{c['a']}: {c['m']} "
+        f"[+{c['add']}/-{c['del']}, {c['files']}f] · {c['d'][:10]} · {url}"
+    )
+
+
 def render_feed(feed: list[dict], since: str, generated_at: str) -> str:
     lines = [f"since: {since}", f"generated: {generated_at}", ""]
     scopes = compute_active_scopes(feed)
@@ -633,16 +644,21 @@ def render_feed(feed: list[dict], since: str, generated_at: str) -> str:
             )
     lines.append("")
 
+    # Every repo in `feed` has ≥1 commit by construction. Render the per-commit
+    # bullets unconditionally so the feed carries real per-commit signal even
+    # when the digest LLM is unconfigured or errored — the digest lines are an
+    # optional synthesis layer on top, not a precondition for the block.
     for entry in feed:
+        lines.append(f"## {entry['r']}")
         today_line = _render_digest_line("today", entry.get("today_digest"))
         week_line = _render_digest_line("week", entry.get("week_digest"))
-        if not today_line and not week_line:
-            continue
-        lines.append(f"## {entry['r']}")
         if today_line:
             lines.append(today_line)
         if week_line:
             lines.append(week_line)
+        # Commits are pre-sorted newest-first, so [24h] commits lead naturally.
+        for c in entry["c"]:
+            lines.append(_render_commit_bullet(entry["r"], c))
         lines.append("")
     return "\n".join(lines)
 
@@ -726,6 +742,7 @@ def main() -> None:
                     )
                     commits.append(
                         {
+                            "oid": c["oid"],
                             "m": c["messageHeadline"],
                             "b": c.get("messageBody") or "",
                             "d": c["committedDate"],
