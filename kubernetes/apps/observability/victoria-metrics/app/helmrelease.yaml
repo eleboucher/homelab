@@ -255,6 +255,10 @@ spec:
           limits:
             memory: 3Gi
         storage:
+          dataSourceRef:
+            apiGroup: volsync.backube
+            kind: ReplicationDestination
+            name: victoria-metrics-dst
           storageClassName: openebs-zfs
           resources:
             requests:

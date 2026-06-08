@@ -5,6 +5,13 @@ kind: Kustomization
 metadata:
   name: victoria-metrics
 spec:
+  dependsOn:
+    - name: external-secrets
+      namespace: security
+    - name: openebs
+      namespace: openebs-system
+    - name: volsync
+      namespace: volsync-system
   interval: 1h
   path: ./kubernetes/apps/observability/victoria-metrics/app
   prune: true
