@@ -5,6 +5,8 @@ kind: Kustomization
 metadata:
   name: victoria-metrics
 spec:
+  components:
+    - ../../../../components/volsync/hot
   dependsOn:
     - name: external-secrets
       namespace: security
@@ -14,6 +16,11 @@ spec:
       namespace: volsync-system
   interval: 1h
   path: ./kubernetes/apps/observability/victoria-metrics/app
+  postBuild:
+    substitute:
+      APP: victoria-metrics
+      APP_NAMESPACE: observability
+      VOLSYNC_CAPACITY: 50Gi
   prune: true
   sourceRef:
     kind: OCIRepository
