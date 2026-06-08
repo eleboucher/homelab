@@ -8,6 +8,9 @@ metadata:
 spec:
   components:
     - ../../../../components/oidc
+  dependsOn:
+    - name: kanidm
+      namespace: security
   interval: 1h
   path: ./kubernetes/apps/automation/renovate-operator/app
   postBuild:

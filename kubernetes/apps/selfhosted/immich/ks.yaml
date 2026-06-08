@@ -13,6 +13,8 @@ spec:
       namespace: database
     - name: dragonfly
       namespace: database
+    - name: kanidm
+      namespace: security
   interval: 1h
   path: ./kubernetes/apps/selfhosted/immich/app
   postBuild:

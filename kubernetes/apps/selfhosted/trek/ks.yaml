@@ -16,6 +16,8 @@ spec:
       namespace: network
     - name: external-secrets
       namespace: security
+    - name: kanidm
+      namespace: security
     - name: openebs
       namespace: openebs-system
   interval: 1h

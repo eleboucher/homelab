@@ -12,6 +12,8 @@ spec:
   dependsOn:
     - name: cnpg-cluster
       namespace: database
+    - name: kanidm
+      namespace: security
     - name: openebs
       namespace: openebs-system
   interval: 1h

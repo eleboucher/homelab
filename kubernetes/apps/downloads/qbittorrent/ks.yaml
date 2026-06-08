@@ -13,6 +13,8 @@ spec:
   interval: 1h
   path: ./kubernetes/apps/downloads/qbittorrent/app
   dependsOn:
+    - name: kanidm
+      namespace: security
     - name: openebs
       namespace: openebs-system
   postBuild:

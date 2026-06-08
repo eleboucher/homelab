@@ -18,6 +18,8 @@ spec:
       namespace: database
     - name: dragonfly
       namespace: database
+    - name: kanidm
+      namespace: security
     - name: keda-http-add-on
       namespace: observability
     - name: openebs

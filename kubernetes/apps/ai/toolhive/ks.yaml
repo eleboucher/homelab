@@ -69,6 +69,8 @@ spec:
     labels:
       app.kubernetes.io/name: toolhive-config
   dependsOn:
+    - name: kanidm
+      namespace: security
     - name: toolhive-operator-crds
       namespace: ai
   interval: 1h

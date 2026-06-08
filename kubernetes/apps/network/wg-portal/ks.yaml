@@ -7,6 +7,9 @@ metadata:
 spec:
   components:
     - ../../../../components/oidc
+  dependsOn:
+    - name: kanidm
+      namespace: security
   interval: 1h
   path: ./kubernetes/apps/network/wg-portal/app
   postBuild:

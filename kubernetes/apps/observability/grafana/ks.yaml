@@ -23,6 +23,8 @@ metadata:
 spec:
   dependsOn:
     - name: grafana
+    - name: kanidm
+      namespace: security
     - name: openebs
       namespace: openebs-system
   healthChecks:

@@ -10,6 +10,9 @@ spec:
       app.kubernetes.io/name: headlamp
   components:
     - ../../../../components/oidc/envoy
+  dependsOn:
+    - name: kanidm
+      namespace: security
   interval: 1h
   path: ./kubernetes/apps/observability/headlamp/app
   postBuild:

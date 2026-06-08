@@ -13,6 +13,8 @@ spec:
     - ../../../../components/oidc
     - ../../../../components/keda-http
   dependsOn:
+    - name: kanidm
+      namespace: security
     - name: keda-http-add-on
       namespace: observability
     - name: openebs

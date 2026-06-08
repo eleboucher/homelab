@@ -13,6 +13,8 @@ spec:
   dependsOn:
     - name: cnpg-cluster
       namespace: database
+    - name: kanidm
+      namespace: security
     - name: keda-http-add-on
       namespace: observability
     - name: openebs
