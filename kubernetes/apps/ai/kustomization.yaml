@@ -10,6 +10,7 @@ resources:
   # - llama-cpp/ks.yaml
   - mcp
   - minimax-shim/ks.yaml
+  - mnemory/ks.yaml
   - ollama/ks.yaml
   - open-webui/ks.yaml
   - text-embeddings-inference/ks.yaml

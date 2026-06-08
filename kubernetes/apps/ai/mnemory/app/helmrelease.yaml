@@ -1,0 +1,119 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: mnemory
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: mnemory
+  interval: 30m
+  values:
+    controllers:
+      mnemory:
+        pod:
+          securityContext:
+            fsGroup: 1000
+            fsGroupChangePolicy: OnRootMismatch
+            runAsGroup: 1000
+            runAsNonRoot: true
+            runAsUser: 1000
+            seccompProfile:
+              type: RuntimeDefault
+        annotations:
+          reloader.stakater.com/auto: "true"
+        replicas: 1
+        type: deployment
+        containers:
+          app:
+            image:
+              repository: docker.io/genunix/mnemory
+              tag: latest@sha256:e38e7ce1b647a2c1588ff0cf764dac8fc1ea14524a65a562d6f9dad9d0a42d35
+            env:
+              DATA_DIR: /data
+              MGMT_PORT: &mgmtPort 9090
+              LLM_BASE_URL: http://litellm.ai.svc.cluster.local:4000/v1
+              LLM_MODEL: minimax/MiniMax-M3
+              EMBED_BASE_URL: http://text-embeddings-inference.ai.svc.cluster.local:8080/v1
+              EMBED_MODEL: sentence-transformers/all-MiniLM-L6-v2
+              EMBED_DIMS: "384"
+              EMBED_API_KEY: none
+              INSTRUCTION_MODE: proactive
+              SERVER_BASE_URL: https://mnemory.erwanleboucher.dev
+              DEFAULT_TIMEZONE: Europe/Paris
+            envFrom:
+              - secretRef:
+                  name: mnemory-secret
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /health
+                    port: *mgmtPort
+                  initialDelaySeconds: 0
+                  periodSeconds: 30
+                  timeoutSeconds: 5
+                  failureThreshold: 3
+              readiness:
+                !!merge <<: *probes
+                spec:
+                  httpGet:
+                    path: /health
+                    port: *mgmtPort
+                  periodSeconds: 10
+                  failureThreshold: 3
+              startup:
+                !!merge <<: *probes
+                spec:
+                  httpGet:
+                    path: /health
+                    port: *mgmtPort
+                  periodSeconds: 5
+                  failureThreshold: 40
+            resources:
+              requests:
+                cpu: 50m
+                memory: 256Mi
+              limits:
+                memory: 1Gi
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop:
+                  - ALL
+    persistence:
+      data:
+        existingClaim: mnemory
+        globalMounts:
+          - path: /data
+    route:
+      app:
+        hostnames:
+          - mnemory.erwanleboucher.dev
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
+        rules:
+          - backendRefs:
+              - identifier: app
+                port: http
+    service:
+      app:
+        controller: mnemory
+        ports:
+          http:
+            port: 8050
+          metrics:
+            port: *mgmtPort
+    serviceMonitor:
+      app:
+        service:
+          identifier: app
+        endpoints:
+          - port: metrics
+            scheme: http
+            path: /metrics
+            interval: 30s
+            scrapeTimeout: 10s
