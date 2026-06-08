@@ -42,6 +42,16 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
 
+      # Persist flate's chart/source/render cache so render-cache hits skip
+      # helm re-rendering on warm runs.
+      - name: Cache flate artifacts
+        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
+        with:
+          path: ~/.cache/flate
+          key: flate-${{ runner.os }}-${{ hashFiles('kubernetes/**') }}
+          restore-keys: |
+            flate-${{ runner.os }}-
+
       - name: Install flate
         uses: https://github.com/home-operations/flate/action@39f44bd8bc9f11ba5321cecbdfc04398a568f4d0 # v0.3.3
         with:
