@@ -24,6 +24,10 @@ spec:
             runAsGroup: 0
             runAsNonRoot: false
           terminationGracePeriodSeconds: 60
+          tolerations:
+            - key: node.kubernetes.io/unschedulable
+              operator: Exists
+              effect: NoSchedule
         containers:
           app:
             image:
