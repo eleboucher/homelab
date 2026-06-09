@@ -13,7 +13,7 @@ spec:
     broker:
       image:
         repository: ghcr.io/kguardian-dev/kguardian/broker
-        tag: v1.10.0@sha256:fe0f13267a34c9b173cc3160c561cf75c61591486525cfcb18f1e8f7b53db927
+        tag: v1.10.1@sha256:4e2d2e8bcfe69b5a5de8cd0a8a1b9179ae91fc56fe57603574610c2127c98472
       resources:
         limits:
           memory: 1Gi
