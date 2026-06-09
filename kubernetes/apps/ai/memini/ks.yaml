@@ -1,0 +1,37 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: &app memini
+spec:
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *app
+  components:
+    - ../../../../components/postgres/pass
+  dependsOn:
+    - name: cnpg-cluster
+      namespace: database
+  interval: 1h
+  path: ./kubernetes/apps/ai/memini/app
+  postBuild:
+    substitute:
+      APP: *app
+      APP_NAMESPACE: ai
+      # VectorChord (vchord, built on pgvector) backs memini's vector search.
+      # CNPG creates these in memini's database as superuser, so memini's own
+      # `CREATE EXTENSION IF NOT EXISTS vchord` is a no-op (it lacks superuser).
+      DATABASE_EXTENSIONS: |
+        [
+          { name: vector },
+          { name: vchord }
+        ]
+  prune: true
+  sourceRef:
+    kind: OCIRepository
+    name: flux-system
+    namespace: flux-system
+  targetNamespace: ai
+  timeout: 5m
+  wait: false

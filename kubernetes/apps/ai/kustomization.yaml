@@ -9,6 +9,7 @@ resources:
   - litellm/ks.yaml
   # - llama-cpp/ks.yaml
   - mcp
+  - memini/ks.yaml
   - minimax-shim/ks.yaml
   - mnemory/ks.yaml
   - ollama/ks.yaml
