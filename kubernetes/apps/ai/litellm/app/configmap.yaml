@@ -9,7 +9,7 @@ data:
       - model_name: gemma
         litellm_params:
           model: openai/gemma
-          api_base: http://llama-cpp-gemma.ai:8080/v1
+          api_base: http://llama-cpp.ai:8080/v1
           api_key: os.environ/LLAMA_API_KEY
         model_info:
           max_tokens: 32768
