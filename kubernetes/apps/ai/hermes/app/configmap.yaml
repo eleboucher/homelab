@@ -61,7 +61,7 @@ data:
         model: minimax/MiniMax-M3
     plugins:
       enabled:
-        - agentmemory
+        - memini
     terminal:
       backend: local
       cwd: /opt/data/workspace

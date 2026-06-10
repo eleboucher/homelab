@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/helm.toolkit.fluxcd.io/helmrelease_v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
@@ -10,83 +10,42 @@ spec:
     name: memini
   interval: 30m
   values:
-    controllers:
-      memini:
-        annotations:
-          reloader.stakater.com/auto: "true"
-        replicas: 1
-        strategy: RollingUpdate
-        containers:
-          app:
-            image:
-              repository: git.erwanleboucher.dev/eleboucher/memini
-              tag: latest
-            env:
-              MEMINI_HTTP_ADDR: ":8080"
-              MEMINI_LOG_FORMAT: json
-              MEMINI_BACKEND: postgres
-              MEMINI_EMBED_BASE_URL: http://text-embeddings-inference.ai.svc.cluster.local:8080/v1
-              MEMINI_EMBED_MODEL: all-MiniLM-L6-v2
-              MEMINI_EMBED_DIMS: "384"
-              MEMINI_POSTGRES_DSN:
-                valueFrom:
-                  secretKeyRef:
-                    name: memini-postgres
-                    key: url
-              MEMINI_API_KEY:
-                valueFrom:
-                  secretKeyRef:
-                    name: memini
-                    key: MEMINI_API_KEY
-            probes:
-              liveness: &probes
-                enabled: true
-                custom: true
-                spec:
-                  httpGet:
-                    path: /healthz
-                    port: &port 8080
-                  initialDelaySeconds: 5
-                  periodSeconds: 10
-                  timeoutSeconds: 3
-                  failureThreshold: 3
-              readiness:
-                enabled: true
-                custom: true
-                spec:
-                  httpGet:
-                    path: /readyz
-                    port: *port
-                  initialDelaySeconds: 5
-                  periodSeconds: 10
-                  timeoutSeconds: 3
-                  failureThreshold: 3
-            securityContext:
-              allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
-              capabilities: { drop: ["ALL"] }
-            resources:
-              requests:
-                cpu: 25m
-                memory: 64Mi
-              limits:
-                memory: 256Mi
-        pod:
-          securityContext:
-            runAsNonRoot: true
-            seccompProfile: { type: RuntimeDefault }
-    global:
-      fullnameOverride: *name
-    service:
-      app:
-        controller: memini
-        ports:
-          http:
-            port: *port
-    route:
-      app:
-        hostnames:
-          - memini.erwanleboucher.dev
-        parentRefs:
-          - name: envoy-external
-            namespace: network
+    fullnameOverride: *name
+    image:
+      repository: git.erwanleboucher.dev/eleboucher/memini
+      tag: latest
+      # Clear the digest the released chart pins, so the floating tag wins.
+      digest: ""
+    backend: postgres
+    config:
+      logFormat: json
+    embeddings:
+      baseURL: http://text-embeddings-inference.ai.svc.cluster.local:8080/v1
+      model: all-MiniLM-L6-v2
+      dims: 384
+    postgres:
+      dsnSecret:
+        name: memini-postgres
+        key: url
+    auth:
+      apiKeySecret:
+        name: *name
+        key: MEMINI_API_KEY
+    ui:
+      enabled: true
+    httpRoute:
+      enabled: true
+      parentRefs:
+        - name: envoy-external
+          namespace: network
+      hostnames:
+        - memini.erwanleboucher.dev
+    podSecurityContext:
+      seccompProfile:
+        type: RuntimeDefault
+    resources:
+      requests:
+        cpu: 25m
+        memory: 64Mi
+      limits:
+        memory: 256Mi

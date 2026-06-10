@@ -207,7 +207,16 @@ data:
         entries: {
           browser: { enabled: true },
           discord: { enabled: true },
-          "memory-core": { enabled: true },
+          "memory-core": { enabled: false },
+          memini: {
+            enabled: true,
+            config: {
+              base_url: "http://memini.ai.svc.cluster.local:8080",
+              namespace: "openclaw",
+              fallback_on_error: true,
+              timeout_ms: 5000,
+            },
+          },
           "memory-wiki": {
             enabled: true,
             config: {
@@ -246,7 +255,7 @@ data:
           "skill-workshop": { enabled: true },
         },
         slots: {
-          memory: "memory-core",
+          memory: "memini",
         },
       },
       session: {
