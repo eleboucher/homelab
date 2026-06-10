@@ -210,6 +210,7 @@ data:
           "memory-core": { enabled: false },
           memini: {
             enabled: true,
+            hooks: { allowConversationAccess: true },
             config: {
               base_url: "http://memini.ai.svc.cluster.local:8080",
               namespace: "openclaw",

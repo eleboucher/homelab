@@ -59,6 +59,8 @@ data:
       kanban_decomposer:
         provider: custom:litellm
         model: minimax/MiniMax-M3
+    memory:
+      provider: memini
     plugins:
       enabled:
         - memini
