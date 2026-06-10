@@ -6,8 +6,6 @@ metadata:
   name: llama-cpp
   namespace: flux-system
 spec:
-  components:
-    - ../../../../components/gpu
   dependsOn:
     - name: openebs
       namespace: openebs-system

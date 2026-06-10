@@ -14,10 +14,7 @@ spec:
       llama-cpp:
         pod:
           nodeSelector:
-            kubernetes.io/hostname: kharkiv
-          resourceClaims:
-            - name: gpu
-              resourceClaimTemplateName: llama-cpp-gpu
+            kubernetes.io/hostname: paris
           securityContext:
             supplementalGroups:
               - 44
@@ -112,8 +109,6 @@ spec:
                   periodSeconds: 10
                   timeoutSeconds: 5
             resources:
-              claims:
-                - name: gpu
               requests:
                 cpu: 100m
                 memory: 4Gi
@@ -155,9 +150,9 @@ spec:
                 readOnly: false
       render-device:
         type: hostPath
-        hostPath: /dev/dri/renderD128
+        hostPath: /dev/dri
         globalMounts:
-          - path: /dev/dri/renderD128
+          - path: /dev/dri
       tmpfs:
         type: emptyDir
         globalMounts:
