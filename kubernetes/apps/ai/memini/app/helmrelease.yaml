@@ -11,11 +11,6 @@ spec:
   interval: 30m
   values:
     fullnameOverride: *name
-    image:
-      repository: git.erwanleboucher.dev/eleboucher/memini
-      tag: latest
-      # Clear the digest the released chart pins, so the floating tag wins.
-      digest: ""
     backend: postgres
     config:
       logFormat: json
