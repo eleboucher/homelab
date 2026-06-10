@@ -39,7 +39,10 @@ metrics:
 federation:
   autoAccept: mutual
   excludedRepos:
-    - eleboucher/agentmemory
+    # Repos are stored namespace-prefixed (accountDomain/<user>/<repo>), so globs
+    # must account for that leading segment — path.Match's '*' never crosses '/'.
+    - erwanleboucher.dev/eleboucher/agentmemory
+    - "*/*/*-buildcache"
     - "*/*-buildcache"
 
 upstreams:
