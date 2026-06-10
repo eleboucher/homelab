@@ -28,23 +28,6 @@ spec:
         strategy: Recreate
         type: deployment
         initContainers:
-          download-qwen:
-            image:
-              repository: ghcr.io/astral-sh/uv
-              tag: python3.14-alpine
-            command:
-              - /bin/sh
-              - -ec
-              - |
-                uv pip install --system --no-cache huggingface_hub
-                download-model unsloth/Qwen3.6-27B-MTP-GGUF:UD-Q3_K_XL
-            env:
-              HUGGINGFACE_HUB_CACHE: /models
-              HF_TOKEN:
-                valueFrom:
-                  secretKeyRef:
-                    name: llama-cpp-secret
-                    key: HF_TOKEN
           download-gemma:
             image:
               repository: ghcr.io/astral-sh/uv
@@ -63,97 +46,6 @@ spec:
                     name: llama-cpp-secret
                     key: HF_TOKEN
         containers:
-          qwen:
-            image:
-              repository: ghcr.io/ggml-org/llama.cpp
-              tag: server-vulkan-b9570@sha256:5e6de18a610baece861f7566a8c51c11e548b8afc163d85378eea8a2ac694893
-            args:
-              - --metrics
-              - --model
-              - /models/models--unsloth--Qwen3.6-27B-MTP-GGUF/model.gguf
-              - --mmproj
-              - /models/models--unsloth--Qwen3.6-27B-MTP-GGUF/mmproj.gguf
-              - --ctx-size
-              - "32768"
-              - --cache-type-k
-              - q8_0
-              - --cache-type-v
-              - q8_0
-              - --no-mmap
-              - --spec-type
-              - draft-mtp
-              - --spec-draft-n-max
-              - "2"
-              - --flash-attn
-              - on
-              - --sleep-idle-seconds
-              - "60"
-              - --temp
-              - "0.7"
-              - --top-k
-              - "20"
-              - --top-p
-              - "0.8"
-              - --min-p
-              - "0.0"
-              - --presence-penalty
-              - "1.5"
-              - --repeat-penalty
-              - "1.0"
-              - --chat-template-kwargs
-              - '{"enable_thinking":false}'
-              - --alias
-              - qwen
-            env:
-              LLAMA_API_KEY:
-                valueFrom:
-                  secretKeyRef:
-                    name: llama-cpp-secret
-                    key: LLAMA_API_KEY
-              LLAMA_ARG_HOST: 0.0.0.0
-              LLAMA_ARG_PORT: "8081"
-              LLAMA_OFFLINE: "1"
-            probes:
-              liveness:
-                enabled: true
-                custom: true
-                spec:
-                  httpGet:
-                    path: /health
-                    port: 8081
-                  failureThreshold: 3
-                  periodSeconds: 30
-                  timeoutSeconds: 5
-              readiness:
-                enabled: true
-                custom: true
-                spec:
-                  httpGet:
-                    path: /health
-                    port: 8081
-                  failureThreshold: 3
-                  periodSeconds: 10
-                  timeoutSeconds: 5
-              startup:
-                enabled: true
-                custom: true
-                spec:
-                  httpGet:
-                    path: /health
-                    port: 8081
-                  failureThreshold: 60
-                  periodSeconds: 10
-                  timeoutSeconds: 5
-            resources:
-              claims:
-                - name: gpu
-              requests:
-                cpu: 100m
-                memory: 8Gi
-              limits:
-                memory: 20Gi
-            securityContext:
-              privileged: true
           gemma:
             image:
               repository: ghcr.io/ggml-org/llama.cpp
@@ -224,19 +116,12 @@ spec:
                 - name: gpu
               requests:
                 cpu: 100m
-                memory: 4Gi
+                memory: 3Gi
               limits:
                 memory: 12Gi
             securityContext:
               privileged: true
     service:
-      qwen:
-        controller: llama-cpp
-        ports:
-          http:
-            port: 8080
-            targetPort: 8081
-            protocol: TCP
       gemma:
         controller: llama-cpp
         ports:
@@ -251,10 +136,6 @@ spec:
         defaultMode: 0o755
         advancedMounts:
           llama-cpp:
-            download-qwen:
-              - path: /usr/bin/download-model
-                subPath: download-model.sh
-                readOnly: true
             download-gemma:
               - path: /usr/bin/download-model
                 subPath: download-model.sh
@@ -266,15 +147,9 @@ spec:
         storageClass: openebs-zfs
         advancedMounts:
           llama-cpp:
-            qwen:
-              - path: /models
-                readOnly: true
             gemma:
               - path: /models
                 readOnly: true
-            download-qwen:
-              - path: /models
-                readOnly: false
             download-gemma:
               - path: /models
                 readOnly: false
