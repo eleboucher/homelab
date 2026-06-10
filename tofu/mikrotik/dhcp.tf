@@ -59,6 +59,11 @@ locals {
       comment    = null
       lease_time = null
     }
+    "192.168.1.135" = {
+      mac        = "FC:9D:05:2B:EA:B1"
+      comment    = "cachyos desktop (Wake-on-LAN)"
+      lease_time = null
+    }
   }
 }
 

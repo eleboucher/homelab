@@ -37,6 +37,13 @@ module "firewall" {
       comment     = "Allow Tailscale Management"
       order       = 130
     }
+    "accept-wireguard-remote" = {
+      chain       = "input"
+      action      = "accept"
+      src_address = "10.10.0.0/24"
+      comment     = "Allow WireGuard Remote Management"
+      order       = 135
+    }
     "accept-wgportal" = {
       chain    = "input"
       action   = "accept"
