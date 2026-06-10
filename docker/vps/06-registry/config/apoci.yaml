@@ -23,12 +23,15 @@ gc:
   diskUsageThreshold: 80
   diskUsageCheckInterval: 5m
   retention:
-    maxAge: 168h
+    # Non-pinned tags (sha-*): keep the 5 newest, drop those older than 2 days.
+    keepLastN: 5
+    maxAge: 48h
     pinnedGlobs:
+      - "latest"
       - "v*"
       - "*.*.*"
     perRepo:
-      - repo: "erwanleboucher.dev/eleboucher/homelab"
+      - repo: "eleboucher/homelab"
         keepLastN: 7
         maxAge: 24h
 
@@ -38,11 +41,9 @@ metrics:
 
 federation:
   autoAccept: mutual
+  # Globs are namespace-relative: write <user>/<repo>, no accountDomain prefix.
   excludedRepos:
-    # Repos are stored namespace-prefixed (accountDomain/<user>/<repo>), so globs
-    # must account for that leading segment — path.Match's '*' never crosses '/'.
-    - erwanleboucher.dev/eleboucher/agentmemory
-    - "*/*/*-buildcache"
+    - eleboucher/agentmemory
     - "*/*-buildcache"
 
 upstreams:
