@@ -9,7 +9,7 @@ x-logging: &default-logging
 
 services:
   iroh-relay-config:
-    image: docker.io/library/alpine:3.23
+    image: docker.io/library/alpine:3.24
     container_name: iroh-relay-config
     command:
       - sh
