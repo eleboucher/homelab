@@ -13,6 +13,9 @@ peering:
   healthCheckInterval: 30s
   fetchTimeout: 60s
 
+limits:
+  maxBlobSize: 5368709120 # 5 GiB
+
 gc:
   untaggedManifestAge: 1h
   orphanBatchSize: 10000
@@ -37,6 +40,7 @@ federation:
   autoAccept: mutual
   excludedRepos:
     - eleboucher/agentmemory
+    - "*/*-buildcache"
 
 upstreams:
   enabled: true
