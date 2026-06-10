@@ -14,7 +14,7 @@ spec:
       llama-cpp:
         pod:
           nodeSelector:
-            kubernetes.io/hostname: paris
+            kubernetes.io/hostname: kharkiv
           resourceClaims:
             - name: gpu
               resourceClaimTemplateName: llama-cpp-gpu
@@ -116,7 +116,7 @@ spec:
                 - name: gpu
               requests:
                 cpu: 100m
-                memory: 3Gi
+                memory: 4Gi
               limits:
                 memory: 12Gi
             securityContext:
@@ -144,7 +144,7 @@ spec:
         type: persistentVolumeClaim
         accessMode: ReadWriteOnce
         size: 100Gi
-        storageClass: openebs-zfs
+        storageClass: openebs-hostpath
         advancedMounts:
           llama-cpp:
             gemma:
