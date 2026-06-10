@@ -229,7 +229,7 @@ spec:
           webui:
             image:
               repository: ghcr.io/nesquena/hermes-webui
-              tag: 0.51.351@sha256:139b2d2e544744cc711abf143c28c05081bc703c500d19ed8c14c28a501ca0c7
+              tag: 0.51.353@sha256:25dcbdf17dd4ac38015838ab2b439aef142b5c58d3e4295af05cd543ccf5cb63
             env:
               # upstream entrypoint uses `su -c`, HOME stays /root → .env missed
               HERMES_HOME: /home/hermeswebui/.hermes
