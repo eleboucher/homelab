@@ -44,6 +44,7 @@ spec:
                 - docker:k8s:/config/podspec-dind.yaml
                 - multiarch:k8s:/config/podspec-dind.yaml  # you need binfmt-misc extension for multiarch
               timeout: 3h
+              shutdown_timeout: 3m
           podspec-default.yaml: |-
             containers:
               - env:
@@ -132,6 +133,8 @@ spec:
         annotations:
           reloader.stakater.com/auto: "true"
         pod:
+          # must cover runner.shutdown_timeout plus the plugin's 60s cleanup budget
+          terminationGracePeriodSeconds: 300
           labels:
             app.kubernetes.io/component: forgejo-runner
           securityContext:
@@ -140,6 +143,29 @@ spec:
             runAsGroup: 1000
             runAsNonRoot: true
             runAsUser: 1000
+        initContainers:
+          # native sidecar: started before, and terminated after, the runner
+          # container, so the plugin socket outlives job draining on shutdown
+          k8s-plugin:
+            image:
+              repository: git.erwanleboucher.dev/eleboucher/runner-k8s-plugin
+              tag: 12.10.5
+            args:
+              - --listen
+              - unix:///plugin/forgejo-runner-k8s.sock
+            restartPolicy: Always
+            resources:
+              requests:
+                cpu: 5m
+                memory: 32Mi
+              limits:
+                memory: 128Mi
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - ALL
         containers:
           runner:
             image:
@@ -160,25 +186,6 @@ spec:
                 memory: 256Mi
               limits:
                 memory: 512Mi
-            securityContext:
-              allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
-              capabilities:
-                drop:
-                  - ALL
-          k8s-plugin:
-            image:
-              repository: git.erwanleboucher.dev/eleboucher/runner-k8s-plugin
-              tag: 12.10.5
-            args:
-              - --listen
-              - unix:///plugin/forgejo-runner-k8s.sock
-            resources:
-              requests:
-                cpu: 5m
-                memory: 32Mi
-              limits:
-                memory: 128Mi
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
