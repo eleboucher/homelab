@@ -163,6 +163,10 @@ cluster:
     extraArgs:
       bind-address: 0.0.0.0
       feature-gates: HPAScaleToZero=true
+      # Tolerate transient etcd fsync stalls without losing leadership (defaults 15s/10s/2s)
+      leader-elect-lease-duration: 30s
+      leader-elect-renew-deadline: 20s
+      leader-elect-retry-period: 4s
     image: registry.k8s.io/kube-controller-manager:v1.36.1
   coreDNS:
     disabled: true
@@ -186,6 +190,11 @@ cluster:
     config:
       apiVersion: kubescheduler.config.k8s.io/v1
       kind: KubeSchedulerConfiguration
+      # Tolerate transient etcd fsync stalls without losing leadership (defaults 15s/10s/2s)
+      leaderElection:
+        leaseDuration: 30s
+        renewDeadline: 20s
+        retryPeriod: 4s
       profiles:
         - schedulerName: default-scheduler
           plugins:
