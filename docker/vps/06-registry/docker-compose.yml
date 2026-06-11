@@ -8,14 +8,6 @@ services:
     container_name: apoci
     restart: unless-stopped
     user: "1000:1000"
-    environment:
-      # Mirror everything pushed here out to GHCR. Replication sees the full
-      # repo path (erwanleboucher.dev/eleboucher/<repo>); strip the domain so it
-      # lands at ghcr.io/eleboucher/<repo>. Token comes from 1Password via doco-cd.
-      APOCI_REPLICATION_ENABLED: "true"
-      APOCI_REPLICATION_TIMEOUT: "5m"
-      APOCI_REPLICATION_TARGETS: >-
-        [{"name":"ghcr","endpoint":"https://ghcr.io","auth":"token","username":"eleboucher","password":"${GHCR_TOKEN}","stripPrefix":"erwanleboucher.dev/"}]
     labels:
       - prometheus.scrape=true
       - prometheus.port=9090
@@ -80,8 +72,82 @@ services:
       DELETE_OLDER_THAN: "30 days ago"
 
 configs:
+  # Inlined (not file:) so doco-cd can interpolate ${GHCR_TOKEN} from 1Password
+  # into the replication target. configs.file: content is not interpolated.
   apoci_config:
-    file: ./config/apoci.yaml
+    content: |
+      ---
+      endpoint: "https://registry.erwanleboucher.dev"
+      accountDomain: "erwanleboucher.dev"
+      listen: ":5000"
+      dataDir: "/apoci/storage"
+      logFormat: json
+
+      database:
+        driver: postgres
+        dsn: "postgres://apoci:apoci@apoci-postgres:5432/apoci?sslmode=disable"
+
+      peering:
+        healthCheckInterval: 30s
+        fetchTimeout: 60s
+
+      limits:
+        maxBlobSize: 5368709120 # 5 GiB
+
+      gc:
+        untaggedManifestAge: 1h
+        orphanBatchSize: 10000
+        interval: 30m
+        diskUsageThreshold: 80
+        diskUsageCheckInterval: 5m
+        retention:
+          # Non-pinned tags (sha-*): keep the 5 newest, drop those older than 2 days.
+          keepLastN: 5
+          maxAge: 48h
+          pinnedGlobs:
+            - "latest"
+            - "v*"
+            - "*.*.*"
+          perRepo:
+            - repo: "eleboucher/homelab"
+              keepLastN: 7
+              maxAge: 24h
+
+      metrics:
+        enabled: true
+        listen: ":9090"
+
+      federation:
+        autoAccept: mutual
+        # Globs are namespace-relative: write <user>/<repo>, no accountDomain prefix.
+        excludedRepos:
+          - eleboucher/agentmemory
+          - "*/*-buildcache"
+
+      upstreams:
+        enabled: true
+        registries:
+          - name: docker.io
+            endpoint: "https://registry-1.docker.io"
+          - name: ghcr.io
+            endpoint: "https://ghcr.io"
+
+      # Mirror everything pushed here out to GHCR as it arrives. Replication sees
+      # the full repo path (erwanleboucher.dev/eleboucher/<repo>); strip the domain
+      # so it lands at ghcr.io/eleboucher/<repo>. Token from 1Password via doco-cd.
+      replication:
+        enabled: true
+        timeout: 5m
+        targets:
+          - name: ghcr
+            endpoint: "https://ghcr.io"
+            auth: token
+            username: eleboucher
+            password: "${GHCR_TOKEN}"
+            stripPrefix: "erwanleboucher.dev/"
+
+      ui:
+        enabled: true
 
 networks:
   default:
