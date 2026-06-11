@@ -53,7 +53,7 @@ jobs:
             flate-${{ runner.os }}-
 
       - name: Install flate
-        uses: https://github.com/home-operations/flate/action@cb51c417b0ff69e73e0569fdb4f95defd9efa90f # v0.4.1
+        uses: https://github.com/home-operations/flate/action@1e753d8a6b8f4ee39c93e57c64c0930cf4215b7e # v0.4.3
         with:
           # Defaults to ${{ github.token }} — a Forgejo-issued token that github.com
           # rejects (401). flate's release is public, so force the unauthenticated path.
