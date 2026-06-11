@@ -254,6 +254,7 @@ spec:
             memory: 1Gi
           limits:
             memory: 3Gi
+        storage: null
         volumes:
           - name: data
             persistentVolumeClaim:
