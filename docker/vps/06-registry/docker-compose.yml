@@ -8,6 +8,14 @@ services:
     container_name: apoci
     restart: unless-stopped
     user: "1000:1000"
+    environment:
+      # Mirror everything pushed here out to GHCR. Replication sees the full
+      # repo path (erwanleboucher.dev/eleboucher/<repo>); strip the domain so it
+      # lands at ghcr.io/eleboucher/<repo>. Token comes from 1Password via doco-cd.
+      APOCI_REPLICATION_ENABLED: "true"
+      APOCI_REPLICATION_TIMEOUT: "5m"
+      APOCI_REPLICATION_TARGETS: >-
+        [{"name":"ghcr","endpoint":"https://ghcr.io","auth":"token","username":"eleboucher","password":"${GHCR_TOKEN}","stripPrefix":"erwanleboucher.dev/"}]
     labels:
       - prometheus.scrape=true
       - prometheus.port=9090
