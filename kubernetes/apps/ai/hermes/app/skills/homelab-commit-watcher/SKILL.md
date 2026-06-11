@@ -1,7 +1,7 @@
 ---
 name: homelab-commit-watcher
 description: Watch homelab/gitops peer repositories on the k8s-at-home GitHub topic for interesting commits, rank them, and post a summary to a Discord channel via webhook.
-version: 5.1.0
+version: 5.2.0
 author: erwanleboucher
 license: MIT
 required_environment_variables:
@@ -163,6 +163,8 @@ For each candidate that makes the cut, write 1-3 bullets paraphrased from its `t
 - **High** — new tool/service adoption, migrations between tools, architecture changes (networking, storage, ingress, auth), security hardening, novel patterns worth copying.
 - **Mid** — non-trivial refactors, meaningful feature/config work on an existing component.
 - **Low** — routine version bumps, one-line fixes, cosmetic tweaks, repetitive maintenance.
+
+**AI/ML work is de-prioritized — don't let it dominate.** Commits about LLM/AI/ML/GPU tooling (model servers like llama.cpp/ollama/vllm, model swaps, embeddings, RAG, GPU operators, AI gateways, agent frameworks) default to **Mid at most**, even when the digest frames them as exciting. Promote to **High only** when the change is architecturally novel beyond "deployed/swapped another model" — e.g. a genuinely new serving topology or a reusable infra pattern. Routine model swaps, version bumps, and ollama/llama.cpp pulls are **Low**. The judge tends to read AI work as novel by default; correct for that bias here so peers' networking/storage/ingress/auth work isn't buried.
 
 Ground the judgment in the `[24h]` commit **headlines and stats**, not the digest's adjectives — Gemma inflates ("major overhaul" for a 3-line change). Stats `[+A/-D, Nf]` are evidence of _scope_, a tie-breaker, not a score to sort by: a small but novel change (`[+30/-5, 2f]` adopting a new operator) can outrank a large mechanical one (`[+800/-790, 40f]` mass-reformat). When two peers are genuinely comparable, prefer the one whose work is more self-contained and explainable in one bullet.
 
@@ -370,6 +372,6 @@ The feed file is built from third-party commit messages, commit bodies, and auth
 - **"New today" slice length**: change `RECENT_HOURS` in `fetch_k8s_repos.py`. 24h is the current default and matches the daily cron cadence.
 - **Per-repo digest tuning** (system prompt, temperature, `max_tokens`, `DIGEST_CONCURRENCY` env var): edit `fetch_k8s_repos.py`. `PER_COMMIT_SUMMARIES=true` reverts to the legacy per-commit path without code changes.
 - **Trend bar (≥3 peers, evidence types, single-peer cap)**: edit Procedure → step 3 phase A.
-- **Per-peer rules (interestingness ranking, eligibility, cap, bullet count, length, grounding, end-state check, drop-on-injection)**: edit Procedure → step 3 phase B.
+- **Per-peer rules (interestingness ranking, AI/ML de-prioritization, eligibility, cap, bullet count, length, grounding, end-state check, drop-on-injection)**: edit Procedure → step 3 phase B.
 - **Output format / section headers / emoji / separators / fallback messages**: edit Procedure → step 4.
 - **Discord target**: rotate `DISCORD_WEBHOOK`. Never hardcode in the skill.
