@@ -1,0 +1,145 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: llama-cpp-reranker
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: llama-cpp-reranker
+  interval: 1h
+  values:
+    controllers:
+      llama-cpp-reranker:
+        pod:
+          nodeSelector:
+            kubernetes.io/hostname: paris
+          securityContext:
+            supplementalGroups:
+              - 44
+              - 992
+        annotations:
+          reloader.stakater.com/auto: "true"
+        replicas: 1
+        strategy: Recreate
+        type: deployment
+        initContainers:
+          download-reranker:
+            image:
+              repository: ghcr.io/astral-sh/uv
+              tag: python3.14-alpine
+            command:
+              - /bin/sh
+              - -ec
+              - |
+                uv pip install --system --no-cache huggingface_hub
+                download-model Voodisss/Qwen3-Reranker-0.6B-GGUF-llama_cpp:Q4_K_M
+            env:
+              HUGGINGFACE_HUB_CACHE: /models
+        containers:
+          reranker:
+            image:
+              repository: ghcr.io/ggml-org/llama.cpp
+              tag: server-vulkan-b9592@sha256:c7a528c271d169982126d2a098844bb769719a2974022296a0771da85aafcb28
+            args:
+              - --metrics
+              - --model
+              - /models/models--Voodisss--Qwen3-Reranker-0.6B-GGUF-llama_cpp/model.gguf
+              # Qwen3-Reranker needs rank pooling; --reranking + --pooling rank
+              # exposes the Cohere-style /v1/rerank endpoint memini calls.
+              - --reranking
+              - --pooling
+              - rank
+              - --embedding
+              - --ctx-size
+              - "8192"
+              - --no-mmap
+              - --sleep-idle-seconds
+              - "300"
+              - --alias
+              - qwen3-reranker-0.6b
+            env:
+              LLAMA_ARG_HOST: 0.0.0.0
+              LLAMA_ARG_PORT: "8082"
+              LLAMA_OFFLINE: "1"
+            probes:
+              liveness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /health
+                    port: 8082
+                  failureThreshold: 3
+                  periodSeconds: 30
+                  timeoutSeconds: 5
+              readiness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /health
+                    port: 8082
+                  failureThreshold: 3
+                  periodSeconds: 10
+                  timeoutSeconds: 5
+              startup:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /health
+                    port: 8082
+                  failureThreshold: 60
+                  periodSeconds: 10
+                  timeoutSeconds: 5
+            resources:
+              requests:
+                cpu: 100m
+                memory: 2Gi
+              limits:
+                memory: 4Gi
+            securityContext:
+              privileged: true
+    service:
+      app:
+        controller: llama-cpp-reranker
+        ports:
+          http:
+            port: 8080
+            targetPort: 8082
+            protocol: TCP
+    persistence:
+      download-script:
+        type: configMap
+        name: llama-cpp-reranker-download-script
+        defaultMode: 0o755
+        advancedMounts:
+          llama-cpp-reranker:
+            download-reranker:
+              - path: /usr/bin/download-model
+                subPath: download-model.sh
+                readOnly: true
+      models:
+        type: persistentVolumeClaim
+        accessMode: ReadWriteOnce
+        size: 5Gi
+        storageClass: openebs-hostpath
+        advancedMounts:
+          llama-cpp-reranker:
+            reranker:
+              - path: /models
+                readOnly: true
+            download-reranker:
+              - path: /models
+                readOnly: false
+      render-device:
+        type: hostPath
+        hostPath: /dev/dri
+        globalMounts:
+          - path: /dev/dri
+      tmpfs:
+        type: emptyDir
+        globalMounts:
+          - path: /tmp

@@ -18,6 +18,12 @@ spec:
       baseURL: http://text-embeddings-inference.ai.svc.cluster.local:8080/v1
       model: all-MiniLM-L6-v2
       dims: 384
+    # Cross-encoder recall reranking (no LLM). Qwen3-Reranker-0.6B served by
+    # llama-server --reranking exposes the Cohere-style /v1/rerank memini calls.
+    rerank:
+      mode: http://llama-cpp-reranker.ai.svc.cluster.local:8080/v1
+      model: qwen3-reranker-0.6b
+      topN: 20
     postgres:
       dsnSecret:
         name: memini-postgres
