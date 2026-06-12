@@ -1,4 +1,3 @@
----
 # yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
@@ -105,7 +104,6 @@ spec:
                   git clone --depth 1 https://github.com/Homebrew/brew $HOMEBREW_PREFIX
                 fi
 
-                rm -rf /opt/data/plugins/agentmemory
                 if [ ! -d /opt/data/plugins/memini ]; then
                   mkdir -p /opt/data/plugins
                   cd /tmp
@@ -166,14 +164,14 @@ spec:
               SUMMARY_LLM_URL: http://litellm.ai:4000/v1
               TERM: xterm-256color
               TERMINAL_MAX_FOREGROUND_TIMEOUT: "1800"
+              HERMES_DASHBOARD: "1"
               TZ: ${TZ}
             resources:
               requests:
                 cpu: 500m
                 memory: 2Gi
               limits:
-                cpu: 4
-                memory: 8Gi
+                memory: 2Gi
             securityContext:
               allowPrivilegeEscalation: false
               capabilities:
@@ -226,41 +224,6 @@ spec:
               capabilities:
                 drop:
                   - ALL
-          webui:
-            image:
-              repository: ghcr.io/nesquena/hermes-webui
-              tag: 0.51.368@sha256:d54e4488783742bb1d5f7c4880965fc237c0fd4ee28f1102504bb7feaf7dc280
-            env:
-              # upstream entrypoint uses `su -c`, HOME stays /root → .env missed
-              HERMES_HOME: /home/hermeswebui/.hermes
-              HERMES_WEBUI_HOST: 0.0.0.0
-              HERMES_WEBUI_PORT: "8787"
-              HERMES_WEBUI_STATE_DIR: /home/hermeswebui/.hermes/webui
-              HOME: /home/hermeswebui
-              TZ: ${TZ}
-              WANTED_GID: "1000"
-              WANTED_UID: "1000"
-            resources:
-              requests:
-                cpu: 50m
-                memory: 256Mi
-              limits:
-                memory: 2Gi
-            securityContext:
-              allowPrivilegeEscalation: false
-              capabilities:
-                add:
-                  - CHOWN
-                  - DAC_OVERRIDE
-                  - FOWNER
-                  - FSETID
-                  - SETGID
-                  - SETUID
-                drop:
-                  - ALL
-              runAsGroup: 0
-              runAsNonRoot: false
-              runAsUser: 0
     service:
       app:
         controller: hermes
@@ -271,8 +234,8 @@ spec:
             port: 12321
           gateway:
             port: 8642
-          webui:
-            port: 8787
+          dashboard:
+            port: 9119
     route:
       app:
         hostnames:
@@ -283,7 +246,7 @@ spec:
         rules:
           - backendRefs:
               - identifier: app
-                port: 8787
+                port: 9119
       codeserver:
         hostnames:
           - hermes-code.erwanleboucher.dev
@@ -305,8 +268,6 @@ spec:
               - path: /opt/hermes
             app:
               - path: /opt/hermes
-            webui:
-              - path: /home/hermeswebui/.hermes/hermes-agent
       data:
         existingClaim: hermes
         advancedMounts:
@@ -319,8 +280,6 @@ spec:
               - path: /opt/data
             codeserver:
               - path: /opt/data
-            webui:
-              - path: /home/hermeswebui/.hermes
       config-yaml:
         type: configMap
         name: hermes-configmap
