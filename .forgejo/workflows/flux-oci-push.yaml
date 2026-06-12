@@ -21,6 +21,7 @@ env:
 jobs:
   push:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     outputs:
       digest-url: ${{ steps.push.outputs.digest-url }}
     steps:
@@ -64,6 +65,7 @@ jobs:
             --creds=eleboucher:${{ secrets.APOCI_REGISTRY_TOKEN }}
   sign:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     needs: push
     steps:
       - name: Install Cosign
