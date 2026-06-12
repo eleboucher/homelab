@@ -7,4 +7,6 @@ resources:
   - ./grafanadashboard.yaml
   - ./helmrelease.yaml
   - ./ocirepository.yaml
+  - ./prometheusrule-towonel-agent.yaml
+  - ./prometheusrule-towonel-edge.yaml
   - ./prometheusrule-towonel-hub.yaml

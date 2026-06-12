@@ -1,0 +1,57 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/monitoring.coreos.com/prometheusrule_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: towonel-edge-rules
+spec:
+  groups:
+    - name: towonel-edge.rules
+      rules:
+        - alert: TowonelEdgeMetricsAbsent
+          expr: |-
+            absent(towonel_edge_active_sessions{cluster="towonel-ops"})
+          for: 10m
+          annotations:
+            summary: >-
+              No towonel edge metrics received for 10 minutes — every edge is
+              down, their scrape is broken, or the remote-write tunnel is down
+          labels:
+            severity: critical
+
+        - alert: TowonelEdgeNoSessions
+          expr: |-
+            towonel_edge_active_sessions{cluster="towonel-ops"} == 0
+          for: 15m
+          annotations:
+            summary: >-
+              Towonel edge {{ $labels.job }} has no agent sessions registered —
+              it cannot route traffic and a load balancer in front of it has
+              nowhere to send requests
+          labels:
+            severity: critical
+
+        - alert: TowonelEdgeOverloadDrops
+          expr: |-
+            sum by (job, reason) (rate(towonel_edge_connections_rejected_overload_total{cluster="towonel-ops"}[15m])) > 1
+          for: 30m
+          annotations:
+            summary: >-
+              Towonel edge {{ $labels.job }} is dropping {{ $value | humanize }} conns/s
+              at the {{ $labels.reason }} cap — for reason=udp_session query
+              towonel_edge_udp_sessions_rejected_total to find the listener,
+              otherwise it is an accept-time DoS or an under-sized cap
+          labels:
+            severity: warning
+
+        - alert: TowonelEdgeRouteNoSession
+          expr: |-
+            sum by (job) (rate(towonel_edge_route_no_session_total{cluster="towonel-ops"}[15m])) > 0.2
+          for: 15m
+          annotations:
+            summary: >-
+              Towonel edge {{ $labels.job }} is taking {{ $value | humanize }} req/s
+              for tunnels whose agent has no registered session — a tenant's agent
+              is down or disconnected and its service is unreachable
+          labels:
+            severity: warning
