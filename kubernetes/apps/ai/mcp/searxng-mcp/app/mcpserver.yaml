@@ -5,7 +5,7 @@ kind: MCPServer
 metadata:
   name: mcp-searxng
 spec:
-  image: docker.io/isokoliuk/mcp-searxng:1.4.0@sha256:fb1f13fec79faf866e1557ea1d9244b60c9f4587b758027361b9f131b430c133
+  image: docker.io/isokoliuk/mcp-searxng:1.5.0@sha256:b467c34f4f0189629cde40abb7d56af0e75c32826777a1baaca27d3c9a2ba289
   transport: streamable-http
   proxyPort: 8080
   env:
