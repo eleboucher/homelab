@@ -254,11 +254,15 @@ spec:
             memory: 1Gi
           limits:
             memory: 3Gi
-        storage: null
-        volumes:
-          - name: data
-            persistentVolumeClaim:
-              claimName: victoria-metrics
+        storage:
+          dataSourceRef:
+            apiGroup: volsync.backube
+            kind: ReplicationDestination
+            name: victoria-metrics-dst
+          storageClassName: openebs-zfs
+          resources:
+            requests:
+              storage: 50Gi
       route:
         enabled: true
         parentRefs:
