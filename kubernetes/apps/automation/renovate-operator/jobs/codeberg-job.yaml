@@ -8,6 +8,8 @@ spec:
   provider:
     name: forgejo
     endpoint: https://codeberg.org/api/v1
+  discoveryFilters:
+    - towonel/*
   extraEnv:
     - name: LOG_LEVEL
       value: debug
@@ -15,6 +17,9 @@ spec:
       value: "true"
     - name: RENOVATE_REDIS_URL
       value: "redis://dragonfly.database.svc:6379/3"
+    - name: RENOVATE_GIT_TIMEOUT
+      value: 20m
+  skipForks: true
   image: ghcr.io/renovatebot/renovate:43.101.1
   parallelism: 3
   resources:
