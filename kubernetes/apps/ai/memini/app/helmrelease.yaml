@@ -1,4 +1,3 @@
----
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/helm.toolkit.fluxcd.io/helmrelease_v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
@@ -14,6 +13,9 @@ spec:
     backend: postgres
     config:
       logFormat: json
+      writeDedupMinScore: 0.95
+      demoteAfter: 1440h
+      tombstoneTTL: 720h
     embeddings:
       baseURL: http://text-embeddings-inference.ai.svc.cluster.local:8080/v1
       model: all-MiniLM-L6-v2
