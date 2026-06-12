@@ -89,7 +89,11 @@ data:
       reasoning_effort: medium
     platforms:
       matrix:
-        enabled: true
+        # Matrix runs in the separate hermes-matrix relay pod (proxy mode →
+        # main agent's API server on 8642), so the main app must not init the
+        # Matrix platform itself — it has no MATRIX_* creds and would log
+        # "Missing required setup". The relay uses its own config under /data.
+        enabled: false
     matrix:
       require_mention: false
       auto_thread: false
