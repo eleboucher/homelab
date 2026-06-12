@@ -54,12 +54,14 @@ spec:
               - --embedding
               - --ctx-size
               - "8192"
-              # Rank pooling needs the whole pair in one physical batch; size
-              # batch/ubatch to the context or longer pairs 500 ("input too large").
               - --batch-size
               - "8192"
               - --ubatch-size
               - "8192"
+              - --parallel
+              - "2"
+              - --cache-ram
+              - "0"
               - --no-mmap
               - --sleep-idle-seconds
               - "300"

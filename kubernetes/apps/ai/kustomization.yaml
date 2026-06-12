@@ -7,7 +7,7 @@ resources:
   - hermes/ks.yaml
   - hermes-matrix/ks.yaml
   - litellm/ks.yaml
-  - llama-cpp/ks.yaml
+  # - llama-cpp/ks.yaml
   - llama-cpp-reranker/ks.yaml
   - mcp
   - memini/ks.yaml
