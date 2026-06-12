@@ -23,6 +23,13 @@ spec:
                 path: /spec/endpoints/1
   values:
     fullnameOverride: tempo
+    tempo:
+      resources:
+        requests:
+          cpu: 100m
+          memory: 1Gi
+        limits:
+          memory: 6Gi
     config: |
       memberlist:
         cluster_label: "{{ .Release.Name }}.{{ .Release.Namespace }}"
