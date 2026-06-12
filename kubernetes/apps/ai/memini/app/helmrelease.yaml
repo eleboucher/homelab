@@ -24,6 +24,9 @@ spec:
       mode: http://llama-cpp-reranker.ai.svc.cluster.local:8080/v1
       model: qwen3-reranker-0.6b
       topN: 20
+      # Reranker batch/ubatch are sized to its 8192-token context, so disable
+      # client-side truncation to keep full rerank fidelity.
+      maxDocChars: 0
     postgres:
       dsnSecret:
         name: memini-postgres
