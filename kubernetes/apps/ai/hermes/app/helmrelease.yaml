@@ -103,15 +103,6 @@ spec:
                   mkdir -p $HOMEBREW_PREFIX
                   git clone --depth 1 https://github.com/Homebrew/brew $HOMEBREW_PREFIX
                 fi
-
-                if [ ! -d /opt/data/plugins/memini ]; then
-                  mkdir -p /opt/data/plugins
-                  cd /tmp
-                  rm -rf memini-src
-                  git clone --depth 1 --branch main https://github.com/eleboucher/memini memini-src
-                  mv memini-src/integrations/hermes/plugin/memini /opt/data/plugins/memini
-                  rm -rf memini-src
-                fi
             securityContext:
               allowPrivilegeEscalation: false
               capabilities:
