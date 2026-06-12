@@ -100,7 +100,7 @@ data:
     privacy:
       redact_pii: true
     agent:
-      max_turns: 90
+      max_turns: 150
       gateway_timeout: 1800
       gateway_timeout_warning: 900
       restart_drain_timeout: 60
