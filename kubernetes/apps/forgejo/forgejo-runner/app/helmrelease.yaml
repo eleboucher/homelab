@@ -1,4 +1,3 @@
----
 # yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
@@ -36,8 +35,14 @@ spec:
                 options:
                   namespace: forgejo
                   poll_timeout: 10m
+                  resources: |
+                    requests:
+                      cpu: 100m
+                      memory: 256Mi
+                    limits:
+                      memory: 1Gi
             runner:
-              capacity: 4
+              capacity: 3
               labels:
                 - ubuntu-latest:k8s:/config/podspec-default.yaml
                 - default:k8s:/config/podspec-default.yaml
@@ -54,12 +59,12 @@ spec:
                 imagePullPolicy: IfNotPresent
                 name: main
                 resources:
-                  limits:
-                    cpu: 500m
-                    memory: 2Gi
                   requests:
                     cpu: 100m
-                    memory: 256Mi
+                    memory: 1Gi
+                  limits:
+                    cpu: 500m
+                    memory: 4Gi
             nodeSelector:
               kubernetes.io/hostname: paris
             restartPolicy: Never
@@ -76,10 +81,10 @@ spec:
                 resources:
                   requests:
                     cpu: 100m
-                    memory: 256Mi
+                    memory: 1Gi
                   limits:
                     cpu: 500m
-                    memory: 4Gi
+                    memory: 8Gi
                 volumeMounts:
                   - name: docker-storage
                     mountPath: /var/lib/docker
@@ -108,12 +113,12 @@ spec:
                 imagePullPolicy: IfNotPresent
                 name: main
                 resources:
-                  limits:
-                    cpu: 500m
-                    memory: 2Gi
                   requests:
                     cpu: 100m
-                    memory: 256Mi
+                    memory: 1Gi
+                  limits:
+                    cpu: 500m
+                    memory: 4Gi
                 volumeMounts:
                   - name: docker-certs
                     mountPath: /certs
@@ -149,7 +154,7 @@ spec:
           k8s-plugin:
             image:
               repository: git.erwanleboucher.dev/eleboucher/runner-k8s-plugin
-              tag: 12.10.5
+              tag: 12.10.6
             args:
               - --listen
               - unix:///plugin/forgejo-runner-k8s.sock
@@ -192,7 +197,6 @@ spec:
               capabilities:
                 drop:
                   - ALL
-
     rbac:
       roles:
         forgejo-runner:
