@@ -20,14 +20,11 @@ spec:
         - ports:
             - port: "3000"
               protocol: TCP
-    - # Registries
-      toFQDNs:
-        - matchName: git.erwanleboucher.dev
-        - matchName: registry.erwanleboucher.dev
-      toPorts:
-        - ports:
-            - port: "443"
-              protocol: TCP
+    - # Own services via ingress gateways (e.g. git.erwanleboucher.dev)
+      toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/managed-by: envoy-gateway
+            k8s:io.kubernetes.pod.namespace: network
     - # Internet egress
       toCIDRSet:
         - cidrGroupRef: internet
