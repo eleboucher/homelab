@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/helm.toolkit.fluxcd.io/helmrelease_v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
@@ -10,83 +10,175 @@ spec:
     name: kromgo
   interval: 30m
   values:
-    defaultPodOptions:
-      securityContext:
-        runAsGroup: 1000
-        runAsNonRoot: true
-        runAsUser: 1000
-    controllers:
-      kromgo:
-        annotations:
-          reloader.stakater.com/auto: "true"
-        strategy: RollingUpdate
-        containers:
-          app:
-            image:
-              repository: ghcr.io/home-operations/kromgo
-              tag: 0.14.7@sha256:00fadee4748fbe70b1883b076fc28ec112b7a8f46a6f2fd993b9f4c78ceee2ac
-            env:
-              PROMETHEUS_URL: http://vmsingle-victoria-metrics.observability.svc.cluster.local:8428
-              SERVER_PORT: &port 80
-              HEALTH_PORT: &healthPort 8080
-            probes:
-              liveness: &probes
-                enabled: true
-                custom: true
-                spec:
-                  httpGet:
-                    path: /readyz
-                    port: *healthPort
-                  initialDelaySeconds: 0
-                  periodSeconds: 10
-                  timeoutSeconds: 1
-                  failureThreshold: 3
-              readiness: *probes
-            securityContext:
-              allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
-              capabilities: { drop: ["ALL"] }
-            resources:
-              requests:
-                cpu: 10m
-              limits:
-                memory: 64Mi
-    persistence:
-      config-file:
-        type: configMap
-        name: kromgo-configmap
-        globalMounts:
-          - path: /config/config.yaml
-            subPath: config.yaml
-    route:
-      app:
-        annotations:
-          gatus.home-operations.com/endpoint: |-
-            conditions: ["[STATUS] == 200"]
-        hostnames:
-          - kromgo.erwanleboucher.dev
-        parentRefs:
-          - name: envoy-external
-            namespace: network
-        rules:
-          - filters:
-              - type: CORS
-                cors:
-                  allowOrigins:
-                    - "*"
-                  allowMethods:
-                    - GET
-                    - OPTIONS
-                  allowHeaders:
-                    - "*"
-                  maxAge: 86400
-            backendRefs:
-              - identifier: app
-                port: *port
-    service:
-      app:
-        ports:
-          http:
-            port: *port
-          health:
-            port: *healthPort
+    config:
+      prometheus: http://vmsingle-victoria-metrics.observability.svc.cluster.local:8428
+      defaults:
+        badge:
+          size: 12
+      badges:
+        - title: Talos
+          id: talos_version
+          query: label_replace(node_os_info{name="Talos"}, "version_id", "$1", "version_id", "v(.+)")
+          valueExpr: labels["version_id"]
+          icon: si:talos
+
+        - title: Kubernetes
+          id: kubernetes_version
+          query: label_replace(kubernetes_build_info{service="kubernetes"}, "git_version", "$1", "git_version", "v(.+)")
+          valueExpr: labels["git_version"]
+          icon: si:kubernetes
+
+        - title: Flux
+          id: flux_version
+          query: label_replace(flux_instance_info, "revision", "$1", "revision", "v(.+)@sha256:.+")
+          valueExpr: labels["revision"]
+          icon: si:flux
+
+        - title: MikroTik
+          id: mkt_version
+          query: label_replace(mktxp_system_uptime, "short_version", "$1", "version", "([^ ]+).*")
+          valueExpr: labels["short_version"]
+          icon: si:mikrotik
+
+        - title: Nodes
+          id: cluster_node_count
+          query: count(count by (node) (kube_node_status_condition{condition="Ready"}))
+          colorExpr: '"green"'
+
+        - title: Pods
+          id: cluster_pod_count
+          query: sum(kube_pod_status_phase{phase="Running"})
+          valueExpr: humanizeCommas(result)
+          colorExpr: '"green"'
+
+        - title: Last Push
+          id: github_last_push_info
+          query: label_replace(topk(1, github_last_push_info), "short_repo", "$1", "repo", ".+/(.+)")
+          valueExpr: labels["short_repo"]
+
+        - title: Last Push Age
+          id: github_last_push_timestamp
+          query: topk(1, github_last_push_info)
+
+        - title: GH Contributions (1y)
+          id: gh_contributions_year
+          query: avg(gh_contributions_year)
+
+        - title: Followers
+          id: github_followers
+          query: github_followers
+
+        - title: Public Repos
+          id: github_public_repos
+          query: github_public_repos
+
+        - title: Stars
+          id: github_stars_total
+          query: github_stars_total
+
+        - title: Gateway Latency
+          id: cluster_latency_over_7d
+          query: quantile(0.99, gatus_results_duration_seconds)
+          valueExpr: string(result) + "s"
+          colorExpr: 'colorScale(result, [300.0, 700.0], ["green", "orange", "red"])'
+
+        - title: CPU
+          id: cluster_cpu_usage
+          query: round(avg(instance:node_cpu_utilisation:rate5m) * 100, 0.1)
+          valueExpr: string(result) + "%"
+          colorExpr: 'colorScale(result, [35.0, 75.0], ["green", "orange", "red"])'
+
+        - title: Memory
+          id: cluster_memory_usage
+          query: round(sum(node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes) / sum(node_memory_MemTotal_bytes) * 100, 0.1)
+          valueExpr: string(result) + "%"
+          colorExpr: 'colorScale(result, [49.0, 75.0], ["green", "orange", "red"])'
+
+        - title: Age
+          id: cluster_age_days
+          query: round((time() - max(kube_node_created)) / 86400)
+          valueExpr: string(result) + "d"
+          colorExpr: 'colorScale(result, [180.0, 360.0], ["green", "orange", "red"])'
+
+        - title: Uptime
+          id: cluster_uptime_days
+          query: round(avg(node_time_seconds - node_boot_time_seconds) / 86400)
+          valueExpr: string(result) + "d"
+          colorExpr: 'colorScale(result, [180.0, 360.0], ["green", "orange", "red"])'
+
+        - title: Alerts
+          id: cluster_alert_count
+          query: ALERTS{alertstate="firing"} - 1
+          colorExpr: 'colorScale(result, [1.0], ["green", "red"])'
+
+        - title: SLA (7d)
+          id: global_sla
+          query: |
+            sum(increase(gatus_results_total{success="true"}[7d]))
+            /
+            sum(increase(gatus_results_total[7d]))
+            * 100
+          valueExpr: string(result) + "%"
+          colorExpr: 'colorScale(result, [99.0, 99.9], ["red", "orange", "green"])'
+      graphs:
+        - title: Pods
+          id: cluster_pod_count
+          query: sum(kube_pod_status_phase{phase="Running"})
+          maxDuration: "7d"
+
+        - title: GH Contributions (1y)
+          id: gh_contributions_year
+          query: avg(gh_contributions_year)
+          maxDuration: "1y"
+
+        - title: Gateway Latency
+          id: cluster_latency_over_7d
+          query: quantile(0.99, gatus_results_duration_seconds)
+          maxDuration: "7d"
+
+        - title: CPU
+          id: cluster_cpu_usage
+          query: round(avg(instance:node_cpu_utilisation:rate5m) * 100, 0.1)
+          maxDuration: "7d"
+
+        - title: Memory
+          id: cluster_memory_usage
+          query: round(sum(node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes) / sum(node_memory_MemTotal_bytes) * 100, 0.1)
+          maxDuration: "7d"
+
+        - title: SLA (7d)
+          id: global_sla
+          query: |
+            sum(increase(gatus_results_total{success="true"}[7d]))
+            /
+            sum(increase(gatus_results_total[7d]))
+            * 100
+          maxDuration: "7d"
+    deploymentAnnotations:
+      reloader.stakater.com/auto: "true"
+    httpRoute:
+      enabled: true
+      annotations:
+        gatus.home-operations.com/endpoint: |-
+          conditions: ["[STATUS] == 200"]
+      parentRefs:
+        - name: envoy-external
+          namespace: network
+      hostnames:
+        - kromgo.erwanleboucher.dev
+      filters:
+        - type: CORS
+          cors:
+            allowOrigins:
+              - "*"
+            allowMethods:
+              - GET
+              - OPTIONS
+            allowHeaders:
+              - "*"
+            maxAge: 86400
+    resources:
+      requests:
+        cpu: 10m
+      limits:
+        memory: 64Mi
