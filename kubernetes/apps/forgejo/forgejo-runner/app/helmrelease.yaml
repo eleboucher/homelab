@@ -154,7 +154,7 @@ spec:
           # container, so the plugin socket outlives job draining on shutdown
           k8s-plugin:
             image:
-              repository: git.erwanleboucher.dev/eleboucher/runner-k8s-plugin
+              repository: registry.erwanleboucher.dev/eleboucher/runner-k8s-plugin
               tag: 12.10.6
             args:
               - --listen
@@ -175,7 +175,7 @@ spec:
         containers:
           runner:
             image:
-              repository: git.erwanleboucher.dev/eleboucher/runner
+              repository: registry.erwanleboucher.dev/eleboucher/runner
               tag: 12.10.2
             command:
               - sh
