@@ -1,0 +1,22 @@
+apiVersion: v1alpha1
+kind: WatchdogTimerConfig
+device: /dev/watchdog0
+timeout: 5m
+---
+apiVersion: v1alpha1
+kind: ResolverConfig
+nameservers:
+  - address: 192.168.1.2
+---
+apiVersion: v1alpha1
+kind: KmsgLogConfig
+name: fluent-bit
+url: tcp://127.0.0.1:5170/
+---
+apiVersion: v1alpha1
+kind: OOMConfig
+# Disable Talos OOM handler — defer to kernel cgroup OOM only.
+# See https://github.com/siderolabs/talos/issues/13329 for context.
+triggerExpression: "false"
+cgroupRankingExpression: "0.0"
+sampleInterval: "5s"

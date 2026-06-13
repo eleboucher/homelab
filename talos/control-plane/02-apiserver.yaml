@@ -1,0 +1,17 @@
+cluster:
+  apiServer:
+    auditPolicy:
+      apiVersion: audit.k8s.io/v1
+      kind: Policy
+      rules:
+        - level: Metadata
+    certSANs:
+      - 127.0.0.1
+      - 192.168.1.42
+      - k8s.internal
+    disablePodSecurityPolicy: true
+    env:
+      GOMEMLIMIT: 3GiB
+    extraArgs:
+      enable-aggregator-routing: "true"
+      feature-gates: HPAScaleToZero=true

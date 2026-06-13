@@ -1,16 +1,3 @@
----
-machine:
-  type: controlplane
-  certSANs:
-    - 127.0.0.1
-    - 192.168.1.42
-  install:
-    diskSelector:
-      type: nvme
-  udev:
-    rules:
-      - SUBSYSTEM=="drm", KERNEL=="renderD*", GROUP="992", MODE="0660"
----
 # 8TB SATA HDD (Seagate ST8000DM004): bulk media storage at /var/mnt/media.
 apiVersion: v1alpha1
 kind: ExistingVolumeConfig
@@ -44,23 +31,3 @@ provisioning:
     match: disk.transport == "sata" && disk.size < 4000000000000u
   maxSize: 1400GiB
   grow: true
----
-apiVersion: v1alpha1
-kind: LinkAliasConfig
-name: lan0
-selector:
-  match: mac(link.permanent_addr) == "c4:62:37:09:df:ff"
----
-apiVersion: v1alpha1
-kind: BondConfig
-name: lacp0
-mtu: 9000
-links:
-  - lan0
-bondMode: active-backup
-miimon: 100
----
-apiVersion: v1alpha1
-kind: HostnameConfig
-auto: "off"
-hostname: paris

@@ -1,0 +1,4 @@
+machine:
+  install:
+    diskSelector:
+      serial: 2526511B4465

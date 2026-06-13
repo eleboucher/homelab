@@ -1,0 +1,9 @@
+cluster:
+  controllerManager:
+    extraArgs:
+      bind-address: 0.0.0.0
+      feature-gates: HPAScaleToZero=true
+      # Tolerate transient etcd fsync stalls without losing leadership (defaults 15s/10s/2s)
+      leader-elect-lease-duration: 30s
+      leader-elect-renew-deadline: 20s
+      leader-elect-retry-period: 4s

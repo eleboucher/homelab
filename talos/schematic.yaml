@@ -12,15 +12,15 @@ customization:
     - talos.dashboard.disabled=1
     - zfs.zfs_arc_max=8589934592 # Cap ZFS ARC at 8GiB
   systemExtensions:
-        officialExtensions:
-            - siderolabs/amd-ucode
-            - siderolabs/binfmt-misc
-            - siderolabs/drbd
-            - siderolabs/i915
-            - siderolabs/intel-ucode
-            - siderolabs/mei
-            - siderolabs/nfsd
-            - siderolabs/nfsrahead
-            - siderolabs/util-linux-tools
-            - siderolabs/xe
-            - siderolabs/zfs
+    officialExtensions:
+      - siderolabs/amd-ucode
+      - siderolabs/binfmt-misc
+      - siderolabs/drbd
+      - siderolabs/i915
+      - siderolabs/intel-ucode
+      - siderolabs/mei
+      - siderolabs/nfsd
+      - siderolabs/nfsrahead
+      - siderolabs/util-linux-tools
+      - siderolabs/xe
+      - siderolabs/zfs

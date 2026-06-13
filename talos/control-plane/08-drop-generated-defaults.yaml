@@ -1,0 +1,12 @@
+# Drop two control-plane defaults Talos machinery injects that the cluster has
+# never run with: PodSecurity admission (baseline-enforce) and the
+# exclude-from-external-load-balancers node label.
+cluster:
+  apiServer:
+    admissionControl:
+      - name: PodSecurity
+        $patch: delete
+machine:
+  nodeLabels:
+    node.kubernetes.io/exclude-from-external-load-balancers:
+      $patch: delete

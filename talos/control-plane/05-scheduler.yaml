@@ -1,0 +1,26 @@
+cluster:
+  scheduler:
+    config:
+      apiVersion: kubescheduler.config.k8s.io/v1
+      kind: KubeSchedulerConfiguration
+      # Tolerate transient etcd fsync stalls without losing leadership (defaults 15s/10s/2s)
+      leaderElection:
+        leaseDuration: 30s
+        renewDeadline: 20s
+        retryPeriod: 4s
+      profiles:
+        - schedulerName: default-scheduler
+          plugins:
+            score:
+              disabled:
+                - name: ImageLocality
+          pluginConfig:
+            - name: PodTopologySpread
+              args:
+                defaultingType: List
+                defaultConstraints:
+                  - maxSkew: 1
+                    topologyKey: kubernetes.io/hostname
+                    whenUnsatisfiable: ScheduleAnyway
+    extraArgs:
+      bind-address: 0.0.0.0

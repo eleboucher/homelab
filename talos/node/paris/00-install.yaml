@@ -1,0 +1,4 @@
+machine:
+  install:
+    diskSelector:
+      type: nvme

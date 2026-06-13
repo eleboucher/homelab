@@ -1,0 +1,12 @@
+---
+clusterName: homelab
+clusterEndpoint: https://k8s.internal:6443
+kubernetesVersion: 1.36.2
+talosVersion: 1.13.4
+schematicId: "@schematic.yaml"
+nodes:
+  - host: paris
+    ip: 192.168.1.42
+    role: control-plane
+  - host: kharkiv
+    role: worker

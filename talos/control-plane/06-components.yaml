@@ -1,0 +1,5 @@
+cluster:
+  coreDNS:
+    disabled: true
+  proxy:
+    disabled: true

@@ -1,0 +1,4 @@
+machine:
+  udev:
+    rules:
+      - SUBSYSTEM=="drm", KERNEL=="renderD*", GROUP="992", MODE="0660"

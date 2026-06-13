@@ -1,0 +1,14 @@
+apiVersion: v1alpha1
+kind: LinkAliasConfig
+name: lan0
+selector:
+  match: mac(link.permanent_addr) == "c4:62:37:09:df:ff"
+---
+apiVersion: v1alpha1
+kind: BondConfig
+name: lacp0
+mtu: 9000
+links:
+  - lan0
+bondMode: active-backup
+miimon: 100

@@ -3,8 +3,7 @@ set quiet
 set script-interpreter := ['bash', '-euo', 'pipefail']
 set shell := ['bash', '-euo', 'pipefail', '-c']
 
-controller := `talosctl config info -o yaml | yq -e '.endpoints[0]'`
-nodes := `talosctl config info -o yaml | yq -e '.nodes | join (" ")'`
+topf_config := justfile_dir() / "talos" / "topf.yaml"
 
 [private]
 default:
@@ -12,44 +11,27 @@ default:
 
 [confirm('Bootstrap cluster? [y|N]')]
 [doc('Bootstrap a Talos & Kubernetes cluster end-to-end')]
-cluster: nodes k8s (kubeconfig "node") base apps kubeconfig
+cluster: apply credentials base apps
 
 [private]
 [script]
-nodes:
+apply:
     just log info "Running stage..." "stage" "$(basename "$0")"
-    for n in {{ nodes }}; do
-        if ! op=$(just --yes talos apply-node "$n" --insecure 2>&1); then
-            if [[ "$op" == *"certificate required"* ]]; then
-                just log info "Talos already configured, skipping apply of config" "stage" "$(basename "$0")" "node" "$n"
-                continue
-            fi
-            just log fatal "Failed to apply Talos configuration" "stage" "$(basename "$0")" "node" "$n" "output" "$op"
-        fi
-    done
-
-[private]
-[script]
-k8s:
-    just log info "Running stage..." "stage" "$(basename "$0")"
-    just log info "Starting Kubernetes bootstrap on controller {{ controller }}" "stage" "$(basename "$0")"
-    until op=$(talosctl -n "{{ controller }}" bootstrap 2>&1 || true) && [[ "$op" == *"AlreadyExists"* ]]; do
-        just log info "Kubernetes bootstrap in progress. Retrying in 5 seconds..." "stage" "$(basename "$0")"
-        sleep 5
-    done
-
-[private]
-[script]
-kubeconfig lb="cilium":
-    just log info "Running stage..." "stage" "$(basename "$0")"
-    if ! talosctl kubeconfig -n "{{ controller }}" -f --force-context-name main {{ justfile_dir() }}; then
-        just log fatal "Failed to fetch kubeconfig" "stage" "$(basename "$0")"
+    if ! topf --topfconfig "{{ topf_config }}" apply --auto-bootstrap; then
+        just log fatal "Failed to apply Talos configuration / bootstrap" "stage" "$(basename "$0")"
     fi
-    if [[ "{{ lb }}" != "cilium" ]]; then
-        if ! kubectl config set-cluster main --server "https://{{ controller }}:6443"; then
-            just log fatal "Failed to set kubectl cluster server address" "stage" "$(basename "$0")"
-        fi
-    fi
+
+[private]
+[script]
+credentials:
+    just log info "Running stage..." "stage" "$(basename "$0")"
+    topf --topfconfig "{{ topf_config }}" talosconfig > "{{ justfile_dir() }}/talosconfig"
+    topf --topfconfig "{{ topf_config }}" kubeconfig --validity 720h > "{{ justfile_dir() }}/kubeconfig"
+    # The cluster endpoint (k8s.internal) is only reachable once Cilium announces
+    # its LoadBalancer VIP, so during bootstrap target the control-plane node directly.
+    cp="$(yq -e '.nodes[] | select(.role == "control-plane") | (.ip // .host)' "{{ topf_config }}" | head -1)"
+    cluster_name="$(kubectl --kubeconfig "{{ justfile_dir() }}/kubeconfig" config view -o jsonpath='{.clusters[0].name}')"
+    kubectl --kubeconfig "{{ justfile_dir() }}/kubeconfig" config set-cluster "$cluster_name" --server "https://${cp}:6443"
 
 [private]
 [script]
