@@ -28,7 +28,7 @@ spec:
         containers:
           app:
             image:
-              repository: git.erwanleboucher.dev/eleboucher/wg-portal-server
+              repository: registry.erwanleboucher.dev/eleboucher/wg-portal-server
               tag: sha-2be79ac1b4d60c97cc97dda43fcef772ea9ff693
             env:
               RUST_LOG: info

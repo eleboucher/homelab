@@ -22,7 +22,7 @@ spec:
         containers:
           app:
             image:
-              repository: git.erwanleboucher.dev/eleboucher/forgesync
+              repository: registry.erwanleboucher.dev/eleboucher/forgesync
               tag: 0.0.2
             args:
               - run
