@@ -59,8 +59,10 @@ spec:
               # 2048 (not 8192) keeps the compute-buffer RAM burst under 6Gi.
               - --ubatch-size
               - "2048"
+              # 4 slots so concurrent recall requests don't queue behind 2;
+              # ctx-size stays 8192 (2048/slot), so total KV is unchanged.
               - --parallel
-              - "2"
+              - "4"
               - --cache-ram
               - "0"
               - --no-mmap
