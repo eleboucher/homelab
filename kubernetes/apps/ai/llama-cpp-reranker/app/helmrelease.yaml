@@ -56,8 +56,9 @@ spec:
               - "8192"
               - --batch-size
               - "8192"
+              # 2048 (not 8192) keeps the compute-buffer RAM burst under 6Gi.
               - --ubatch-size
-              - "8192"
+              - "2048"
               - --parallel
               - "2"
               - --cache-ram
