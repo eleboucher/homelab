@@ -89,6 +89,17 @@ zpool-status node:
     kubectl logs "zpool-status-{{ node }}"
     kubectl delete pod "zpool-status-{{ node }}"
 
+[confirm('Destroy ZFS pool data-pool on ' + node + ' — THIS IRREVERSIBLY DESTROYS ALL POOL DATA [y|N] ?')]
+[doc('Destroy the OpenEBS ZFS pool on a node (irreversible)')]
+[script]
+zpool-destroy node:
+    overrides="$(jq -n --arg node "{{ node }}" \
+        '{spec:{nodeName:$node,hostNetwork:true,hostPID:true,containers:[{name:"zpool",image:"alpine:3.21",securityContext:{privileged:true},command:["nsenter","-t","1","-m","-u","-i","-n","--","/usr/local/sbin/zpool","destroy","-f","data-pool"]}]}}')"
+    kubectl run "zpool-destroy-{{ node }}" --restart=Never --image=alpine:3.21 --overrides="$overrides"
+    kubectl wait --for=jsonpath='{.status.phase}'=Succeeded "pod/zpool-destroy-{{ node }}" --timeout=120s
+    kubectl logs "zpool-destroy-{{ node }}"
+    kubectl delete pod "zpool-destroy-{{ node }}"
+
 [private]
 schematic-id:
     curl -sX POST --data-binary @<(just template "{{ source_directory() }}/schematic.yaml.j2") "https://factory.talos.dev/schematics" | jq -r '.id'
