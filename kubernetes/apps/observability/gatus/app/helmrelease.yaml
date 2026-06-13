@@ -22,12 +22,6 @@ spec:
       gatus:
         annotations:
           reloader.stakater.com/auto: "true"
-        statefulset:
-          volumeClaimTemplates:
-            - name: config
-              storageClass: openebs-zfs
-              accessMode: ReadWriteOnce
-              size: 5Gi
         type: statefulset
         initContainers:
           gatus-sidecar:

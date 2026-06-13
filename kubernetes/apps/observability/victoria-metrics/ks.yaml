@@ -23,6 +23,7 @@ spec:
       APP: victoria-metrics
       APP_NAMESPACE: observability
       VOLSYNC_CAPACITY: 50Gi
+      VOLSYNC_PVC: vmsingle-victoria-metrics
   prune: true
   sourceRef:
     kind: OCIRepository
