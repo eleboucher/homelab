@@ -23,7 +23,7 @@ spec:
           app:
             image:
               repository: registry.erwanleboucher.dev/eleboucher/forgesync
-              tag: 0.0.2
+              tag: 0.0.4
             args:
               - run
             env:
