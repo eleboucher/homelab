@@ -16,6 +16,8 @@ spec:
   dependsOn:
     - name: envoy-gateway
       namespace: network
+    - name: kopia
+      namespace: volsync-system
     - name: openebs
       namespace: openebs-system
   postBuild:

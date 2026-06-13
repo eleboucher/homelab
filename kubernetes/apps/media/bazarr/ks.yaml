@@ -17,6 +17,8 @@ spec:
       namespace: network
     - name: kanidm
       namespace: security
+    - name: kopia
+      namespace: volsync-system
     - name: openebs
       namespace: openebs-system
     - name: volsync

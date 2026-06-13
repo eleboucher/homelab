@@ -10,6 +10,8 @@ spec:
   dependsOn:
     - name: external-secrets
       namespace: security
+    - name: kopia
+      namespace: volsync-system
     - name: openebs
       namespace: openebs-system
     - name: volsync

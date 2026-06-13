@@ -13,6 +13,8 @@ spec:
       namespace: database
     - name: dragonfly-operator
       namespace: dragonfly-system
+    - name: kopia
+      namespace: volsync-system
     - name: openebs
       namespace: openebs-system
   healthCheckExprs:
@@ -46,6 +48,8 @@ metadata:
   name: photon
 spec:
   dependsOn:
+    - name: kopia
+      namespace: volsync-system
     - name: piefed
       namespace: selfhosted
   interval: 1h

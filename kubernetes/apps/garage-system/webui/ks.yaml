@@ -9,6 +9,8 @@ spec:
     labels:
       app.kubernetes.io/name: webui
   dependsOn:
+    - name: garage
+      namespace: garage-system
     - name: openebs
       namespace: openebs-system
   interval: 1h

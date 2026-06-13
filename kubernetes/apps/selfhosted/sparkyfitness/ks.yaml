@@ -14,6 +14,8 @@ spec:
   dependsOn:
     - name: cnpg-cluster
       namespace: database
+    - name: kopia
+      namespace: volsync-system
     - name: openebs
       namespace: openebs-system
   interval: 1h
@@ -43,6 +45,8 @@ spec:
     labels:
       app.kubernetes.io/name: sparkyfitness
   dependsOn:
+    - name: kopia
+      namespace: volsync-system
     - name: sparkyfitness
   interval: 1h
   path: "./kubernetes/apps/selfhosted/sparkyfitness/app"

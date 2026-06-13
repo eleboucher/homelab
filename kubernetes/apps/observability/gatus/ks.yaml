@@ -10,6 +10,8 @@ spec:
   components:
     - ../../../../components/volsync/hot
   dependsOn:
+    - name: kopia
+      namespace: volsync-system
     - name: openebs
       namespace: openebs-system
   postBuild:

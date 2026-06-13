@@ -8,6 +8,8 @@ spec:
   interval: 1h
   path: ./kubernetes/apps/volsync-system/volsync/app
   dependsOn:
+    - name: nfs
+      namespace: nfs
     - name: openebs
       namespace: openebs-system
     - name: snapshot-controller
@@ -33,6 +35,8 @@ metadata:
   name: volsync-maintenance
 spec:
   dependsOn:
+    - name: nfs
+      namespace: nfs
     - name: volsync
   interval: 1h
   path: ./kubernetes/apps/volsync-system/volsync/maintenance
@@ -51,6 +55,8 @@ metadata:
   name: volsync-sync
 spec:
   dependsOn:
+    - name: nfs
+      namespace: nfs
     - name: volsync
   interval: 1h
   path: ./kubernetes/apps/volsync-system/volsync/sync

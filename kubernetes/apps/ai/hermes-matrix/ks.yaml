@@ -12,11 +12,13 @@ spec:
   components:
     - ../../../../components/volsync/hot
   dependsOn:
-    # Needs the main agent's API server (proxy mode forwards plaintext to it).
-    - name: hermes
     # Needs the homeserver reachable to sync.
     - name: continuwuity
       namespace: matrix
+    # Needs the main agent's API server (proxy mode forwards plaintext to it).
+    - name: hermes
+    - name: kopia
+      namespace: volsync-system
   interval: 1h
   path: ./kubernetes/apps/ai/hermes-matrix/app
   postBuild:

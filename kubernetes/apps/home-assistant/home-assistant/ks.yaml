@@ -14,6 +14,8 @@ spec:
   dependsOn:
     - name: kanidm
       namespace: security
+    - name: kopia
+      namespace: volsync-system
     - name: openebs
       namespace: openebs-system
   interval: 1h
@@ -26,7 +28,6 @@ spec:
       SUBDOMAIN: home
       OIDC_CALLBACK: /auth/openid/callback
       OIDC_SHORT_USERNAME: "true"
-
   prune: true
   sourceRef:
     kind: OCIRepository

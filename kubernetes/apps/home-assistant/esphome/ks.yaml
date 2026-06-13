@@ -12,6 +12,8 @@ spec:
   components:
     - ../../../../components/volsync/hot
   dependsOn:
+    - name: kopia
+      namespace: volsync-system
     - name: openebs
       namespace: openebs-system
   path: "./kubernetes/apps/home-assistant/esphome/app"

@@ -14,6 +14,8 @@ spec:
       namespace: database
     - name: kanidm
       namespace: security
+    - name: kopia
+      namespace: volsync-system
     - name: openebs
       namespace: openebs-system
   interval: 1h
@@ -51,3 +53,6 @@ spec:
   targetNamespace: selfhosted
   timeout: 5m
   wait: false
+  dependsOn:
+    - name: kopia
+      namespace: volsync-system

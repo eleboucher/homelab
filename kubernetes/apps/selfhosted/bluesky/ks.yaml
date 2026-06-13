@@ -16,6 +16,8 @@ spec:
       namespace: database
     - name: garage
       namespace: garage-system
+    - name: kopia
+      namespace: volsync-system
     - name: openebs
       namespace: openebs-system
   interval: 1h

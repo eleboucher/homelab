@@ -17,6 +17,8 @@ spec:
       namespace: security
     - name: keda-http-add-on
       namespace: observability
+    - name: kopia
+      namespace: volsync-system
     - name: openebs
       namespace: openebs-system
   interval: 1h

@@ -6,6 +6,8 @@ metadata:
   name: kopia
 spec:
   dependsOn:
+    - name: nfs
+      namespace: nfs
     - name: volsync
   interval: 1h
   path: ./kubernetes/apps/volsync-system/kopia/app
