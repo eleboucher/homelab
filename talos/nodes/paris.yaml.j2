@@ -11,14 +11,39 @@ machine:
     rules:
       - SUBSYSTEM=="drm", KERNEL=="renderD*", GROUP="992", MODE="0660"
 ---
-# SAMSUNG MZ7KM1T9 (1.92TB SATA SSD) is used whole-disk for the
-# OpenEBS ZFS pool (zfspv-pool) — created out-of-band, no Talos volume config.
+# 8TB SATA HDD (Seagate ST8000DM004): bulk media storage at /var/mnt/media.
 apiVersion: v1alpha1
 kind: ExistingVolumeConfig
 name: media
 discovery:
   volumeSelector:
     match: disk.transport == "sata" && disk.size > 4000000000000u
+---
+# SAMSUNG MZ7KM1T9 (1.92TB SATA SSD): partitioned into the EPHEMERAL system
+# volume (/var, which holds etcd) + a raw partition for the OpenEBS ZFS
+# data-pool, moving etcd off the consumer NVMe onto the enterprise SSD.
+# NOTE: VolumeConfig only applies when EPHEMERAL is (re)provisioned, i.e. after
+# wiping EPHEMERAL. Applying this with the pool still on the disk is inert.
+apiVersion: v1alpha1
+kind: VolumeConfig
+name: EPHEMERAL
+provisioning:
+  diskSelector:
+    match: disk.transport == "sata" && disk.size < 4000000000000u
+  maxSize: 300GiB
+  grow: false
+---
+# Raw (unformatted) partition for the ZFS data-pool; exposed at the stable path
+# /dev/disk/by-partlabel/r-data-pool. Capped so EPHEMERAL always has room
+# regardless of provisioning order.
+apiVersion: v1alpha1
+kind: RawVolumeConfig
+name: data-pool
+provisioning:
+  diskSelector:
+    match: disk.transport == "sata" && disk.size < 4000000000000u
+  maxSize: 1400GiB
+  grow: true
 ---
 apiVersion: v1alpha1
 kind: LinkAliasConfig
