@@ -8,8 +8,6 @@ spec:
     kind: OCIRepository
     name: memini
   interval: 30m
-  # The v0.2.x→v0.3.0 chart migration (bespoke → bjw-s common) changes the
-  # Deployment selector labels, which are immutable; force lets Flux replace it.
   upgrade:
     force: true
   values:
@@ -37,13 +35,9 @@ spec:
               MEMINI_WRITE_DEDUP_MIN_SCORE: "0.95"
               MEMINI_DEMOTE_AFTER: 1440h
               MEMINI_TOMBSTONE_TTL: 720h
-              # External OpenAI-compatible embeddings (TEI).
               MEMINI_EMBED_BASE_URL: http://text-embeddings-inference.ai.svc.cluster.local:8080/v1
               MEMINI_EMBED_MODEL: all-MiniLM-L6-v2
               MEMINI_EMBED_DIMS: "384"
-              # Cross-encoder recall reranking (Qwen3-Reranker-0.6B via llama-server
-              # --reranking, Cohere-style /v1/rerank). Keep query+doc within the
-              # reranker's 2048-token ubatch via MEMINI_RERANK_MAX_DOC_CHARS.
               MEMINI_RERANK: http://llama-cpp-reranker.ai.svc.cluster.local:8080/v1
               MEMINI_RERANK_MODEL: qwen3-reranker-0.6b
               MEMINI_RERANK_TOP_N: "20"
@@ -53,7 +47,6 @@ spec:
                   secretKeyRef:
                     name: memini-postgres
                     key: url
-              # Bearer token gating /v1 and /mcp (required: routes are public).
               MEMINI_API_KEY:
                 valueFrom:
                   secretKeyRef:
@@ -86,6 +79,7 @@ spec:
             backendRefs:
               - identifier: main
                 port: http
+      # Split-horizon: same host, internal gateway serves the UI (catch-all) on-LAN.
       internal:
         enabled: true
         kind: HTTPRoute
@@ -94,7 +88,7 @@ spec:
             namespace: network
             sectionName: https
         hostnames:
-          - memini-internal.erwanleboucher.dev
+          - memini.erwanleboucher.dev
         rules:
           - backendRefs:
               - identifier: main
