@@ -36,14 +36,6 @@ trusted_servers = ["bi-vibes.com", "codestorm.net"]
 registration_token = "{{ .registration_token }}"
 emergency_password = "{{ .emergency_password }}"
 
-turn_uris = [
-  "turn:turn.erwanleboucher.dev?transport=udp",
-  "turn:turn.erwanleboucher.dev?transport=tcp",
-  "turns:turn.erwanleboucher.dev?transport=udp",
-  "turns:turn.erwanleboucher.dev?transport=tcp",
-]
-turn_secret = "{{ .turn_secret }}"
-turn_ttl = 86400
 
 [global.well_known]
 client = "https://matrix.erwanleboucher.dev"
