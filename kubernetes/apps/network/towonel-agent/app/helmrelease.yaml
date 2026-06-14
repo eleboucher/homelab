@@ -9,9 +9,11 @@ spec:
     name: towonel-agent
   interval: 1h
   values:
-    replicaCount: 2
-    deploymentAnnotations:
-      reloader.stakater.com/auto: "true"
+    controllers:
+      main:
+        replicas: 2
+        annotations:
+          reloader.stakater.com/auto: "true"
     agent:
       logLevel: info
       healthPort: 9090
@@ -32,10 +34,15 @@ spec:
       inviteTokenSecret:
         name: towonel-agent-secret
         key: TOWONEL_INVITE_TOKEN
-    monitoring:
-      serviceMonitor:
+    serviceMonitor:
+      main:
         enabled: true
-        interval: 1m
+        endpoints:
+          - port: metrics
+            interval: 1m
+            scrapeTimeout: 10s
+            path: /metrics
+    monitoring:
       prometheusRule:
         enabled: true
       dashboards:
