@@ -1,5 +1,4 @@
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/helm.toolkit.fluxcd.io/helmrelease_v2.json
----
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/helm.toolkit.fluxcd.io/helmrelease_v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
@@ -14,6 +13,8 @@ spec:
     fullnameOverride: external-dns-mikrotik
     triggerLoopOnEvent: true
     policy: sync
+    extraArgs:
+      - --gateway-name=envoy-internal
     sources:
       - gateway-httproute
       - service
@@ -28,7 +29,6 @@ spec:
         memory: 128Mi
       limits:
         memory: 256Mi
-
     provider:
       name: webhook
       webhook:
@@ -40,7 +40,6 @@ spec:
             value: text
           - name: LOG_LEVEL
             value: info
-
           - name: MIKROTIK_BASEURL
             value: "https://192.168.1.2:443"
           - name: MIKROTIK_SKIP_TLS_VERIFY
