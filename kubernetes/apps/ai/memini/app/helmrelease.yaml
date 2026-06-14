@@ -8,6 +8,10 @@ spec:
     kind: OCIRepository
     name: memini
   interval: 30m
+  # The v0.2.x→v0.3.0 chart migration (bespoke → bjw-s common) changes the
+  # Deployment selector labels, which are immutable; force lets Flux replace it.
+  upgrade:
+    force: true
   values:
     global:
       fullnameOverride: *name
