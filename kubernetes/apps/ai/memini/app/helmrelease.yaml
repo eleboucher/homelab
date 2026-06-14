@@ -9,48 +9,89 @@ spec:
     name: memini
   interval: 30m
   values:
-    fullnameOverride: *name
-    backend: postgres
-    config:
-      logFormat: json
-      writeDedupMinScore: 0.95
-      demoteAfter: 1440h
-      tombstoneTTL: 720h
-    embeddings:
-      baseURL: http://text-embeddings-inference.ai.svc.cluster.local:8080/v1
-      model: all-MiniLM-L6-v2
-      dims: 384
-    # Cross-encoder recall reranking (no LLM). Qwen3-Reranker-0.6B served by
-    # llama-server --reranking exposes the Cohere-style /v1/rerank memini calls.
-    rerank:
-      mode: http://llama-cpp-reranker.ai.svc.cluster.local:8080/v1
-      model: qwen3-reranker-0.6b
-      topN: 20
-      # keep query+doc within the reranker's 2048-token ubatch, else rerank 500s.
-      maxDocChars: 4000
-    postgres:
-      dsnSecret:
-        name: memini-postgres
-        key: url
-    auth:
-      apiKeySecret:
-        name: *name
-        key: MEMINI_API_KEY
-    ui:
-      enabled: true
-    httpRoute:
-      enabled: true
-      parentRefs:
-        - name: envoy-external
-          namespace: network
-      hostnames:
-        - memini.erwanleboucher.dev
-    podSecurityContext:
-      seccompProfile:
-        type: RuntimeDefault
-    resources:
-      requests:
-        cpu: 25m
-        memory: 64Mi
-      limits:
-        memory: 256Mi
+    global:
+      fullnameOverride: *name
+    controllers:
+      main:
+        type: deployment
+        replicas: 1
+        pod:
+          securityContext:
+            seccompProfile:
+              type: RuntimeDefault
+        containers:
+          main:
+            resources:
+              requests:
+                cpu: 25m
+                memory: 64Mi
+              limits:
+                memory: 256Mi
+            env:
+              MEMINI_BACKEND: postgres
+              MEMINI_LOG_FORMAT: json
+              MEMINI_WRITE_DEDUP_MIN_SCORE: "0.95"
+              MEMINI_DEMOTE_AFTER: 1440h
+              MEMINI_TOMBSTONE_TTL: 720h
+              # External OpenAI-compatible embeddings (TEI).
+              MEMINI_EMBED_BASE_URL: http://text-embeddings-inference.ai.svc.cluster.local:8080/v1
+              MEMINI_EMBED_MODEL: all-MiniLM-L6-v2
+              MEMINI_EMBED_DIMS: "384"
+              # Cross-encoder recall reranking (Qwen3-Reranker-0.6B via llama-server
+              # --reranking, Cohere-style /v1/rerank). Keep query+doc within the
+              # reranker's 2048-token ubatch via MEMINI_RERANK_MAX_DOC_CHARS.
+              MEMINI_RERANK: http://llama-cpp-reranker.ai.svc.cluster.local:8080/v1
+              MEMINI_RERANK_MODEL: qwen3-reranker-0.6b
+              MEMINI_RERANK_TOP_N: "20"
+              MEMINI_RERANK_MAX_DOC_CHARS: "4000"
+              MEMINI_POSTGRES_DSN:
+                valueFrom:
+                  secretKeyRef:
+                    name: memini-postgres
+                    key: url
+              # Bearer token gating /v1 and /mcp (required: routes are public).
+              MEMINI_API_KEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: *name
+                    key: MEMINI_API_KEY
+    persistence:
+      data:
+        enabled: false
+    route:
+      main:
+        enabled: true
+        kind: HTTPRoute
+        parentRefs:
+          - name: envoy-external
+            namespace: network
+            sectionName: https
+        hostnames:
+          - memini.erwanleboucher.dev
+        rules:
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /v1
+              - path:
+                  type: PathPrefix
+                  value: /mcp
+              - path:
+                  type: PathPrefix
+                  value: /.well-known/
+            backendRefs:
+              - identifier: main
+                port: http
+      internal:
+        enabled: true
+        kind: HTTPRoute
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
+            sectionName: https
+        hostnames:
+          - memini-internal.erwanleboucher.dev
+        rules:
+          - backendRefs:
+              - identifier: main
+                port: http
