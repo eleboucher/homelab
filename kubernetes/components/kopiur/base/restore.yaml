@@ -7,6 +7,8 @@ metadata:
   labels:
     kustomize.toolkit.fluxcd.io/ssa: IfNotPresent
 spec:
+  credentialProjection:
+    enabled: true
   policy:
     onMissingSnapshot: Continue
   source:

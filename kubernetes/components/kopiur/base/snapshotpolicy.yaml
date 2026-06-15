@@ -6,6 +6,8 @@ metadata:
   name: "${APP}"
 spec:
   copyMethod: Snapshot
+  credentialProjection:
+    enabled: true
   repository:
     kind: ClusterRepository
     name: ${KOPIUR_REPOSITORY:=nas}
