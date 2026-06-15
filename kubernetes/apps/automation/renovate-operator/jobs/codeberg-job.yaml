@@ -18,7 +18,7 @@ spec:
     - name: RENOVATE_REDIS_URL
       value: "redis://dragonfly.database.svc:6379/3"
     - name: RENOVATE_GIT_TIMEOUT
-      value: 20m
+      value: "1200000"
   skipForks: true
   image: ghcr.io/renovatebot/renovate:43.101.1
   parallelism: 3
