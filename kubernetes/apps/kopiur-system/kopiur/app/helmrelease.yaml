@@ -10,6 +10,15 @@ spec:
     name: kopiur
   interval: 1h
   values:
+    controller:
+      extraVolumes:
+        - name: repo
+          nfs:
+            server: normandie.internal
+            path: /backups/kopiur
+      extraVolumeMounts:
+        - name: repo
+          mountPath: /repo
     grafanaDashboard:
       enabled: true
       grafanaOperator:
@@ -22,6 +31,14 @@ spec:
         enabled: true
       prometheusRule:
         enabled: true
+    podSecurityContext:
+      fsGroup: 1000
+      fsGroupChangePolicy: OnRootMismatch
+      runAsGroup: 1000
+      runAsNonRoot: true
+      runAsUser: 1000
+      seccompProfile:
+        type: RuntimeDefault
     secretProjection:
       enabled: true
     webhook:
