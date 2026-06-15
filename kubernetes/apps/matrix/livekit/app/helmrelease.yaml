@@ -93,6 +93,8 @@ spec:
             port: 8080
     route:
       app:
+        annotations:
+          gatus.home-operations.com/enabled: "false"
         hostnames:
           - livekit.erwanleboucher.dev
         parentRefs:

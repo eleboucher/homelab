@@ -82,6 +82,8 @@ spec:
       # Split-horizon: same host, internal gateway serves the UI (catch-all) on-LAN.
       internal:
         enabled: true
+        annotations:
+          gatus.home-operations.com/enabled: "false"
         kind: HTTPRoute
         parentRefs:
           - name: envoy-internal
