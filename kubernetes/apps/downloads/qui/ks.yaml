@@ -15,12 +15,12 @@ spec:
   dependsOn:
     - name: envoy-gateway
       namespace: network
+    - name: homefs
+      namespace: homefs-system
     - name: kanidm
       namespace: security
     - name: kopiur-repository
       namespace: kopiur-system
-    - name: openebs
-      namespace: openebs-system
   postBuild:
     substitute:
       APP: qui
@@ -30,6 +30,8 @@ spec:
       OIDC_LEGACY_CRYPTO: "true"
       OIDC_SHORT_USERNAME: "true"
       KOPIUR_CAPACITY: 2Gi
+      KOPIUR_SNAPSHOTCLASS: homefs-snap
+      KOPIUR_STORAGECLASS: homefs-replicated
   prune: true
   sourceRef:
     kind: OCIRepository
