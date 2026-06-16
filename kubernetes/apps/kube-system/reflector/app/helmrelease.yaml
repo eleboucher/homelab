@@ -3,9 +3,9 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: ksgate
+  name: reflector
 spec:
   chartRef:
     kind: OCIRepository
-    name: ksgate
+    name: reflector
   interval: 1h
