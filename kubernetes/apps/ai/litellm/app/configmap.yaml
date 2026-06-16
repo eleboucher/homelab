@@ -17,13 +17,9 @@ data:
 
       - model_name: qwen
         litellm_params:
-          model: openai/qwen
-          api_base: http://llama-cpp-qwen.ai:8080/v1
-          api_key: os.environ/LLAMA_API_KEY
-        model_info:
-          max_tokens: 32768
-          max_input_tokens: 32768
-          max_output_tokens: 8192
+          model: openai/qwen3.6-27b
+          api_base: os.environ/SUPER_SERVER_URL
+          api_key: os.environ/SUPER_SERVER_PASS
 
       - model_name: minimax/MiniMax-M3
         litellm_params:
