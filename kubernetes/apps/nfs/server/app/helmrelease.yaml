@@ -32,7 +32,7 @@ spec:
           app:
             image:
               repository: quay.io/aminvakil/alpine-nfs-server
-              tag: latest@sha256:9245af667027198a654a5856cf622821234b7f41420cdc2af8bd3946e0e463a3
+              tag: latest@sha256:4051cdc395da395ec42bfa473b25c69a686f75b7ebd10542afc5c0f44602e0dd
             env:
               EXPORTS_MOUNTED: "true"
             lifecycle:
