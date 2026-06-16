@@ -20,6 +20,13 @@ data:
           model: openai/qwen3.6-27b
           api_base: os.environ/SUPER_SERVER_URL
           api_key: os.environ/SUPER_SERVER_PASS
+          drop_params: true
+        model_info:
+          max_tokens: 131072
+          max_input_tokens: 131072
+          max_output_tokens: 8192
+          supports_function_calling: true
+          supports_prompt_caching: true
 
       - model_name: minimax/MiniMax-M3
         litellm_params:
@@ -46,6 +53,7 @@ data:
           model: minimax/MiniMax-M3
           api_base: https://api.minimax.io/anthropic/v1/messages
           api_key: os.environ/MINIMAX_API_KEY
+          drop_params: true
         model_info:
           mode: messages
           max_input_tokens: 1000000
@@ -77,3 +85,5 @@ data:
       - MINIMAX_API_KEY
       - REDIS_HOST
       - REDIS_PORT
+      - SUPER_SERVER_URL
+      - SUPER_SERVER_PASS
