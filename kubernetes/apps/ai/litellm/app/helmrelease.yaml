@@ -77,7 +77,7 @@ spec:
         hostnames:
           - litellm.erwanleboucher.dev
         parentRefs:
-          - name: envoy-internal
+          - name: envoy-external
             namespace: network
         rules:
           - backendRefs:
