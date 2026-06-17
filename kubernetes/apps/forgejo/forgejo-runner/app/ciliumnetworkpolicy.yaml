@@ -20,6 +20,17 @@ spec:
         - ports:
             - port: "3000"
               protocol: TCP
+    - # DNS resolution (kube-dns)
+      toEndpoints:
+        - matchLabels:
+            k8s-app: kube-dns
+            k8s:io.kubernetes.pod.namespace: kube-system
+      toPorts:
+        - ports:
+            - port: "53"
+              protocol: UDP
+            - port: "53"
+              protocol: TCP
     - # Own services via ingress gateways (e.g. git.erwanleboucher.dev)
       toEndpoints:
         - matchLabels:
