@@ -1,11 +1,11 @@
----
 # yaml-language-server: $schema=https://json.schemastore.org/kustomization
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: observability
-
 resources:
   - blackbox-exporter/ks.yaml
+  - drm-exporter/ks.yaml
+  - fluent-bit/ks.yaml
   - gatus/ks.yaml
   - github-exporter/ks.yaml
   - grafana/ks.yaml
