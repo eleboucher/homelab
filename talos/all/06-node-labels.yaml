@@ -1,4 +1,5 @@
 machine:
   nodeLabels:
     node.kubernetes.io/gpu: "true"
+    intel.feature.node.kubernetes.io/gpu: "true"
     topology.kubernetes.io/region: main

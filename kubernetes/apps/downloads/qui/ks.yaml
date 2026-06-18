@@ -8,19 +8,19 @@ metadata:
 spec:
   components:
     - ../../../../components/oidc
-    - ../../../../components/kopiur/hot
+    - ../../../../components/volsync/hot
     - ../../../../components/zeroscaler
   interval: 1h
   path: ./kubernetes/apps/downloads/qui/app
   dependsOn:
     - name: envoy-gateway
       namespace: network
-    - name: homefs
-      namespace: homefs-system
     - name: kanidm
       namespace: security
-    - name: kopiur-repository
-      namespace: kopiur-system
+    - name: kopia
+      namespace: volsync-system
+    - name: openebs
+      namespace: openebs-system
   postBuild:
     substitute:
       APP: qui
@@ -29,9 +29,8 @@ spec:
       OIDC_GROUP: admins
       OIDC_LEGACY_CRYPTO: "true"
       OIDC_SHORT_USERNAME: "true"
-      KOPIUR_CAPACITY: 2Gi
-      KOPIUR_SNAPSHOTCLASS: homefs-snap
-      KOPIUR_STORAGECLASS: homefs-replicated
+      VOLSYNC_CAPACITY: 2Gi
+      VOLSYNC_SCHEDULE: "20 1-23/2 * * *"
   prune: true
   sourceRef:
     kind: OCIRepository
