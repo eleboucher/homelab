@@ -8,7 +8,7 @@ metadata:
 spec:
   components:
     - ../../../../components/oidc/envoy
-    - ../../../../components/volsync/hot
+    - ../../../../components/kopiur/hot
     - ../../../../components/zeroscaler
   interval: 1h
   path: ./kubernetes/apps/media/bazarr/app
@@ -17,12 +17,10 @@ spec:
       namespace: network
     - name: kanidm
       namespace: security
-    - name: kopia
-      namespace: volsync-system
+    - name: kopiur-repository
+      namespace: kopiur-system
     - name: openebs
       namespace: openebs-system
-    - name: volsync
-      namespace: volsync-system
   postBuild:
     substitute:
       APP: bazarr
@@ -30,8 +28,6 @@ spec:
       OIDC_DISPLAY_NAME: Bazarr
       OIDC_GROUP: admins
       OIDC_SCOPES: '["openid", "profile"]'
-      VOLSYNC_CAPACITY: 5Gi
-      VOLSYNC_SCHEDULE: "30 1-23/2 * * *"
   prune: true
   sourceRef:
     kind: OCIRepository

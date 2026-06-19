@@ -9,3 +9,5 @@ resources:
   - ./ocirepository.yaml
   - ./prometheusrule-towonel-edge.yaml
   - ./prometheusrule-towonel-hub.yaml
+  - ./snapshotpolicy.yaml
+  - ./snapshotschedule.yaml

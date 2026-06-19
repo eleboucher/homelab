@@ -7,23 +7,21 @@ metadata:
   namespace: flux-system
 spec:
   components:
-    - ../../../../components/volsync/hot
+    - ../../../../components/kopiur/hot
     - ../../../../components/zeroscaler
   interval: 1h
   path: ./kubernetes/apps/downloads/sabnzbd/app
   dependsOn:
     - name: envoy-gateway
       namespace: network
-    - name: kopia
-      namespace: volsync-system
+    - name: kopiur-repository
+      namespace: kopiur-system
     - name: openebs
       namespace: openebs-system
   postBuild:
     substitute:
       APP: sabnzbd
       APP_NAMESPACE: downloads
-      VOLSYNC_CAPACITY: 5Gi
-      VOLSYNC_SCHEDULE: "20 1-23/2 * * *"
   prune: true
   sourceRef:
     kind: OCIRepository

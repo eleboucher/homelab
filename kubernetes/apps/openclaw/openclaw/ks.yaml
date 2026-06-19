@@ -7,12 +7,12 @@ metadata:
   namespace: flux-system
 spec:
   components:
-    - ../../../../components/volsync/hot
+    - ../../../../components/kopiur/hot
   dependsOn:
     - name: external-secrets
       namespace: security
-    - name: kopia
-      namespace: volsync-system
+    - name: kopiur-repository
+      namespace: kopiur-system
     - name: openebs
       namespace: openebs-system
   interval: 1h
@@ -21,9 +21,6 @@ spec:
     substitute:
       APP: openclaw
       APP_NAMESPACE: openclaw
-      VOLSYNC_CAPACITY: 10Gi
-      VOLSYNC_PGID: "100"
-      VOLSYNC_SCHEDULE: "0 3 * * *"
   prune: true
   sourceRef:
     kind: OCIRepository

@@ -7,15 +7,15 @@ metadata:
 spec:
   components:
     - ../../../../components/postgres/cert
-    - ../../../../components/volsync/hot
+    - ../../../../components/kopiur/hot
     - ../../../../components/oidc
   dependsOn:
     - name: cnpg-cluster
       namespace: database
     - name: kanidm
       namespace: security
-    - name: kopia
-      namespace: volsync-system
+    - name: kopiur-repository
+      namespace: kopiur-system
     - name: openebs
       namespace: openebs-system
   interval: 1h
@@ -25,7 +25,6 @@ spec:
       APP: *app
       APP_NAMESPACE: selfhosted
       SUBDOMAIN: gts
-      VOLSYNC_CAPACITY: 10Gi
       OIDC_CALLBACK: /auth/callback
       OIDC_DISABLE_PKCE: "true"
   prune: true
@@ -54,5 +53,5 @@ spec:
   timeout: 5m
   wait: false
   dependsOn:
-    - name: kopia
-      namespace: volsync-system
+    - name: kopiur-repository
+      namespace: kopiur-system

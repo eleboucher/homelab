@@ -9,13 +9,13 @@ spec:
     labels:
       app.kubernetes.io/name: sparkyfitness
   components:
-    - ../../../../components/volsync/hot
+    - ../../../../components/kopiur/hot
     - ../../../../components/postgres/pass
   dependsOn:
     - name: cnpg-cluster
       namespace: database
-    - name: kopia
-      namespace: volsync-system
+    - name: kopiur-repository
+      namespace: kopiur-system
     - name: openebs
       namespace: openebs-system
   interval: 1h
@@ -25,7 +25,6 @@ spec:
       APP: sparkyfitness
       APP_NAMESPACE: selfhosted
       APP_UID: "1000"
-      VOLSYNC_CAPACITY: 15Gi
   prune: true
   sourceRef:
     kind: OCIRepository
@@ -45,8 +44,8 @@ spec:
     labels:
       app.kubernetes.io/name: sparkyfitness
   dependsOn:
-    - name: kopia
-      namespace: volsync-system
+    - name: kopiur-repository
+      namespace: kopiur-system
     - name: sparkyfitness
   interval: 1h
   path: "./kubernetes/apps/selfhosted/sparkyfitness/app"

@@ -8,15 +8,15 @@ metadata:
 spec:
   components:
     - ../../../../components/oidc/envoy
-    - ../../../../components/volsync/hot
+    - ../../../../components/kopiur/hot
     - ../../../../components/zeroscaler
   interval: 1h
   path: ./kubernetes/apps/downloads/qbittorrent/app
   dependsOn:
     - name: kanidm
       namespace: security
-    - name: kopia
-      namespace: volsync-system
+    - name: kopiur-repository
+      namespace: kopiur-system
     - name: openebs
       namespace: openebs-system
   postBuild:
@@ -27,8 +27,6 @@ spec:
       OIDC_GROUP: admins
       OIDC_SCOPES: '["openid", "profile"]'
       SUBDOMAIN: qbit
-      VOLSYNC_CAPACITY: 5Gi
-      VOLSYNC_SCHEDULE: "30 1-23/2 * * *"
   prune: true
   sourceRef:
     kind: OCIRepository

@@ -9,7 +9,7 @@ spec:
     labels:
       app.kubernetes.io/name: paperless
   components:
-    - ../../../../components/volsync/hot
+    - ../../../../components/kopiur/hot
     - ../../../../components/oidc
     - ../../../../components/postgres/cert
     - ../../../../components/keda-http
@@ -22,8 +22,8 @@ spec:
       namespace: security
     - name: keda-http-add-on
       namespace: observability
-    - name: kopia
-      namespace: volsync-system
+    - name: kopiur-repository
+      namespace: kopiur-system
     - name: openebs
       namespace: openebs-system
   interval: 1h
@@ -35,7 +35,6 @@ spec:
       APP_UID: "1000"
       APP_GID: "65542"
       HTTP_SCALER_PORT: "8000"
-      VOLSYNC_CAPACITY: 15Gi
       OIDC_DISPLAY_NAME: "Paperless"
       OIDC_CALLBACK: /accounts/oidc/kanidm/login/callback/
       OIDC_DISABLE_PKCE: "true"

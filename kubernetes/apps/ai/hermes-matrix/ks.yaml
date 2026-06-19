@@ -10,22 +10,21 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   components:
-    - ../../../../components/volsync/hot
+    - ../../../../components/kopiur/hot
   dependsOn:
     # Needs the homeserver reachable to sync.
     - name: continuwuity
       namespace: matrix
     # Needs the main agent's API server (proxy mode forwards plaintext to it).
     - name: hermes
-    - name: kopia
-      namespace: volsync-system
+    - name: kopiur-repository
+      namespace: kopiur-system
   interval: 1h
   path: ./kubernetes/apps/ai/hermes-matrix/app
   postBuild:
     substitute:
       APP: *app
       APP_NAMESPACE: ai
-      VOLSYNC_CAPACITY: 1Gi
   prune: true
   sourceRef:
     kind: OCIRepository

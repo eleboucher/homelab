@@ -9,10 +9,10 @@ spec:
     labels:
       app.kubernetes.io/name: garage
   components:
-    - ../../../../components/volsync/hot
+    - ../../../../components/kopiur/hot
   dependsOn:
-    - name: kopia
-      namespace: volsync-system
+    - name: kopiur-repository
+      namespace: kopiur-system
     - name: openebs
       namespace: openebs-system
   interval: 1h
@@ -21,7 +21,6 @@ spec:
     substitute:
       APP: garage
       APP_NAMESPACE: garage-system
-      VOLSYNC_CAPACITY: 50Gi
   prune: true
   sourceRef:
     kind: OCIRepository

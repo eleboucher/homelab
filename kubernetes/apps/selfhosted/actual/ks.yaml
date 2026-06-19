@@ -9,10 +9,10 @@ spec:
     labels:
       app.kubernetes.io/name: actual
   components:
-    - ../../../../components/volsync/hot
+    - ../../../../components/kopiur/hot
   dependsOn:
-    - name: kopia
-      namespace: volsync-system
+    - name: kopiur-repository
+      namespace: kopiur-system
     - name: openebs
       namespace: openebs-system
   interval: 1h

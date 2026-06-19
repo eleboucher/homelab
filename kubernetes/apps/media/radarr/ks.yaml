@@ -8,7 +8,7 @@ metadata:
 spec:
   components:
     - ../../../../components/oidc/envoy
-    - ../../../../components/volsync/hot
+    - ../../../../components/kopiur/hot
     - ../../../../components/zeroscaler
   interval: 1h
   path: ./kubernetes/apps/media/radarr/app
@@ -17,8 +17,8 @@ spec:
       namespace: network
     - name: kanidm
       namespace: security
-    - name: kopia
-      namespace: volsync-system
+    - name: kopiur-repository
+      namespace: kopiur-system
     - name: openebs
       namespace: openebs-system
   postBuild:
@@ -28,8 +28,6 @@ spec:
       OIDC_DISPLAY_NAME: Radarr
       OIDC_GROUP: admins
       OIDC_SCOPES: '["openid", "profile"]'
-      VOLSYNC_CAPACITY: 5Gi
-      VOLSYNC_SCHEDULE: "10 1-23/2 * * *"
   prune: true
   sourceRef:
     kind: OCIRepository

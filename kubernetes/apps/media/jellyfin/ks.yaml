@@ -9,23 +9,21 @@ spec:
   components:
     - ../../../../components/gpu
     - ../../../../components/oidc
-    - ../../../../components/volsync/hot
+    - ../../../../components/kopiur/hot
     - ../../../../components/zeroscaler
   interval: 1h
   path: ./kubernetes/apps/media/jellyfin/app
   dependsOn:
     - name: envoy-gateway
       namespace: network
-    - name: kopia
-      namespace: volsync-system
+    - name: kopiur-repository
+      namespace: kopiur-system
     - name: openebs
       namespace: openebs-system
   postBuild:
     substitute:
       APP: jellyfin
       APP_NAMESPACE: media
-      VOLSYNC_CAPACITY: 10Gi
-      VOLSYNC_SCHEDULE: "50 1-23/2 * * *"
       OIDC_DISPLAY_NAME: "Jellyfin"
       SUBDOMAIN: "watch"
       OIDC_CALLBACK: /sso/OID/redirect/kanidm

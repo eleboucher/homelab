@@ -7,10 +7,10 @@ metadata:
   namespace: flux-system
 spec:
   components:
-    - ../../../../components/volsync/hot
+    - ../../../../components/kopiur/hot
   dependsOn:
-    - name: kopia
-      namespace: volsync-system
+    - name: kopiur-repository
+      namespace: kopiur-system
     - name: litellm
     - name: openebs
       namespace: openebs-system
@@ -20,7 +20,6 @@ spec:
     substitute:
       APP: hermes
       APP_NAMESPACE: ai
-      VOLSYNC_CAPACITY: 20Gi
   prune: true
   sourceRef:
     kind: OCIRepository

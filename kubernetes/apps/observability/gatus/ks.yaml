@@ -8,10 +8,10 @@ spec:
   interval: 1h
   path: ./kubernetes/apps/observability/gatus/app
   components:
-    - ../../../../components/volsync/hot
+    - ../../../../components/kopiur/hot
   dependsOn:
-    - name: kopia
-      namespace: volsync-system
+    - name: kopiur-repository
+      namespace: kopiur-system
     - name: openebs
       namespace: openebs-system
   postBuild:

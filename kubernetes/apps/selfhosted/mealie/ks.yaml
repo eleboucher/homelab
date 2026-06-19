@@ -8,7 +8,7 @@ spec:
   components:
     - ../../../../components/oidc
     - ../../../../components/postgres/cert
-    - ../../../../components/volsync/hot
+    - ../../../../components/kopiur/hot
     - ../../../../components/keda-http
   dependsOn:
     - name: cnpg-cluster
@@ -17,8 +17,8 @@ spec:
       namespace: security
     - name: keda-http-add-on
       namespace: observability
-    - name: kopia
-      namespace: volsync-system
+    - name: kopiur-repository
+      namespace: kopiur-system
     - name: openebs
       namespace: openebs-system
   interval: 1h
@@ -32,7 +32,6 @@ spec:
       OIDC_DISPLAY_NAME: Mealie
       OIDC_LEGACY_CRYPTO: "true"
       OIDC_SHORT_USERNAME: "true"
-      VOLSYNC_CAPACITY: 2Gi
   prune: true
   sourceRef:
     kind: OCIRepository

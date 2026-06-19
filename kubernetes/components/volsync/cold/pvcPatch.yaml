@@ -1,7 +1,0 @@
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: "${APP}"
-  annotations:
-    volsync.backube/use-copy-trigger: ""

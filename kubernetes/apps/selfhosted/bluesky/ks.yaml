@@ -10,14 +10,14 @@ spec:
       app.kubernetes.io/name: bluesky
   components:
     - ../../../../components/postgres/cert
-    - ../../../../components/volsync/hot
+    - ../../../../components/kopiur/hot
   dependsOn:
     - name: cnpg-cluster
       namespace: database
     - name: garage
       namespace: garage-system
-    - name: kopia
-      namespace: volsync-system
+    - name: kopiur-repository
+      namespace: kopiur-system
     - name: openebs
       namespace: openebs-system
   interval: 1h
@@ -26,7 +26,6 @@ spec:
     substitute:
       APP: bluesky
       APP_NAMESPACE: selfhosted
-      VOLSYNC_CAPACITY: 5Gi
   prune: true
   sourceRef:
     kind: OCIRepository

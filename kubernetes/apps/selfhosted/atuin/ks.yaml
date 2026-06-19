@@ -9,10 +9,10 @@ spec:
     labels:
       app.kubernetes.io/name: atuin
   components:
-    - ../../../../components/volsync/hot
+    - ../../../../components/kopiur/hot
   dependsOn:
-    - name: kopia
-      namespace: volsync-system
+    - name: kopiur-repository
+      namespace: kopiur-system
     - name: openebs
       namespace: openebs-system
   interval: 1h
@@ -21,8 +21,6 @@ spec:
     substitute:
       APP: atuin
       APP_NAMESPACE: selfhosted
-      VOLSYNC_CAPACITY: 5Gi
-      VOLSYNC_SCHEDULE: "40 1-23/2 * * *"
   prune: true
   sourceRef:
     kind: OCIRepository

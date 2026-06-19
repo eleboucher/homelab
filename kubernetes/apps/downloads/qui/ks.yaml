@@ -8,7 +8,7 @@ metadata:
 spec:
   components:
     - ../../../../components/oidc
-    - ../../../../components/volsync/hot
+    - ../../../../components/kopiur/hot
     - ../../../../components/zeroscaler
   interval: 1h
   path: ./kubernetes/apps/downloads/qui/app
@@ -17,8 +17,8 @@ spec:
       namespace: network
     - name: kanidm
       namespace: security
-    - name: kopia
-      namespace: volsync-system
+    - name: kopiur-repository
+      namespace: kopiur-system
     - name: openebs
       namespace: openebs-system
   postBuild:
@@ -29,8 +29,6 @@ spec:
       OIDC_GROUP: admins
       OIDC_LEGACY_CRYPTO: "true"
       OIDC_SHORT_USERNAME: "true"
-      VOLSYNC_CAPACITY: 2Gi
-      VOLSYNC_SCHEDULE: "20 1-23/2 * * *"
   prune: true
   sourceRef:
     kind: OCIRepository

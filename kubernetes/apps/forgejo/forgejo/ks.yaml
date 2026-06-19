@@ -11,7 +11,7 @@ spec:
   components:
     - ../../../../components/anubis
     - ../../../../components/postgres/cert
-    - ../../../../components/volsync/hot
+    - ../../../../components/kopiur/hot
     - ../../../../components/oidc
   dependsOn:
     - name: cnpg-cluster
@@ -20,8 +20,8 @@ spec:
       namespace: database
     - name: kanidm
       namespace: security
-    - name: kopia
-      namespace: volsync-system
+    - name: kopiur-repository
+      namespace: kopiur-system
     - name: openebs
       namespace: openebs-system
   interval: 1h
@@ -31,7 +31,6 @@ spec:
       APP: forgejo
       ANUBIS_TARGET: "http://forgejo-http.forgejo.svc:3000"
       APP_NAMESPACE: forgejo
-      VOLSYNC_CAPACITY: 50Gi
       OIDC_CALLBACK: /user/oauth2/kanidm/callback
       SUBDOMAIN: git
       OIDC_CLIENT_ID_KEY: key

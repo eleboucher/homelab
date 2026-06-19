@@ -10,10 +10,10 @@ spec:
       app.kubernetes.io/name: esphome
   interval: 1h
   components:
-    - ../../../../components/volsync/hot
+    - ../../../../components/kopiur/hot
   dependsOn:
-    - name: kopia
-      namespace: volsync-system
+    - name: kopiur-repository
+      namespace: kopiur-system
     - name: openebs
       namespace: openebs-system
   path: "./kubernetes/apps/home-assistant/esphome/app"

@@ -9,13 +9,13 @@ spec:
     labels:
       app.kubernetes.io/name: home-assistant
   components:
-    - ../../../../components/volsync/hot
+    - ../../../../components/kopiur/hot
     - ../../../../components/oidc
   dependsOn:
     - name: kanidm
       namespace: security
-    - name: kopia
-      namespace: volsync-system
+    - name: kopiur-repository
+      namespace: kopiur-system
     - name: openebs
       namespace: openebs-system
   interval: 1h
@@ -24,7 +24,6 @@ spec:
     substitute:
       APP: home-assistant
       APP_NAMESPACE: home-assistant
-      VOLSYNC_CAPACITY: 10Gi
       SUBDOMAIN: home
       OIDC_CALLBACK: /auth/openid/callback
       OIDC_SHORT_USERNAME: "true"

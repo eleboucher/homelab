@@ -9,7 +9,7 @@ spec:
     labels:
       app.kubernetes.io/name: open-webui
   components:
-    - ../../../../components/volsync/hot
+    - ../../../../components/kopiur/hot
     - ../../../../components/oidc
     - ../../../../components/keda-http
   dependsOn:
@@ -17,8 +17,8 @@ spec:
       namespace: security
     - name: keda-http-add-on
       namespace: observability
-    - name: kopia
-      namespace: volsync-system
+    - name: kopiur-repository
+      namespace: kopiur-system
     - name: openebs
       namespace: openebs-system
   healthCheckExprs:

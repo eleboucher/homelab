@@ -7,14 +7,14 @@ spec:
   components:
     - ../../../../components/anubis
     - ../../../../components/postgres/pass
-    - ../../../../components/volsync/hot
+    - ../../../../components/kopiur/hot
   dependsOn:
     - name: cnpg-cluster
       namespace: database
     - name: dragonfly-operator
       namespace: dragonfly-system
-    - name: kopia
-      namespace: volsync-system
+    - name: kopiur-repository
+      namespace: kopiur-system
     - name: openebs
       namespace: openebs-system
   healthCheckExprs:
@@ -29,9 +29,6 @@ spec:
       APP: *app
       ANUBIS_TARGET: http://piefed-app.selfhosted.svc:5000
       APP_NAMESPACE: selfhosted
-      VOLSYNC_CAPACITY: 20Gi
-      VOLSYNC_PUID: "1000"
-      VOLSYNC_PGID: "1000"
   prune: true
   sourceRef:
     kind: OCIRepository
@@ -48,8 +45,8 @@ metadata:
   name: photon
 spec:
   dependsOn:
-    - name: kopia
-      namespace: volsync-system
+    - name: kopiur-repository
+      namespace: kopiur-system
     - name: piefed
       namespace: selfhosted
   interval: 1h
