@@ -88,7 +88,7 @@ spec:
   tcpKeepalive: {}
   timeout:
     http:
-      connectionIdleTimeout: 15s
+      connectionIdleTimeout: 5m
       requestTimeout: 0s
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/gateway.envoyproxy.io/clienttrafficpolicy_v1alpha1.json
