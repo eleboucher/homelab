@@ -2,19 +2,17 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: homefs
+  name: miroir
 spec:
   interval: 1h
   chartRef:
     kind: OCIRepository
-    name: homefs
+    name: miroir
   install:
     crds: CreateReplace
   upgrade:
     crds: CreateReplace
   values:
-    image:
-      tag: main@sha256:2fb96903582578faa9f96a5014a1b4744e23353c8b8a3b00220c460975105aeb
     nodes:
       kharkiv:
         backend: lvmthin
@@ -24,13 +22,13 @@ spec:
         zfsDataset: data-pool/homefs
     storageClass:
       create: true
-      name: homefs-local
+      name: miroir-local
       isDefault: false
     replicatedStorageClass:
       create: true
-      name: homefs-replicated
+      name: miroir-replicated
       isDefault: false
       quorum: last-man-standing
     volumeSnapshotClass:
       create: true
-      name: homefs-snap
+      name: miroir-snap

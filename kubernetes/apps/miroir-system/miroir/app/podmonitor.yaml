@@ -3,13 +3,13 @@
 apiVersion: monitoring.coreos.com/v1
 kind: PodMonitor
 metadata:
-  name: homefs
+  name: miroir
   labels:
-    metrics: homefs
+    metrics: miroir
 spec:
   selector:
     matchLabels:
-      app.kubernetes.io/name: homefs
+      app.kubernetes.io/name: miroir
   podTargetLabels:
     - app.kubernetes.io/component
   podMetricsEndpoints:
