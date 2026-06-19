@@ -19,6 +19,9 @@ spec:
       extraVolumeMounts:
         - name: repo
           mountPath: /repo
+    features:
+      credentialProjection:
+        enabled: true
     grafanaDashboard:
       enabled: true
       grafanaOperator:
@@ -39,8 +42,6 @@ spec:
       runAsUser: 1000
       seccompProfile:
         type: RuntimeDefault
-    secretProjection:
-      enabled: true
     webhook:
       tls:
         mode: self
