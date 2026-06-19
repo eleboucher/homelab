@@ -15,6 +15,16 @@ spec:
       value: "true"
     - name: RENOVATE_REDIS_URL
       value: "redis://dragonfly.database.svc:6379/2"
+    - name: RENOVATE_REPOSITORY_CACHE
+      value: enabled
+    - name: RENOVATE_REPOSITORY_CACHE_TYPE
+      value: "s3://renovate/homelab"
+    - name: RENOVATE_S3_ENDPOINT
+      value: "http://garage.garage-system.svc.cluster.local:3900"
+    - name: RENOVATE_S3_PATH_STYLE
+      value: "true"
+    - name: AWS_REGION
+      value: us-east-1
   image: ghcr.io/renovatebot/renovate:43.101.1
   parallelism: 3
   resources:

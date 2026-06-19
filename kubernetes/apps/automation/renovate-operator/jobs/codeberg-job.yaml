@@ -19,6 +19,16 @@ spec:
       value: "redis://dragonfly.database.svc:6379/3"
     - name: RENOVATE_GIT_TIMEOUT
       value: "1200000"
+    - name: RENOVATE_REPOSITORY_CACHE
+      value: enabled
+    - name: RENOVATE_REPOSITORY_CACHE_TYPE
+      value: "s3://renovate/codeberg"
+    - name: RENOVATE_S3_ENDPOINT
+      value: "http://garage.garage-system.svc.cluster.local:3900"
+    - name: RENOVATE_S3_PATH_STYLE
+      value: "true"
+    - name: AWS_REGION
+      value: us-east-1
   skipForks: true
   image: ghcr.io/renovatebot/renovate:43.101.1
   parallelism: 3
