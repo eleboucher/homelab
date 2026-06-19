@@ -8,6 +8,9 @@ spec:
   copyMethod: Snapshot
   credentialProjection:
     enabled: true
+  files:
+    ignoreRules:
+      - /cache
   repository:
     kind: ClusterRepository
     name: nas
