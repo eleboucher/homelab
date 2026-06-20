@@ -40,10 +40,14 @@ spec:
     supplementalGroups:
       - 44
       - 992
+  # llama.cpp splits contextSize across parallelSlots, so per-slot ctx =
+  # 8192/2 = 4096 tokens — above memini's longest document (~2k tokens). uBatch
+  # must hold a whole sequence for last-token pooling, so it matches the per-slot
+  # ctx. (parallelSlots 8 gave 1024/slot, which rejected longer memories.)
   contextSize: 8192
-  parallelSlots: 8
+  parallelSlots: 2
   batchSize: 8192
-  uBatchSize: 2048
+  uBatchSize: 4096
   resources:
     gpu: 1
     cpu: 100m
