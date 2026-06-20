@@ -47,7 +47,7 @@ spec:
   resources:
     gpu: 1
     cpu: 100m
-    memory: 6Gi
+    memory: 2Gi
   extraArgs:
     # Qwen3-Reranker needs rank pooling; --reranking + --pooling rank exposes
     # the Cohere-style /v1/rerank endpoint memini calls.
