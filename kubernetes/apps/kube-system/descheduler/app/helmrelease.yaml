@@ -32,7 +32,7 @@ spec:
                   pods: 30
                 targetThresholds:
                   cpu: 80
-                  memory: 90
+                  memory: 95
                   pods: 80
                 evictionLimits:
                   node: 5
