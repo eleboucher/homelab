@@ -8,7 +8,7 @@ metadata:
 spec:
   dependsOn:
     - name: llmkube
-      namespace: flux-system
+      namespace: ai
   interval: 1h
   path: ./kubernetes/apps/ai/llama-cpp-reranker/app
   prune: true
