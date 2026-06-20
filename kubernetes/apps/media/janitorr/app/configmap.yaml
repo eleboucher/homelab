@@ -79,8 +79,3 @@ data:
         enabled: true
         url: "http://jellyseerr:5055"
         match-server: false
-
-      streamystats:
-        enabled: true
-        whole-tv-show: false
-        url: "http://streamystats-job-server:80"
