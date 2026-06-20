@@ -12,6 +12,10 @@ spec:
   nodeSelector:
     kubernetes.io/hostname: paris
   podSecurityContext:
+    # 102 = curlimages/curl curl_group GID; makes the /models emptyDir
+    # writable by the model-downloader init container (we override the
+    # chart's default fsGroup by supplying podSecurityContext).
+    fsGroup: 102
     supplementalGroups:
       - 44
       - 992
