@@ -29,6 +29,9 @@ spec:
       APP: *app
       ANUBIS_TARGET: http://piefed-app.selfhosted.svc:5000
       APP_NAMESPACE: selfhosted
+      KOPIUR_CAPACITY: 20Gi
+      KOPIUR_SNAPSHOTCLASS: miroir-snap
+      KOPIUR_STORAGECLASS: miroir-replicated
   prune: true
   sourceRef:
     kind: OCIRepository

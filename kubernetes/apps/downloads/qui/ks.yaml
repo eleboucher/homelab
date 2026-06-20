@@ -25,6 +25,9 @@ spec:
     substitute:
       APP: qui
       APP_NAMESPACE: downloads
+      KOPIUR_CAPACITY: 2Gi
+      KOPIUR_SNAPSHOTCLASS: miroir-snap
+      KOPIUR_STORAGECLASS: miroir-replicated
       OIDC_CALLBACK: /api/auth/oidc/callback
       OIDC_GROUP: admins
       OIDC_LEGACY_CRYPTO: "true"
