@@ -24,18 +24,6 @@ spec:
                     - FailedBarePods
                     - PodsWithLocalStorage
                     - SystemCriticalPods
-            - name: LowNodeUtilization
-              args:
-                thresholds:
-                  cpu: 30
-                  memory: 50
-                  pods: 30
-                targetThresholds:
-                  cpu: 80
-                  memory: 95
-                  pods: 80
-                evictionLimits:
-                  node: 5
             - name: RemoveFailedPods
               args:
                 reasons:
@@ -58,7 +46,6 @@ spec:
           plugins:
             balance:
               enabled:
-                - LowNodeUtilization
                 - RemovePodsViolatingTopologySpreadConstraint
             deschedule:
               enabled:
