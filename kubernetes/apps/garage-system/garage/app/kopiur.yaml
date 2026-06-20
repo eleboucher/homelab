@@ -1,0 +1,145 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/kopiur.home-operations.com/snapshotpolicy_v1alpha1.json
+# Inline kopiur: backup + restore-on-bootstrap for the operator's two volumes.
+# The operator (manual layout) adopts these PVCs via GarageNode.existingClaim.
+# node-local zfs → both PVCs pinned to paris so they + the operator pod co-locate.
+apiVersion: kopiur.home-operations.com/v1alpha1
+kind: SnapshotPolicy
+metadata:
+  name: garage-meta
+spec:
+  copyMethod: Snapshot
+  credentialProjection:
+    enabled: true
+  repository:
+    kind: ClusterRepository
+    name: nas
+  retention:
+    keepHourly: 24
+    keepDaily: 7
+  sources:
+    - pvc:
+        name: garage-meta
+  volumeSnapshotClassName: openebs-snapshots
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/kopiur.home-operations.com/snapshotschedule_v1alpha1.json
+apiVersion: kopiur.home-operations.com/v1alpha1
+kind: SnapshotSchedule
+metadata:
+  name: garage-meta
+spec:
+  policyRef:
+    name: garage-meta
+  schedule:
+    concurrencyPolicy: Forbid
+    cron: "0 */12 * * *"
+    runOnCreate: false
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/kopiur.home-operations.com/restore_v1alpha1.json
+apiVersion: kopiur.home-operations.com/v1alpha1
+kind: Restore
+metadata:
+  name: garage-meta-restore
+  labels:
+    kustomize.toolkit.fluxcd.io/ssa: IfNotPresent
+spec:
+  credentialProjection:
+    enabled: true
+  policy:
+    onMissingSnapshot: Continue
+  source:
+    fromPolicy:
+      name: garage-meta
+      offset: 0
+  target:
+    populator: {}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: garage-meta
+  labels:
+    kustomize.toolkit.fluxcd.io/ssa: IfNotPresent
+  annotations:
+    volume.kubernetes.io/selected-node: paris
+spec:
+  accessModes: [ReadWriteOnce]
+  dataSourceRef:
+    apiGroup: kopiur.home-operations.com
+    kind: Restore
+    name: garage-meta-restore
+  resources:
+    requests:
+      storage: 5Gi
+  storageClassName: openebs-zfs
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/kopiur.home-operations.com/snapshotpolicy_v1alpha1.json
+apiVersion: kopiur.home-operations.com/v1alpha1
+kind: SnapshotPolicy
+metadata:
+  name: garage-data
+spec:
+  copyMethod: Snapshot
+  credentialProjection:
+    enabled: true
+  repository:
+    kind: ClusterRepository
+    name: nas
+  retention:
+    keepHourly: 24
+    keepDaily: 7
+  sources:
+    - pvc:
+        name: garage-data
+  volumeSnapshotClassName: openebs-snapshots
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/kopiur.home-operations.com/snapshotschedule_v1alpha1.json
+apiVersion: kopiur.home-operations.com/v1alpha1
+kind: SnapshotSchedule
+metadata:
+  name: garage-data
+spec:
+  policyRef:
+    name: garage-data
+  schedule:
+    concurrencyPolicy: Forbid
+    cron: "0 */12 * * *"
+    runOnCreate: false
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/kopiur.home-operations.com/restore_v1alpha1.json
+apiVersion: kopiur.home-operations.com/v1alpha1
+kind: Restore
+metadata:
+  name: garage-data-restore
+  labels:
+    kustomize.toolkit.fluxcd.io/ssa: IfNotPresent
+spec:
+  credentialProjection:
+    enabled: true
+  policy:
+    onMissingSnapshot: Continue
+  source:
+    fromPolicy:
+      name: garage-data
+      offset: 0
+  target:
+    populator: {}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: garage-data
+  labels:
+    kustomize.toolkit.fluxcd.io/ssa: IfNotPresent
+  annotations:
+    volume.kubernetes.io/selected-node: paris
+spec:
+  accessModes: [ReadWriteOnce]
+  dataSourceRef:
+    apiGroup: kopiur.home-operations.com
+    kind: Restore
+    name: garage-data-restore
+  resources:
+    requests:
+      storage: 50Gi
+  storageClassName: openebs-zfs

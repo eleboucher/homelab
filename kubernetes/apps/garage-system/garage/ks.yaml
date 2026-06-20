@@ -8,19 +8,15 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: garage
-  components:
-    - ../../../../components/kopiur/hot
   dependsOn:
+    - name: garage-operator
+      namespace: garage-system
     - name: kopiur-repository
       namespace: kopiur-system
     - name: openebs
       namespace: openebs-system
   interval: 1h
   path: "./kubernetes/apps/garage-system/garage/app"
-  postBuild:
-    substitute:
-      APP: garage
-      APP_NAMESPACE: garage-system
   prune: true
   sourceRef:
     kind: OCIRepository

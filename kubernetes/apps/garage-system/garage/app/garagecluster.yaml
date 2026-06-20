@@ -1,0 +1,49 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/garage.rajsingh.info/garagecluster_v1beta2.json
+apiVersion: garage.rajsingh.info/v1beta2
+kind: GarageCluster
+metadata:
+  name: garage
+spec:
+  image: dxflrs/garage:v2.3.0
+  layoutPolicy: Manual
+  replication:
+    factor: 1
+  database:
+    engine: lmdb
+  s3Api:
+    region: us-east-1
+    rootDomain: .s3.erwanleboucher.dev
+  network:
+    rpcSecretRef:
+      name: garage-operator-secret
+      key: rpc-secret
+  admin:
+    adminTokenSecretRef:
+      name: garage-operator-secret
+      key: admin-token
+    metricsTokenSecretRef:
+      name: garage-operator-secret
+      key: metrics-token
+  storage:
+    replicas: 1
+    metadata:
+      size: 5Gi
+    data:
+      size: 50Gi
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/garage.rajsingh.info/garagenode_v1beta1.json
+apiVersion: garage.rajsingh.info/v1beta1
+kind: GarageNode
+metadata:
+  name: garage-node0
+spec:
+  clusterRef:
+    name: garage
+  zone: us-east-1
+  capacity: 50Gi
+  storage:
+    metadata:
+      existingClaim: garage-meta
+    data:
+      existingClaim: garage-data

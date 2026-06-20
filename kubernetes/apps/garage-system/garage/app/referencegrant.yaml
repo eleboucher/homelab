@@ -1,0 +1,25 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/garage.rajsingh.info/garagereferencegrant_v1beta1.json
+# Authorizes the consuming apps' namespaces to reference this cluster
+# cross-namespace via their co-located GarageBucket/GarageKey resources.
+apiVersion: garage.rajsingh.info/v1beta1
+kind: GarageReferenceGrant
+metadata:
+  name: allow-app-refs
+spec:
+  from:
+    - kind: GarageBucket
+      namespace: selfhosted
+    - kind: GarageKey
+      namespace: selfhosted
+    - kind: GarageBucket
+      namespace: automation
+    - kind: GarageKey
+      namespace: automation
+    - kind: GarageBucket
+      namespace: forgejo
+    - kind: GarageKey
+      namespace: forgejo
+  to:
+    - kind: GarageCluster
+      name: garage
