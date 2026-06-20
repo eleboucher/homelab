@@ -1,0 +1,64 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/inference.llmkube.dev/inferenceservice_v1alpha1.json
+apiVersion: inference.llmkube.dev/v1alpha1
+kind: InferenceService
+metadata:
+  name: llama-cpp-reranker
+spec:
+  modelRef: qwen3-reranker-0.6b
+  runtime: llamacpp
+  image: ghcr.io/ggml-org/llama.cpp:server-vulkan-b9717@sha256:a7db9813b9cefa87d0d536272c146d18e85a9fda1f2e4764ccd0065b65c5b265
+  replicas: 1
+  nodeSelector:
+    kubernetes.io/hostname: paris
+  podSecurityContext:
+    supplementalGroups:
+      - 44
+      - 992
+  contextSize: 8192
+  parallelSlots: 8
+  batchSize: 8192
+  # 2048 (not 8192) keeps the compute-buffer RAM burst under the memory limit;
+  # query+doc must fit this budget or rerank 500s (see memini maxDocChars).
+  uBatchSize: 2048
+  resources:
+    gpu: 1
+    cpu: 100m
+    memory: 6Gi
+  extraArgs:
+    # Qwen3-Reranker needs rank pooling; --reranking + --pooling rank exposes
+    # the Cohere-style /v1/rerank endpoint memini calls.
+    - --reranking
+    - --pooling
+    - rank
+    - --embedding
+    - --cache-ram
+    - "0"
+    - --no-mmap
+    - --sleep-idle-seconds
+    - "300"
+    - --alias
+    - qwen3-reranker-0.6b
+    - --metrics
+  endpoint:
+    port: 8080
+    type: ClusterIP
+  probeOverrides:
+    startup:
+      httpGet:
+        path: /health
+        port: 8080
+      periodSeconds: 10
+      failureThreshold: 60
+    liveness:
+      httpGet:
+        path: /health
+        port: 8080
+      periodSeconds: 30
+      failureThreshold: 3
+    readiness:
+      httpGet:
+        path: /health
+        port: 8080
+      periodSeconds: 10
+      failureThreshold: 3

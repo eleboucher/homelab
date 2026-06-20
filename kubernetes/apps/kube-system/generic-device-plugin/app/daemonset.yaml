@@ -1,0 +1,64 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/apps/daemonset_v1.json
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: generic-device-plugin
+  labels:
+    app.kubernetes.io/name: generic-device-plugin
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: generic-device-plugin
+  updateStrategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: generic-device-plugin
+    spec:
+      priorityClassName: system-node-critical
+      tolerations:
+        - operator: Exists
+          effect: NoExecute
+        - operator: Exists
+          effect: NoSchedule
+      containers:
+        - name: generic-device-plugin
+          image: ghcr.io/squat/generic-device-plugin:0.2.0@sha256:66c8d5c270eb2b721f1064c549b9b7898152a6d2f0163380a5d37dc7636c20ff
+          args:
+            # Advertise the DRI render node as a shareable resource
+            # (devic.es/dri-render). count:10 hands the same /dev/dri/renderD128
+            # to up to 10 pods so GPU workloads multiplex the device at the
+            # kernel level instead of claiming it exclusively via DRA — this is
+            # how the reranker shares the Arc B580 with Jellyfin.
+            - --device
+            - |
+              name: dri-render
+              groups:
+                - count: 10
+                  paths:
+                    - path: /dev/dri/renderD128
+          resources:
+            requests:
+              cpu: 50m
+              memory: 10Mi
+            limits:
+              memory: 20Mi
+          securityContext:
+            privileged: true
+          ports:
+            - name: http
+              containerPort: 8080
+          volumeMounts:
+            - name: device-plugin
+              mountPath: /var/lib/kubelet/device-plugins
+            - name: dev
+              mountPath: /dev
+      volumes:
+        - name: device-plugin
+          hostPath:
+            path: /var/lib/kubelet/device-plugins
+        - name: dev
+          hostPath:
+            path: /dev
