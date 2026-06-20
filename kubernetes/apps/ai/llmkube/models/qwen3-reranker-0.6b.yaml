@@ -1,0 +1,87 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/inference.llmkube.dev/model_v1alpha1.json
+apiVersion: inference.llmkube.dev/v1alpha1
+kind: Model
+metadata:
+  name: qwen3-reranker-0.6b
+spec:
+  format: gguf
+  hardware:
+    accelerator: vulkan
+    gpu:
+      count: 1
+      enabled: true
+      layers: 99
+      # Shareable /dev/dri render node advertised by generic-device-plugin,
+      # so the reranker multiplexes the Arc B580 with the embedding workload
+      # and Jellyfin (DRA can't share this device — it has no allowMultipleAllocations).
+      resourceName: devic.es/dri-render
+      vendor: intel
+  quantization: Q4_K_M
+  source: https://huggingface.co/Voodisss/Qwen3-Reranker-0.6B-GGUF-llama_cpp/resolve/main/Qwen3-Reranker-0.6B-Q4_K_M.gguf
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/inference.llmkube.dev/inferenceservice_v1alpha1.json
+apiVersion: inference.llmkube.dev/v1alpha1
+kind: InferenceService
+metadata:
+  name: qwen3-reranker-0.6b
+spec:
+  modelRef: qwen3-reranker-0.6b
+  runtime: llamacpp
+  image: ghcr.io/ggml-org/llama.cpp:server-vulkan-b9737@sha256:2c7bf6f374d0674bbc4f6e2a2a4d2c33909952d8219743966ba98ecd3f6d5d33
+  replicas: 1
+  nodeSelector:
+    kubernetes.io/hostname: paris
+  podSecurityContext:
+    # 102 = curlimages/curl curl_group GID; makes the /models emptyDir
+    # writable by the model-downloader init container (we override the
+    # chart's default fsGroup by supplying podSecurityContext).
+    fsGroup: 102
+    supplementalGroups:
+      - 44
+      - 992
+  contextSize: 8192
+  parallelSlots: 8
+  batchSize: 8192
+  uBatchSize: 2048
+  resources:
+    gpu: 1
+    cpu: 100m
+    memory: 6Gi
+  extraArgs:
+    # Qwen3-Reranker needs rank pooling; --reranking + --pooling rank exposes
+    # the Cohere-style /v1/rerank endpoint memini calls.
+    - --reranking
+    - --pooling
+    - rank
+    - --embedding
+    - --cache-ram
+    - "0"
+    - --no-mmap
+    - --sleep-idle-seconds
+    - "300"
+    - --alias
+    - qwen3-reranker-0.6b
+    - --metrics
+  endpoint:
+    port: 8080
+    type: ClusterIP
+  probeOverrides:
+    startup:
+      httpGet:
+        path: /health
+        port: 8080
+      periodSeconds: 10
+      failureThreshold: 60
+    liveness:
+      httpGet:
+        path: /health
+        port: 8080
+      periodSeconds: 30
+      failureThreshold: 3
+    readiness:
+      httpGet:
+        path: /health
+        port: 8080
+      periodSeconds: 10
+      failureThreshold: 3

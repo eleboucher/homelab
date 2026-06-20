@@ -8,8 +8,8 @@ resources:
   - hermes-matrix/ks.yaml
   - litellm/ks.yaml
   # - llama-cpp/ks.yaml
-  - llama-cpp-reranker/ks.yaml
   - llmkube/ks.yaml
+  - llmkube/models/ks.yaml
   - mcp
   - memini/ks.yaml
   - minimax-shim/ks.yaml

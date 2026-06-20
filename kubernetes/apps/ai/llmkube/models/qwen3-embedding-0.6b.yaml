@@ -1,11 +1,32 @@
 ---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/inference.llmkube.dev/model_v1alpha1.json
+apiVersion: inference.llmkube.dev/v1alpha1
+kind: Model
+metadata:
+  name: qwen3-embedding-0.6b
+spec:
+  format: gguf
+  hardware:
+    accelerator: vulkan
+    gpu:
+      count: 1
+      enabled: true
+      layers: 99
+      # Shareable /dev/dri render node advertised by generic-device-plugin,
+      # so the embedding workload multiplexes the Arc B580 with the reranker
+      # and Jellyfin (DRA can't share this device — it has no allowMultipleAllocations).
+      resourceName: devic.es/dri-render
+      vendor: intel
+  quantization: Q8_0
+  source: https://huggingface.co/Qwen/Qwen3-Embedding-0.6B-GGUF/resolve/main/Qwen3-Embedding-0.6B-Q8_0.gguf
+---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/inference.llmkube.dev/inferenceservice_v1alpha1.json
 apiVersion: inference.llmkube.dev/v1alpha1
 kind: InferenceService
 metadata:
-  name: llama-cpp-reranker
+  name: qwen3-embedding-0.6b
 spec:
-  modelRef: qwen3-reranker-0.6b
+  modelRef: qwen3-embedding-0.6b
   runtime: llamacpp
   image: ghcr.io/ggml-org/llama.cpp:server-vulkan-b9737@sha256:2c7bf6f374d0674bbc4f6e2a2a4d2c33909952d8219743966ba98ecd3f6d5d33
   replicas: 1
@@ -22,27 +43,25 @@ spec:
   contextSize: 8192
   parallelSlots: 8
   batchSize: 8192
-  # 2048 (not 8192) keeps the compute-buffer RAM burst under the memory limit;
-  # query+doc must fit this budget or rerank 500s (see memini maxDocChars).
   uBatchSize: 2048
   resources:
     gpu: 1
     cpu: 100m
     memory: 6Gi
   extraArgs:
-    # Qwen3-Reranker needs rank pooling; --reranking + --pooling rank exposes
-    # the Cohere-style /v1/rerank endpoint memini calls.
-    - --reranking
-    - --pooling
-    - rank
+    # Qwen3-Embedding uses last-token pooling with left padding;
+    # --embedding + --pooling last exposes the OpenAI-compatible
+    # /v1/embeddings endpoint.
     - --embedding
+    - --pooling
+    - last
     - --cache-ram
     - "0"
     - --no-mmap
     - --sleep-idle-seconds
     - "300"
     - --alias
-    - qwen3-reranker-0.6b
+    - qwen3-embedding-0.6b
     - --metrics
   endpoint:
     port: 8080
