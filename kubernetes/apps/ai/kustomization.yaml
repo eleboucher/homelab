@@ -12,7 +12,6 @@ resources:
   - mcp
   - memini/ks.yaml
   - minimax-shim/ks.yaml
-  - ollama/ks.yaml
   - open-webui/ks.yaml
   - text-embeddings-inference/ks.yaml
   - toolhive/ks.yaml
