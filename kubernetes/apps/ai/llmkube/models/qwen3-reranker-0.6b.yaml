@@ -40,10 +40,11 @@ spec:
     supplementalGroups:
       - 44
       - 992
+  # per-slot ctx = contextSize/parallelSlots; 2 slots = 4096, fits memini's query+doc.
   contextSize: 8192
-  parallelSlots: 8
+  parallelSlots: 2
   batchSize: 8192
-  uBatchSize: 2048
+  uBatchSize: 4096
   resources:
     gpu: 1
     cpu: 100m
