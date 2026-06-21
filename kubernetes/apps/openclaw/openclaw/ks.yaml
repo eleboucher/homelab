@@ -21,6 +21,9 @@ spec:
     substitute:
       APP: openclaw
       APP_NAMESPACE: openclaw
+      KOPIUR_CAPACITY: 10Gi
+      KOPIUR_SNAPSHOTCLASS: miroir-snap
+      KOPIUR_STORAGECLASS: miroir-replicated
   prune: true
   sourceRef:
     kind: OCIRepository

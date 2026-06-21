@@ -316,7 +316,7 @@ spec:
         accessMode: ReadWriteOnce
         forceRename: openclaw-home
         size: 20Gi
-        storageClass: openebs-zfs
+        storageClass: miroir-replicated
         globalMounts:
           - path: /home/node
       config:
