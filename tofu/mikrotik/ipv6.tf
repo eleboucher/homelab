@@ -65,7 +65,8 @@ resource "routeros_ipv6_firewall_filter" "forward_lan_to_wan" {
   chain        = "forward"
   action       = "accept"
   in_interface = "vlan10-mgmt"
-  comment      = "LAN to WAN"
+  src_address  = "2a01:e0a:e4b:aa30::/60"
+  comment      = "LAN egress (our /60)"
 
   depends_on = [routeros_ipv6_firewall_filter.forward_established]
 }
@@ -97,10 +98,29 @@ resource "routeros_ipv6_firewall_filter" "forward_vx0_to_lan" {
   depends_on = [routeros_ipv6_firewall_filter.input_link_local]
 }
 
+resource "routeros_ipv6_firewall_filter" "forward_icmpv6" {
+  chain    = "forward"
+  action   = "accept"
+  protocol = "icmpv6"
+  comment  = "ICMPv6 forward"
+
+  depends_on = [routeros_ipv6_firewall_filter.forward_vx0_to_lan]
+}
+
+resource "routeros_ipv6_firewall_filter" "forward_lb_inbound" {
+  chain       = "forward"
+  action      = "accept"
+  dst_address = "2a01:e0a:e4b:aa32::/64"
+  disabled    = true
+  comment     = "Inbound to cluster LB VIPs"
+
+  depends_on = [routeros_ipv6_firewall_filter.forward_icmpv6]
+}
+
 resource "routeros_ipv6_firewall_filter" "forward_drop" {
   chain   = "forward"
   action  = "drop"
   comment = "Drop rest"
 
-  depends_on = [routeros_ipv6_firewall_filter.forward_vx0_to_lan]
+  depends_on = [routeros_ipv6_firewall_filter.forward_lb_inbound]
 }
