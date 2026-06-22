@@ -219,6 +219,8 @@ spec:
             regex: ".+_node_kubevirt_io_.+"
           - action: labeldrop
             regex: "feature_node_kubernetes_io_.+"
+          - action: labeldrop
+            regex: "extensions_talos_dev_.+"
     vmalert:
       spec:
         evaluationInterval: 30s
