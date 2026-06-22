@@ -61,11 +61,12 @@ resource "routeros_routing_filter_rule" "vx0_import_reject" {
 }
 
 resource "routeros_routing_bgp_connection" "kharkiv" {
-  name          = "to-kharkiv"
-  as            = "64513"
-  instance      = routeros_routing_bgp_instance.k8s.name
-  routing_table = "main"
-  disabled      = false
+  name             = "to-kharkiv"
+  as               = "64513"
+  instance         = routeros_routing_bgp_instance.k8s.name
+  address_families = "ip,ipv6"
+  routing_table    = "main"
+  disabled         = false
 
   remote {
     address = "192.168.1.41"
@@ -90,11 +91,12 @@ resource "routeros_routing_bgp_connection" "kharkiv" {
 }
 
 resource "routeros_routing_bgp_connection" "paris" {
-  name          = "to-paris"
-  as            = "64513"
-  instance      = routeros_routing_bgp_instance.k8s.name
-  routing_table = "main"
-  disabled      = false
+  name             = "to-paris"
+  as               = "64513"
+  instance         = routeros_routing_bgp_instance.k8s.name
+  address_families = "ip,ipv6"
+  routing_table    = "main"
+  disabled         = false
 
   remote {
     address = "192.168.1.42"

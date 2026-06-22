@@ -17,6 +17,8 @@ machine:
     net.ipv4.tcp_slow_start_after_idle: "0"
     net.ipv4.tcp_window_scaling: "1"
     net.ipv4.tcp_wmem: 4096 65536 33554432
+    net.ipv6.conf.all.forwarding: "1"
+    net.ipv6.conf.bond0.accept_ra: "2"
     sunrpc.tcp_max_slot_table_entries: "128"
     sunrpc.tcp_slot_table_entries: "128"
     user.max_user_namespaces: "11255"

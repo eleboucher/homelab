@@ -58,7 +58,7 @@ spec:
         lfs:
           PATH: /data/git/lfs
         security:
-          REVERSE_PROXY_TRUSTED_PROXIES: 10.42.0.0/16
+          REVERSE_PROXY_TRUSTED_PROXIES: 10.42.0.0/16,fd42::/56
         server:
           APP_DATA_PATH: /data/gitea
           ROOT_URL: https://git.erwanleboucher.dev

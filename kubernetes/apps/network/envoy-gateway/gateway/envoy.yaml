@@ -5,6 +5,7 @@ kind: EnvoyProxy
 metadata:
   name: envoy
 spec:
+  ipFamily: DualStack
   logging:
     level:
       default: info
@@ -103,6 +104,7 @@ spec:
     xForwardedFor:
       trustedCIDRs:
         - 10.42.0.0/16
+        - fd42::/56
   headers:
     earlyRequestHeaders:
       set:

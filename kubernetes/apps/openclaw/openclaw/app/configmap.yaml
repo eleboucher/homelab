@@ -372,6 +372,6 @@ data:
         port: 18789,
         reload: { debounceMs: 300, mode: "hybrid" },
         tailscale: { mode: "off", resetOnExit: false },
-        trustedProxies: ["10.42.0.0/16", "192.168.0.0/16"],
+        trustedProxies: ["10.42.0.0/16", "192.168.0.0/16", "fd42::/56"],
       },
     }

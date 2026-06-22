@@ -5,8 +5,10 @@ cluster:
     dnsDomain: cluster.local
     podSubnets:
       - 10.42.0.0/16
+      - fd42::/56
     serviceSubnets:
       - 10.43.0.0/16
+      - fd43::/108
   discovery:
     enabled: true
     registries:

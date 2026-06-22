@@ -15,8 +15,8 @@ spec:
   infrastructure:
     annotations:
       external-dns.alpha.kubernetes.io/hostname: *hostname
-      external-dns.alpha.kubernetes.io/target: 192.168.69.126
-      lbipam.cilium.io/ips: "192.168.69.126,10.222.5.2"
+      external-dns.alpha.kubernetes.io/target: "192.168.69.126,2a01:e0a:e4b:aa32::126"
+      lbipam.cilium.io/ips: "192.168.69.126,2a01:e0a:e4b:aa32::126,10.222.5.2"
     labels:
       expose/vx0: "true"
   listeners:
