@@ -12,6 +12,7 @@ spec:
       APP: towonel-agent
       APP_NAMESPACE: network
       VPS_IP: 92.222.247.160
+      VPS_IP6: 2001:41d0:20a:900::c7e
   prune: true
   sourceRef:
     kind: OCIRepository

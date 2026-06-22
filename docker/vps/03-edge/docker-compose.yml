@@ -19,6 +19,8 @@ services:
     ports:
       - "${VPS_IP}:80:80"
       - "${VPS_IP}:443:443"
+      - "[${VPS_IP6}]:80:80"
+      - "[${VPS_IP6}]:443:443"
     volumes:
       - caddy-data:/data
       - caddy-config:/config

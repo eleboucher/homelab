@@ -49,6 +49,27 @@
       args:
         executable: /bin/bash
         creates: /usr/bin/docker
+
+    # Single public /128: containers reach v6 via NAT66 (ip6tables default on).
+    - name: network | Docker IPv6 NAT (daemon.json)
+      ansible.builtin.copy:
+        dest: /etc/docker/daemon.json
+        owner: root
+        group: root
+        mode: "0644"
+        content: |
+          {
+            "ipv6": true,
+            "fixed-cidr-v6": "fd00:d0c::/64"
+          }
+      register: docker_daemon_json
+
+    - name: network | Restart Docker to apply daemon.json
+      ansible.builtin.service:
+        name: docker
+        state: restarted
+      when: docker_daemon_json.changed
+
     - name: ssh
       block:
         - name: ssh | Harden sshd_config
@@ -108,10 +129,13 @@
       community.general.ufw:
         state: enabled
         policy: deny
+    # enable_ipv6 recreates edge only on config diff; a live recreate needs the
+    # stacks stopped first.
     - name: Create edge docker network
       community.docker.docker_network:
         name: edge
         driver: bridge
+        enable_ipv6: true
         state: present
 
     - name: Create doco-cd directory

@@ -14,35 +14,71 @@ spec:
       recordType: A
       targets:
         - ${VPS_IP}
+    - dnsName: erwanleboucher.dev
+      recordType: AAAA
+      targets:
+        - ${VPS_IP6}
     - dnsName: www.erwanleboucher.dev
       recordType: A
       targets:
         - ${VPS_IP}
+    - dnsName: www.erwanleboucher.dev
+      recordType: AAAA
+      targets:
+        - ${VPS_IP6}
     - dnsName: openpgpkey.erwanleboucher.dev
       recordType: A
       targets:
         - ${VPS_IP}
+    - dnsName: openpgpkey.erwanleboucher.dev
+      recordType: AAAA
+      targets:
+        - ${VPS_IP6}
     - dnsName: doco-cd.erwanleboucher.dev
       recordType: A
       targets:
         - ${VPS_IP}
+    - dnsName: doco-cd.erwanleboucher.dev
+      recordType: AAAA
+      targets:
+        - ${VPS_IP6}
     - dnsName: registry.erwanleboucher.dev
       recordType: A
       targets:
         - ${VPS_IP}
+    - dnsName: registry.erwanleboucher.dev
+      recordType: AAAA
+      targets:
+        - ${VPS_IP6}
     - dnsName: towonel.erwanleboucher.dev
       recordType: A
       targets:
         - ${VPS_IP}
+    - dnsName: towonel.erwanleboucher.dev
+      recordType: AAAA
+      targets:
+        - ${VPS_IP6}
     - dnsName: tunnel.erwanleboucher.dev
       recordType: A
       targets:
         - ${VPS_IP}
+    - dnsName: tunnel.erwanleboucher.dev
+      recordType: AAAA
+      targets:
+        - ${VPS_IP6}
     - dnsName: relay.towonel.erwanleboucher.dev
       recordType: A
       targets:
         - ${VPS_IP}
+    - dnsName: relay.towonel.erwanleboucher.dev
+      recordType: AAAA
+      targets:
+        - ${VPS_IP6}
     - dnsName: turn.erwanleboucher.dev
       recordType: A
       targets:
         - ${VPS_IP}
+    - dnsName: turn.erwanleboucher.dev
+      recordType: AAAA
+      targets:
+        - ${VPS_IP6}
