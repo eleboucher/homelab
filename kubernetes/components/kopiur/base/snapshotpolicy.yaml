@@ -8,6 +8,9 @@ spec:
   copyMethod: Snapshot
   credentialProjection:
     enabled: true
+  files:
+    ignoreRules:
+      - lost+found
   repository:
     kind: ClusterRepository
     name: ${KOPIUR_REPOSITORY:=nas}
