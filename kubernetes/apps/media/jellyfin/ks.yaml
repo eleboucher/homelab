@@ -24,6 +24,7 @@ spec:
     substitute:
       APP: jellyfin
       APP_NAMESPACE: media
+      KOPIUR_CAPACITY: 15Gi
       OIDC_DISPLAY_NAME: "Jellyfin"
       SUBDOMAIN: "watch"
       OIDC_CALLBACK: /sso/OID/redirect/kanidm
