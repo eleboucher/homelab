@@ -7,16 +7,7 @@ metadata:
 spec:
   format: gguf
   hardware:
-    accelerator: vulkan
-    gpu:
-      count: 1
-      enabled: true
-      layers: 99
-      # Shareable /dev/dri render node advertised by generic-device-plugin,
-      # so the embedding workload multiplexes the Arc B580 with the reranker
-      # and Jellyfin (DRA can't share this device — it has no allowMultipleAllocations).
-      resourceName: devic.es/dri-render
-      vendor: intel
+    accelerator: cpu
   quantization: Q8_0
   source: https://huggingface.co/Qwen/Qwen3-Embedding-0.6B-GGUF/resolve/main/Qwen3-Embedding-0.6B-Q8_0.gguf
 ---
@@ -28,27 +19,21 @@ metadata:
 spec:
   modelRef: qwen3-embedding-0.6b
   runtime: llamacpp
-  image: ghcr.io/ggml-org/llama.cpp:server-vulkan-b9744@sha256:c7e3aa0258d9f79f5462f3ef21368af5c3614c75459d368c7ce941b6adb42fca
+  image: ghcr.io/ggml-org/llama.cpp:server-b9744@sha256:9e2ab5775c2e9cb52ac611e506ea5b873247033aeba54d71f20d71bf7f4e219d
   replicas: 1
-  nodeSelector:
-    kubernetes.io/hostname: paris
   podSecurityContext:
     # 102 = curlimages/curl curl_group GID; makes the /models emptyDir
     # writable by the model-downloader init container (we override the
     # chart's default fsGroup by supplying podSecurityContext).
     fsGroup: 102
-    supplementalGroups:
-      - 44
-      - 992
   # per-slot ctx = contextSize/parallelSlots; 2 slots = 4096, enough for long memini docs.
   contextSize: 8192
   parallelSlots: 2
   batchSize: 8192
   uBatchSize: 4096
   resources:
-    gpu: 1
-    cpu: 100m
-    memory: 2Gi
+    cpu: "2"
+    memory: 4Gi
   extraArgs:
     # Qwen3-Embedding uses last-token pooling with left padding;
     # --embedding + --pooling last exposes the OpenAI-compatible
@@ -64,6 +49,10 @@ spec:
     - --alias
     - qwen3-embedding-0.6b
     - --metrics
+    # CPU inference: bound the thread pool so it doesn't oversubscribe the node
+    # (llama.cpp otherwise defaults to the host's full core count).
+    - --threads
+    - "8"
   endpoint:
     port: 8080
     type: ClusterIP
