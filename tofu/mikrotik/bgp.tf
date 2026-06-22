@@ -120,6 +120,66 @@ resource "routeros_routing_bgp_connection" "paris" {
   }
 }
 
+resource "routeros_routing_bgp_connection" "kharkiv_v6" {
+  name             = "to-kharkiv-v6"
+  as               = "64513"
+  instance         = routeros_routing_bgp_instance.k8s.name
+  address_families = "ipv6"
+  routing_table    = "main"
+  disabled         = false
+
+  remote {
+    address = "2a01:e0a:e4b:aa31:3a05:25ff:fe35:3b9a"
+    as      = "64514"
+  }
+
+  local {
+    role = "ebgp"
+  }
+
+  input {
+    filter = "bgp-in-cilium"
+  }
+
+  output {
+    filter_chain = "bgp-out-cilium"
+  }
+
+  lifecycle {
+    ignore_changes = [add_path_out, connect, disabled, keepalive_time, listen, local, nexthop_choice, remote]
+  }
+}
+
+resource "routeros_routing_bgp_connection" "paris_v6" {
+  name             = "to-paris-v6"
+  as               = "64513"
+  instance         = routeros_routing_bgp_instance.k8s.name
+  address_families = "ipv6"
+  routing_table    = "main"
+  disabled         = false
+
+  remote {
+    address = "2a01:e0a:e4b:aa31:c662:37ff:fe09:dfff"
+    as      = "64514"
+  }
+
+  local {
+    role = "ebgp"
+  }
+
+  input {
+    filter = "bgp-in-cilium"
+  }
+
+  output {
+    filter_chain = "bgp-out-cilium"
+  }
+
+  lifecycle {
+    ignore_changes = [add_path_out, connect, disabled, keepalive_time, listen, local, nexthop_choice, remote]
+  }
+}
+
 resource "routeros_routing_bgp_connection" "mortebrume" {
   name             = "mortebrume"
   as               = "4200005000"

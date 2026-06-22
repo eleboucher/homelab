@@ -52,6 +52,19 @@ spec:
       advertisements:
         matchLabels:
           advertise: bgp
+  ebgpMultihop: 2
+  timers:
+    connectRetryTimeSeconds: 120
+    holdTimeSeconds: 90
+    keepAliveTimeSeconds: 60
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/cilium.io/ciliumbgppeerconfig_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumBGPPeerConfig
+metadata:
+  name: l3-bgp-peer-config-v6
+spec:
+  families:
     - afi: ipv6
       safi: unicast
       advertisements:
@@ -81,6 +94,11 @@ spec:
           peerAddress: 192.168.1.2
           peerConfigRef:
             name: l3-bgp-peer-config
+        - name: mikrotik-v6
+          peerASN: 64513
+          peerAddress: 2a01:e0a:e4b:aa31::1
+          peerConfigRef:
+            name: l3-bgp-peer-config-v6
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/core/service_v1.json
 apiVersion: v1

@@ -110,9 +110,9 @@ resource "routeros_ipv6_firewall_filter" "forward_icmpv6" {
 resource "routeros_ipv6_firewall_filter" "forward_lb_inbound" {
   chain       = "forward"
   action      = "accept"
-  dst_address = "2a01:e0a:e4b:aa32::/64"
+  dst_address = "2a01:e0a:e4b:aa32::126/128"
   disabled    = true
-  comment     = "Inbound to cluster LB VIPs"
+  comment     = "Inbound to external gateway VIP (staged; public is v4-via-tunnel)"
 
   depends_on = [routeros_ipv6_firewall_filter.forward_icmpv6]
 }
