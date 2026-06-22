@@ -10,7 +10,7 @@ data:
         key_env: LITELLM_API_KEY
         models:
           minimax/MiniMax-M3:
-            context_length: 192000
+            context_length: 1000000
           glm-5.2:
             context_length: 1000000
           glm-5-turbo:
@@ -19,16 +19,9 @@ data:
             context_length: 1048560
           neuralwatt/qwen3.6-35b:
             context_length: 131056
-      - name: litellm-anthropic
-        base_url: http://litellm.ai:4000
-        key_env: LITELLM_API_KEY
-        api_mode: anthropic_messages
-        models:
-          MiniMax-M3:
-            context_length: 1000000
     model:
-      default: MiniMax-M3
-      provider: custom:litellm-anthropic
+      default: minimax/MiniMax-M3
+      provider: custom:litellm
       context_length: 1000000
     model_aliases:
       gemma:
@@ -59,36 +52,36 @@ data:
         model: gemma
     auxiliary:
       approval:
-        provider: custom:litellm-anthropic
-        model: MiniMax-M3
+        provider: custom:litellm
+        model: minimax/MiniMax-M3
         timeout: 60
       compression:
-        provider: custom:litellm-anthropic
-        model: MiniMax-M3
+        provider: custom:litellm
+        model: minimax/MiniMax-M3
       web_extract:
-        provider: custom:litellm-anthropic
-        model: MiniMax-M3
+        provider: custom:litellm
+        model: minimax/MiniMax-M3
       session_search:
-        provider: custom:litellm-anthropic
-        model: MiniMax-M3
+        provider: custom:litellm
+        model: minimax/MiniMax-M3
       vision:
-        provider: custom:litellm-anthropic
-        model: MiniMax-M3
+        provider: custom:litellm
+        model: minimax/MiniMax-M3
       goal_judge:
-        provider: custom:litellm-anthropic
-        model: MiniMax-M3
+        provider: custom:litellm
+        model: minimax/MiniMax-M3
       title_generator:
-        provider: custom:litellm-anthropic
-        model: MiniMax-M3
+        provider: custom:litellm
+        model: minimax/MiniMax-M3
       profile_describer:
-        provider: custom:litellm-anthropic
-        model: MiniMax-M3
+        provider: custom:litellm
+        model: minimax/MiniMax-M3
       triage_specifier:
-        provider: custom:litellm-anthropic
-        model: MiniMax-M3
+        provider: custom:litellm
+        model: minimax/MiniMax-M3
       kanban_decomposer:
-        provider: custom:litellm-anthropic
-        model: MiniMax-M3
+        provider: custom:litellm
+        model: minimax/MiniMax-M3
     memory:
       provider: memini
     plugins:
