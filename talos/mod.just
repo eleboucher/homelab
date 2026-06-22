@@ -53,9 +53,18 @@ kubeconfig:
     done
 
 [confirm('Reset node ' + node + ' [y|N] ?')]
-[doc('Reset a node')]
+[doc('Reset a node (lazy-detaches NFS first so a dying in-cluster NFS server cannot wedge the unmount)')]
+[script]
 reset-node node *args:
-    talosctl -n "{{ node }}" reset --system-labels-to-wipe STATE --system-labels-to-wipe EPHEMERAL --system-labels-to-wipe u-local-hostpath --graceful=false {{ args }}
+    # normandie (the NFS server) runs in-cluster, so it dies mid-reset; hard NFS
+    # mounts would then hang the unmount forever. Lazy force-detach NFS on the node
+    # first via a privileged nsenter pod. Best-effort — skipped if the API is gone.
+    overrides="$(jq -n --arg node "{{ node }}" \
+        '{spec:{nodeName:$node,hostPID:true,hostNetwork:true,tolerations:[{operator:"Exists"}],containers:[{name:"u",image:"alpine:3.21",securityContext:{privileged:true},command:["nsenter","-t","1","-m","-u","-i","-n","--","sh","-c","umount -f -l -a -t nfs,nfs4 || true"]}]}}')"
+    kubectl run "nfs-detach-{{ node }}" --restart=Never --image=alpine:3.21 --overrides="$overrides" >/dev/null 2>&1 || true
+    kubectl wait --for=jsonpath='{.status.phase}'=Succeeded "pod/nfs-detach-{{ node }}" --timeout=30s >/dev/null 2>&1 || true
+    kubectl delete pod "nfs-detach-{{ node }}" --ignore-not-found --wait=false >/dev/null 2>&1 || true
+    talosctl -n "{{ node }}" reset --system-labels-to-wipe STATE --system-labels-to-wipe EPHEMERAL --graceful=false {{ args }}
 
 [confirm('Shutdown node ' + node + ' [y|N] ?')]
 [doc('Shutdown a node')]
