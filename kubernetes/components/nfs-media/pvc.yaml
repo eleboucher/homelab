@@ -2,19 +2,19 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: immich-library
+  name: ${APP}-nfs-media
 spec:
   accessModes:
     - ReadWriteMany
   capacity:
-    storage: 10Ti
+    storage: 1Gi
   mountOptions:
     - nfsvers=4.1
     - soft
     - timeo=100
     - retrans=3
   nfs:
-    path: /immich
+    path: /
     server: normandie.internal
   persistentVolumeReclaimPolicy: Retain
   storageClassName: ""
@@ -23,13 +23,13 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: immich-library
-  namespace: selfhosted
+  name: ${APP}-nfs-media
+  namespace: ${APP_NAMESPACE}
 spec:
   accessModes:
     - ReadWriteMany
   resources:
     requests:
-      storage: 10Ti
+      storage: 1Gi
   storageClassName: ""
-  volumeName: immich-library
+  volumeName: ${APP}-nfs-media

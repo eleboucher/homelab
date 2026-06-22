@@ -82,9 +82,8 @@ spec:
             subPath: introskipper
 
       data:
-        type: nfs
-        server: normandie.internal
-        path: /
+        type: persistentVolumeClaim
+        existingClaim: ${APP}-nfs-media
         globalMounts:
           - path: /data
       transcode:

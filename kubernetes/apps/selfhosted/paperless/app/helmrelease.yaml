@@ -121,9 +121,8 @@ spec:
               - path: /var/lib/apt
                 subPath: apt
       nas:
-        type: nfs
-        server: normandie.internal
-        path: /
+        type: persistentVolumeClaim
+        existingClaim: ${APP}-nfs-media
         globalMounts:
           - path: /data/nas
 

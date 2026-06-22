@@ -9,6 +9,7 @@ spec:
     labels:
       app.kubernetes.io/name: paperless
   components:
+    - ../../../../components/nfs-media
     - ../../../../components/kopiur/hot
     - ../../../../components/oidc
     - ../../../../components/postgres/cert

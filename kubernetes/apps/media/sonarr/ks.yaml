@@ -7,6 +7,7 @@ metadata:
   namespace: flux-system
 spec:
   components:
+    - ../../../../components/nfs-media
     - ../../../../components/oidc/envoy
     - ../../../../components/kopiur/hot
     - ../../../../components/zeroscaler

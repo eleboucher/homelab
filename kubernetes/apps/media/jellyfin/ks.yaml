@@ -7,6 +7,7 @@ metadata:
   namespace: flux-system
 spec:
   components:
+    - ../../../../components/nfs-media
     - ../../../../components/gpu
     - ../../../../components/oidc
     - ../../../../components/kopiur/hot

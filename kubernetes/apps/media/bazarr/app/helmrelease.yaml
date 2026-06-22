@@ -79,9 +79,8 @@ spec:
         globalMounts:
           - path: /config
       data:
-        type: nfs
-        server: normandie.internal
-        path: /
+        type: persistentVolumeClaim
+        existingClaim: ${APP}-nfs-media
         globalMounts:
           - path: /data
       tmp:
