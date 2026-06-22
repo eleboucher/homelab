@@ -24,6 +24,7 @@ spec:
     substitute:
       APP: *app
       APP_NAMESPACE: selfhosted
+      KOPIUR_CAPACITY: 10Gi
       SUBDOMAIN: gts
       OIDC_CALLBACK: /auth/callback
       OIDC_DISABLE_PKCE: "true"

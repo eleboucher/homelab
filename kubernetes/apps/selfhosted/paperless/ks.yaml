@@ -32,6 +32,7 @@ spec:
     substitute:
       APP: paperless
       APP_NAMESPACE: selfhosted
+      KOPIUR_CAPACITY: 15Gi
       APP_UID: "1000"
       APP_GID: "65542"
       HTTP_SCALER_PORT: "8000"

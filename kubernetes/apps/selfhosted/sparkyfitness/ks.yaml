@@ -24,6 +24,7 @@ spec:
     substitute:
       APP: sparkyfitness
       APP_NAMESPACE: selfhosted
+      KOPIUR_CAPACITY: 15Gi
       APP_UID: "1000"
   prune: true
   sourceRef:

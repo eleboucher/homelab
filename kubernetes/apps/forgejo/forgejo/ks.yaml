@@ -29,6 +29,7 @@ spec:
   postBuild:
     substitute:
       APP: forgejo
+      KOPIUR_CAPACITY: 50Gi
       ANUBIS_TARGET: "http://forgejo-http.forgejo.svc:3000"
       APP_NAMESPACE: forgejo
       OIDC_CALLBACK: /user/oauth2/kanidm/callback

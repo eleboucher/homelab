@@ -24,6 +24,7 @@ spec:
     substitute:
       APP: home-assistant
       APP_NAMESPACE: home-assistant
+      KOPIUR_CAPACITY: 10Gi
       SUBDOMAIN: home
       OIDC_CALLBACK: /auth/openid/callback
       OIDC_SHORT_USERNAME: "true"
