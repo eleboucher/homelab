@@ -61,6 +61,50 @@ data:
           supports_function_calling: true
           supports_prompt_caching: true
 
+      - model_name: glm-5.2
+        litellm_params:
+          model: openai/glm-5.2
+          api_base: https://api.z.ai/api/coding/paas/v4
+          api_key: os.environ/ZAI_API_KEY
+          drop_params: true
+        model_info:
+          max_input_tokens: 1000000
+          max_output_tokens: 131072
+          supports_function_calling: true
+          supports_prompt_caching: true
+
+      - model_name: glm-5-turbo
+        litellm_params:
+          model: openai/glm-5-turbo
+          api_base: https://api.z.ai/api/coding/paas/v4
+          api_key: os.environ/ZAI_API_KEY
+          drop_params: true
+        model_info:
+          max_input_tokens: 200000
+          max_output_tokens: 16384
+          supports_function_calling: true
+
+      - model_name: neuralwatt/glm-5.2
+        litellm_params:
+          model: openai/glm-5.2
+          api_base: https://api.neuralwatt.com/v1
+          api_key: os.environ/NEURALWATT_API_KEY
+        model_info:
+          max_input_tokens: 1048560
+          max_output_tokens: 131072
+          supports_function_calling: true
+
+      - model_name: neuralwatt/qwen3.6-35b
+        litellm_params:
+          model: openai/qwen3.6-35b
+          api_base: https://api.neuralwatt.com/v1
+          api_key: os.environ/NEURALWATT_API_KEY
+        model_info:
+          max_input_tokens: 131056
+          max_output_tokens: 32768
+          supports_function_calling: true
+          supports_vision: true
+
     general_settings:
       health_check_endpoint: /v1/health
 
@@ -83,7 +127,9 @@ data:
     environment:
       - LLAMA_API_KEY
       - MINIMAX_API_KEY
+      - NEURALWATT_API_KEY
       - REDIS_HOST
       - REDIS_PORT
       - SUPER_SERVER_URL
       - SUPER_SERVER_PASS
+      - ZAI_API_KEY
