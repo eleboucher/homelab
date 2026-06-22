@@ -20,6 +20,7 @@ resource "routeros_ipv6_neighbor_discovery" "lan" {
   advertise_dns       = true
   other_configuration = true
   ra_interval         = "20s-1m"
+  ra_preference       = "high"
 }
 
 resource "routeros_ipv6_route" "default" {
