@@ -11,7 +11,7 @@ spec:
   concurrencyPolicy: Forbid
   jobTemplate:
     spec:
-      activeDeadlineSeconds: 21600 # 6 hours (gdrive blob enumeration alone takes ~3h)
+      activeDeadlineSeconds: 36000 # 10 hours (gdrive blob enumeration alone takes ~3h; heavy runs exceed 6h)
       backoffLimit: 5
       template:
         spec:
