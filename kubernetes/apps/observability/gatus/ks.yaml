@@ -8,12 +8,10 @@ spec:
   interval: 1h
   path: ./kubernetes/apps/observability/gatus/app
   components:
-    - ../../../../components/kopiur/hot
+    - ../../../../components/postgres/pass
   dependsOn:
-    - name: kopiur-repository
-      namespace: kopiur-system
-    - name: openebs
-      namespace: openebs-system
+    - name: cnpg-cluster
+      namespace: database
   postBuild:
     substitute:
       APP: gatus

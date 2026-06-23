@@ -47,6 +47,11 @@ spec:
               GATUS_DELAY_START_SECONDS: 5
               GATUS_CONFIG_PATH: /config
               GATUS_WEB_PORT: &port 80
+              POSTGRES_URL:
+                valueFrom:
+                  secretKeyRef:
+                    name: gatus-postgres
+                    key: url
               TZ: Europe/Paris
             probes:
               liveness: &probes
@@ -78,11 +83,6 @@ spec:
         globalMounts:
           - path: /config/config.yaml
             subPath: config.yaml
-      config:
-        type: persistentVolumeClaim
-        existingClaim: "{{ .Release.Name }}"
-        globalMounts:
-          - path: /config
     rbac:
       roles:
         gatus:
