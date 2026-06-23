@@ -256,11 +256,14 @@ spec:
             memory: 1Gi
           limits:
             memory: 3Gi
-        storage:
-          storageClassName: openebs-zfs
-          resources:
-            requests:
-              storage: 50Gi
+        # Use the kopiur-managed PVC (carries the Restore populator) instead of an
+        # operator-managed claim. `storage: null` disables the chart's default PVC;
+        # the operator mounts the `data` volume at the data path.
+        storage: null
+        volumes:
+          - name: data
+            persistentVolumeClaim:
+              claimName: victoria-metrics
       route:
         enabled: true
         parentRefs:

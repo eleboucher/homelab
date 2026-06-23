@@ -9,5 +9,13 @@ resources:
   - ./ocirepository.yaml
   - ./prometheusrule-towonel-edge.yaml
   - ./prometheusrule-towonel-hub.yaml
-  - ./snapshotpolicy.yaml
-  - ./snapshotschedule.yaml
+# Preserve the /cache backup exclusion on the kopiur component's SnapshotPolicy.
+patches:
+  - target:
+      kind: SnapshotPolicy
+    patch: |
+      - op: add
+        path: /spec/files
+        value:
+          ignoreRules:
+            - /cache
