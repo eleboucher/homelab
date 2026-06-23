@@ -6,6 +6,18 @@ metadata:
   name: dragonfly
 spec:
   replicas: 1
+  # Persist to a PVC so cache/session state (incl. vmcp OAuth client
+  # registrations under thv:vmcp:session:) survives pod restarts/reschedules.
+  # Dragonfly snapshots on the cron and on graceful shutdown, and reloads on start.
+  snapshot:
+    cron: "*/10 * * * *"
+    persistentVolumeClaimSpec:
+      accessModes:
+        - ReadWriteOnce
+      resources:
+        requests:
+          storage: 1Gi
+      storageClassName: openebs-zfs
   args:
     - "--admin_bind=::"
     - --maxmemory=$(MAX_MEMORY)Mi
