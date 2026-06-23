@@ -257,9 +257,13 @@ spec:
           limits:
             memory: 3Gi
         # Use the kopiur-managed PVC (carries the Restore populator) instead of an
-        # operator-managed claim. `storage: null` disables the chart's default PVC;
-        # the operator mounts the `data` volume at the data path.
-        storage: null
+        # operator-managed claim. Zeroing the storage request makes the operator
+        # treat storage as empty (isStorageEmpty -> Requests.Storage().IsZero()),
+        # so it skips the managed PVC and mounts the `data` volume at the data path.
+        storage:
+          resources:
+            requests:
+              storage: "0"
         volumes:
           - name: data
             persistentVolumeClaim:
