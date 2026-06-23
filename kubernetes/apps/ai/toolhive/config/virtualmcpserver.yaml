@@ -60,6 +60,24 @@ spec:
     address: dragonfly.database:6379
   podTemplateSpec:
     spec:
+      # Gate startup on dependencies so vmcp does not hard-crash (exit 1) when
+      # kanidm / dragonfly aren't ready yet (e.g. during a re-bootstrap) — a
+      # crash there drops the OAuth client registrations and breaks MCP login.
+      initContainers:
+        - name: wait-for-deps
+          image: docker.io/library/alpine:3.24
+          command:
+            - sh
+            - -c
+            - |
+              echo "waiting for dragonfly..."
+              until nc -z dragonfly.database 6379; do sleep 3; done
+              echo "waiting for kanidm OIDC discovery..."
+              until wget -q -T 5 --no-check-certificate -O /dev/null \
+                https://idm.erwanleboucher.dev/oauth2/openid/toolhive/.well-known/openid-configuration; do
+                sleep 3
+              done
+              echo "dependencies ready"
       containers:
         - name: vmcp
           env:
