@@ -1,0 +1,48 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+name: AI PR Review
+
+on:
+  pull_request:
+    branches:
+      - main
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - ready_for_review
+      - labeled
+
+permissions:
+  contents: read
+  pull-requests: write
+
+concurrency:
+  group: ${{ forgejo.workflow }}-${{ forgejo.event.pull_request.number || forgejo.ref }}${{ forgejo.event.action == 'labeled' && format('-label-{0}', forgejo.run_id) || '' }}
+  cancel-in-progress: true
+
+jobs:
+  review:
+    name: AI PR Review
+    if: ${{ !forgejo.pull_request.draft }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - name: Checkout PR
+        uses: https://github.com/actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          fetch-depth: 0
+          ref: ${{ forgejo.event.pull_request.head.sha }}
+
+      - name: AI PR Review
+        uses: https://github.com/misospace/pr-reviewer-action@75d38fbc0a6098eb253a9c8a2c28ad1c20f268fb # v2.0.1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          platform: forgejo
+          ai_base_url: https://litellm.erwanleboucher.dev/v1
+          ai_model: minimax/MiniMax-M3
+          ai_api_key: ${{ secrets.LITELLM_API_KEY }}
+          ai_max_tokens: "16384"
+          publish_review_comment: "true"
