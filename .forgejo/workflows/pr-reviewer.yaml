@@ -66,4 +66,16 @@ jobs:
           ai_fallback_model: neuralwatt-qwen3-6-35b
           ai_fallback_api_key: ${{ secrets.LITELLM_API_KEY }}
           on_model_failure: notice
+          tool_mode: native_loop
+          tool_max_requests: "4"
+          tool_max_rounds: "2"
+          tool_loop_wall_clock_sec: "180"
+          tool_request_timeout_sec: "15"
+          tool_max_response_bytes: "12000"
+          tool_planning_timeout_sec: "60"
+          tool_planning_max_context_bytes: "30000"
+          tool_planning_max_tokens: "8000"
+          tool_allowed_gh_api_repos: "eleboucher/homelab"
+          tool_enable_for_forks: "false"
+          tool_mcp_servers: "tools=http://vmcp-mcp-gateway-internal.network.svc.cluster.local:4483/mcp"
           publish_review_comment: "true"
