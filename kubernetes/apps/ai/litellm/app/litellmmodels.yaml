@@ -1,0 +1,174 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: gemma
+spec:
+  modelName: gemma
+  params:
+    model: openai/gemma
+    apiBase: http://llama-cpp.ai:8080/v1
+    apiKeyRef:
+      name: litellm
+      key: LLAMA_API_KEY
+  info:
+    maxTokens: 32768
+    maxInputTokens: 32768
+    maxOutputTokens: 8192
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: qwen
+spec:
+  modelName: qwen
+  params:
+    model: openai/qwen3.6-27b
+    apiBaseRef:
+      name: litellm
+      key: SUPER_SERVER_URL
+    apiKeyRef:
+      name: litellm
+      key: SUPER_SERVER_PASS
+    dropParams: true
+  info:
+    maxTokens: 262144
+    maxInputTokens: 262144
+    maxOutputTokens: 32768
+    supportsFunctionCalling: true
+    supportsPromptCaching: true
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: minimax-m3
+spec:
+  modelName: minimax/MiniMax-M3
+  params:
+    model: minimax/MiniMax-M3
+    apiBase: https://api.minimax.io/v1
+    apiKeyRef:
+      name: litellm
+      key: MINIMAX_API_KEY
+  info:
+    maxTokens: 1000000
+    maxInputTokens: 192000
+    maxOutputTokens: 16384
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: minimax-m2-7
+spec:
+  modelName: minimax/MiniMax-M2.7
+  params:
+    model: minimax/MiniMax-M2.7
+    apiBase: https://api.minimax.io/v1
+    apiKeyRef:
+      name: litellm
+      key: MINIMAX_API_KEY
+  info:
+    maxTokens: 204800
+    maxInputTokens: 192000
+    maxOutputTokens: 16384
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: minimax-m3-anthropic
+spec:
+  modelName: MiniMax-M3
+  params:
+    model: minimax/MiniMax-M3
+    apiBase: https://api.minimax.io/anthropic/v1/messages
+    apiKeyRef:
+      name: litellm
+      key: MINIMAX_API_KEY
+    dropParams: true
+  info:
+    mode: messages
+    maxInputTokens: 1000000
+    maxOutputTokens: 131072
+    supportsFunctionCalling: true
+    supportsPromptCaching: true
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: glm-5-2
+spec:
+  modelName: glm-5.2
+  params:
+    model: openai/glm-5.2
+    apiBase: https://api.z.ai/api/coding/paas/v4
+    apiKeyRef:
+      name: litellm
+      key: ZAI_API_KEY
+    dropParams: true
+  info:
+    maxInputTokens: 1000000
+    maxOutputTokens: 131072
+    supportsFunctionCalling: true
+    supportsPromptCaching: true
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: glm-5-turbo
+spec:
+  modelName: glm-5-turbo
+  params:
+    model: openai/glm-5-turbo
+    apiBase: https://api.z.ai/api/coding/paas/v4
+    apiKeyRef:
+      name: litellm
+      key: ZAI_API_KEY
+    dropParams: true
+  info:
+    maxInputTokens: 200000
+    maxOutputTokens: 16384
+    supportsFunctionCalling: true
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: neuralwatt-glm-5-2
+spec:
+  modelName: neuralwatt/glm-5.2
+  params:
+    model: openai/glm-5.2
+    apiBase: https://api.neuralwatt.com/v1
+    apiKeyRef:
+      name: litellm
+      key: NEURALWATT_API_KEY
+  info:
+    maxInputTokens: 1048560
+    maxOutputTokens: 131072
+    supportsFunctionCalling: true
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: neuralwatt-qwen3-6-35b
+spec:
+  modelName: neuralwatt/qwen3.6-35b
+  params:
+    model: openai/qwen3.6-35b
+    apiBase: https://api.neuralwatt.com/v1
+    apiKeyRef:
+      name: litellm
+      key: NEURALWATT_API_KEY
+  info:
+    maxInputTokens: 131056
+    maxOutputTokens: 32768
+    supportsFunctionCalling: true
+    supportsVision: true
