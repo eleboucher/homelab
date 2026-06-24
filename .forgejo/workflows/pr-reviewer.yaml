@@ -79,3 +79,36 @@ jobs:
           tool_enable_for_forks: "false"
           tool_mcp_servers: "tools=https://mcp-internal.erwanleboucher.dev/mcp"
           publish_review_comment: "true"
+
+      - name: Debug forgejo publish
+        if: always()
+        env:
+          GITHUB_ACTION_PATH: ${{ github.action_path }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          FORGEJO_API_URL: https://git.erwanleboucher.dev/
+          REPO: ${{ forgejo.repository }}
+          PR_NUMBER: ${{ forgejo.event.pull_request.number }}
+        run: |
+          set +e
+          export PYTHONPATH="$GITHUB_ACTION_PATH${PYTHONPATH:+:$PYTHONPATH}"
+          echo "=== env ==="
+          echo "GITHUB_ACTION_PATH=$GITHUB_ACTION_PATH"
+          echo "FORGEJO_API_URL=$FORGEJO_API_URL"
+          echo "REPO=$REPO  PR_NUMBER=$PR_NUMBER"
+          echo
+          echo "=== 1. list-comments (read probe) ==="
+          python3 -m pr_reviewer.forgejo_backend list-comments "$REPO" "$PR_NUMBER" 2>&1 | head -30
+          echo "exit=$?"
+          echo
+          echo "=== 2. create-comment with test body (write probe) ==="
+          body='<!-- ai-pr-reviewer-debug -->\ndebug probe from workflow'
+          python3 -m pr_reviewer.forgejo_backend create-comment "$REPO" "$PR_NUMBER" "$body" 2>&1 | head -30
+          echo "exit=$?"
+          echo
+          echo "=== 3. Raw curl to same endpoint (no python wrapper) ==="
+          curl -sS -X POST -o - -w "\nhttp_status=%{http_code}\n" \
+            -H "Authorization: token $GH_TOKEN" \
+            -H "Content-Type: application/json" \
+            -d "{\"body\": \"<!-- ai-pr-reviewer-debug -->\nraw curl probe\"}" \
+            "$FORGEJO_API_URL/api/v1/repos/$REPO/issues/$PR_NUMBER/comments" 2>&1 | head -30
+          echo "curl_exit=$?"
