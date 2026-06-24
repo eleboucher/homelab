@@ -37,8 +37,6 @@ jobs:
           ref: ${{ forgejo.event.pull_request.head.sha }}
 
       - name: Install gh CLI
-        # The action's preflight requires `gh` on PATH even on Forgejo
-        # (core review uses curl, but the preflight check is unconditional).
         run: |
           curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
           chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg
