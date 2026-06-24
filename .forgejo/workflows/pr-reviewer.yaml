@@ -56,3 +56,20 @@ jobs:
           ai_api_key: ${{ secrets.LITELLM_API_KEY }}
           ai_max_tokens: "16384"
           publish_review_comment: "true"
+
+      - name: Debug forgejo comment API
+        if: always()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          FORGEJO_API_URL: ${{ forgejo.server_url }}
+          REPO: ${{ forgejo.repository }}
+          PR_NUMBER: ${{ forgejo.event.pull_request.number }}
+        run: |
+          echo "FORGEJO_API_URL=$FORGEJO_API_URL"
+          echo "REPO=$REPO"
+          echo "PR_NUMBER=$PR_NUMBER"
+          echo "--- list existing comments ---"
+          curl -fsS -H "Authorization: token $GH_TOKEN" \
+            "$FORGEJO_API_URL/api/v1/repos/$REPO/issues/$PR_NUMBER/comments" | \
+            python3 -c 'import json,sys; data=json.load(sys.stdin); print(f"count={len(data)}"); [print(c["id"], c["user"]["login"], repr(c["body"][:80])) for c in data[-5:]]' \
+            || echo "list-comments FAILED"
