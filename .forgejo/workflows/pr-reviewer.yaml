@@ -52,13 +52,16 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           platform: forgejo
           ai_base_url: https://litellm.erwanleboucher.dev/v1
-          ai_model: neuralwatt-qwen3-6-35b
+          ai_api_format: anthropic
+          ai_model: MiniMax-M3
           ai_api_key: ${{ secrets.LITELLM_API_KEY }}
           ai_max_tokens: "16000"
-          ai_response_format: json_object
+          ai_primary_retries: "2"
+          ai_primary_retry_delay_sec: "5"
+          ai_connect_timeout_sec: "10"
           ai_fallback_base_url: https://litellm.erwanleboucher.dev/v1
           ai_fallback_api_format: openai
-          ai_fallback_model: neuralwatt-glm-5-2
+          ai_fallback_model: neuralwatt-qwen3-6-35b
           ai_fallback_api_key: ${{ secrets.LITELLM_API_KEY }}
           on_model_failure: notice
           publish_review_comment: "true"
