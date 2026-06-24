@@ -52,7 +52,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           platform: forgejo
           ai_base_url: https://litellm.erwanleboucher.dev/v1
-          ai_model: minimax/MiniMax-M3
+          ai_model: qwen
           ai_api_key: ${{ secrets.LITELLM_API_KEY }}
           ai_max_tokens: "16000"
           ai_response_format: json_object
