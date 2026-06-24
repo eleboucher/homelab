@@ -51,7 +51,7 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           platform: forgejo
-          forgejo_api_url: ${{ forgejo.server_url }}
+          forgejo_api_url: https://git.erwanleboucher.dev/
           forgejo_token: ${{ secrets.GITHUB_TOKEN }}
           ai_base_url: https://litellm.erwanleboucher.dev/v1
           ai_api_format: anthropic
