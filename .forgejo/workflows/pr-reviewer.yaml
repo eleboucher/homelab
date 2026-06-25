@@ -76,4 +76,5 @@ jobs:
           tool_allowed_gh_api_repos: "eleboucher/homelab"
           tool_enable_for_forks: "false"
           tool_mcp_servers: "tools=https://mcp-internal.erwanleboucher.dev/mcp"
+          tool_mcp_name_prefixes: "github-mcp,talos-mcp,searxng-mcp,ha-mcp,grafana-mcp,victoria-logs-mcp,context7-mcp"
           publish_review_comment: "true"
