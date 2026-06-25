@@ -45,7 +45,7 @@ jobs:
           apt-get install -y gh
 
       - name: AI PR Review
-        uses: https://github.com/eleboucher/pr-reviewer-action@7e5167b2020db5877b4039a80f5d600a41f32a29 # v2.0.1-fork.1
+        uses: https://github.com/eleboucher/pr-reviewer-action@75d38fbc0a6098eb253a9c8a2c28ad1c20f268fb # v2.0.1-fork.1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           platform: forgejo
