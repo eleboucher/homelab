@@ -172,3 +172,4 @@ spec:
     maxOutputTokens: 32768
     supportsFunctionCalling: true
     supportsVision: true
+    supportsPromptCaching: true
