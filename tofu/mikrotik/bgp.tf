@@ -35,9 +35,19 @@ resource "routeros_routing_filter_rule" "bgp_in_cilium_accept_lb" {
   rule  = "if (dst in 10.222.5.0/28) { accept }"
 }
 
+resource "routeros_routing_filter_rule" "bgp_in_cilium_accept_lb_v6" {
+  chain = "bgp-in-cilium"
+  rule  = "if (dst in 2a01:e0a:e4b:aa32::/64) { accept }"
+}
+
 resource "routeros_routing_filter_rule" "bgp_in_cilium_reject_lo" {
   chain = "bgp-in-cilium"
   rule  = "if (dst in 10.222.0.0/16) { reject } accept"
+}
+
+resource "routeros_routing_filter_rule" "bgp_in_cilium_reject_lo_v6" {
+  chain = "bgp-in-cilium"
+  rule  = "if (dst in fd42::/56) { reject }"
 }
 
 resource "routeros_routing_filter_rule" "bgp_out_cilium_reject_lo" {
@@ -64,7 +74,7 @@ resource "routeros_routing_bgp_connection" "kharkiv" {
   name             = "to-kharkiv"
   as               = "64513"
   instance         = routeros_routing_bgp_instance.k8s.name
-  address_families = "ip,ipv6"
+  address_families = "ip"
   routing_table    = "main"
   disabled         = false
 
@@ -86,7 +96,7 @@ resource "routeros_routing_bgp_connection" "kharkiv" {
   }
 
   lifecycle {
-    ignore_changes = [add_path_out, local, remote]
+    ignore_changes = [local, remote]
   }
 }
 
@@ -94,7 +104,7 @@ resource "routeros_routing_bgp_connection" "paris" {
   name             = "to-paris"
   as               = "64513"
   instance         = routeros_routing_bgp_instance.k8s.name
-  address_families = "ip,ipv6"
+  address_families = "ip"
   routing_table    = "main"
   disabled         = false
 
@@ -116,7 +126,7 @@ resource "routeros_routing_bgp_connection" "paris" {
   }
 
   lifecycle {
-    ignore_changes = [add_path_out, local, remote]
+    ignore_changes = [local, remote]
   }
 }
 
@@ -208,6 +218,6 @@ resource "routeros_routing_bgp_connection" "mortebrume" {
   depends_on = [routeros_interface_wireguard.wg_mb]
 
   lifecycle {
-    ignore_changes = [add_path_out, local, remote]
+    ignore_changes = [local, remote]
   }
 }

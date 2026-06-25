@@ -18,9 +18,19 @@ resource "routeros_ipv6_address" "wg_mb_ll" {
 resource "routeros_ipv6_neighbor_discovery" "lan" {
   interface           = "vlan10-mgmt"
   advertise_dns       = true
+  dns                 = "2a01:e0a:e4b:aa31::1"
   other_configuration = true
   ra_interval         = "20s-1m"
-  ra_preference       = "high"
+  ra_lifetime         = "none"
+}
+
+resource "routeros_ipv6_nd_prefix" "lb_vip_v6" {
+  interface          = "vlan10-mgmt"
+  prefix             = "2a01:e0a:e4b:aa32::/64"
+  autonomous         = false
+  on_link            = true
+  valid_lifetime     = "1h"
+  preferred_lifetime = "30m"
 }
 
 resource "routeros_ipv6_route" "default" {
