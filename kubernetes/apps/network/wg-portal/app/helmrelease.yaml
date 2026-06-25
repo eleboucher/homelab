@@ -1,4 +1,3 @@
----
 # yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
@@ -29,7 +28,7 @@ spec:
           app:
             image:
               repository: registry.erwanleboucher.dev/eleboucher/wg-portal-server
-              tag: sha-2be79ac1b4d60c97cc97dda43fcef772ea9ff693
+              tag: 0.1.2
             env:
               RUST_LOG: info
               LISTEN_ADDR: "[::]:50051"
