@@ -13,8 +13,8 @@ spec:
     routing_strategy: simple-shuffle
     redis_host: os.environ/REDIS_HOST
     redis_port: os.environ/REDIS_PORT
-    fallbacks:
-      - neuralwatt/glm-5.2: ["glm-5.2"] # Neuralwatt primary; Z.AI on error
+    num_retries: 3
+    timeout: 600
   litellmSettings:
     success_callback: ["prometheus"]
     prometheus_adapter: true
