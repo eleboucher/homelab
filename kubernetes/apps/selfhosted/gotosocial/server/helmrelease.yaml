@@ -20,7 +20,7 @@ spec:
           gts:
             image:
               repository: docker.io/superseriousbusiness/gotosocial
-              tag: "0.21.2"
+              tag: "0.21.3"
             env:
               TZ: Europe/Paris
               GTS_HOST: gts.erwanleboucher.dev
