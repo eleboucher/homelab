@@ -26,8 +26,8 @@ spec:
               API_ADMIN_KEY:
                 valueFrom:
                   secretKeyRef:
-                    name: garage-secret
-                    key: GARAGE_ADMIN_TOKEN
+                    name: garage-operator-secret
+                    key: admin-token
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
@@ -57,11 +57,3 @@ spec:
         parentRefs:
           - name: envoy-internal
             namespace: network
-    persistence:
-      config:
-        enabled: true
-        type: configMap
-        name: garage
-        globalMounts:
-          - path: /etc/garage.toml
-            subPath: configuration.toml
