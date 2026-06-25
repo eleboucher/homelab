@@ -85,7 +85,7 @@ metadata:
 spec:
   modelName: MiniMax-M3
   params:
-    model: minimax/MiniMax-M3
+    model: anthropic/MiniMax-M3
     apiBase: https://api.minimax.io/anthropic
     apiKeyRef:
       name: litellm
