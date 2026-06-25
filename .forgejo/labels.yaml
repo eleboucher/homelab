@@ -1,0 +1,29 @@
+---
+# Area labels applied by .forgejo/labeler.yaml based on changed paths.
+- name: area/ansible
+  color: "#EE0000"
+  description: Ansible changes
+- name: area/bootstrap
+  color: "#6E40C9"
+  description: Bootstrap / cluster-init changes
+- name: area/ci
+  color: "#0E8A16"
+  description: CI and Forgejo workflow changes
+- name: area/docker
+  color: "#0DB7ED"
+  description: Docker changes
+- name: area/kubernetes
+  color: "#326CE5"
+  description: Kubernetes manifests and apps
+- name: area/renovate
+  color: "#34D058"
+  description: Renovate config and dependency updates
+- name: area/talos
+  color: "#FFA500"
+  description: Talos cluster config
+
+# PR-reviewer trigger label (auto-managed by misospace/pr-reviewer-action;
+# included here for documentation so reviewers can find it).
+- name: ai-review
+  color: "#7057FF"
+  description: Add to force a fresh AI review on this PR
