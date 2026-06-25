@@ -26,6 +26,7 @@ spec:
     drop_params: true
     set_verbose: true
     merge_reasoning_content_in_choices: true
+    detect_model_repetition: false
   env:
     - name: LITELLM_LOG
       value: INFO
