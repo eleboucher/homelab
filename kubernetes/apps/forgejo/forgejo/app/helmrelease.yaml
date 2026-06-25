@@ -1,4 +1,3 @@
----
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/helm.toolkit.fluxcd.io/helmrelease_v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
@@ -49,6 +48,11 @@ spec:
         ui.meta:
           AUTHOR: Erwan Leboucher
           DESCRIPTION: "Erwan's Forge"
+        cron.archive_cleanup:
+          ENABLED: true
+          RUN_AT_START: true
+          SCHEDULE: "@every 1h"
+          OLDER_THAN: 2h
         database:
           DB_TYPE: postgres
           HOST: pooler-rw.database.svc:5432
@@ -79,7 +83,10 @@ spec:
           DEFAULT_REPO_UNITS: repo.code,repo.releases,repo.issues,repo.pulls,repo.actions
           DISABLED_REPO_UNITS: repo.ext_wiki,repo.ext_issues
           DISABLE_DOWNLOAD_SOURCE_ARCHIVES: true
+          ENABLE_PUSH_CREATE_USER: true
+          GO_GET_CLONE_URL_PROTOCOL: ssh
         repository.pull-request:
+          DEFAULT_DELETE_BRANCH_AFTER_MERGE: true
           DEFAULT_MERGE_STYLE: squash
         repository.signing:
           FORMAT: ssh
@@ -127,16 +134,13 @@ spec:
     service:
       ssh:
         port: 2222
-
     valkey-cluster:
       enabled: false
     postgresql-ha:
       enabled: false
-
     persistence:
       create: false
       claimName: ${APP}
-
     extraVolumes:
       - name: postgres-forgejo
         secret:
@@ -146,7 +150,6 @@ spec:
         secret:
           defaultMode: 0o600
           secretName: root-ca
-
       - name: signing-key
         secret:
           secretName: forgejo-signing-key
