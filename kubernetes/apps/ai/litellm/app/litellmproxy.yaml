@@ -14,7 +14,7 @@ spec:
     redis_host: os.environ/REDIS_HOST
     redis_port: os.environ/REDIS_PORT
     fallbacks:
-      - neuralwatt/glm-5.2: ["glm-5.2"]  # Neuralwatt primary; Z.AI on error
+      - neuralwatt/glm-5.2: ["glm-5.2"] # Neuralwatt primary; Z.AI on error
   litellmSettings:
     success_callback: ["prometheus"]
     prometheus_adapter: true
@@ -25,6 +25,7 @@ spec:
       port: os.environ/REDIS_PORT
     drop_params: true
     set_verbose: false
+    merge_reasoning_content_in_choices: true
   env:
     - name: LITELLM_LOG
       value: INFO
