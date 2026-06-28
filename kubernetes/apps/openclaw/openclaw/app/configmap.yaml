@@ -8,23 +8,11 @@ data:
     {
       agents: {
         defaults: {
-          compaction: {
-            memoryFlush: { enabled: true, softThresholdTokens: 6000 },
-            mode: "safeguard",
-            reserveTokensFloor: 8000,
-            timeoutSeconds: 900,
-          },
           contextPruning: { mode: "off" },
-          compaction: { mode: "default", reserveTokensFloor: 30000, memoryFlush: { enabled: true, softThresholdTokens: 80000, prompt: "Extract key decisions, state changes, lessons, blockers to memory/YYYY-MM-DD.md. Format: ## [HH:MM] Topic. Skip routine work. NO_FLUSH if nothing important.", systemPrompt: "Compacting session context. Extract only what's worth remembering. No fluff." },
-          },
-          heartbeat: {
-            directPolicy: "allow",
-            lightContext: true,
-            isolatedSession: true,
-            includeReasoning: true,
+          compaction: { mode: "default", reserveTokensFloor: 30000, memoryFlush: { enabled: true, model: "litellm/glm-5-turbo", softThresholdTokens: 80000, prompt: "Extract key decisions, state changes, lessons, blockers to memory/YYYY-MM-DD.md. Format: ## [HH:MM] Topic. Skip routine work. NO_FLUSH if nothing important.", systemPrompt: "Compacting session context. Extract only what's worth remembering. No fluff." },
           },
           imageModel: {
-            primary: "litellm/gemma",
+            primary: "litellm-anthropic/MiniMax-M3",
           },
           maxConcurrent: 4,
           memorySearch: {
@@ -42,11 +30,9 @@ data:
             primary: "litellm-anthropic/MiniMax-M3",
             fallbacks: [
               "litellm/qwen",
-              "litellm/gemma",
             ],
           },
           models: {
-            "litellm/gemma": { alias: "gemma" },
             "litellm/qwen": { alias: "qwen" },
             "litellm-anthropic/MiniMax-M3": { alias: "minimax", params: { cache_prompt: true } },
             "litellm/glm-5.2": { alias: "glm" },
@@ -143,23 +129,13 @@ data:
             request: { allowPrivateNetwork: true },
             models: [
               {
-                id: "gemma",
-                name: "Gemma 4 E4B",
-                reasoning: false,
-                input: ["text", "image"],
-                cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
-                contextWindow: 131072,
-                maxTokens: 8192,
-                compat: { supportsUsageInStreaming: true },
-              },
-              {
                 id: "qwen",
                 name: "Qwen3.6 27B",
                 reasoning: false,
                 input: ["text"],
                 cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
-                contextWindow: 32768,
-                maxTokens: 8192,
+                contextWindow: 262144,
+                maxTokens: 32768,
                 compat: { supportsUsageInStreaming: true },
               },
               {
@@ -210,7 +186,7 @@ data:
             api: "anthropic-messages",
             timeoutSeconds: 600,
             models: [
-              { id: "MiniMax-M3", name: "MiniMax M3 via LiteLLM", reasoning: true, input: ["text", "image"], cost: { input: 15, output: 60, cacheRead: 2, cacheWrite: 10 }, contextWindow: 1000000, maxTokens: 32768, },
+              { id: "MiniMax-M3", name: "MiniMax M3 via LiteLLM", reasoning: true, input: ["text", "image"], cost: { input: 0.30, output: 1.20, cacheRead: 0.03, cacheWrite: 0.30 }, contextWindow: 1000000, maxTokens: 131072, },
             ],
           },
         },
