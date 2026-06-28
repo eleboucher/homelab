@@ -74,7 +74,7 @@ data:
       goal_judge:
         provider: custom:litellm
         model: glm-5-turbo
-      title_generator:
+      title_generation:
         provider: custom:litellm
         model: glm-5-turbo
       profile_describer:
