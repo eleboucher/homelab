@@ -51,6 +51,7 @@ jobs:
           platform: forgejo
           forgejo_api_url: https://git.erwanleboucher.dev/
           forgejo_token: ${{ secrets.GITHUB_TOKEN }}
+          allowed_source_hosts: github.com,api.github.com,gitlab.com,registry.terraform.io,artifacthub.io,git.erwanleboucher.dev,codeberg.org
           ai_base_url: https://litellm.erwanleboucher.dev/v1
           ai_api_format: anthropic
           ai_model: MiniMax-M3
@@ -75,6 +76,6 @@ jobs:
           tool_planning_max_tokens: "8000"
           tool_allowed_gh_api_repos: "eleboucher/homelab"
           tool_enable_for_forks: "false"
-          tool_mcp_servers: "tools=https://mcp-internal.erwanleboucher.dev/mcp"
+          tool_mcp_servers: "tools=https://mcp-internal.erwanleboucher.dev/mcp,konflate=https://konflate.erwanleboucher.dev/mcp"
           tool_mcp_name_prefixes: "github-mcp,talos-mcp,searxng-mcp,ha-mcp,grafana-mcp,victoria-logs-mcp,context7-mcp"
           publish_review_comment: "true"
