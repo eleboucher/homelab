@@ -1,5 +1,5 @@
 module "firewall" {
-  source = "git::https://github.com/mirceanton/terraform-modules-routeros.git//modules/firewall?ref=v0.3.0"
+  source = "git::https://github.com/mirceanton/terraform-modules-routeros.git//modules/firewall?ref=v0.4.0"
 
   interface_lists = {
     WAN = {
