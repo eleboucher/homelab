@@ -95,15 +95,17 @@ configs:
         maxBlobSize: 5368709120 # 5 GiB
 
       gc:
-        untaggedManifestAge: 1h
+        untaggedManifestAge: 168h
         orphanBatchSize: 10000
         interval: 30m
         diskUsageThreshold: 80
         diskUsageCheckInterval: 5m
         retention:
-          # Non-pinned tags (sha-*): keep the 5 newest, drop those older than 2 days.
-          keepLastN: 5
-          maxAge: 48h
+          # Retention is origin-blind (sweeps peer repos too); keep the global
+          # default off so federated mirrors survive. Aggressive policy is scoped
+          # per-repo to repos we own.
+          keepLastN: 0
+          maxAge: 0
           pinnedGlobs:
             - "latest"
             - "v*"
