@@ -19,6 +19,10 @@ data:
             context_length: 1048560
           neuralwatt/qwen3.6-35b:
             context_length: 131056
+          gemma:
+            context_length: 32768
+          qwen:
+            context_length: 262144
     model:
       default: minimax/MiniMax-M3
       provider: custom:litellm
@@ -63,25 +67,29 @@ data:
         model: minimax/MiniMax-M3
       session_search:
         provider: custom:litellm
-        model: minimax/MiniMax-M3
+        model: glm-5-turbo
       vision:
         provider: custom:litellm
         model: minimax/MiniMax-M3
       goal_judge:
         provider: custom:litellm
-        model: minimax/MiniMax-M3
+        model: glm-5-turbo
       title_generator:
         provider: custom:litellm
-        model: minimax/MiniMax-M3
+        model: glm-5-turbo
       profile_describer:
         provider: custom:litellm
-        model: minimax/MiniMax-M3
+        model: glm-5-turbo
       triage_specifier:
         provider: custom:litellm
-        model: minimax/MiniMax-M3
+        model: glm-5-turbo
       kanban_decomposer:
         provider: custom:litellm
-        model: minimax/MiniMax-M3
+        model: glm-5-turbo
+      curator:
+        provider: custom:litellm
+        model: glm-5-turbo
+        timeout: 600
     memory:
       provider: memini
     plugins:
@@ -95,8 +103,8 @@ data:
       persistent_shell: true
     compression:
       enabled: true
-      protect_first_n: 0
-      threshold: 0.8
+      protect_last_n: 20
+      threshold: 0.5
     streaming:
       enabled: false
     approvals:
@@ -119,6 +127,28 @@ data:
       restart_drain_timeout: 60
       api_max_retries: 3
       reasoning_effort: medium
+    delegation:
+      model: glm-5-turbo
+      max_concurrent_children: 8
+      max_spawn_depth: 2
+    moa:
+      default_preset: council
+      presets:
+        council:
+          enabled: true
+          reference_models:
+            - provider: custom:litellm
+              model: minimax/MiniMax-M3
+            - provider: custom:litellm
+              model: glm-5.2
+            - provider: custom:litellm
+              model: neuralwatt/qwen3.6-35b
+          aggregator:
+            provider: custom:litellm
+            model: minimax/MiniMax-M3
+          reference_temperature: 0.6
+          aggregator_temperature: 0.4
+          max_tokens: 8192
     platforms:
       matrix:
         enabled: false

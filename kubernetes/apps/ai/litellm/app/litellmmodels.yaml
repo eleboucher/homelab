@@ -55,9 +55,11 @@ spec:
       key: MINIMAX_API_KEY
   info:
     maxTokens: 1000000
-    maxInputTokens: 192000
+    maxInputTokens: 1000000
     maxOutputTokens: 16384
+    supportsFunctionCalling: true
     supportsPromptCaching: true
+    supportsVision: true
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
 apiVersion: litellm.home-operations.com/v1alpha1
@@ -76,6 +78,7 @@ spec:
     maxTokens: 204800
     maxInputTokens: 192000
     maxOutputTokens: 16384
+    supportsFunctionCalling: true
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
 apiVersion: litellm.home-operations.com/v1alpha1
