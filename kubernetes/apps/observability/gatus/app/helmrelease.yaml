@@ -15,6 +15,12 @@ spec:
       delayStartSeconds: "5"
       env:
         TZ: Europe/Paris
+      extraEnv:
+        - name: POSTGRES_URL
+          valueFrom:
+            secretKeyRef:
+              name: gatus-postgres
+              key: url
     sidecar:
       kinds:
         httproute:
