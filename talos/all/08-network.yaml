@@ -6,6 +6,9 @@ links:
   - lacp0
 stp:
   enabled: false
+# On-link route to the Freebox client prefix so nodes can return LB v6 traffic.
+routes:
+  - destination: 2a01:e0a:e4b:aa30::/64
 ---
 apiVersion: v1alpha1
 kind: DHCPv4Config
