@@ -32,7 +32,6 @@ spec:
             env:
               MEMINI_BACKEND: postgres
               MEMINI_LOG_FORMAT: json
-              MEMINI_WRITE_DEDUP_MIN_SCORE: "0.95"
               MEMINI_DEMOTE_AFTER: 1440h
               MEMINI_TOMBSTONE_TTL: 720h
               MEMINI_EMBED_BASE_URL: http://qwen3-embedding-0-6b.ai.svc.cluster.local:8080/v1
