@@ -35,6 +35,13 @@
 					upstream 127.0.0.1:8080
 				}
 			}
+			@http http
+			route @http {
+				proxy {
+					proxy_protocol v2
+					upstream towonel-hub:4480
+				}
+			}
 		}
 	}
 
