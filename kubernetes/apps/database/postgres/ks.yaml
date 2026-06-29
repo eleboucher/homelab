@@ -1,103 +1,31 @@
 ---
-# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/fluxcd.controlplane.io/resourceset_v1.json
-apiVersion: fluxcd.controlplane.io/v1
-kind: ResourceSet
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
 metadata:
-  name: cnpg-cluster
-  annotations:
-    fluxcd.controlplane.io/reconcile: "enabled"
-    fluxcd.controlplane.io/reconcileEvery: "30m"
-    fluxcd.controlplane.io/reconcileTimeout: "5m"
+  name: &app cnpg-cluster
+  namespace: &namespace database
 spec:
-  inputStrategy:
-    name: Permute
-  inputs:
-    - role: pooler-rw
-  inputsFrom:
-    - apiVersion: fluxcd.controlplane.io/v1
-      kind: ResourceSetInputProvider
-      selector:
-        matchLabels:
-          postgresql.cnpg.io/role: "true"
-  resourcesTemplate: |-
-    apiVersion: kustomize.toolkit.fluxcd.io/v1
-    kind: Kustomization
-    metadata:
-      name: &app cnpg-cluster
-      namespace: &namespace database
-    spec:
-      commonMetadata:
-        labels:
-          app.kubernetes.io/name: *app
-      healthChecks:
-        - apiVersion: postgresql.cnpg.io/v1
-          kind: Cluster
-          name: postgres
-          namespace: database
-      interval: 1h
-      path: ./kubernetes/apps/database/postgres/cluster
-      prune: true
-      retryInterval: 2m
-      postBuild:
-        substituteFrom:
-          - kind: Secret
-            name: barman-ovh
-            optional: true
-      sourceRef:
-        kind: OCIRepository
-        name: flux-system
-        namespace: flux-system
-      targetNamespace: *namespace
-      timeout: 5m
-      patches:
-        - target:
-            kind: Cluster
-            group: postgresql.cnpg.io
-            version: v1
-          patch: |-
-            apiVersion: postgresql.cnpg.io/v1
-            kind: Cluster
-            metadata:
-              name: not-used
-            spec:
-              managed:
-                roles:
-                  <<- $roleMap := dict >>
-                  <<- range $k, $in := inputs >>
-                  <<-   if kindIs "map" $in >>
-                  <<-     $r := index $in "role" >>
-                  <<-     if $r >>
-                  <<-       $_ := set $roleMap $r $in >>
-                  <<-     end >>
-                  <<-   end >>
-                  <<- end >>
-
-                  <<- $roleNames := keys $roleMap | sortAlpha >>
-
-                  <<- $roleObjs := list >>
-                  <<- range $r := $roleNames >>
-                  <<-   $in := index $roleMap $r >>
-
-                  <<-   $disablePass := true >>
-                  <<-   $dpVal := index $in "disablePassword" | toString | lower >>
-                  <<-   if contains "false" $dpVal >>
-                  <<-     $disablePass = false >>
-                  <<-   end >>
-
-                  <<-   $superuser := false >>
-                  <<-   $suVal := index $in "superuser" | toString | lower >>
-                  <<-   if contains "true" $suVal >>
-                  <<-     $superuser = true >>
-                  <<-   end >>
-
-                  <<-   $role := dict "name" $r "ensure" "present" "login" true "superuser" $superuser "disablePassword" $disablePass >>
-
-                  <<-   if not $disablePass >>
-                  <<-     $app := index $in "app" >>
-                  <<-     $_ := set $role "passwordSecret" (dict "name" (printf "%s-postgres" $app)) >>
-                  <<-   end >>
-
-                  <<-   $roleObjs = concat $roleObjs (list $role) >>
-                  <<- end >>
-
-                  <<- toYaml $roleObjs | nindent 18 >>
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *app
+  healthChecks:
+    - apiVersion: postgresql.cnpg.io/v1
+      kind: Cluster
+      name: postgres
+      namespace: *namespace
+  interval: 1h
+  path: ./kubernetes/apps/database/postgres/cluster
+  postBuild:
+    substituteFrom:
+      - kind: Secret
+        name: barman-ovh
+        optional: true
+  prune: true
+  retryInterval: 2m
+  sourceRef:
+    kind: OCIRepository
+    name: flux-system
+    namespace: flux-system
+  targetNamespace: *namespace
+  timeout: 5m

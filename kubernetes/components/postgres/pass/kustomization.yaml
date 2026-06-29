@@ -30,9 +30,6 @@ patches:
                 disablePassword: false
                 passwordSecret:
                   name: ${APP}-postgres
-        postBuild:
-          substitute:
-            DISABLE_PASSWORD: "false"
   - target:
       kind: HelmRelease
       group: helm.toolkit.fluxcd.io
