@@ -20,9 +20,9 @@ spec:
     substitute:
       APP: ${APP}
       OWNER: ${DATABASE_OWNER:=${APP}}
-      EXTENSIONS: ${q:='}${DATABASE_EXTENSIONS}${q:='}
       DATABASE_SUPERUSER: ${q:='}${DATABASE_SUPERUSER:=false}${q:='}
       DISABLE_PASSWORD: ${q:='}${DISABLE_PASSWORD:=true}${q:='}
+      EXTENSIONS: ${q:='}${DATABASE_EXTENSIONS}${q:='}
       emptyArray: "[]"
   prune: true
   retryInterval: 2m

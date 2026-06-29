@@ -6,6 +6,7 @@ resources:
   - ./ca.yaml
   - ./certificate.yaml
   - ./cluster.yaml
+  - ./databaserole.yaml
   - ./externalsecret.yaml
   - ./objectstore.yaml
   - ./pooler.yaml

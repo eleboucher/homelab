@@ -16,10 +16,23 @@ patches:
       metadata:
         name: not-used
       spec:
+        patches:
+          - target:
+              kind: DatabaseRole
+              group: postgresql.cnpg.io
+              version: v1
+            patch: |-
+              apiVersion: postgresql.cnpg.io/v1
+              kind: DatabaseRole
+              metadata:
+                name: not-used
+              spec:
+                disablePassword: false
+                passwordSecret:
+                  name: ${APP}-postgres
         postBuild:
           substitute:
             DISABLE_PASSWORD: "false"
-            APP: "${APP}"
   - target:
       kind: HelmRelease
       group: helm.toolkit.fluxcd.io
