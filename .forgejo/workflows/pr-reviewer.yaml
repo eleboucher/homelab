@@ -78,5 +78,5 @@ jobs:
           tool_enable_for_forks: "false"
           tool_mcp_servers: "tools=https://litellm.erwanleboucher.dev/mcp,konflate=https://konflate.erwanleboucher.dev/mcp"
           tool_mcp_token: ${{ secrets.LITELLM_API_KEY }}
-          tool_mcp_name_prefixes: "github,talos-mcp,searxng,ha-mcp,grafana,victoria-logs,context7,sidero"
+          tool_mcp_name_prefixes: "github,talos_mcp,searxng,ha_mcp,grafana,victoria_logs,context7,sidero"
           publish_review_comment: "true"

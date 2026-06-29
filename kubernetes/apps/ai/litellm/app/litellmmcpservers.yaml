@@ -25,7 +25,7 @@ kind: LiteLLMMCPServer
 metadata:
   name: ha-mcp
 spec:
-  alias: ha-mcp
+  alias: ha_mcp
   workload:
     image: ghcr.io/homeassistant-ai/ha-mcp:7.9.0
     port: 8080
@@ -73,7 +73,7 @@ kind: LiteLLMMCPServer
 metadata:
   name: talos-mcp
 spec:
-  alias: talos-mcp
+  alias: talos_mcp
   workload:
     image: registry.erwanleboucher.dev/eleboucher/talos-mcp:0.0.2
     port: 8080
@@ -98,7 +98,7 @@ kind: LiteLLMMCPServer
 metadata:
   name: victoria-logs
 spec:
-  alias: victoria-logs
+  alias: victoria_logs
   workload:
     image: ghcr.io/victoriametrics/mcp-victorialogs:latest
     port: 8081
