@@ -1,6 +1,4 @@
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/monitoring.coreos.com/prometheusrule_v1.json
----
-# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/monitoring.coreos.com/prometheusrule_v1.json
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
@@ -18,7 +16,6 @@ spec:
               The {{ $labels.name }} endpoint is down
           labels:
             severity: critical
-
         - alert: GatusEndpointExposed
           expr: |-
             gatus_results_endpoint_success{group="internal"} == 0
