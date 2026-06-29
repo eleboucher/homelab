@@ -9,7 +9,15 @@ spec:
   workload:
     image: mcp/grafana:latest
     port: 8000
-    args: ["-t", "streamable-http", "--address", "0.0.0.0:8000"]
+    args:
+      [
+        "-t",
+        "streamable-http",
+        "--address",
+        "0.0.0.0:8000",
+        "--allowed-hosts",
+        "grafana.ai.svc.cluster.local:8000",
+      ]
     env:
       - name: GRAFANA_URL
         value: http://grafana-service.observability.svc.cluster.local:3000
@@ -28,7 +36,7 @@ spec:
   alias: ha_mcp
   workload:
     image: ghcr.io/homeassistant-ai/ha-mcp:7.9.0
-    port: 8080
+    port: 8086
     command: ["ha-mcp-web"]
     env:
       - name: HOMEASSISTANT_URL
@@ -60,6 +68,8 @@ spec:
         value: http://searxng.selfhosted.svc.cluster.local:8080
       - name: MCP_HTTP_PORT
         value: "8080"
+      - name: MCP_HTTP_HOST
+        value: 0.0.0.0
     resources:
       requests:
         cpu: 10m
