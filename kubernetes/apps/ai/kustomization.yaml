@@ -10,9 +10,7 @@ resources:
   - litellm-operator/ks.yaml
   # - llama-cpp/ks.yaml
   - llmkube/ks.yaml
-  - mcp
   - memini/ks.yaml
   - minimax-shim/ks.yaml
   - open-webui/ks.yaml
   - text-embeddings-inference/ks.yaml
-  - toolhive/ks.yaml

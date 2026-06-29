@@ -247,7 +247,8 @@ data:
         servers: {
           homelab: {
             transport: "streamable-http",
-            url: "http://vmcp-mcp-gateway-internal.ai.svc.cluster.local:4483/mcp",
+            url: "http://litellm.ai:4000/mcp",
+            headers: { Authorization: "Bearer {{ .LITELLM_MASTER_KEY }}" },
           },
           skiplagged: {
             transport: "streamable-http",

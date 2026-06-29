@@ -162,7 +162,9 @@ data:
           tool_progress: "off"
     mcp_servers:
       homelab:
-        url: http://vmcp-mcp-gateway-internal.ai.svc.cluster.local:4483/mcp
+        url: http://litellm.ai:4000/mcp
+        headers:
+          Authorization: "Bearer ${LITELLM_API_KEY}"
     web:
       search_backend: searxng
   env: |-

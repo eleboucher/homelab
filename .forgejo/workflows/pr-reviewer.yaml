@@ -76,6 +76,7 @@ jobs:
           tool_planning_max_tokens: "8000"
           tool_allowed_gh_api_repos: "eleboucher/homelab"
           tool_enable_for_forks: "false"
-          tool_mcp_servers: "tools=https://mcp-internal.erwanleboucher.dev/mcp,konflate=https://konflate.erwanleboucher.dev/mcp"
-          tool_mcp_name_prefixes: "github-mcp,talos-mcp,searxng-mcp,ha-mcp,grafana-mcp,victoria-logs-mcp,context7-mcp"
+          tool_mcp_servers: "tools=https://litellm.erwanleboucher.dev/mcp,konflate=https://konflate.erwanleboucher.dev/mcp"
+          tool_mcp_token: ${{ secrets.LITELLM_API_KEY }}
+          tool_mcp_name_prefixes: "github,talos-mcp,searxng,ha-mcp,grafana,victoria-logs,context7,sidero"
           publish_review_comment: "true"
