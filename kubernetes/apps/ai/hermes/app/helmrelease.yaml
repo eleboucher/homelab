@@ -131,6 +131,11 @@ spec:
               HOMEBREW_CELLAR: /opt/data/.local/homebrew/Cellar
               HOMEBREW_PREFIX: /opt/data/.local/homebrew
               HOMEBREW_REPOSITORY: /opt/data/.local/homebrew
+              LITELLM_API_KEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: hermes-config
+                    key: LITELLM_API_KEY
               MEMINI_URL: http://memini.ai.svc.cluster.local:8080
               MEMINI_NAMESPACE: hermes
               MEMINI_API_KEY:
