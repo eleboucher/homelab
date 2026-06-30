@@ -21,3 +21,9 @@ bondMode: 802.3ad
 lacpRate: fast
 xmitHashPolicy: layer3+4
 miimon: 100
+---
+apiVersion: v1alpha1
+kind: BridgeConfig
+name: bond0
+addresses:
+  - address: 2a01:e0a:e4b:aa31::43/64

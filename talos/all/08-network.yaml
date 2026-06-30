@@ -9,6 +9,7 @@ stp:
 # On-link route to the Freebox client prefix so nodes can return LB v6 traffic.
 routes:
   - destination: 2a01:e0a:e4b:aa30::/64
+  - gateway: 2a01:e0a:e4b:aa31::1
 ---
 apiVersion: v1alpha1
 kind: DHCPv4Config

@@ -12,3 +12,9 @@ links:
   - lan0
 bondMode: active-backup
 miimon: 100
+---
+apiVersion: v1alpha1
+kind: BridgeConfig
+name: bond0
+addresses:
+  - address: 2a01:e0a:e4b:aa31::42/64
