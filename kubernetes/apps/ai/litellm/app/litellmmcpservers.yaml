@@ -35,6 +35,7 @@ metadata:
 spec:
   alias: ha_mcp
   workload:
+    # renovate: datasource=docker depName=ghcr.io/homeassistant-ai/ha-mcp
     image: ghcr.io/homeassistant-ai/ha-mcp:7.9.0
     port: 8086
     command: ["ha-mcp-web"]
@@ -61,6 +62,7 @@ metadata:
 spec:
   alias: searxng
   workload:
+    # renovate: datasource=docker depName=docker.io/isokoliuk/mcp-searxng
     image: docker.io/isokoliuk/mcp-searxng:1.8.0@sha256:e19e276f50123dfaae990bb31a8ae62930ee466b716d70ddc16b9842b0327979
     port: 8080
     env:
@@ -85,6 +87,7 @@ metadata:
 spec:
   alias: talos_mcp
   workload:
+    # renovate: datasource=docker depName=registry.erwanleboucher.dev/eleboucher/talos-mcp
     image: registry.erwanleboucher.dev/eleboucher/talos-mcp:0.0.2
     port: 8080
     env:
