@@ -15,9 +15,11 @@ rocksdb_bottommost_compression = true
 max_request_size = 20971520
 
 # DNS Optimisation
-dns_timeout = 60
+dns_timeout = 15
 query_over_tcp_only = true
-ip_lookup_strategy = 1
+ip_lookup_strategy = 3
+
+cache_capacity_modifier = 1.5
 
 # User settings
 allow_encryption = true
