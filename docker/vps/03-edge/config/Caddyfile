@@ -143,7 +143,9 @@ erwanleboucher.dev {
 
 	# Everything else → anubis bot-challenge; anubis forwards non-challenge
 	# traffic back to caddy:8082 which passes it through to the S3 website.
-	reverse_proxy anubis:8083
+	reverse_proxy anubis:8083 {
+		header_up X-Real-Ip {client_ip}
+	}
 }
 
 
