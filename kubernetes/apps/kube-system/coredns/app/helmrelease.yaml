@@ -18,8 +18,11 @@ spec:
     serviceAccount:
       create: true
     service:
+      ipFamilyPolicy: "PreferDualStack"
       name: kube-dns
-      clusterIP: 10.43.0.10
+      clusterIPs:
+        - 10.43.0.10
+        - fd43::a
     replicaCount: 2
     servers:
       - zones:
