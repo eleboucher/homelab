@@ -84,7 +84,7 @@ spec:
 
         - title: CPU
           id: cluster_cpu_usage
-          query: round(avg(instance:node_cpu_utilisation:rate5m) * 100, 0.1)
+          query: round((1 - avg(rate(node_cpu_seconds_total{mode="idle"}[5m]))) * 100, 0.1)
           valueExpr: string(result) + "%"
           colorExpr: 'colorScale(result, [35.0, 75.0], ["green", "orange", "red"])'
 
@@ -138,7 +138,7 @@ spec:
 
         - title: CPU
           id: cluster_cpu_usage
-          query: round(avg(instance:node_cpu_utilisation:rate5m) * 100, 0.1)
+          query: round((1 - avg(rate(node_cpu_seconds_total{mode="idle"}[5m]))) * 100, 0.1)
           maxDuration: "7d"
 
         - title: Memory
