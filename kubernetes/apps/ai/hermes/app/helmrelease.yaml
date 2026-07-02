@@ -162,7 +162,7 @@ spec:
               TERMINAL_MAX_FOREGROUND_TIMEOUT: "1800"
               HERMES_DASHBOARD: "1"
               HERMES_DASHBOARD_INSECURE: "1"
-              TZ: ${TZ}
+              TZ: "Europe/Paris"
             resources:
               requests:
                 cpu: 500m
@@ -210,7 +210,7 @@ spec:
                   secretKeyRef:
                     name: hermes-config
                     key: DISCORD_WEBHOOK
-              TZ: ${TZ}
+              TZ: "Europe/Paris"
             resources:
               requests:
                 cpu: 10m

@@ -164,7 +164,7 @@ data:
       homelab:
         url: http://litellm.ai:4000/mcp
         headers:
-          Authorization: "Bearer ${LITELLM_API_KEY}"
+          Authorization: "Bearer $${LITELLM_API_KEY}"
     web:
       search_backend: searxng
   env: |-
