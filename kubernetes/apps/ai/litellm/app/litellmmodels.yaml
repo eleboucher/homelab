@@ -2,47 +2,6 @@
 apiVersion: litellm.home-operations.com/v1alpha1
 kind: LiteLLMModel
 metadata:
-  name: gemma
-spec:
-  modelName: gemma
-  params:
-    model: openai/gemma
-    apiBase: http://llama-cpp.ai:8080/v1
-    apiKeyRef:
-      name: litellm
-      key: LLAMA_API_KEY
-  info:
-    maxTokens: 32768
-    maxInputTokens: 32768
-    maxOutputTokens: 8192
----
-# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
-apiVersion: litellm.home-operations.com/v1alpha1
-kind: LiteLLMModel
-metadata:
-  name: qwen
-spec:
-  modelName: qwen
-  params:
-    model: openai/qwen3.6-27b
-    apiBaseRef:
-      name: litellm
-      key: SUPER_SERVER_URL
-    apiKeyRef:
-      name: litellm
-      key: SUPER_SERVER_PASS
-    dropParams: true
-  info:
-    maxTokens: 262144
-    maxInputTokens: 262144
-    maxOutputTokens: 32768
-    supportsFunctionCalling: true
-    supportsPromptCaching: true
----
-# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
-apiVersion: litellm.home-operations.com/v1alpha1
-kind: LiteLLMModel
-metadata:
   name: minimax-m3
 spec:
   modelName: minimax/MiniMax-M3
@@ -164,6 +123,177 @@ spec:
 apiVersion: litellm.home-operations.com/v1alpha1
 kind: LiteLLMModel
 metadata:
+  name: neuralwatt-glm-5-2-fast
+spec:
+  modelName: neuralwatt/glm-5.2-fast
+  params:
+    model: openai/glm-5.2-fast
+    apiBase: https://api.neuralwatt.com/v1
+    apiKeyRef:
+      name: litellm
+      key: NEURALWATT_API_KEY
+    dropParams: true
+    additional:
+      temperature: 1.0
+  info:
+    maxInputTokens: 1048560
+    maxOutputTokens: 131072
+    supportsFunctionCalling: true
+    supportsPromptCaching: true
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: neuralwatt-glm-5-2-short
+spec:
+  modelName: neuralwatt/glm-5.2-short
+  params:
+    model: openai/glm-5.2-short
+    apiBase: https://api.neuralwatt.com/v1
+    apiKeyRef:
+      name: litellm
+      key: NEURALWATT_API_KEY
+    dropParams: true
+  info:
+    maxInputTokens: 199984
+    maxOutputTokens: 131072
+    supportsFunctionCalling: true
+    supportsPromptCaching: true
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: neuralwatt-glm-5-2-short-fast
+spec:
+  modelName: neuralwatt/glm-5.2-short-fast
+  params:
+    model: openai/glm-5.2-short-fast
+    apiBase: https://api.neuralwatt.com/v1
+    apiKeyRef:
+      name: litellm
+      key: NEURALWATT_API_KEY
+    dropParams: true
+    additional:
+      temperature: 1.0
+  info:
+    maxInputTokens: 199984
+    maxOutputTokens: 131072
+    supportsFunctionCalling: true
+    supportsPromptCaching: true
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: neuralwatt-kimi-k2-6
+spec:
+  modelName: neuralwatt/kimi-k2.6
+  params:
+    model: openai/kimi-k2.6
+    apiBase: https://api.neuralwatt.com/v1
+    apiKeyRef:
+      name: litellm
+      key: NEURALWATT_API_KEY
+    dropParams: true
+  info:
+    maxInputTokens: 262128
+    maxOutputTokens: 131072
+    supportsFunctionCalling: true
+    supportsPromptCaching: true
+    supportsVision: true
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: neuralwatt-kimi-k2-6-fast
+spec:
+  modelName: neuralwatt/kimi-k2.6-fast
+  params:
+    model: openai/kimi-k2.6-fast
+    apiBase: https://api.neuralwatt.com/v1
+    apiKeyRef:
+      name: litellm
+      key: NEURALWATT_API_KEY
+    dropParams: true
+    additional:
+      temperature: 0.6
+  info:
+    maxInputTokens: 262128
+    maxOutputTokens: 131072
+    supportsFunctionCalling: true
+    supportsPromptCaching: true
+    supportsVision: true
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: neuralwatt-kimi-k2-7-code
+spec:
+  modelName: neuralwatt/kimi-k2.7-code
+  params:
+    model: openai/kimi-k2.7-code
+    apiBase: https://api.neuralwatt.com/v1
+    apiKeyRef:
+      name: litellm
+      key: NEURALWATT_API_KEY
+    dropParams: true
+  info:
+    maxInputTokens: 262128
+    maxOutputTokens: 131072
+    supportsFunctionCalling: true
+    supportsPromptCaching: true
+    supportsVision: true
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: neuralwatt-qwen3-5-397b
+spec:
+  modelName: neuralwatt/qwen3.5-397b
+  params:
+    model: openai/qwen3.5-397b
+    apiBase: https://api.neuralwatt.com/v1
+    apiKeyRef:
+      name: litellm
+      key: NEURALWATT_API_KEY
+    dropParams: true
+  info:
+    maxInputTokens: 262128
+    maxOutputTokens: 32768
+    supportsFunctionCalling: true
+    supportsPromptCaching: true
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: neuralwatt-qwen3-5-397b-fast
+spec:
+  modelName: neuralwatt/qwen3.5-397b-fast
+  params:
+    model: openai/qwen3.5-397b-fast
+    apiBase: https://api.neuralwatt.com/v1
+    apiKeyRef:
+      name: litellm
+      key: NEURALWATT_API_KEY
+    dropParams: true
+    additional:
+      temperature: 0.7
+  info:
+    maxInputTokens: 262128
+    maxOutputTokens: 32768
+    supportsFunctionCalling: true
+    supportsPromptCaching: true
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
   name: neuralwatt-qwen3-6-35b
 spec:
   modelName: neuralwatt/qwen3.6-35b
@@ -173,6 +303,30 @@ spec:
     apiKeyRef:
       name: litellm
       key: NEURALWATT_API_KEY
+    dropParams: true
+  info:
+    maxInputTokens: 131056
+    maxOutputTokens: 32768
+    supportsFunctionCalling: true
+    supportsVision: true
+    supportsPromptCaching: true
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: neuralwatt-qwen3-6-35b-fast
+spec:
+  modelName: neuralwatt/qwen3.6-35b-fast
+  params:
+    model: openai/qwen3.6-35b-fast
+    apiBase: https://api.neuralwatt.com/v1
+    apiKeyRef:
+      name: litellm
+      key: NEURALWATT_API_KEY
+    dropParams: true
+    additional:
+      temperature: 0.7
   info:
     maxInputTokens: 131056
     maxOutputTokens: 32768
