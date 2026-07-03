@@ -105,7 +105,7 @@ configs:
           # default off so federated mirrors survive. Aggressive policy is scoped
           # per-repo to repos we own.
           keepLastN: 0
-          maxAge: 0
+          maxAge: 0s
           pinnedGlobs:
             - "latest"
             - "v*"
