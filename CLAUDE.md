@@ -103,8 +103,6 @@ talos/                       # Talos cluster config, managed with topf
 
 **Talos config (topf):** `talos/topf.yaml` declares the cluster + nodes; layered strategic-merge patches under `all/`, `control-plane/`, `worker/`, `node/<host>/` build each machine config (applied in that order). PKI lives in `talos/secrets.yaml` as `ref+op://` references resolved via `vals`/1Password at apply time — so `op` must be authenticated when topf runs. Preview changes with `just talos diff` before `just talos apply-node <node>`.
 
-**Templates:** Jinja2 templates (`.j2` files) processed with `minijinja-cli` (via the `just template` recipe). Used for bootstrap secret injection (the Talos layer no longer uses Jinja).
-
 **GitOps Flow:** Push to repo → Flux detects changes → Reconciles cluster state
 
 ## Validation

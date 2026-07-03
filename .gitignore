@@ -17,3 +17,5 @@ talosconfig
 *.tfstate.*
 *.tfvars
 *.tfvars.json
+__pycache__/
+*.py[cod]
