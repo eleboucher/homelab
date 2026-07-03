@@ -17,7 +17,7 @@ spec:
           app:
             image:
               repository: docker.io/livekit/livekit-server
-              tag: v1.13.2@sha256:50409575b8a4c4d4e5496793ba698701a230bc5d0f33e54dbe6877ba6e325a9f
+              tag: v1.13.3@sha256:483b8b7b5b0654f91f1e8bdc7b46fcd37fd9911612ecf627f97e3185a89825bd
             env:
               LIVEKIT_CONFIG:
                 valueFrom:
