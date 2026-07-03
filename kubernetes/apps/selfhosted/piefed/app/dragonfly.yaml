@@ -7,7 +7,10 @@ metadata:
 spec:
   replicas: 1
   args:
-    - --maxmemory=$(MAX_MEMORY)Mi
+    # maxmemory bounds only the dataset; keep it well below the container
+    # limit so Dragonfly's process overhead (buffers, snapshots, fragmentation)
+    # fits under the cgroup ceiling instead of getting OOMKilled on bursts.
+    - --maxmemory=256Mi
     - --proactor_threads=1
     - --default_lua_flags=allow-undeclared-keys
   networkPolicyEnabled: false
@@ -16,12 +19,6 @@ spec:
       cpu: 50m
       memory: 256Mi
     limits:
-      memory: 256Mi
+      memory: 384Mi
   labels:
     role: master
-  env:
-    - name: MAX_MEMORY
-      valueFrom:
-        resourceFieldRef:
-          resource: limits.memory
-          divisor: 1Mi
