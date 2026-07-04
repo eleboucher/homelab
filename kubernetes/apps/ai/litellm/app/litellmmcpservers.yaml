@@ -63,7 +63,7 @@ spec:
   alias: searxng
   workload:
     # renovate: datasource=docker depName=docker.io/isokoliuk/mcp-searxng
-    image: docker.io/isokoliuk/mcp-searxng:1.10.0@sha256:de489bb2642361439549b0c30e649f5b5213f42dc33031a69a70efa9149ba5bf
+    image: docker.io/isokoliuk/mcp-searxng:1.10.1@sha256:8704a6cdd73c416df0779e241e96b78414723640dfe492ab94fa9eb7b0cca6a8
     port: 8080
     env:
       - name: SEARXNG_URL
