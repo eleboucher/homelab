@@ -41,7 +41,7 @@ spec:
                   secretKeyRef:
                     name: piefed-postgres
                     key: url
-              GUNICORN_CMD_ARGS: --workers=1 --threads=4
+              GUNICORN_CMD_ARGS: --workers=1 --threads=4 --worker-class=gthread --max-requests=1000 --max-requests-jitter=50
             probes:
               startup:
                 enabled: true
