@@ -1,10 +1,8 @@
----
 name: registry
-
 services:
   apoci:
     # renovate: datasource=docker depName=registry.mortebrume.eu/erwanleboucher.dev/eleboucher/apoci
-    image: registry.mortebrume.eu/erwanleboucher.dev/eleboucher/apoci:0.0.51
+    image: registry.mortebrume.eu/erwanleboucher.dev/eleboucher/apoci:0.0.50
     container_name: apoci
     restart: unless-stopped
     user: "1000:1000"
@@ -48,7 +46,6 @@ services:
       interval: 5s
       timeout: 3s
       retries: 5
-
   apoci-postgres-backup:
     # renovate: datasource=docker depName=ghcr.io/itbm/postgresql-backup-s3
     image: ghcr.io/itbm/postgresql-backup-s3:1.2.3
@@ -70,7 +67,6 @@ services:
       S3_S3V4: "yes"
       SCHEDULE: "0 */6 * * *"
       DELETE_OLDER_THAN: "30 days ago"
-
 configs:
   # Inlined (not file:) so doco-cd can interpolate ${GHCR_TOKEN} from 1Password
   # into the replication target. configs.file: content is not interpolated.
@@ -150,7 +146,6 @@ configs:
 
       ui:
         enabled: true
-
 networks:
   default:
     name: edge
