@@ -23,9 +23,6 @@ spec:
     all: true
   credentialProjection:
     allowed: true
-  identityDefaults:
-    hostnameExpr: namespace
-    usernameExpr: namespace + '-' + policyName
   moverDefaults:
     securityContext:
       runAsUser: 1000
