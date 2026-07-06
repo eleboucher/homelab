@@ -11,7 +11,7 @@ spec:
     # limit so Dragonfly's process overhead (buffers, snapshots, fragmentation)
     # fits under the cgroup ceiling instead of getting OOMKilled on bursts.
     - --maxmemory=256Mi
-    - --maxmemory-policy=allkeys-lru
+    - --cache_mode=true
     - --proactor_threads=1
     - --default_lua_flags=allow-undeclared-keys
   networkPolicyEnabled: false
