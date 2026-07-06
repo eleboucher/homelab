@@ -31,6 +31,24 @@ spec:
               protocol: UDP
             - port: "53"
               protocol: TCP
+    - # Forgejo runner cache & proxy (job pods → runner pod)
+      toEndpoints:
+        - matchExpressions:
+            - key: app.kubernetes.io/instance
+              operator: In
+              values:
+                - forgejo-runner
+                - forgejo-runner-codeberg
+            - key: k8s:io.kubernetes.pod.namespace
+              operator: In
+              values:
+                - forgejo
+      toPorts:
+        - ports:
+            - port: "8088"
+              protocol: TCP
+            - port: "8089"
+              protocol: TCP
     - # Own services via ingress gateways (e.g. git.erwanleboucher.dev)
       toEndpoints:
         - matchLabels:
