@@ -61,6 +61,9 @@ spec:
     route:
       main:
         enabled: true
+        annotations:
+          gatus.home-operations.com/endpoint: |-
+            path: /healthz
         parentRefs:
           - name: envoy-external
             namespace: network
