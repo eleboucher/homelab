@@ -6,6 +6,8 @@ metadata:
   annotations:
     kopiur.home-operations.com/allow-identity-change: "true"
 spec:
+  credentialProjection:
+    enabled: true
   repository:
     kind: ClusterRepository
     name: nas
