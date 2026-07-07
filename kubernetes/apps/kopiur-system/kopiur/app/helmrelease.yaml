@@ -12,8 +12,8 @@ spec:
     extraVolumes:
       - name: repo
         nfs:
-          server: expanse.internal
-          path: /mnt/ceres/Kopiur
+          server: normandie.internal
+          path: /backups/kopiur
     extraVolumeMounts:
       - name: repo
         mountPath: /repo
