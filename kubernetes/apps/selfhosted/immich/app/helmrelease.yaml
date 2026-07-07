@@ -33,8 +33,6 @@ spec:
       persistence:
         library:
           existingClaim: immich-library
-          globalMounts:
-            - path: /data
 
     server:
       controllers:
