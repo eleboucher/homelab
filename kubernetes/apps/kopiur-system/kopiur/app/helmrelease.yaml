@@ -1,4 +1,3 @@
----
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/helm.toolkit.fluxcd.io/helmrelease_v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
@@ -10,40 +9,33 @@ spec:
     name: kopiur
   interval: 1h
   values:
-    controller:
-      extraVolumes:
-        - name: repo
-          nfs:
-            server: normandie.internal
-            path: /backups/kopiur
-      extraVolumeMounts:
-        - name: repo
-          mountPath: /repo
-    features:
-      credentialProjection:
+    extraVolumes:
+      - name: repo
+        nfs:
+          server: expanse.internal
+          path: /mnt/ceres/Kopiur
+    extraVolumeMounts:
+      - name: repo
+        mountPath: /repo
+    monitoring:
+      dashboards:
         enabled: true
-    grafanaDashboard:
-      enabled: true
-      grafanaOperator:
-        enabled: true
-        matchLabels:
-          dashboards: grafana
-    installScope: cluster
-    metrics:
-      serviceMonitor:
-        enabled: true
+        grafanaOperator:
+          enabled: true
+          matchLabels:
+            dashboards: grafana
       prometheusRule:
         enabled: true
-    podSecurityContext:
-      fsGroup: 1000
-      fsGroupChangePolicy: OnRootMismatch
-      runAsGroup: 1000
-      runAsNonRoot: true
-      runAsUser: 1000
-      seccompProfile:
-        type: RuntimeDefault
-    webhook:
-      tls:
-        mode: self
       serviceMonitor:
         enabled: true
+    podSecurityContext:
+      runAsNonRoot: true
+      runAsUser: 1000
+      runAsGroup: 1000
+      fsGroup: 1000
+      fsGroupChangePolicy: OnRootMismatch
+    resources:
+      requests:
+        cpu: 100m
+      limits:
+        memory: 2Gi

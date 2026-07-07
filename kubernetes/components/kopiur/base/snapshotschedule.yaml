@@ -1,13 +1,10 @@
----
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/kopiur.home-operations.com/snapshotschedule_v1alpha1.json
 apiVersion: kopiur.home-operations.com/v1alpha1
 kind: SnapshotSchedule
 metadata:
-  name: "${APP}"
+  name: ${APP}
 spec:
   policyRef:
-    name: "${APP}"
+    name: ${APP}
   schedule:
-    concurrencyPolicy: Forbid
-    cron: "${KOPIUR_CRON:=0 */12 * * *}"
-    runOnCreate: false
+    cron: H * * * *
