@@ -28,7 +28,7 @@ metadata:
 spec:
   modelRef: qwen3-embedding-0.6b
   runtime: llamacpp
-  image: ghcr.io/ggml-org/llama.cpp:server-vulkan-b9894@sha256:ba79ce324b97ea25ac1ed5c1b8d0a3983ac49ed8020c792104d31eae60ea7a98
+  image: ghcr.io/ggml-org/llama.cpp:server-vulkan-b9917@sha256:e0e1c8c54bde6a99bfde8701671aa580c155873dcd8086c0584afca55f4ec03f
   replicas: 1
   nodeSelector:
     kubernetes.io/hostname: kharkiv
