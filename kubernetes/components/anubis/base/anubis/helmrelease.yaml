@@ -81,6 +81,12 @@ spec:
               - name: allow-api
                 path_regex: ^/api/.*
                 action: ALLOW
+              - name: allow-opencode
+                user_agent_regex: (?i)opencode
+                action: ALLOW
+              - name: allow-claude
+                user_agent_regex: (?i)claude|octokit
+                action: ALLOW
               - import: (data)/meta/default-config.yaml
             store:
               backend: valkey
