@@ -27,4 +27,4 @@ spec:
   sources:
     - pvc:
         name: ${APP}
-  volumeSnapshotClassName: ${KOPIUR_SNAPSHOTCLASS:=openebs-snapshots}
+  volumeSnapshotClassName: ${KOPIUR_SNAPSHOTCLASS:=miroir-snap}
