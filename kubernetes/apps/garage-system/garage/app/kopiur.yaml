@@ -20,7 +20,7 @@ spec:
   sources:
     - pvc:
         name: garage-meta
-  volumeSnapshotClassName: openebs-snapshots
+  volumeSnapshotClassName: miroir-snap
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/kopiur.home-operations.com/snapshotschedule_v1alpha1.json
 apiVersion: kopiur.home-operations.com/v1alpha1
@@ -90,7 +90,7 @@ spec:
   sources:
     - pvc:
         name: garage-data
-  volumeSnapshotClassName: openebs-snapshots
+  volumeSnapshotClassName: miroir-snap
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/kopiur.home-operations.com/snapshotschedule_v1alpha1.json
 apiVersion: kopiur.home-operations.com/v1alpha1
