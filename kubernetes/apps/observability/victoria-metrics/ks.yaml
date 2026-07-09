@@ -21,6 +21,9 @@ spec:
       APP: victoria-metrics
       APP_NAMESPACE: observability
       KOPIUR_CAPACITY: 50Gi
+      # miroir-replicated cannot provision 50Gi (DRBD initial sync exceeds the CSI
+      # timeout), so vmsingle stays on openebs-zfs.
+      KOPIUR_STORAGECLASS: openebs-zfs
   prune: true
   sourceRef:
     kind: OCIRepository
