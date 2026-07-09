@@ -22,14 +22,14 @@ spec:
       key: KOPIA_PASSWORD
   moverDefaults:
     cache:
-      capacity: 1Mi
-      mode: Ephemeral
-      storageClassName: miroir-local
+      capacity: 5Gi
+      mode: Persistent
+      storageClassName: miroir-replicated
     podSecurityContext:
       fsGroup: 1000
       fsGroupChangePolicy: OnRootMismatch
     scratch:
-      capacity: 1Mi
+      capacity: 1Gi
       storageClassName: miroir-local
     securityContext:
       runAsUser: 1000
