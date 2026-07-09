@@ -29,13 +29,17 @@ spec:
           copy-agent-source:
             image:
               repository: nousresearch/hermes-agent
-              tag: v2026.7.7@sha256:ce3b39adf33fffae8cb19dcae74f971975b972efe91207f7d7539f80a0aae66a
+              tag: v2026.7.7.2@sha256:9c841866021c54c4596849f6135717e8a4d52ba510b7f52c50aef1de1a283973
             command:
               - /bin/sh
               - -c
               - |
                 set -e
-                cp -r /opt/hermes/. /agent-src/
+                # hermes-agent >= v2026.7.x ships root-only playwright .deps files;
+                # tolerate those but still fail on any other copy error.
+                cp -r /opt/hermes/. /agent-src/ 2>/tmp/cp.err || true
+                if grep -v 'Permission denied' /tmp/cp.err; then exit 1; fi
+                test -e /agent-src/.venv
             securityContext:
               allowPrivilegeEscalation: false
               capabilities:
@@ -72,7 +76,7 @@ spec:
           install-tools:
             image:
               repository: nousresearch/hermes-agent
-              tag: v2026.7.7@sha256:ce3b39adf33fffae8cb19dcae74f971975b972efe91207f7d7539f80a0aae66a
+              tag: v2026.7.7.2@sha256:9c841866021c54c4596849f6135717e8a4d52ba510b7f52c50aef1de1a283973
             command:
               - /bin/sh
               - -c
@@ -114,7 +118,7 @@ spec:
           app:
             image:
               repository: nousresearch/hermes-agent
-              tag: v2026.7.7@sha256:ce3b39adf33fffae8cb19dcae74f971975b972efe91207f7d7539f80a0aae66a
+              tag: v2026.7.7.2@sha256:9c841866021c54c4596849f6135717e8a4d52ba510b7f52c50aef1de1a283973
             args:
               - gateway
               - run
