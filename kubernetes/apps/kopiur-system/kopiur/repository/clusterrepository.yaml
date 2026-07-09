@@ -20,20 +20,5 @@ spec:
       name: kopiur-nas-secret
       namespace: kopiur-system
       key: KOPIA_PASSWORD
-  moverDefaults:
-    cache:
-      capacity: 5Gi
-      mode: Persistent
-      storageClassName: miroir-replicated
-    podSecurityContext:
-      fsGroup: 1000
-      fsGroupChangePolicy: OnRootMismatch
-    scratch:
-      capacity: 1Gi
-      storageClassName: miroir-local
-    securityContext:
-      runAsUser: 1000
-      runAsGroup: 1000
-    ttlSecondsAfterFinished: 300
   scheduleDefaults:
     timezone: Europe/Paris
