@@ -18,6 +18,8 @@ spec:
     supportsFunctionCalling: true
     supportsPromptCaching: true
     supportsVision: true
+    extra:
+      supports_reasoning: true
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
 apiVersion: litellm.home-operations.com/v1alpha1
@@ -58,6 +60,8 @@ spec:
     supportsFunctionCalling: true
     supportsPromptCaching: true
     supportsVision: true
+    extra:
+      supports_reasoning: true
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
 apiVersion: litellm.home-operations.com/v1alpha1
@@ -78,6 +82,8 @@ spec:
     maxOutputTokens: 131072
     supportsFunctionCalling: true
     supportsPromptCaching: true
+    extra:
+      supports_reasoning: true
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
 apiVersion: litellm.home-operations.com/v1alpha1
@@ -118,6 +124,8 @@ spec:
     maxOutputTokens: 131072
     supportsFunctionCalling: true
     supportsPromptCaching: true
+    extra:
+      supports_reasoning: true
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
 apiVersion: litellm.home-operations.com/v1alpha1
@@ -160,6 +168,8 @@ spec:
     maxOutputTokens: 131072
     supportsFunctionCalling: true
     supportsPromptCaching: true
+    extra:
+      supports_reasoning: true
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
 apiVersion: litellm.home-operations.com/v1alpha1
@@ -203,6 +213,8 @@ spec:
     supportsFunctionCalling: true
     supportsPromptCaching: true
     supportsVision: true
+    extra:
+      supports_reasoning: true
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
 apiVersion: litellm.home-operations.com/v1alpha1
@@ -247,6 +259,8 @@ spec:
     supportsFunctionCalling: true
     supportsPromptCaching: true
     supportsVision: true
+    extra:
+      supports_reasoning: true
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
 apiVersion: litellm.home-operations.com/v1alpha1
@@ -267,6 +281,8 @@ spec:
     maxOutputTokens: 32768
     supportsFunctionCalling: true
     supportsPromptCaching: true
+    extra:
+      supports_reasoning: true
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
 apiVersion: litellm.home-operations.com/v1alpha1
@@ -310,6 +326,8 @@ spec:
     supportsFunctionCalling: true
     supportsVision: true
     supportsPromptCaching: true
+    extra:
+      supports_reasoning: true
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
 apiVersion: litellm.home-operations.com/v1alpha1
