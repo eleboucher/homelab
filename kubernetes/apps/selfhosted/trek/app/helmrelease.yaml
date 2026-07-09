@@ -81,13 +81,13 @@ spec:
       data:
         accessMode: ReadWriteOnce
         size: 5Gi
-        storageClass: openebs-zfs
+        storageClass: miroir-replicated
         globalMounts:
           - path: /app/data
       uploads:
         accessMode: ReadWriteOnce
         size: 5Gi
-        storageClass: openebs-zfs
+        storageClass: miroir-replicated
         globalMounts:
           - path: /app/uploads
     route:

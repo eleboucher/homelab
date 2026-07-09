@@ -11,8 +11,8 @@ spec:
   dependsOn:
     - name: garage
       namespace: garage-system
-    - name: openebs
-      namespace: openebs-system
+    - name: miroir
+      namespace: miroir-system
   interval: 1h
   path: "./kubernetes/apps/garage-system/webui/app"
   postBuild:

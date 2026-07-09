@@ -17,8 +17,8 @@ spec:
       namespace: database
     - name: kanidm
       namespace: security
-    - name: openebs
-      namespace: openebs-system
+    - name: miroir
+      namespace: miroir-system
     - name: external-secrets
       namespace: security
     - name: keda-http-add-on

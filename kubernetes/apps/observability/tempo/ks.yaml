@@ -6,8 +6,8 @@ metadata:
   name: tempo
 spec:
   dependsOn:
-    - name: openebs
-      namespace: openebs-system
+    - name: miroir
+      namespace: miroir-system
   interval: 1h
   path: ./kubernetes/apps/observability/tempo/app
   prune: true

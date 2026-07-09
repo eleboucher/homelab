@@ -19,8 +19,8 @@ spec:
       namespace: observability
     - name: kopiur-repository
       namespace: kopiur-system
-    - name: openebs
-      namespace: openebs-system
+    - name: miroir
+      namespace: miroir-system
   healthCheckExprs:
     - apiVersion: dragonflydb.io/v1alpha1
       kind: Dragonfly

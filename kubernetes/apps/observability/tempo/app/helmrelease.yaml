@@ -81,11 +81,11 @@ spec:
             processors: [local-blocks, service-graphs, span-metrics]
     persistence:
       enabled: true
-      storageClassName: openebs-zfs
+      storageClassName: miroir-replicated
       size: 20Gi
     metrics_generator_storage:
       enabled: true
-      storageClassName: openebs-zfs
+      storageClassName: miroir-replicated
       size: 10Gi
     serviceMonitor:
       enabled: true

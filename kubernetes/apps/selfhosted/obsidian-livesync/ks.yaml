@@ -15,8 +15,8 @@ spec:
       namespace: security
     - name: kopiur-repository
       namespace: kopiur-system
-    - name: openebs
-      namespace: openebs-system
+    - name: miroir
+      namespace: miroir-system
   interval: 1h
   path: "./kubernetes/apps/selfhosted/obsidian-livesync/app"
   postBuild:

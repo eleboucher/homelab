@@ -18,8 +18,8 @@ spec:
       namespace: security
     - name: kanidm
       namespace: security
-    - name: openebs
-      namespace: openebs-system
+    - name: miroir
+      namespace: miroir-system
   interval: 1h
   path: ./kubernetes/apps/selfhosted/trek/app
   postBuild:

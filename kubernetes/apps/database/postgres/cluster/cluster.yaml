@@ -19,7 +19,7 @@ spec:
 
   storage:
     size: 8Gi
-    storageClass: openebs-hostpath
+    storageClass: miroir-local
 
   bootstrap:
     recovery:

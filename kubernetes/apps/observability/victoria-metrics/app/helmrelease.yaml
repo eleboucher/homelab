@@ -28,7 +28,7 @@ spec:
         storage:
           volumeClaimTemplate:
             spec:
-              storageClassName: openebs-zfs
+              storageClassName: miroir-replicated
               resources:
                 requests:
                   storage: 5Gi

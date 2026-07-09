@@ -12,8 +12,8 @@ spec:
     - name: kopiur-repository
       namespace: kopiur-system
     - name: litellm
-    - name: openebs
-      namespace: openebs-system
+    - name: miroir
+      namespace: miroir-system
   interval: 15m
   path: ./kubernetes/apps/ai/hermes/app
   postBuild:

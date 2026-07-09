@@ -15,4 +15,4 @@ spec:
   resources:
     requests:
       storage: ${KOPIUR_CAPACITY:=5Gi}
-  storageClassName: ${KOPIUR_STORAGECLASS:=openebs-zfs}
+  storageClassName: ${KOPIUR_STORAGECLASS:=miroir-replicated}

@@ -14,8 +14,8 @@ spec:
   dependsOn:
     - name: kopiur-repository
       namespace: kopiur-system
-    - name: openebs
-      namespace: openebs-system
+    - name: miroir
+      namespace: miroir-system
   path: "./kubernetes/apps/home-assistant/esphome/app"
   postBuild:
     substitute:

@@ -23,7 +23,7 @@ spec:
     server:
       persistentVolume:
         enabled: true
-        storageClassName: openebs-zfs
+        storageClassName: miroir-replicated
         size: 20Gi
       retentionPeriod: 14d
       route:

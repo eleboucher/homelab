@@ -117,7 +117,7 @@ spec:
       backup:
         accessMode: ReadWriteOnce
         size: 15Gi
-        storageClass: openebs-zfs
+        storageClass: miroir-replicated
         globalMounts:
           - path: /app/SparkyFitnessServer/backup
       tmp:

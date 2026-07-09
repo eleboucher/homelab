@@ -96,5 +96,5 @@ spec:
       resources:
         requests:
           storage: 10Gi
-      storageClassName: openebs-zfs
+      storageClassName: miroir-replicated
   disableDefaultSecurityContext: All

@@ -14,8 +14,8 @@ spec:
       namespace: security
     - name: jellyfin
     - name: jellyseerr
-    - name: openebs
-      namespace: openebs-system
+    - name: miroir
+      namespace: miroir-system
     - name: radarr
     - name: sonarr
     - name: streamystats

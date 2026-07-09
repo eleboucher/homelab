@@ -25,8 +25,8 @@ spec:
     - name: grafana
     - name: kanidm
       namespace: security
-    - name: openebs
-      namespace: openebs-system
+    - name: miroir
+      namespace: miroir-system
   healthChecks:
     - apiVersion: v1
       kind: Secret

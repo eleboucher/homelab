@@ -17,7 +17,7 @@ spec:
       resources:
         requests:
           storage: 1Gi
-      storageClassName: openebs-zfs
+      storageClassName: miroir-replicated
   args:
     - "--admin_bind=::"
     - --dbfilename=dump

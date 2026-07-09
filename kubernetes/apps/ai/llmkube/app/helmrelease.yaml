@@ -22,11 +22,11 @@ spec:
       # perService gives each InferenceService its own RWO cache that binds on the
       # node its pod schedules to, so the embedder can run on kharkiv's iGPU and the
       # reranker on paris's Arc without one shared node-pinned (or RWX) volume.
-      # openebs-hostpath is WaitForFirstConsumer + node-local (the default
-      # openebs-zfs is Immediate and would bind on the wrong node).
+      # miroir-local is WaitForFirstConsumer + node-local (per-service
+      # cache binds on the node the pod schedules to).
       mode: perService
       size: 20Gi
-      storageClass: openebs-hostpath
+      storageClass: miroir-local
     prometheus:
       inferencePodMonitor:
         enabled: false

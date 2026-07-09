@@ -73,6 +73,6 @@ spec:
         type: persistentVolumeClaim
         accessMode: ReadWriteOnce
         size: 20Gi
-        storageClass: openebs-hostpath
+        storageClass: miroir-local
         globalMounts:
           - path: /data/minimax-media

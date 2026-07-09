@@ -10,8 +10,8 @@ spec:
   dependsOn:
     - name: envoy-gateway
       namespace: network
-    - name: openebs
-      namespace: openebs-system
+    - name: miroir
+      namespace: miroir-system
   postBuild:
     substitute:
       APP: bentopdf

@@ -139,7 +139,7 @@ spec:
         type: persistentVolumeClaim
         accessMode: ReadWriteOnce
         size: 100Gi
-        storageClass: openebs-hostpath
+        storageClass: miroir-local
         advancedMounts:
           llama-cpp:
             gemma:

@@ -61,7 +61,6 @@ metadata:
   labels:
     kustomize.toolkit.fluxcd.io/ssa: IfNotPresent
   annotations:
-    volume.kubernetes.io/selected-node: paris
 spec:
   accessModes: [ReadWriteOnce]
   dataSourceRef:
@@ -71,7 +70,7 @@ spec:
   resources:
     requests:
       storage: 5Gi
-  storageClassName: openebs-zfs
+  storageClassName: miroir-replicated
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/kopiur.home-operations.com/snapshotpolicy_v1alpha1.json
 apiVersion: kopiur.home-operations.com/v1alpha1
@@ -132,7 +131,6 @@ metadata:
   labels:
     kustomize.toolkit.fluxcd.io/ssa: IfNotPresent
   annotations:
-    volume.kubernetes.io/selected-node: paris
 spec:
   accessModes: [ReadWriteOnce]
   dataSourceRef:
@@ -142,4 +140,4 @@ spec:
   resources:
     requests:
       storage: 50Gi
-  storageClassName: openebs-zfs
+  storageClassName: miroir-replicated

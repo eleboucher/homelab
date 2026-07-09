@@ -16,8 +16,8 @@ spec:
       namespace: network
     - name: kopiur-repository
       namespace: kopiur-system
-    - name: openebs
-      namespace: openebs-system
+    - name: miroir
+      namespace: miroir-system
   postBuild:
     substitute:
       APP: jellyseerr
