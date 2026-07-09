@@ -6,6 +6,10 @@ metadata:
 spec:
   credentialProjection:
     enabled: true
+  mover:
+    securityContext:
+      runAsUser: ${KOPIUR_MOVER_UID:=1000}
+      runAsGroup: ${KOPIUR_MOVER_GID:=1000}
   policy:
     onMissingSnapshot: Continue
   source:
