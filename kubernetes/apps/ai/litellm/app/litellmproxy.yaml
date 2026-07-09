@@ -37,7 +37,7 @@ spec:
       port: os.environ/REDIS_PORT
     drop_params: true
     merge_reasoning_content_in_choices: true
-    set_verbose: true
+    set_verbose: false
   env:
     - name: LITELLM_LOG
       value: INFO
