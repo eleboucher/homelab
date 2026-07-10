@@ -13,7 +13,7 @@ spec:
   postBuild:
     substitute:
       APP: sure
-      NAMESPACE: selfhosted
+      APP_NAMESPACE: selfhosted
       OIDC_CALLBACK: /auth/openid_connect/callback
       SUBDOMAIN: fin
   prune: true
