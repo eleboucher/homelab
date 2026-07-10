@@ -20,7 +20,7 @@ services:
 
   prometheus-agent:
     # renovate: datasource=docker depName=quay.io/prometheus/prometheus
-    image: quay.io/prometheus/prometheus:v3.13.0
+    image: quay.io/prometheus/prometheus:v3.13.1
     container_name: prometheus-agent
     restart: unless-stopped
     group_add:
