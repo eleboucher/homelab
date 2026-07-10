@@ -1,0 +1,138 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: sure
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: sure
+  interval: 1h
+  values:
+    controllers:
+      server:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        containers:
+          app:
+            image: &img
+              repository: ghcr.io/we-promise/sure
+              tag: 0.7.0-hotfix.3@sha256:55c4da94f60a6a0e1da107dd6d61bdef06661bebaed26c1cd2a5c4d3d10af4ef
+            env: &env
+              AI_DEBUG_MODE: "false"
+              APP_DOMAIN: fin.erwanleboucher.dev
+              DATABASE_URL:
+                valueFrom:
+                  secretKeyRef:
+                    name: sure-postgres
+                    key: url
+              OIDC_CLIENT_ID: sure
+              OIDC_CLIENT_SECRET:
+                valueFrom:
+                  secretKeyRef:
+                    name: kanidm-sure-oidc
+                    key: client-secret
+              OIDC_ISSUER: https://idm.erwanleboucher.dev/oauth2/openid/sure
+              OIDC_REDIRECT_URI: https://fin.erwanleboucher.dev/auth/openid_connect/callback
+              ONBOARDING_STATE: open
+              RAILS_ENV: production
+              REDIS_URL: redis://dragonfly.database.svc:6379/6
+              SELF_HOSTED: "true"
+            envFrom:
+              - secretRef:
+                  name: sure
+            probes:
+              liveness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /up
+                    port: &port 3000
+                  initialDelaySeconds: 20
+                  periodSeconds: 10
+                  timeoutSeconds: 2
+                  failureThreshold: 6
+              readiness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /up
+                    port: *port
+                  initialDelaySeconds: 10
+                  periodSeconds: 5
+                  timeoutSeconds: 2
+                  failureThreshold: 6
+              startup:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /up
+                    port: *port
+                  failureThreshold: 10
+                  periodSeconds: 5
+            resources:
+              requests:
+                cpu: 100m
+                memory: 256Mi
+              limits:
+                memory: 1Gi
+            securityContext: &sec
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: false
+              capabilities: {drop: ["ALL"]}
+        initContainers:
+          migration:
+            image: *img
+            command:
+              - "bash"
+              - "-lc"
+            args: |
+              DISABLE_DATABASE_ENVIRONMENT_CHECK=1 bundle exec rake db:prepare
+            env: *env
+            envFrom:
+              - secretRef:
+                  name: sure
+      worker:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        containers:
+          app:
+            command:
+              - "bash"
+              - "-lc"
+            args: "bundle exec sidekiq -C config/sidekiq.yml"
+            image: *img
+            env: *env
+            envFrom:
+              - secretRef:
+                  name: sure
+            resources:
+              requests:
+                cpu: 100m
+                memory: 256Mi
+              limits:
+                memory: 1Gi
+            securityContext: *sec
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+    service:
+      app:
+        forceRename: sure
+        controller: server
+        ports:
+          http:
+            port: *port
+    route:
+      app:
+        hostnames:
+          - fin.erwanleboucher.dev
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
