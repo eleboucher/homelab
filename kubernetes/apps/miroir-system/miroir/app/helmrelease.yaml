@@ -13,11 +13,13 @@ spec:
   upgrade:
     crds: CreateReplace
   values:
+    controller:
+      autoTieBreaker: false
     image:
       # Pin to the release tag: the chart's rendered flags track tagged
       # releases, while :main drifts ahead and drops flags (e.g.
       # --overcommit-ratio) → controller/agent crashloop on usage.
-      tag: 0.2.2
+      tag: 0.3.2
     nodes:
       kharkiv:
         backend: lvmthin
