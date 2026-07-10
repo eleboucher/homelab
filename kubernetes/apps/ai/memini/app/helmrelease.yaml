@@ -44,7 +44,7 @@ spec:
               MEMINI_GLOBAL_NAMESPACE: global
               MEMINI_LLM_API: openai
               MEMINI_LLM_BASE_URL: https://litellm.erwanleboucher.dev/v1
-              MEMINI_LLM_MODEL: neuralwatt/qwen3.6-35b-fast
+              MEMINI_LLM_MODEL: opencode-go/qwen3.6-plus
               MEMINI_LLM_API_KEY:
                 valueFrom:
                   secretKeyRef:
