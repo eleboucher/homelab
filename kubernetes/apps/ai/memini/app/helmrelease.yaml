@@ -41,6 +41,7 @@ spec:
               MEMINI_RECALL_MIN_SEMANTIC_SCORE: "0.46"
               MEMINI_RECALL_EMBED_TIMEOUT: "10s"
               MEMINI_EMBED_MAX_CONCURRENCY: "2"
+              MEMINI_TENANT_SHARED: true
               MEMINI_LLM_API: openai
               MEMINI_LLM_BASE_URL: https://litellm.erwanleboucher.dev/v1
               MEMINI_LLM_MODEL: neuralwatt/qwen3.6-35b-fast
