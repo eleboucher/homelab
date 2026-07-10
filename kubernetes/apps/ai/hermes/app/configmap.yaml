@@ -9,86 +9,76 @@ data:
         base_url: http://litellm.ai:4000/v1
         key_env: LITELLM_API_KEY
         models:
-          minimax/MiniMax-M3:
+          opencode-go/minimax-m3:
             context_length: 1000000
-          glm-5.2:
-            context_length: 1000000
-          glm-5-turbo:
-            context_length: 200000
-          neuralwatt/glm-5.2:
+          opencode-go/glm-5.2:
             context_length: 1048560
-          neuralwatt/qwen3.6-35b:
-            context_length: 131056
-          gemma:
-            context_length: 32768
-          qwen:
+          opencode-go/deepseek-v4-flash:
+            context_length: 131072
+          opencode-go/mimo-v2.5:
+            context_length: 262144
+          opencode-go/qwen3.6-plus:
             context_length: 262144
     model:
-      default: minimax/MiniMax-M3
+      default: opencode-go/minimax-m3
       provider: custom:litellm
       context_length: 1000000
     model_aliases:
-      gemma:
-        model: gemma
-        provider: custom:litellm
       qwen:
-        model: qwen
+        model: opencode-go/qwen3.6-plus
         provider: custom:litellm
       minimax:
-        model: minimax/MiniMax-M3
+        model: opencode-go/minimax-m3
         provider: custom:litellm
       glm:
-        model: glm-5.2
+        model: opencode-go/glm-5.2
         provider: custom:litellm
       glm-turbo:
-        model: glm-5-turbo
+        model: opencode-go/deepseek-v4-flash
         provider: custom:litellm
-      neuralwatt-glm:
-        model: neuralwatt/glm-5.2
-        provider: custom:litellm
-      neuralwatt-qwen:
-        model: neuralwatt/qwen3.6-35b
+      mimo:
+        model: opencode-go/mimo-v2.5
         provider: custom:litellm
     fallback_providers:
       - provider: custom:litellm
-        model: qwen
+        model: opencode-go/qwen3.6-plus
       - provider: custom:litellm
-        model: gemma
+        model: opencode-go/deepseek-v4-flash
     auxiliary:
       approval:
         provider: custom:litellm
-        model: minimax/MiniMax-M3
+        model: opencode-go/minimax-m3
         timeout: 60
       compression:
         provider: custom:litellm
-        model: minimax/MiniMax-M3
+        model: opencode-go/minimax-m3
       web_extract:
         provider: custom:litellm
-        model: minimax/MiniMax-M3
+        model: opencode-go/minimax-m3
       session_search:
         provider: custom:litellm
-        model: glm-5-turbo
+        model: opencode-go/deepseek-v4-flash
       vision:
         provider: custom:litellm
-        model: minimax/MiniMax-M3
+        model: opencode-go/minimax-m3
       goal_judge:
         provider: custom:litellm
-        model: glm-5-turbo
+        model: opencode-go/deepseek-v4-flash
       title_generation:
         provider: custom:litellm
-        model: glm-5-turbo
+        model: opencode-go/deepseek-v4-flash
       profile_describer:
         provider: custom:litellm
-        model: glm-5-turbo
+        model: opencode-go/deepseek-v4-flash
       triage_specifier:
         provider: custom:litellm
-        model: glm-5-turbo
+        model: opencode-go/deepseek-v4-flash
       kanban_decomposer:
         provider: custom:litellm
-        model: glm-5-turbo
+        model: opencode-go/deepseek-v4-flash
       curator:
         provider: custom:litellm
-        model: glm-5-turbo
+        model: opencode-go/deepseek-v4-flash
         timeout: 600
     memory:
       provider: memini
@@ -128,7 +118,7 @@ data:
       api_max_retries: 3
       reasoning_effort: medium
     delegation:
-      model: glm-5-turbo
+      model: opencode-go/deepseek-v4-flash
       max_concurrent_children: 8
       max_spawn_depth: 2
     moa:
@@ -138,14 +128,14 @@ data:
           enabled: true
           reference_models:
             - provider: custom:litellm
-              model: minimax/MiniMax-M3
+              model: opencode-go/minimax-m3
             - provider: custom:litellm
-              model: glm-5.2
+              model: opencode-go/glm-5.2
             - provider: custom:litellm
-              model: neuralwatt/qwen3.6-35b
+              model: opencode-go/mimo-v2.5
           aggregator:
             provider: custom:litellm
-            model: minimax/MiniMax-M3
+            model: opencode-go/minimax-m3
           reference_temperature: 0.6
           aggregator_temperature: 0.4
           max_tokens: 8192
