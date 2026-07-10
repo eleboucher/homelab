@@ -20,4 +20,5 @@ resources:
   - searxng/ks.yaml
   - smtp-relay/ks.yaml
   - sparkyfitness/ks.yaml
+  - sure/ks.yaml
   - trek/ks.yaml
