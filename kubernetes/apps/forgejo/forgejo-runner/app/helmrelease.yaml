@@ -14,7 +14,7 @@ spec:
       existingSecret: forgejo-runner-secret
     image:
       repository: registry.erwanleboucher.dev/eleboucher/runner
-      tag: "12.10.2"
+      tag: "12.13.0"
     plugin:
       image:
         repository: registry.erwanleboucher.dev/eleboucher/runner-k8s-plugin
