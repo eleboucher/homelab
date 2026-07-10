@@ -14,12 +14,6 @@
   ],
   "packageRules": [
     {
-      "description": "Hold miroir on 0.3.x: 0.4.x agent regression leaves new replicated volumes' kharkiv leg unrealized (DRBD stuck Connecting)",
-      "matchDatasources": ["docker"],
-      "matchPackageNames": ["ghcr.io/home-operations/charts/miroir"],
-      "allowedVersions": "<0.4.0"
-    },
-    {
       "description": "Auto merge container digests",
       "matchDatasources": ["docker"],
       "matchUpdateTypes": ["digest"],
