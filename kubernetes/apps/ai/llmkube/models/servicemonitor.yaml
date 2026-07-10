@@ -11,7 +11,7 @@ spec:
         operator: Exists
   namespaceSelector:
     matchNames:
-      - llm
+      - ai
   endpoints:
     - port: http
       path: /metrics
