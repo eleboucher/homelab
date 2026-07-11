@@ -40,8 +40,6 @@ spec:
               MEMINI_EMBED_QUERY_PREFIX: "Instruct: Given a user message, retrieve relevant past memories\nQuery: "
               MEMINI_RECALL_EMBED_TIMEOUT: "10s"
               MEMINI_EMBED_MAX_CONCURRENCY: "2"
-              MEMINI_TENANT_SHARED: true
-              MEMINI_GLOBAL_NAMESPACE: global
               MEMINI_LLM_API: openai
               MEMINI_LLM_BASE_URL: https://litellm.erwanleboucher.dev/v1
               MEMINI_LLM_MODEL: opencode-go/qwen3.6-plus
