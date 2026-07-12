@@ -25,7 +25,7 @@ ip_lookup_strategy = 3
 # User settings
 allow_encryption = true
 allow_federation = true
-allow_registration = false
+allow_registration = true
 new_user_displayname_suffix = ""
 suspend_on_register = false
 
