@@ -49,7 +49,7 @@ server = "matrix.erwanleboucher.dev:443"
 support_mxid = "@genesixx:erwanleboucher.dev"
 
 [global.oauth]
-compatibility_mode = "exclusive"
+compatibility_mode = "hybrid"
 
 [global.oauth.oidc]
 discovery_url = "https://idm.erwanleboucher.dev/oauth2/openid/continuwuity"
