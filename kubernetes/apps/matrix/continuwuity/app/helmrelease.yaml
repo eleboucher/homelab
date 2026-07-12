@@ -61,6 +61,13 @@ spec:
           - path: /etc/conduwuit/conduwuit.toml
             subPath: conduwuit.toml
             readOnly: true
+      oidc-secret:
+        type: secret
+        name: kanidm-continuwuity-oidc
+        globalMounts:
+          - path: /etc/continuwuity/oidc_secret
+            subPath: client-secret
+            readOnly: true
       tmp:
         type: emptyDir
     route:

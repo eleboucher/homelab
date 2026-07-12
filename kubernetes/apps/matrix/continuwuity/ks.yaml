@@ -10,17 +10,24 @@ spec:
       app.kubernetes.io/name: continuwuity
   components:
     - ../../../../components/kopiur/hot
+    - ../../../../components/oidc
   dependsOn:
     - name: kopiur-repository
       namespace: kopiur-system
     - name: miroir
       namespace: miroir-system
+    - name: kanidm
+      namespace: security
   interval: 1h
   path: "./kubernetes/apps/matrix/continuwuity/app"
   postBuild:
     substitute:
       APP: continuwuity
       APP_NAMESPACE: matrix
+      SUBDOMAIN: matrix
+      OIDC_CALLBACK: /_continuwuity/oidc/complete
+      OIDC_DISPLAY_NAME: Continuwuity
+      OIDC_SHORT_USERNAME: "true"
   prune: true
   sourceRef:
     kind: OCIRepository
