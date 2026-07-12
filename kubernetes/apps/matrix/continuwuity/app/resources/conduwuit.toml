@@ -49,13 +49,16 @@ server = "matrix.erwanleboucher.dev:443"
 support_mxid = "@genesixx:erwanleboucher.dev"
 
 [global.oauth]
-compatibility_mode = "hybrid"
+compatibility_mode = "exclusive"
 
-# [global.oauth.oidc]
-# discovery_url = "https://idm.erwanleboucher.dev/oauth2/openid/continuwuity"
-# client_id = "continuwuity"
-# client_secret_file = "/etc/continuwuity/oidc_secret"
-# additional_scopes = ["profile", "email"]
+[global.oauth.oidc]
+discovery_url = "https://idm.erwanleboucher.dev/oauth2/openid/continuwuity"
+client_id = "continuwuity"
+client_secret_file = "/etc/continuwuity/oidc_secret"
+additional_scopes = ["email", "openid", "profile"]
+prompt_for_localpart = false
+profile_key_import_mode = "on_registration"
+profile_key_map = { displayname = "name" }
 
 [global.matrix_rtc]
 foci = [{ type = "livekit", livekit_service_url = "https://livekit.erwanleboucher.dev" }]
