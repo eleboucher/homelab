@@ -5,24 +5,22 @@ port = 8080
 
 database_path = "/data"
 database_backup_path = "/backups"
-database_backups_to_keep = 3
+database_backups_to_keep = 1
 
 rocksdb_compression_algo = "zstd"
 rocksdb_compression_level = 32767
 rocksdb_bottommost_compression_level = 32767
 rocksdb_bottommost_compression = true
-rocksdb_direct_io = false
 
+# Perf tuning
+cache_capacity_modifier = 2.0
 max_request_size = 20971520
 
 # DNS Optimisation
-dns_cache_entries = 0
-dns_timeout = 15
+dns_cache_entries = 1_000_000
+dns_timeout = 60
 query_over_tcp_only = true
 ip_lookup_strategy = 3
-request_ip_source = "x_envoy_external_address"
-
-cache_capacity_modifier = 1.5
 
 # User settings
 allow_encryption = true
@@ -35,7 +33,7 @@ allow_legacy_media = true
 allow_public_room_directory_over_federation = false
 lockdown_public_room_directory = true
 require_auth_for_profile_requests = true
-trusted_servers = ["codestorm.net", "starstruck.systems", "unredacted.org", "matrix.org"]
+trusted_servers = ["codestorm.net", "starstruck.systems", "unredacted.org"]
 
 admins_list = ["@genesixx:erwanleboucher.dev"]
 startup_netburst_keep = 200
