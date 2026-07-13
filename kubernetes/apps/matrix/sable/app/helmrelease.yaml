@@ -1,0 +1,77 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app sable
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: sable
+  interval: 1h
+  values:
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+    controllers:
+      sable:
+        containers:
+          app:
+            image:
+              repository: registry.erwanleboucher.dev/eleboucher/sable
+              tag: pr1071-05cb4383
+            env:
+              TZ: Europe/Paris
+            probes:
+              liveness:
+                enabled: true
+              readiness:
+                enabled: true
+            resources:
+              requests:
+                cpu: 10m
+                memory: 32Mi
+              limits:
+                memory: 128Mi
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - "ALL"
+    persistence:
+      config-json:
+        type: configMap
+        name: sable-configmap
+        globalMounts:
+          - path: /app/config.json
+            subPath: config.json
+            readOnly: true
+      caddy-config:
+        type: emptyDir
+        globalMounts:
+          - path: /config
+      caddy-data:
+        type: emptyDir
+        globalMounts:
+          - path: /data
+    route:
+      app:
+        hostnames:
+          - "sable.erwanleboucher.dev"
+        parentRefs:
+          - name: envoy-external
+            namespace: network
+        rules:
+          - backendRefs:
+              - identifier: app
+                port: 8080
+    service:
+      app:
+        controller: sable
+        ports:
+          http:
+            port: 8080

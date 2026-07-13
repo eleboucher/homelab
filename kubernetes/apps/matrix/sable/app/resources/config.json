@@ -1,0 +1,14 @@
+{
+  "defaultHomeserver": 0,
+  "homeserverList": ["erwanleboucher.dev"],
+  "allowCustomHomeservers": true,
+
+  "slidingSync": {
+    "enabled": true
+  },
+
+  "hashRouter": {
+    "enabled": false,
+    "basename": "/"
+  }
+}

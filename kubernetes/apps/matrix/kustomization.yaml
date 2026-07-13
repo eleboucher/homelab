@@ -9,3 +9,4 @@ resources:
   - mautrix-signal/ks.yaml
   - mautrix-whatsapp/ks.yaml
   - namespace.yaml
+  - sable/ks.yaml

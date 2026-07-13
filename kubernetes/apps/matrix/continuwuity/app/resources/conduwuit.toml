@@ -53,14 +53,14 @@ compatibility_mode = "hybrid"
 # OIDC disabled: configuring it forces `exclusive` mode, which disables legacy
 # password login and only allows native-OAuth clients (Element family).
 # Cinny/sable use password login, so OIDC stays off to keep them working.
-# [global.oauth.oidc]
-# discovery_url = "https://idm.erwanleboucher.dev/oauth2/openid/continuwuity"
-# client_id = "continuwuity"
-# client_secret_file = "/etc/continuwuity/oidc_secret"
-# additional_scopes = ["email", "openid", "profile"]
-# prompt_for_localpart = false
-# profile_key_import_mode = "on_registration"
-# profile_key_map = { displayname = "name" }
+[global.oauth.oidc]
+discovery_url = "https://idm.erwanleboucher.dev/oauth2/openid/continuwuity"
+client_id = "continuwuity"
+client_secret_file = "/etc/continuwuity/oidc_secret"
+additional_scopes = ["email", "openid", "profile"]
+prompt_for_localpart = false
+profile_key_import_mode = "on_registration"
+profile_key_map = { displayname = "name" }
 
 [global.matrix_rtc]
 foci = [{ type = "livekit", livekit_service_url = "https://livekit.erwanleboucher.dev" }]
