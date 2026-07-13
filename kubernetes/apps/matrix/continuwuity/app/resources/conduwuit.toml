@@ -11,13 +11,14 @@ rocksdb_compression_algo = "zstd"
 rocksdb_compression_level = 32767
 rocksdb_bottommost_compression_level = 32767
 rocksdb_bottommost_compression = true
+rocksdb_direct_io = false
 
 # Perf tuning
 cache_capacity_modifier = 2.0
 max_request_size = 20971520
 
 # DNS Optimisation
-dns_cache_entries = 1_000_000
+dns_cache_entries = 0
 dns_timeout = 60
 query_over_tcp_only = true
 ip_lookup_strategy = 3
@@ -36,8 +37,6 @@ require_auth_for_profile_requests = true
 trusted_servers = ["codestorm.net", "starstruck.systems", "unredacted.org"]
 
 admins_list = ["@genesixx:erwanleboucher.dev"]
-startup_netburst_keep = 200
-
 
 registration_token = "{{ .registration_token }}"
 emergency_password = "{{ .emergency_password }}"
