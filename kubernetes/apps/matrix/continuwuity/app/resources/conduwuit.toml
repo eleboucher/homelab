@@ -48,7 +48,7 @@ server = "matrix.erwanleboucher.dev:443"
 support_mxid = "@genesixx:erwanleboucher.dev"
 
 [global.oauth]
-compatibility_mode = "hybrid"
+compatibility_mode = "disabled"
 
 # OIDC disabled: configuring it forces `exclusive` mode, which disables legacy
 # password login and only allows native-OAuth clients (Element family).
