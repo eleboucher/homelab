@@ -94,6 +94,7 @@ encryption:
   default: true
   require: false
   appservice: false
+  msc4190: true
   allow_key_sharing: true
   pickle_key: "{{ .PICKLE_KEY }}"
   verification_levels:
