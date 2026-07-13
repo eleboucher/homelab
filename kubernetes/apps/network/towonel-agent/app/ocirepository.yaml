@@ -9,7 +9,7 @@ spec:
     mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
     operation: copy
   ref:
-    tag: 1.1.0
+    tag: 1.2.0
   url: oci://codeberg.org/towonel/charts/towonel-agent
   verify:
     provider: cosign
