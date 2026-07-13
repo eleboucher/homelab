@@ -23,15 +23,11 @@ spec:
       paris:
         backend: zfs
         zfsDataset: data-pool/homefs
-    storageClass:
-      create: true
-      name: miroir-local
-      isDefault: false
-    replicatedStorageClass:
-      create: true
-      name: miroir-replicated
-      isDefault: false
-      quorum: last-man-standing
-    volumeSnapshotClass:
-      create: true
-      name: miroir-snap
+    storageClasses:
+      - name: miroir-local
+        replicas: 1
+      - name: miroir-replicated
+        replicas: 2
+        quorum: last-man-standing
+    volumeSnapshotClasses:
+      - name: miroir-snap
