@@ -10,6 +10,15 @@ spec:
   interval: 1h
   values:
     defaultPodOptions:
+      dnsConfig:
+        nameservers:
+          - "127.0.0.1"
+        options:
+          - name: ndots
+            value: "1"
+        searches:
+          - cluster.local
+      dnsPolicy: None
       securityContext:
         runAsNonRoot: true
         runAsUser: 1000
@@ -19,6 +28,43 @@ spec:
     controllers:
       continuwuity:
         type: statefulset
+        initContainers:
+          unbound:
+            restartPolicy: Always
+            image:
+              repository: docker.io/madnuttah/unbound
+              tag: 1.25.1-3@sha256:1184c6210e56348ffdc446f31eb3108d6d0844ecfd18cf7081ca4ebe87ae8de8
+            env:
+              DISABLE_SET_PERMS: "true"
+              HEALTHCHECK_PORT: "53"
+              TZ: Europe/Paris
+            probes:
+              liveness: &probeDns
+                enabled: true
+                custom: true
+                spec:
+                  exec:
+                    command:
+                      - /usr/local/unbound/sbin/healthcheck.sh
+                  initialDelaySeconds: 15
+                  periodSeconds: 60
+                  timeoutSeconds: 30
+                  failureThreshold: 5
+              readiness: *probeDns
+            resources:
+              requests:
+                cpu: 100m
+                memory: 256Mi
+              limits:
+                memory: 1Gi
+            securityContext:
+              readOnlyRootFilesystem: true
+              allowPrivilegeEscalation: false
+              capabilities:
+                add:
+                  - NET_BIND_SERVICE
+                drop:
+                  - ALL
         containers:
           app:
             image:
@@ -50,26 +96,46 @@ spec:
         enabled: true
         type: persistentVolumeClaim
         existingClaim: "{{ .Release.Name }}"
-        globalMounts:
-          - path: /data
-          - path: /backups
-            subPath: backups
+        advancedMounts:
+          continuwuity:
+            app:
+              - path: /data
+              - path: /backups
+                subPath: backups
       conduwuit-toml:
         type: secret
         name: continuwuity
-        globalMounts:
-          - path: /etc/conduwuit/conduwuit.toml
-            subPath: conduwuit.toml
-            readOnly: true
+        advancedMounts:
+          continuwuity:
+            app:
+              - path: /etc/conduwuit/conduwuit.toml
+                subPath: conduwuit.toml
+                readOnly: true
       oidc-secret:
         type: secret
         name: kanidm-continuwuity-oidc
-        globalMounts:
-          - path: /etc/continuwuity/oidc_secret
-            subPath: client-secret
-            readOnly: true
+        advancedMounts:
+          continuwuity:
+            app:
+              - path: /etc/continuwuity/oidc_secret
+                subPath: client-secret
+                readOnly: true
       tmp:
         type: emptyDir
+      unbound:
+        type: configMap
+        name: unbound-configmap
+        advancedMounts:
+          continuwuity:
+            unbound:
+              - path: /usr/local/unbound/unbound.conf
+                subPath: unbound.conf
+      unbound-iana:
+        type: emptyDir
+        advancedMounts:
+          continuwuity:
+            unbound:
+              - path: /usr/local/unbound/iana.d
     route:
       app:
         hostnames:
