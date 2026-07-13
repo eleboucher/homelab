@@ -47,9 +47,11 @@
       "description": "Auto-merge high-cadence packages weekly",
       "matchDatasources": ["docker"],
       "automerge": true,
-      "matchUpdateTypes": ["minor", "patch"],
+      "matchUpdateTypes": ["digest", "minor", "patch"],
       "matchPackageNames": [
         "ghcr.io/renovatebot/renovate",
+        "ghcr.io/cloudnative-pg/postgis-extension-testing",
+        "ghcr.io/cloudnative-pg/postgresql",
         "ghcr.io/emberstack/helm-charts/reflector",
         "ghcr.io/mogenius/helm-charts/renovate-operator"
       ],
