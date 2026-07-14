@@ -174,3 +174,71 @@ spec:
     supportsPromptCaching: true
     extra:
       supports_reasoning: true
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: lilac-minimax-m3
+spec:
+  modelName: minimaxai/minimax-m3
+  params:
+    model: openai/minimax-m3
+    apiBase: https://api.getlilac.com/v1
+    apiKeyRef:
+      name: litellm
+      key: LILAC_API_KEY
+    dropParams: true
+  info:
+    maxInputTokens: 1000000
+    maxOutputTokens: 131072
+    supportsFunctionCalling: true
+    supportsPromptCaching: true
+    supportsVision: true
+    extra:
+      supports_reasoning: true
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: lilac-kimi-k2-6
+spec:
+  modelName: moonshotai/kimi-k2.6
+  params:
+    model: openai/kimi-k2.6
+    apiBase: https://api.getlilac.com/v1
+    apiKeyRef:
+      name: litellm
+      key: LILAC_API_KEY
+    dropParams: true
+  info:
+    maxInputTokens: 262128
+    maxOutputTokens: 131072
+    supportsFunctionCalling: true
+    supportsPromptCaching: true
+    supportsVision: true
+    extra:
+      supports_reasoning: true
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: lilac-glm-5-2
+spec:
+  modelName: zai-org/glm-5.2
+  params:
+    model: openai/glm-5.2
+    apiBase: https://api.getlilac.com/v1
+    apiKeyRef:
+      name: litellm
+      key: LILAC_API_KEY
+    dropParams: true
+  info:
+    maxInputTokens: 1048560
+    maxOutputTokens: 131072
+    supportsFunctionCalling: true
+    supportsPromptCaching: true
+    extra:
+      supports_reasoning: true
