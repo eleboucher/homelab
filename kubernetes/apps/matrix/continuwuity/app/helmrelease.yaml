@@ -68,8 +68,8 @@ spec:
         containers:
           app:
             image:
-              repository: forgejo.ellis.link/continuwuation/continuwuity
-              tag: sha-ad1c194
+              repository: registry.erwanleboucher.dev/continuwuity-invite-fix
+              tag: latest
             env:
               CONDUWUIT_CONFIG: /etc/conduwuit/conduwuit.toml
               TOKIO_WORKER_THREADS: "2"
