@@ -5,17 +5,22 @@ metadata:
   name: miroir
 spec:
   interval: 1h
-  chartRef:
-    kind: OCIRepository
-    name: miroir
-  install:
-    crds: CreateReplace
-  upgrade:
-    crds: CreateReplace
   values:
     # 2-node cluster: no spare node can host a diskless tie-breaker.
     # Top-level key since chart 0.4.0 (was controller.autoTieBreaker).
     autoTieBreaker: false
+    replicaCount: 2
+    monitoring:
+      dashboards:
+        enabled: true
+        grafanaOperator:
+          enabled: true
+          matchLabels:
+            dashboards: grafana
+      podMonitor:
+        enabled: true
+      prometheusRule:
+        enabled: true
     nodes:
       kharkiv:
         backend: lvmthin
