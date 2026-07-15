@@ -10,6 +10,7 @@ resources:
   - janitorr/ks.yaml
   - jellyfin/ks.yaml
   - jellyseerr/ks.yaml
+  - jellystat/ks.yaml
   - namespace.yaml
   - profilarr/ks.yaml
   - prowlarr/ks.yaml

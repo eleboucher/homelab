@@ -1,0 +1,29 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: &app jellystat
+  namespace: flux-system
+spec:
+  interval: 1h
+  components:
+    - ../../../../components/postgres/pass
+  path: ./kubernetes/apps/media/jellystat/app
+  dependsOn:
+    - name: cnpg-cluster
+      namespace: database
+    - name: envoy-gateway
+      namespace: network
+  prune: true
+  postBuild:
+    substitute:
+      APP: *app
+      APP_NAMESPACE: media
+  sourceRef:
+    kind: OCIRepository
+    name: flux-system
+    namespace: flux-system
+  targetNamespace: media
+  timeout: 5m
+  wait: false
