@@ -126,11 +126,11 @@ erwanleboucher.dev {
 		reverse_proxy apoci:5000
 	}
 
-	# Matrix .well-known — 301 to the matrix subdomain.
+	# Matrix .well-known — proxy to the matrix subdomain (federation clients don't follow 3xx).
 	@matrix path /.well-known/matrix/*
 	handle @matrix {
 		header Access-Control-Allow-Origin *
-		redir https://matrix.erwanleboucher.dev{uri} 301
+		reverse_proxy https://matrix.erwanleboucher.dev
 	}
 
 	# GoToSocial/ActivityPub .well-knowns — 301 to the gts subdomain. Must come
