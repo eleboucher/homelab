@@ -26,11 +26,15 @@ spec:
         enabled: true
     nodes:
       kharkiv:
-        backend: lvmthin
-        device: /dev/disk/by-partlabel/r-homefs
+        pools:
+          default:
+            backend: lvmthin
+            device: /dev/disk/by-partlabel/r-homefs
       paris:
-        backend: zfs
-        zfsDataset: data-pool/homefs
+        pools:
+          default:
+            backend: zfs
+            zfsDataset: data-pool/homefs
     storageClasses:
       - name: miroir-local
         replicas: 1
