@@ -15,4 +15,3 @@ resources:
   - prowlarr/ks.yaml
   - radarr/ks.yaml
   - sonarr/ks.yaml
-  - streamystats/ks.yaml
