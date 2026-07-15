@@ -5,6 +5,9 @@ metadata:
   name: miroir
 spec:
   interval: 1h
+  chartRef:
+    kind: OCIRepository
+    name: miroir
   values:
     # 2-node cluster: no spare node can host a diskless tie-breaker.
     # Top-level key since chart 0.4.0 (was controller.autoTieBreaker).
