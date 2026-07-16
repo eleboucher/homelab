@@ -16,6 +16,17 @@ spec:
     redis_port: os.environ/REDIS_PORT
     num_retries: 3
     timeout: 600
+    fallbacks:
+      # direct same-model failover
+      - opencode-go/glm-5.2: ["zai-org/glm-5.2"]
+      - opencode-go/kimi-k2.6: ["moonshotai/kimi-k2.6"]
+      - opencode-go/minimax-m3: ["minimaxai/minimax-m3"]
+      # cross-family failover (lanes Lilac has no direct twin for)
+      - opencode-go/kimi-k2.7-code: ["moonshotai/kimi-k2.6"]
+      - opencode-go/mimo-v2.5: ["moonshotai/kimi-k2.6"]
+      - opencode-go/qwen3.7-max: ["zai-org/glm-5.2"]
+      - opencode-go/qwen3.6-plus: ["zai-org/glm-5.2"]
+      - opencode-go/deepseek-v4-flash: ["moonshotai/kimi-k2.6"]
   litellmSettings:
     success_callback: ["prometheus"]
     prometheus_adapter: true
