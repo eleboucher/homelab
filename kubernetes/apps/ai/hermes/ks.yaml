@@ -8,7 +8,10 @@ metadata:
 spec:
   components:
     - ../../../../components/kopiur/hot
+    - ../../../../components/oidc
   dependsOn:
+    - name: kanidm
+      namespace: security
     - name: kopiur-repository
       namespace: kopiur-system
     - name: litellm
@@ -21,6 +24,9 @@ spec:
       APP: hermes
       APP_NAMESPACE: ai
       KOPIUR_CAPACITY: 20Gi
+      OIDC_CALLBACK: /auth/callback
+      OIDC_DISPLAY_NAME: Hermes
+      SUBDOMAIN: hermes
   prune: true
   sourceRef:
     kind: OCIRepository

@@ -170,17 +170,18 @@ spec:
               TERM: xterm-256color
               TERMINAL_MAX_FOREGROUND_TIMEOUT: "1800"
               HERMES_DASHBOARD: "1"
-              HERMES_DASHBOARD_BASIC_AUTH_USERNAME: erwan
-              HERMES_DASHBOARD_BASIC_AUTH_PASSWORD_HASH:
+              HERMES_DASHBOARD_PUBLIC_URL: https://hermes.erwanleboucher.dev
+              HERMES_DASHBOARD_OIDC_ISSUER: https://idm.erwanleboucher.dev/oauth2/openid/hermes
+              HERMES_DASHBOARD_OIDC_CLIENT_ID:
                 valueFrom:
                   secretKeyRef:
-                    name: hermes-config
-                    key: DASHBOARD_PW_HASH
-              HERMES_DASHBOARD_BASIC_AUTH_SECRET:
+                    name: kanidm-hermes-oidc
+                    key: client-id
+              HERMES_DASHBOARD_OIDC_CLIENT_SECRET:
                 valueFrom:
                   secretKeyRef:
-                    name: hermes-config
-                    key: DASHBOARD_SESSION_SECRET
+                    name: kanidm-hermes-oidc
+                    key: client-secret
               TZ: "Europe/Paris"
             resources:
               requests:
