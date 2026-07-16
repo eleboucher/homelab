@@ -170,7 +170,17 @@ spec:
               TERM: xterm-256color
               TERMINAL_MAX_FOREGROUND_TIMEOUT: "1800"
               HERMES_DASHBOARD: "1"
-              HERMES_DASHBOARD_INSECURE: "1"
+              HERMES_DASHBOARD_BASIC_AUTH_USERNAME: erwan
+              HERMES_DASHBOARD_BASIC_AUTH_PASSWORD_HASH:
+                valueFrom:
+                  secretKeyRef:
+                    name: hermes-config
+                    key: DASHBOARD_PW_HASH
+              HERMES_DASHBOARD_BASIC_AUTH_SECRET:
+                valueFrom:
+                  secretKeyRef:
+                    name: hermes-config
+                    key: DASHBOARD_SESSION_SECRET
               TZ: "Europe/Paris"
             resources:
               requests:
