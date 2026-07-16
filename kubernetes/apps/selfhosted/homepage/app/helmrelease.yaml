@@ -1,4 +1,3 @@
----
 # yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
@@ -243,9 +242,9 @@ spec:
                   icon: wizarr.png
                   href: https://wizarr.erwanleboucher.dev
                   description: User Invitations
-              - Streamystats:
+              - jellystat:
                   icon: jellyfin.png
-                  href: https://streamystats.erwanleboucher.dev
+                  href: https://jellystat.erwanleboucher.dev
                   description: Jellyfin Statistics
 
             - Downloads:
@@ -283,7 +282,6 @@ spec:
                     type: homeassistant
                     url: http://home-assistant-external.system:8123
                     key: '{{ "{{" }}HOMEPAGE_VAR_HASS_KEY{{ "}}" }}'
-
     persistence:
       config:
         type: configMap
