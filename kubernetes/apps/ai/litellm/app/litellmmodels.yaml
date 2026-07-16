@@ -242,3 +242,23 @@ spec:
     supportsPromptCaching: true
     extra:
       supports_reasoning: true
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: lilac-gemma-4-31b-it
+spec:
+  modelName: google/gemma-4-31b-it
+  params:
+    model: openai/google/gemma-4-31b-it
+    apiBase: https://api.getlilac.com/v1
+    apiKeyRef:
+      name: litellm
+      key: LILAC_API_KEY
+    dropParams: true
+  info:
+    maxInputTokens: 131072
+    maxOutputTokens: 8192
+    supportsFunctionCalling: false
+    supportsPromptCaching: true

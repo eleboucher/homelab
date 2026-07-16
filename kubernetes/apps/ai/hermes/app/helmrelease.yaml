@@ -165,7 +165,7 @@ spec:
                   secretKeyRef:
                     name: hermes-config
                     key: LITELLM_API_KEY
-              SUMMARY_LLM_MODEL: opencode-go/deepseek-v4-flash
+              SUMMARY_LLM_MODEL: google/gemma-4-31b-it
               SUMMARY_LLM_URL: http://litellm.ai:4000/v1
               TERM: xterm-256color
               TERMINAL_MAX_FOREGROUND_TIMEOUT: "1800"
