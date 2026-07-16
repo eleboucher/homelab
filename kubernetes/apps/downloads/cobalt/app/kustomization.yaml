@@ -2,12 +2,6 @@
 # yaml-language-server: $schema=https://json.schemastore.org/kustomization
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-namespace: downloads
-
 resources:
-  - autobrr/ks.yaml
-  - cobalt/ks.yaml
-  - namespace.yaml
-  - qbittorrent/ks.yaml
-  - qui/ks.yaml
-  - sabnzbd/ks.yaml
+  - ./helmrelease.yaml
+  - ./ocirepository.yaml
