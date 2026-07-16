@@ -206,7 +206,7 @@ metadata:
 spec:
   modelName: moonshotai/kimi-k2.6
   params:
-    model: openai/kimi-k2.6
+    model: openai/moonshotai/kimi-k2.6
     apiBase: https://api.getlilac.com/v1
     apiKeyRef:
       name: litellm
