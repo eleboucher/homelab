@@ -21,8 +21,8 @@ spec:
         containers:
           app:
             image:
-              repository: ghcr.io/sableclient/sable
-              tag: 7b60c45
+              repository: registry.erwanleboucher.dev/eleboucher/sable
+              tag: d434097-7dace29
             env:
               TZ: Europe/Paris
             probes:
