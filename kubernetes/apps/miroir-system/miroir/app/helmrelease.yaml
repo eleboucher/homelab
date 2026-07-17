@@ -4,15 +4,23 @@ kind: HelmRelease
 metadata:
   name: miroir
 spec:
-  interval: 1h
   chartRef:
     kind: OCIRepository
     name: miroir
+  interval: 1h
+  install:
+    crds: CreateReplace
+  upgrade:
+    crds: CreateReplace
   values:
     # 2-node cluster: no spare node can host a diskless tie-breaker.
     # Top-level key since chart 0.4.0 (was controller.autoTieBreaker).
     autoTieBreaker: false
     replicaCount: 2
+    # Larger DRBD activity log cuts write amplification under the scattered
+    # random writes of the DB/media workloads; must be a prime below 65534.
+    drbd:
+      alExtents: 6007
     monitoring:
       dashboards:
         enabled: true
@@ -24,22 +32,3 @@ spec:
         enabled: true
       prometheusRule:
         enabled: true
-    nodes:
-      kharkiv:
-        pools:
-          default:
-            backend: lvmthin
-            device: /dev/disk/by-partlabel/r-homefs
-      paris:
-        pools:
-          default:
-            backend: zfs
-            zfsDataset: data-pool/homefs
-    storageClasses:
-      - name: miroir-local
-        replicas: 1
-      - name: miroir-replicated
-        replicas: 2
-        quorum: last-man-standing
-    volumeSnapshotClasses:
-      - name: miroir-snap

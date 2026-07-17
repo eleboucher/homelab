@@ -1,0 +1,22 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/miroir.home-operations.com/miroirnode_v1alpha1.json
+apiVersion: miroir.home-operations.com/v1alpha1
+kind: MiroirNode
+metadata:
+  name: kharkiv
+spec:
+  pools:
+    - name: default
+      lvmthin:
+        device: /dev/disk/by-partlabel/r-homefs
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/miroir.home-operations.com/miroirnode_v1alpha1.json
+apiVersion: miroir.home-operations.com/v1alpha1
+kind: MiroirNode
+metadata:
+  name: paris
+spec:
+  pools:
+    - name: default
+      zfs:
+        dataset: data-pool/homefs
