@@ -68,20 +68,37 @@ spec:
         containers:
           app:
             image:
-              repository: registry.erwanleboucher.dev/continuwuity-invite-fix
-              tag: latest
+              repository: forgejo.ellis.link/continuwuation/continuwuity
+              tag: main-maxperf@sha256:ea2f430e2eea52025c76f92553ad68b8737df490b7cfecac567f8b4934d605ee
             env:
               CONDUWUIT_CONFIG: /etc/conduwuit/conduwuit.toml
-              TOKIO_WORKER_THREADS: "2"
+              TOKIO_WORKER_THREADS: "4"
               TZ: Europe/Paris
             probes:
               liveness:
                 enabled: true
+                custom: true
+                spec: &probeApp
+                  tcpSocket:
+                    port: 8080
+                  periodSeconds: 15
+                  timeoutSeconds: 5
+                  failureThreshold: 6
               readiness:
                 enabled: true
+                custom: true
+                spec: *probeApp
+              startup:
+                enabled: true
+                custom: true
+                spec:
+                  tcpSocket:
+                    port: 8080
+                  periodSeconds: 10
+                  failureThreshold: 60
             resources:
               requests:
-                cpu: 100m
+                cpu: 500m
                 memory: 512Mi
               limits:
                 memory: 1536Mi
