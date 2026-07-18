@@ -41,18 +41,26 @@ spec:
               HEALTHCHECK_PORT: "53"
               TZ: Europe/Paris
             probes:
-              liveness: &probeDns
+              liveness:
                 enabled: true
                 custom: true
                 spec:
-                  exec:
+                  exec: &probeDnsExec
                     command:
                       - /usr/local/unbound/sbin/healthcheck.sh
                   initialDelaySeconds: 15
                   periodSeconds: 60
                   timeoutSeconds: 30
                   failureThreshold: 5
-              readiness: *probeDns
+              readiness:
+                enabled: true
+                custom: true
+                spec:
+                  exec: *probeDnsExec
+                  initialDelaySeconds: 2
+                  periodSeconds: 5
+                  timeoutSeconds: 5
+                  failureThreshold: 3
             resources:
               requests:
                 cpu: 100m
@@ -96,8 +104,8 @@ spec:
                 spec:
                   tcpSocket:
                     port: 8080
-                  periodSeconds: 10
-                  failureThreshold: 60
+                  periodSeconds: 5
+                  failureThreshold: 120
             resources:
               requests:
                 cpu: 500m
