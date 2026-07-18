@@ -27,6 +27,8 @@ spec:
         fsGroupChangePolicy: OnRootMismatch
     controllers:
       continuwuity:
+        annotations:
+          reloader.stakater.com/auto: "true"
         type: statefulset
         initContainers:
           unbound:
