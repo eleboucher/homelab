@@ -15,7 +15,7 @@ rocksdb_direct_io = false
 
 # Perf tuning
 cache_capacity_modifier = 2.0
-max_request_size = 20971520
+max_request_size = 524288000
 
 # DNS Optimisation
 dns_cache_entries = 0
