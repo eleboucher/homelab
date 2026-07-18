@@ -19,6 +19,8 @@ spec:
         searches:
           - cluster.local
       dnsPolicy: None
+      nodeSelector:
+        kubernetes.io/hostname: paris
       securityContext:
         runAsNonRoot: true
         runAsUser: 1000
