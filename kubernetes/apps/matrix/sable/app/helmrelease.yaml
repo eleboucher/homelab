@@ -22,7 +22,7 @@ spec:
           app:
             image:
               repository: registry.erwanleboucher.dev/eleboucher/sable
-              tag: d434097-7dace29
+              tag: ab4538a-41e0ed4
             env:
               TZ: Europe/Paris
             probes:
