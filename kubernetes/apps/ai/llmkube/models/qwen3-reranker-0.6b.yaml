@@ -28,7 +28,7 @@ metadata:
 spec:
   modelRef: qwen3-reranker-0.6b
   runtime: llamacpp
-  image: ghcr.io/ggml-org/llama.cpp:server-vulkan-b9894@sha256:ba79ce324b97ea25ac1ed5c1b8d0a3983ac49ed8020c792104d31eae60ea7a98
+  image: ghcr.io/ggml-org/llama.cpp:server-vulkan-b10068@sha256:b4d05052d06a32371b053a6449d7aa63ce826ca08440df8997d0c02dd5c0b74f
   replicas: 1
   nodeSelector:
     kubernetes.io/hostname: paris
