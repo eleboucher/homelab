@@ -1,132 +1,130 @@
----
+# ---
+# # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmcpserver_v1alpha1.json
+# apiVersion: litellm.home-operations.com/v1alpha1
+# kind: LiteLLMMCPServer
+# metadata:
+#   name: grafana
+# spec:
+#   alias: grafana
+#   workload:
+#     image: mcp/grafana:latest
+#     port: 8000
+#     args:
+#       [
+#         "-t",
+#         "streamable-http",
+#         "--address",
+#         "0.0.0.0:8000",
+#         "--allowed-hosts",
+#         "grafana.ai.svc.cluster.local:8000",
+#       ]
+#     env:
+#       - name: GRAFANA_URL
+#         value: http://grafana-service.observability.svc.cluster.local:3000
+#       - name: GRAFANA_SERVICE_ACCOUNT_TOKEN
+#         valueFrom:
+#           secretKeyRef:
+#             name: grafana-mcp
+#             key: token
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmcpserver_v1alpha1.json
-apiVersion: litellm.home-operations.com/v1alpha1
-kind: LiteLLMMCPServer
-metadata:
-  name: grafana
-spec:
-  alias: grafana
-  workload:
-    image: mcp/grafana:latest
-    port: 8000
-    args:
-      [
-        "-t",
-        "streamable-http",
-        "--address",
-        "0.0.0.0:8000",
-        "--allowed-hosts",
-        "grafana.ai.svc.cluster.local:8000",
-      ]
-    env:
-      - name: GRAFANA_URL
-        value: http://grafana-service.observability.svc.cluster.local:3000
-      - name: GRAFANA_SERVICE_ACCOUNT_TOKEN
-        valueFrom:
-          secretKeyRef:
-            name: grafana-mcp
-            key: token
----
-# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmcpserver_v1alpha1.json
-apiVersion: litellm.home-operations.com/v1alpha1
-kind: LiteLLMMCPServer
-metadata:
-  name: ha-mcp
-spec:
-  alias: ha_mcp
-  workload:
-    # renovate: datasource=docker depName=ghcr.io/homeassistant-ai/ha-mcp
-    image: ghcr.io/homeassistant-ai/ha-mcp:7.14.0
-    port: 8086
-    command: ["ha-mcp-web"]
-    env:
-      - name: HOMEASSISTANT_URL
-        value: https://home.erwanleboucher.dev
-      - name: HOMEASSISTANT_TOKEN
-        valueFrom:
-          secretKeyRef:
-            name: homeassistant-token
-            key: HOMEASSISTANT_TOKEN
-    volumes:
-      - name: tmp
-        emptyDir: {}
-    volumeMounts:
-      - name: tmp
-        mountPath: /tmp
----
-# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmcpserver_v1alpha1.json
-apiVersion: litellm.home-operations.com/v1alpha1
-kind: LiteLLMMCPServer
-metadata:
-  name: searxng
-spec:
-  alias: searxng
-  workload:
-    # renovate: datasource=docker depName=docker.io/isokoliuk/mcp-searxng
-    image: docker.io/isokoliuk/mcp-searxng:1.11.1@sha256:b6727fc950cf1a7501d70f863b563d9fc689d6e33c773296ed845070c5646b48
-    port: 8080
-    env:
-      - name: SEARXNG_URL
-        value: http://searxng.selfhosted.svc.cluster.local:8080
-      - name: MCP_HTTP_PORT
-        value: "8080"
-      - name: MCP_HTTP_HOST
-        value: 0.0.0.0
-    resources:
-      requests:
-        cpu: 10m
-        memory: 128Mi
-      limits:
-        memory: 256Mi
----
-# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmcpserver_v1alpha1.json
-apiVersion: litellm.home-operations.com/v1alpha1
-kind: LiteLLMMCPServer
-metadata:
-  name: talos-mcp
-spec:
-  alias: talos_mcp
-  workload:
-    # renovate: datasource=docker depName=registry.erwanleboucher.dev/eleboucher/talos-mcp
-    image: registry.erwanleboucher.dev/eleboucher/talos-mcp:0.0.2
-    port: 8080
-    env:
-      - name: TALOS_MCP_TRANSPORT
-        value: http
-      - name: TALOS_MCP_HTTP_ADDR
-        value: ":8080"
-    volumes:
-      - name: talosconfig
-        secret:
-          secretName: talos-mcp-talosconfig
-          defaultMode: 0400
-    volumeMounts:
-      - name: talosconfig
-        mountPath: /var/run/secrets/talos.dev
-        readOnly: true
----
-# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmcpserver_v1alpha1.json
-apiVersion: litellm.home-operations.com/v1alpha1
-kind: LiteLLMMCPServer
-metadata:
-  name: victoria-logs
-spec:
-  alias: victoria_logs
-  workload:
-    image: ghcr.io/victoriametrics/mcp-victorialogs:latest
-    port: 8081
-    env:
-      - name: MCP_SERVER_MODE
-        value: http
-      - name: MCP_LISTEN_ADDR
-        value: :8081
-      - name: MCP_LOG_FORMAT
-        value: json
-      - name: MCP_LOG_LEVEL
-        value: info
-      - name: VL_INSTANCE_ENTRYPOINT
-        value: http://victoria-logs-server.observability.svc.cluster.local:9428
----
+# apiVersion: litellm.home-operations.com/v1alpha1
+# kind: LiteLLMMCPServer
+# metadata:
+#   name: ha-mcp
+# spec:
+#   alias: ha_mcp
+#   workload:
+#     # renovate: datasource=docker depName=ghcr.io/homeassistant-ai/ha-mcp
+#     image: ghcr.io/homeassistant-ai/ha-mcp:7.14.0
+#     port: 8086
+#     command: ["ha-mcp-web"]
+#     env:
+#       - name: HOMEASSISTANT_URL
+#         value: https://home.erwanleboucher.dev
+#       - name: HOMEASSISTANT_TOKEN
+#         valueFrom:
+#           secretKeyRef:
+#             name: homeassistant-token
+#             key: HOMEASSISTANT_TOKEN
+#     volumes:
+#       - name: tmp
+#         emptyDir: {}
+#     volumeMounts:
+#       - name: tmp
+#         mountPath: /tmp
+# ---
+# # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmcpserver_v1alpha1.json
+# apiVersion: litellm.home-operations.com/v1alpha1
+# kind: LiteLLMMCPServer
+# metadata:
+#   name: searxng
+# spec:
+#   alias: searxng
+#   workload:
+#     # renovate: datasource=docker depName=docker.io/isokoliuk/mcp-searxng
+#     image: docker.io/isokoliuk/mcp-searxng:1.11.1@sha256:b6727fc950cf1a7501d70f863b563d9fc689d6e33c773296ed845070c5646b48
+#     port: 8080
+#     env:
+#       - name: SEARXNG_URL
+#         value: http://searxng.selfhosted.svc.cluster.local:8080
+#       - name: MCP_HTTP_PORT
+#         value: "8080"
+#       - name: MCP_HTTP_HOST
+#         value: 0.0.0.0
+#     resources:
+#       requests:
+#         cpu: 10m
+#         memory: 128Mi
+#       limits:
+#         memory: 256Mi
+# ---
+# # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmcpserver_v1alpha1.json
+# apiVersion: litellm.home-operations.com/v1alpha1
+# kind: LiteLLMMCPServer
+# metadata:
+#   name: talos-mcp
+# spec:
+#   alias: talos_mcp
+#   workload:
+#     # renovate: datasource=docker depName=registry.erwanleboucher.dev/eleboucher/talos-mcp
+#     image: registry.erwanleboucher.dev/eleboucher/talos-mcp:0.0.2
+#     port: 8080
+#     env:
+#       - name: TALOS_MCP_TRANSPORT
+#         value: http
+#       - name: TALOS_MCP_HTTP_ADDR
+#         value: ":8080"
+#     volumes:
+#       - name: talosconfig
+#         secret:
+#           secretName: talos-mcp-talosconfig
+#           defaultMode: 0400
+#     volumeMounts:
+#       - name: talosconfig
+#         mountPath: /var/run/secrets/talos.dev
+#         readOnly: true
+# ---
+# # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmcpserver_v1alpha1.json
+# apiVersion: litellm.home-operations.com/v1alpha1
+# kind: LiteLLMMCPServer
+# metadata:
+#   name: victoria-logs
+# spec:
+#   alias: victoria_logs
+#   workload:
+#     image: ghcr.io/victoriametrics/mcp-victorialogs:latest
+#     port: 8081
+#     env:
+#       - name: MCP_SERVER_MODE
+#         value: http
+#       - name: MCP_LISTEN_ADDR
+#         value: :8081
+#       - name: MCP_LOG_FORMAT
+#         value: json
+#       - name: MCP_LOG_LEVEL
+#         value: info
+#       - name: VL_INSTANCE_ENTRYPOINT
+#         value: http://victoria-logs-server.observability.svc.cluster.local:9428
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmcpserver_v1alpha1.json
 apiVersion: litellm.home-operations.com/v1alpha1
 kind: LiteLLMMCPServer
@@ -154,13 +152,13 @@ spec:
   authTokenRef:
     name: github-mcp
     key: token
----
-# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmcpserver_v1alpha1.json
-apiVersion: litellm.home-operations.com/v1alpha1
-kind: LiteLLMMCPServer
-metadata:
-  name: sidero
-spec:
-  alias: sidero
-  url: https://docs.siderolabs.com/mcp
-  transport: http
+# ---
+# # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmcpserver_v1alpha1.json
+# apiVersion: litellm.home-operations.com/v1alpha1
+# kind: LiteLLMMCPServer
+# metadata:
+#   name: sidero
+# spec:
+#   alias: sidero
+#   url: https://docs.siderolabs.com/mcp
+#   transport: http
