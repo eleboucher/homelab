@@ -25,19 +25,10 @@ spec:
       processors:
         batch: {}
       exporters:
-        otlphttp/tempo:
-          endpoint: http://tempo.observability.svc.cluster.local:4318
         otlphttp/vlogs:
           logs_endpoint: http://victoria-logs-client.observability.svc.cluster.local:9428/insert/opentelemetry/v1/logs
       service:
         pipelines:
-          traces:
-            receivers:
-              - otlp
-            processors:
-              - batch
-            exporters:
-              - otlphttp/tempo
           logs:
             receivers:
               - otlp

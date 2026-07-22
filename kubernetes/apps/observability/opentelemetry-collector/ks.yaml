@@ -6,7 +6,6 @@ metadata:
   name: opentelemetry-collector
 spec:
   dependsOn:
-    - name: tempo
     - name: victoria-logs
   interval: 1h
   path: ./kubernetes/apps/observability/opentelemetry-collector/app
