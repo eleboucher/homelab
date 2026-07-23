@@ -1,7 +1,7 @@
 clusterName: homelab
 clusterEndpoint: https://k8s.internal:6443
 kubernetesVersion: 1.36.2
-talosVersion: 1.13.5
+talosVersion: 1.13.7
 schematicId: "@schematic.yaml"
 nodes:
   - host: paris
