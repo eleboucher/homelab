@@ -32,7 +32,7 @@ services:
 
   anubis:
     # renovate: datasource=docker depName=ghcr.io/techarohq/anubis
-    image: ghcr.io/techarohq/anubis:v1.25.0
+    image: ghcr.io/techarohq/anubis:v1.26.0
     container_name: anubis
     restart: unless-stopped
     environment:
