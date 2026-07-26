@@ -26,5 +26,8 @@ spec:
     securityContext:
       runAsGroup: 1000
       runAsUser: 1000
+  parameters:
+    epoch:
+      minDuration: 6h
   scheduleDefaults:
     timezone: Europe/Paris

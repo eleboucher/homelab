@@ -5,3 +5,13 @@ kind: Kustomization
 resources:
   - ./helmrelease.yaml
   - ./ocirepository.yaml
+# esphome runs as 2000 and its device-builder files are 0600, unreadable by the
+# uid-1000 mover. A read-write source lets the mover's fsGroup normalize the
+# staged clone; the live PVC is untouched under copyMethod: Snapshot.
+patches:
+  - target:
+      kind: SnapshotPolicy
+    patch: |
+      - op: add
+        path: /spec/sources/0/readOnly
+        value: false
