@@ -17,5 +17,6 @@ resources:
   - multus/ks.yaml
   - reflector/ks.yaml
   - reloader/ks.yaml
+  - runtime-classes/ks.yaml
   - snapshot-controller/ks.yaml
   - spegel/ks.yaml
