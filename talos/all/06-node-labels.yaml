@@ -1,6 +1,5 @@
 machine:
   nodeLabels:
-    intel.feature.node.kubernetes.io/gpu: "true"
-    katacontainers.io/kata-runtime: "true"
     node.kubernetes.io/gpu: "true"
+    intel.feature.node.kubernetes.io/gpu: "true"
     topology.kubernetes.io/region: main

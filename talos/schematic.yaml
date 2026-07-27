@@ -18,7 +18,6 @@ customization:
       - siderolabs/drbd
       - siderolabs/i915
       - siderolabs/intel-ucode
-      - siderolabs/kata-containers
       - siderolabs/mei
       - siderolabs/nfsd
       - siderolabs/nfsrahead
