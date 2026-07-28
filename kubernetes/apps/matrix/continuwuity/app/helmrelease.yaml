@@ -81,7 +81,7 @@ spec:
           app:
             image:
               repository: forgejo.ellis.link/continuwuation/continuwuity
-              tag: main-maxperf@sha256:8f095cc72438d55147fe7cabd46b739fffea66a92763132d70fc2f895c3578fe
+              tag: main-maxperf@sha256:66418cdce05d81dbfd948e95bd9d8df064b977c30f076fd520d449e757465b4a
             env:
               CONDUWUIT_CONFIG: /etc/conduwuit/conduwuit.toml
               TOKIO_WORKER_THREADS: "4"
