@@ -26,7 +26,7 @@ spec:
           app:
             image:
               repository: ghcr.io/home-operations/sonarr
-              tag: 4.0.19.2991
+              tag: 4.0.19.2995
             env:
               - name: TZ
                 value: "Europe/Paris"
