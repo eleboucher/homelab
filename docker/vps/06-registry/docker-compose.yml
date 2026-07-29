@@ -106,14 +106,13 @@ configs:
             - "latest"
             - "v*"
             - "*.*.*"
-            # Moving branch tags must never be age-culled: Flux tracks
-            # eleboucher/homelab:main, and a >24h gap between pushes was enough
-            # for the perRepo maxAge sweep to delete it out from under it.
+            # Flux tracks eleboucher/homelab:main; never let GC cull it.
             - "main"
           perRepo:
+            # Count-based only: no maxAge, which culled sha tags just for the repo
+            # being idle a day.
             - repo: "eleboucher/homelab"
-              keepLastN: 7
-              maxAge: 24h
+              keepLastN: 20
 
       metrics:
         enabled: true
