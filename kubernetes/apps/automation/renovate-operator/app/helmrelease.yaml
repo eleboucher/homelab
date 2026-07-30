@@ -39,6 +39,9 @@ spec:
         parentRefs:
           - name: envoy-external
             namespace: network
+    config:
+      # towonel/console renovate runs exceed the default 1800s
+      defaultJobActiveDeadlineSeconds: 3600
     metrics:
       enabled: true
       serviceMonitor:
