@@ -7,3 +7,4 @@ resources:
   - ./hpa_maxed_out.yaml
   - ./kube_cpu_overcommit.yaml
   - ./kube_memory_overcommit.yaml
+  - ./renovate_job_failed.yaml
