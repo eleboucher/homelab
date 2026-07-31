@@ -224,6 +224,10 @@ spec:
     vmalert:
       spec:
         evaluationInterval: 30s
+        # {} = all namespaces: without this the operator restricts vmalert to
+        # its own namespace and PrometheusRules elsewhere (miroir, cnpg,
+        # cert-manager, network, ...) are silently never evaluated.
+        ruleNamespaceSelector: {}
         ruleSelector:
           matchExpressions:
             - key: vmalert-datasource
