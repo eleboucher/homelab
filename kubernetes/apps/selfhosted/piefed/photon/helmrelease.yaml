@@ -23,7 +23,7 @@ spec:
           app:
             image:
               repository: ghcr.io/xyphyn/photon
-              tag: v2.4.2@sha256:1ed367f0c73e365adbbe47a5ab3c298b5c78728d1d97fee59aac21152145b5b4
+              tag: v2.4.3@sha256:141a467315ef061fdac06ca4cb484f1014cea2a2651061ba4ecec2a62fc98d7e
             env:
               PUBLIC_INSTANCE_URL: piefed.erwanleboucher.dev
               PUBLIC_INSTANCE_TYPE: piefedalpha
