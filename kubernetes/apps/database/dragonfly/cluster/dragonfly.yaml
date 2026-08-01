@@ -6,21 +6,8 @@ metadata:
   name: dragonfly
 spec:
   replicas: 1
-  # Persist to a PVC so cache/session state (incl. vmcp OAuth client
-  # registrations under thv:vmcp:session:) survives pod restarts/reschedules.
-  # Dragonfly snapshots on the cron and on graceful shutdown, and reloads on start.
-  snapshot:
-    cron: "*/10 * * * *"
-    persistentVolumeClaimSpec:
-      accessModes:
-        - ReadWriteOnce
-      resources:
-        requests:
-          storage: 1Gi
-      storageClassName: miroir-replicated
   args:
     - "--admin_bind=::"
-    - --dbfilename=dump
     - --maxmemory=$(MAX_MEMORY)Mi
     - --proactor_threads=2
     - --cluster_mode=emulated
