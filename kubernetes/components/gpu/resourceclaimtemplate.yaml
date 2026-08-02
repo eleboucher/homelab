@@ -11,6 +11,9 @@ spec:
         - name: gpu
           exactly:
             deviceClassName: gpu.intel.com
+            selectors:
+              - cel:
+                  expression: device.attributes["gpu.intel.com"].model == "${GPU_MODEL:=B580}"
             capacity:
               requests:
                 millicores: 100
