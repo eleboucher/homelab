@@ -77,6 +77,9 @@ spec:
             initContainers:
               - name: dind
                 image: docker:29-dind
+                args:
+                  - --ipv6
+                  - --fixed-cidr-v6=fd00:d1d::/64
                 securityContext:
                   privileged: true
                 restartPolicy: Always
