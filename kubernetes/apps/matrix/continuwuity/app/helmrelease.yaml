@@ -80,8 +80,8 @@ spec:
         containers:
           app:
             image:
-              repository: forgejo.ellis.link/continuwuation/continuwuity
-              tag: v26.7.2-maxperf
+              repository: registry.erwanleboucher.dev/eleboucher/continuwuity
+              tag: 11810a7-8c48ca6
             env:
               CONDUWUIT_CONFIG: /etc/conduwuit/conduwuit.toml
               TOKIO_WORKER_THREADS: "4"
