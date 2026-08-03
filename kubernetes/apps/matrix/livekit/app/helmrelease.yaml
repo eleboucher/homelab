@@ -39,35 +39,6 @@ spec:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
               capabilities: { drop: ["ALL"] }
-      jwt:
-        annotations:
-          reloader.stakater.com/auto: "true"
-        containers:
-          app:
-            image:
-              repository: ghcr.io/element-hq/lk-jwt-service
-              tag: 0.5.0@sha256:29918567e6b7cd920e2853b4cd6848ce01b79947c3d19a9f1ed5b74f0a2a88bf
-            env:
-              LIVEKIT_URL: wss://livekit.erwanleboucher.dev
-              LIVEKIT_FULL_ACCESS_HOMESERVERS: erwanleboucher.dev
-            envFrom:
-              - secretRef:
-                  name: livekit-keys
-            probes:
-              liveness:
-                enabled: true
-              readiness:
-                enabled: true
-            resources:
-              requests:
-                cpu: 10m
-                memory: 100Mi
-              limits:
-                memory: 100Mi
-            securityContext:
-              allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
-              capabilities: { drop: ["ALL"] }
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true
@@ -86,11 +57,6 @@ spec:
             port: 7881
           metrics:
             port: 6789
-      jwt:
-        controller: jwt
-        ports:
-          http:
-            port: 8080
     route:
       app:
         annotations:
@@ -109,16 +75,6 @@ spec:
             backendRefs:
               - name: livekit
                 port: 7880
-          - matches:
-              - path:
-                  value: /sfu/get
-              - path:
-                  value: /healthz
-              - path:
-                  value: /get_token
-            backendRefs:
-              - name: livekit-jwt
-                port: 8080
     serviceMonitor:
       app:
         service:

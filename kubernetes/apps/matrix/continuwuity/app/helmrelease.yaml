@@ -149,6 +149,15 @@ spec:
               - path: /etc/continuwuity/oidc_secret
                 subPath: client-secret
                 readOnly: true
+      livekit-secret:
+        type: secret
+        name: livekit-keys
+        advancedMounts:
+          continuwuity:
+            app:
+              - path: /etc/continuwuity/livekit_secret
+                subPath: LIVEKIT_SECRET
+                readOnly: true
       tmp:
         type: emptyDir
       unbound:
