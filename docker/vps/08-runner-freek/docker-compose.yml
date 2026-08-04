@@ -18,7 +18,7 @@ services:
 
   forgejo-runner-freek:
     # renovate: datasource=docker depName=data.forgejo.org/forgejo/runner
-    image: data.forgejo.org/forgejo/runner:12
+    image: data.forgejo.org/forgejo/runner:13
     container_name: forgejo-runner-freek
     restart: unless-stopped
     depends_on:
