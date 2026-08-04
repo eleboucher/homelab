@@ -3,12 +3,12 @@
 apiVersion: keda.sh/v1alpha1
 kind: ScaledObject
 metadata:
-  name: ${APP}
+  name: kopiur-nfs
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
-    kind: ${CONTROLLER:=Deployment}
-    name: ${APP}
+    kind: Deployment
+    name: kopiur-controller
   minReplicaCount: 0
   maxReplicaCount: 1
   pollingInterval: 15
@@ -17,7 +17,7 @@ spec:
     - type: prometheus
       metadata:
         serverAddress: http://vmsingle-victoria-metrics.observability.svc.cluster.local:8428
-        query: probe_success{job="${ZEROSCALER_JOB_NAME:=nfs_probe}"}
+        query: probe_success{job="nfs_probe"}
         threshold: "1"
   advanced:
     horizontalPodAutoscalerConfig:
