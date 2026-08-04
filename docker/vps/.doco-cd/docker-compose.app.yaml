@@ -33,7 +33,7 @@ services:
       interval: 30s
       timeout: 5s
       retries: 3
-    image: ghcr.io/kimdre/doco-cd:0.104.0@sha256:a1ff99adaccd8eb29e218d79b30051cec0b4aa1e2451643d0082d04e4b5c4653
+    image: ghcr.io/kimdre/doco-cd:0.105.2@sha256:b3dbc27d6cce437ad5acc34f326121623b5a3b2b45b85baf3029001e0f9fa764
     restart: unless-stopped
     secrets:
       - 1pw_token
