@@ -56,7 +56,10 @@ spec:
           - default:k8s:/config/podspec-default.yaml
           - docker:k8s:/config/podspec-dind.yaml
           - multiarch:k8s:/config/podspec-dind.yaml  # you need binfmt-misc extension for multiarch
-        timeout: 3h
+          - heavy:k8s:/config/podspec-heavy.yaml  # long compiles (webkitgtk); see podspec-heavy
+        # Ceiling for every job, not a target. webkitgtk needs ~1.5-4h and the
+        # previous 3h cut it too fine; ordinary jobs are unaffected.
+        timeout: 8h
         shutdown_timeout: 3m
     podSpecs:
       podspec-default.yaml: |
@@ -74,6 +77,28 @@ spec:
               limits:
                 cpu: 500m
                 memory: 4Gi
+        nodeSelector:
+          kubernetes.io/hostname: kharkiv
+        restartPolicy: Never
+      podspec-heavy.yaml: |
+        containers:
+          - env:
+              - name: DEBIAN_FRONTEND
+                value: noninteractive
+            image: ghcr.io/bjw-s-labs/forgejo-runner:ubuntu-24.04@sha256:175bb41fcb7d53a1316bc1288aa20f07d68f3394650177bdc88462bf87054036
+            imagePullPolicy: IfNotPresent
+            name: main
+            resources:
+              requests:
+                cpu: "4"
+                memory: 12Gi
+                ephemeral-storage: 40Gi
+              limits:
+                # Compiler link steps are the memory peak (~4GB each), so memory
+                # is what actually buys parallelism here, not cores.
+                cpu: "12"
+                memory: 32Gi
+                ephemeral-storage: 60Gi
         nodeSelector:
           kubernetes.io/hostname: kharkiv
         restartPolicy: Never
