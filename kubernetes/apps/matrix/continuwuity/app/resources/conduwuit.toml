@@ -39,6 +39,11 @@ trusted_servers = ["codestorm.net", "starstruck.systems", "unredacted.org"]
 
 admins_list = ["@genesixx:erwanleboucher.dev"]
 
+# Cached remote media has no built-in retention; purge it on every startup so
+# the media store does not grow unbounded and fill the volume.
+admin_execute = ["media delete-past-remote-media -b 30d"]
+admin_execute_errors_ignore = true
+
 registration_token = "{{ .registration_token }}"
 emergency_password = "{{ .emergency_password }}"
 

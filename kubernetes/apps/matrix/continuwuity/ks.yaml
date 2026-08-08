@@ -24,6 +24,7 @@ spec:
     substitute:
       APP: continuwuity
       APP_NAMESPACE: matrix
+      KOPIUR_CAPACITY: 15Gi
       SUBDOMAIN: matrix
       OIDC_CALLBACK: /_continuwuity/oidc/complete
       OIDC_DISPLAY_NAME: Continuwuity
