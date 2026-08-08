@@ -30,6 +30,7 @@ spec:
       APP_NAMESPACE: selfhosted
       KOPIUR_CAPACITY: 2Gi
       OIDC_CALLBACK: /oauth-callback
+      OIDC_DISABLE_PKCE: "true"
       OIDC_DISPLAY_NAME: "Gokapi"
       OIDC_GROUP: admins
       SUBDOMAIN: share

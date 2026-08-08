@@ -42,8 +42,6 @@ spec:
                   secretKeyRef:
                     name: gokapi-s3
                     key: secret-access-key
-              # Garage is cluster-internal, so pre-signed URLs are unreachable
-              # from a browser: Gokapi has to stream downloads itself.
               GOKAPI_AWS_PROXY_DOWNLOAD: "true"
               GOKAPI_AWS_REGION: us-east-1
               GOKAPI_CONFIG_DIR: /app/config

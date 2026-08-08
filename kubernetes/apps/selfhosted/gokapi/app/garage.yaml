@@ -9,9 +9,6 @@ spec:
     name: garage
     namespace: garage-system
   globalAlias: gokapi
-  # Backstop only: Gokapi deletes expired objects itself every hour. This
-  # catches orphans left behind by a failed cleanup, so it must stay well
-  # above the longest expiry a share is given.
   lifecycle:
     rules:
       - id: expire-orphans
