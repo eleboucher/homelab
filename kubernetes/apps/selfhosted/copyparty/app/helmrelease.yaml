@@ -1,0 +1,91 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: copyparty
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: copyparty
+  interval: 30m
+  values:
+    defaultPodOptions:
+      securityContext:
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+        runAsGroup: 1000
+        runAsNonRoot: true
+        runAsUser: 1000
+
+    controllers:
+      copyparty:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        containers:
+          app:
+            image:
+              repository: ghcr.io/9001/copyparty-ac
+              tag: 1.20.20
+            env:
+              TZ: "Europe/Paris"
+              PYTHONUNBUFFERED: "1"
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: "/?reset=/._"
+                    port: &port 3923
+                  failureThreshold: 3
+                  initialDelaySeconds: 15
+                  periodSeconds: 30
+                  timeoutSeconds: 5
+              readiness: *probes
+            resources:
+              requests:
+                cpu: 25m
+                memory: 128Mi
+              limits:
+                memory: 1Gi
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop:
+                  - ALL
+              readOnlyRootFilesystem: true
+
+    persistence:
+      config:
+        type: secret
+        name: copyparty-config
+        globalMounts:
+          - path: /cfg
+      data:
+        type: persistentVolumeClaim
+        existingClaim: copyparty
+        globalMounts:
+          - path: /w
+            subPath: w
+          - path: /state
+            subPath: state
+      tmp:
+        type: emptyDir
+        globalMounts:
+          - path: /tmp
+
+    route:
+      app:
+        hostnames:
+          - share.erwanleboucher.dev
+        parentRefs:
+          - name: envoy-external
+            namespace: network
+
+    service:
+      app:
+        controller: copyparty
+        ports:
+          http:
+            port: *port
