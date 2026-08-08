@@ -8,6 +8,7 @@ resources:
   - atuin/ks.yaml
   - bentopdf/ks.yaml
   - bluesky/ks.yaml
+  - gokapi/ks.yaml
   - gotosocial/ks.yaml
   - homepage/ks.yaml
   - immich/ks.yaml
