@@ -1,0 +1,41 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: zipline
+spec:
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: zipline
+  components:
+    - ../../../../components/oidc
+    - ../../../../components/postgres/pass
+  dependsOn:
+    - name: cnpg-cluster
+      namespace: database
+    - name: envoy-gateway
+      namespace: network
+    - name: garage
+      namespace: garage-system
+    - name: kanidm
+      namespace: security
+  interval: 1h
+  path: "./kubernetes/apps/selfhosted/zipline/app"
+  postBuild:
+    substitute:
+      APP: zipline
+      APP_NAMESPACE: selfhosted
+      OIDC_CALLBACK: /api/auth/oauth/oidc
+      OIDC_DISPLAY_NAME: "Zipline"
+      OIDC_GROUP: admins
+      OIDC_SCOPES: '["openid", "profile", "email", "offline_access"]'
+      SUBDOMAIN: share
+  prune: true
+  sourceRef:
+    kind: OCIRepository
+    name: flux-system
+    namespace: flux-system
+  targetNamespace: selfhosted
+  timeout: 5m
+  wait: false
