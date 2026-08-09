@@ -91,13 +91,13 @@ spec:
             resources:
               requests:
                 cpu: "4"
-                memory: 12Gi
+                memory: 36Gi
                 ephemeral-storage: 40Gi
               limits:
                 # Compiler link steps are the memory peak (~4GB each), so memory
                 # is what actually buys parallelism here, not cores.
                 cpu: "12"
-                memory: 32Gi
+                memory: 36Gi
                 ephemeral-storage: 60Gi
         nodeSelector:
           kubernetes.io/hostname: kharkiv
