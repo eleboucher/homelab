@@ -89,15 +89,19 @@ spec:
             imagePullPolicy: IfNotPresent
             name: main
             resources:
+              # Deliberately Burstable, not Guaranteed. At 36Gi request=limit on
+              # a 46Gi node this pod held oom_score_adj -997, so when the build
+              # approached its ceiling the kernel killed postgres and most of
+              # the observability DaemonSets instead of the build. A low request
+              # makes the build the first victim, and the 24Gi ceiling leaves
+              # the node ~22Gi so it should not come to that.
               requests:
                 cpu: "4"
-                memory: 36Gi
+                memory: 8Gi
                 ephemeral-storage: 40Gi
               limits:
-                # Compiler link steps are the memory peak (~4GB each), so memory
-                # is what actually buys parallelism here, not cores.
                 cpu: "12"
-                memory: 36Gi
+                memory: 24Gi
                 ephemeral-storage: 60Gi
         nodeSelector:
           kubernetes.io/hostname: kharkiv
