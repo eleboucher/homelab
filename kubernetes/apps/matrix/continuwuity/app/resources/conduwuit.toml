@@ -30,6 +30,8 @@ allow_registration = false
 new_user_displayname_suffix = ""
 suspend_on_register = false
 
+
+url_preview_url_contains_allowlist=["*"]
 allow_legacy_media = true
 allow_public_room_directory_over_federation = false
 lockdown_public_room_directory = true
