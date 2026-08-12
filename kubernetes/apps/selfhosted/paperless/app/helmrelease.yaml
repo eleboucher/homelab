@@ -19,6 +19,18 @@ spec:
         fsGroupChangePolicy: OnRootMismatch
     controllers:
       paperless:
+        initContainers:
+          init-run-dir:
+            image:
+              repository: docker.io/library/busybox
+              tag: 1.37.0
+            command:
+              - /bin/sh
+              - -c
+              - chown 1000:1000 /run
+            securityContext:
+              runAsNonRoot: false
+              runAsUser: 0
         annotations:
           reloader.stakater.com/auto: "true"
         forceRename: paperless
@@ -120,6 +132,9 @@ spec:
                 subPath: run
               - path: /var/lib/apt
                 subPath: apt
+            init-run-dir:
+              - path: /run
+                subPath: run
       nas:
         type: persistentVolumeClaim
         existingClaim: ${APP}-nfs-media
