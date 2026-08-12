@@ -11,6 +11,7 @@ spec:
   components:
     - ../../../../components/nfs-media
     - ../../../../components/kopiur/hot
+    - ../../../../components/kopiur/snapshot-restore
     - ../../../../components/oidc
     - ../../../../components/postgres/cert
     - ../../../../components/keda-http
@@ -34,6 +35,8 @@ spec:
       APP: paperless
       APP_NAMESPACE: selfhosted
       KOPIUR_CAPACITY: 15Gi
+      KOPIUR_RESTORE_NAME: paperless-local-restore
+      KOPIUR_RESTORE_SNAPSHOT: paperless-pre-local-migration-20260812092624
       APP_UID: "1000"
       APP_GID: "65542"
       HTTP_SCALER_PORT: "8000"

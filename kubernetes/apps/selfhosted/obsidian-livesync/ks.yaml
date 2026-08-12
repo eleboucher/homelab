@@ -10,6 +10,7 @@ spec:
       app.kubernetes.io/name: obsidian-livesync
   components:
     - ../../../../components/kopiur/hot
+    - ../../../../components/kopiur/snapshot-restore
   dependsOn:
     - name: external-secrets
       namespace: security
@@ -23,6 +24,8 @@ spec:
     substitute:
       APP: obsidian-livesync
       APP_NAMESPACE: selfhosted
+      KOPIUR_RESTORE_NAME: obsidian-livesync-local-restore
+      KOPIUR_RESTORE_SNAPSHOT: obsidian-livesync-pre-local-migration-20260812092624
   prune: true
   sourceRef:
     kind: OCIRepository

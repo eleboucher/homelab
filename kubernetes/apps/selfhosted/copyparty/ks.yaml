@@ -10,6 +10,7 @@ spec:
       app.kubernetes.io/name: copyparty
   components:
     - ../../../../components/kopiur/hot
+    - ../../../../components/kopiur/snapshot-restore
   dependsOn:
     - name: envoy-gateway
       namespace: network
@@ -24,6 +25,8 @@ spec:
       APP: copyparty
       APP_NAMESPACE: selfhosted
       KOPIUR_CAPACITY: 20Gi
+      KOPIUR_RESTORE_NAME: copyparty-local-restore
+      KOPIUR_RESTORE_SNAPSHOT: copyparty-pre-local-migration-20260812092624
   prune: true
   sourceRef:
     kind: OCIRepository
