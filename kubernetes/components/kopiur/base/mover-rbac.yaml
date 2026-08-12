@@ -1,0 +1,25 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: kopiur-mover-restore-reader
+rules:
+  - apiGroups:
+      - kopiur.home-operations.com
+    resources:
+      - restores
+    verbs:
+      - get
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: kopiur-mover-restore-reader
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: kopiur-mover-restore-reader
+subjects:
+  - kind: ServiceAccount
+    name: kopiur-mover
+    namespace: ${APP_NAMESPACE}
