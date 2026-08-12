@@ -11,6 +11,7 @@ spec:
   interval: 1h
   components:
     - ../../../../components/kopiur/hot
+    - ../../../../components/kopiur/snapshot-restore
   dependsOn:
     - name: kopiur-repository
       namespace: kopiur-system
@@ -21,6 +22,8 @@ spec:
     substitute:
       APP: esphome
       APP_NAMESPACE: home-assistant
+      KOPIUR_RESTORE_NAME: esphome-local-restore
+      KOPIUR_RESTORE_SNAPSHOT: esphome-pre-local-migration-20260812092624
   prune: true
   sourceRef:
     kind: OCIRepository
