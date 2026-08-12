@@ -10,6 +10,7 @@ spec:
     - ../../../../components/nfs-media
     - ../../../../components/oidc
     - ../../../../components/kopiur/hot
+    - ../../../../components/kopiur/snapshot-restore
     - ../../../../components/zeroscaler
   interval: 1h
   path: ./kubernetes/apps/downloads/qui/app
@@ -27,6 +28,8 @@ spec:
       APP: qui
       APP_NAMESPACE: downloads
       KOPIUR_CAPACITY: 2Gi
+      KOPIUR_RESTORE_NAME: qui-local-restore
+      KOPIUR_RESTORE_SNAPSHOT: qui-20260812110200
       KOPIUR_SNAPSHOTCLASS: miroir-snap
       KOPIUR_STORAGECLASS: miroir-local
       OIDC_CALLBACK: /api/auth/oidc/callback

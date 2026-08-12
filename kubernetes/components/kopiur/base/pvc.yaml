@@ -11,7 +11,7 @@ spec:
   dataSourceRef:
     apiGroup: kopiur.home-operations.com
     kind: Restore
-    name: ${APP}-restore
+    name: ${KOPIUR_RESTORE_NAME:=${APP}-restore}
   resources:
     requests:
       storage: ${KOPIUR_CAPACITY:=5Gi}

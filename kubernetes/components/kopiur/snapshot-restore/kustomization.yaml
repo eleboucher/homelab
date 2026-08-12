@@ -15,10 +15,3 @@ patches:
         value:
           snapshotRef:
             name: ${KOPIUR_RESTORE_SNAPSHOT}
-  - target:
-      version: v1
-      kind: PersistentVolumeClaim
-    patch: |-
-      - op: replace
-        path: /spec/dataSourceRef/name
-        value: ${KOPIUR_RESTORE_NAME}
