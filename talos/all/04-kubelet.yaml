@@ -12,6 +12,9 @@ machine:
           - rshared
           - rw
     extraConfig:
+      # Let the Miroir agent detach DRBD backings after workloads stop.
+      shutdownGracePeriod: 120s
+      shutdownGracePeriodCriticalPods: 60s
       imageGCHighThresholdPercent: 70
       imageGCLowThresholdPercent: 50
       maxPods: 250
