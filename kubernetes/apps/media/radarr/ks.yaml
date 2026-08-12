@@ -10,6 +10,7 @@ spec:
     - ../../../../components/nfs-media
     - ../../../../components/oidc/envoy
     - ../../../../components/kopiur/hot
+    - ../../../../components/kopiur/snapshot-restore
     - ../../../../components/zeroscaler
   interval: 1h
   path: ./kubernetes/apps/media/radarr/app
@@ -26,6 +27,8 @@ spec:
     substitute:
       APP: radarr
       APP_NAMESPACE: media
+      KOPIUR_RESTORE_NAME: radarr-local-restore
+      KOPIUR_RESTORE_SNAPSHOT: radarr-pre-local-migration-20260812092624
       OIDC_DISPLAY_NAME: Radarr
       OIDC_GROUP: admins
       OIDC_SCOPES: '["openid", "profile"]'
