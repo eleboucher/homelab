@@ -23,7 +23,7 @@ spec:
       APP_NAMESPACE: openclaw
       KOPIUR_CAPACITY: 10Gi
       KOPIUR_SNAPSHOTCLASS: miroir-snap
-      KOPIUR_STORAGECLASS: miroir-replicated
+      KOPIUR_STORAGECLASS: miroir-local
   prune: true
   sourceRef:
     kind: OCIRepository

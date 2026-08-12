@@ -23,7 +23,7 @@ spec:
     server:
       persistentVolume:
         enabled: true
-        storageClassName: miroir-replicated
+        storageClassName: miroir-local
         size: 20Gi
       retentionPeriod: 14d
       route:

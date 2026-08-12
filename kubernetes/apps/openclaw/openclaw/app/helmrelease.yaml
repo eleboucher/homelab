@@ -316,7 +316,7 @@ spec:
         accessMode: ReadWriteOnce
         forceRename: openclaw-home
         size: 20Gi
-        storageClass: miroir-replicated
+        storageClass: miroir-local
         globalMounts:
           - path: /home/node
       config:

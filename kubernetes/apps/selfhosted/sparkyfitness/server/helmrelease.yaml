@@ -117,7 +117,7 @@ spec:
       backup:
         accessMode: ReadWriteOnce
         size: 15Gi
-        storageClass: miroir-replicated
+        storageClass: miroir-local
         globalMounts:
           - path: /app/SparkyFitnessServer/backup
       tmp:

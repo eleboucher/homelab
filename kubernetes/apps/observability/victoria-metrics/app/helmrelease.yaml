@@ -28,7 +28,7 @@ spec:
         storage:
           volumeClaimTemplate:
             spec:
-              storageClassName: miroir-replicated
+              storageClassName: miroir-local
               resources:
                 requests:
                   storage: 5Gi

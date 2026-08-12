@@ -25,6 +25,7 @@ spec:
       APP: continuwuity
       APP_NAMESPACE: matrix
       KOPIUR_CAPACITY: 15Gi
+      KOPIUR_STORAGECLASS: miroir-local
       SUBDOMAIN: matrix
       OIDC_CALLBACK: /_continuwuity/oidc/complete
       OIDC_DISPLAY_NAME: Continuwuity

@@ -81,13 +81,13 @@ spec:
       data:
         accessMode: ReadWriteOnce
         size: 5Gi
-        storageClass: miroir-replicated
+        storageClass: miroir-local
         globalMounts:
           - path: /app/data
       uploads:
         accessMode: ReadWriteOnce
         size: 5Gi
-        storageClass: miroir-replicated
+        storageClass: miroir-local
         globalMounts:
           - path: /app/uploads
     route:
