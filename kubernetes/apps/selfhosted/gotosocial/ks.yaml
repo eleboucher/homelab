@@ -8,6 +8,7 @@ spec:
   components:
     - ../../../../components/postgres/cert
     - ../../../../components/kopiur/hot
+    - ../../../../components/kopiur/snapshot-restore
     - ../../../../components/oidc
   dependsOn:
     - name: cnpg-cluster
@@ -25,6 +26,8 @@ spec:
       APP: *app
       APP_NAMESPACE: selfhosted
       KOPIUR_CAPACITY: 10Gi
+      KOPIUR_RESTORE_NAME: gotosocial-local-restore
+      KOPIUR_RESTORE_SNAPSHOT: gotosocial-pre-local-migration-20260812092624
       SUBDOMAIN: gts
       OIDC_CALLBACK: /auth/callback
       OIDC_DISABLE_PKCE: "true"
