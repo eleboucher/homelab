@@ -9,6 +9,7 @@ spec:
   interval: 1h
   components:
     - ../../../../components/kopiur/hot
+    - ../../../../components/kopiur/snapshot-restore
     - ../../../../components/anubis
   path: ./kubernetes/apps/media/jellyseerr/app
   dependsOn:
@@ -22,6 +23,8 @@ spec:
     substitute:
       APP: jellyseerr
       APP_NAMESPACE: media
+      KOPIUR_RESTORE_NAME: jellyseerr-local-restore
+      KOPIUR_RESTORE_SNAPSHOT: jellyseerr-pre-local-migration-20260812092624
       ANUBIS_TARGET: "http://jellyseerr.media.svc:5055"
   prune: true
   sourceRef:
