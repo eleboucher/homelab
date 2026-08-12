@@ -30,6 +30,8 @@ allow_registration = false
 new_user_displayname_suffix = ""
 suspend_on_register = false
 
+allow_webpush = true
+webpush_vapid_contact = "mailto:erwanleboucher@gmail.com"
 
 url_preview_url_contains_allowlist=["*"]
 allow_legacy_media = true
