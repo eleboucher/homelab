@@ -1,0 +1,24 @@
+---
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+patches:
+  - target:
+      group: kopiur.home-operations.com
+      version: v1alpha1
+      kind: Restore
+    patch: |-
+      - op: replace
+        path: /metadata/name
+        value: ${KOPIUR_RESTORE_NAME}
+      - op: replace
+        path: /spec/source
+        value:
+          snapshotRef:
+            name: ${KOPIUR_RESTORE_SNAPSHOT}
+  - target:
+      version: v1
+      kind: PersistentVolumeClaim
+    patch: |-
+      - op: replace
+        path: /spec/dataSourceRef/name
+        value: ${KOPIUR_RESTORE_NAME}

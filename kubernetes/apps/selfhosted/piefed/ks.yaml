@@ -8,6 +8,7 @@ spec:
     - ../../../../components/anubis
     - ../../../../components/postgres/pass
     - ../../../../components/kopiur/hot
+    - ../../../../components/kopiur/snapshot-restore
   dependsOn:
     - name: cnpg-cluster
       namespace: database
@@ -32,6 +33,8 @@ spec:
       KOPIUR_CAPACITY: 20Gi
       KOPIUR_SNAPSHOTCLASS: miroir-snap
       KOPIUR_STORAGECLASS: miroir-local
+      KOPIUR_RESTORE_NAME: piefed-local-restore
+      KOPIUR_RESTORE_SNAPSHOT: piefed-local-migration
   prune: true
   sourceRef:
     kind: OCIRepository

@@ -8,6 +8,7 @@ metadata:
 spec:
   components:
     - ../../../../components/kopiur/hot
+    - ../../../../components/kopiur/snapshot-restore
   dependsOn:
     - name: external-secrets
       namespace: security
@@ -24,6 +25,8 @@ spec:
       KOPIUR_CAPACITY: 10Gi
       KOPIUR_SNAPSHOTCLASS: miroir-snap
       KOPIUR_STORAGECLASS: miroir-local
+      KOPIUR_RESTORE_NAME: openclaw-local-restore
+      KOPIUR_RESTORE_SNAPSHOT: openclaw-local-migration
   prune: true
   sourceRef:
     kind: OCIRepository
