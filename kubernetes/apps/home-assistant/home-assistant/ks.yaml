@@ -10,6 +10,7 @@ spec:
       app.kubernetes.io/name: home-assistant
   components:
     - ../../../../components/kopiur/hot
+    - ../../../../components/kopiur/snapshot-restore
     - ../../../../components/oidc
   dependsOn:
     - name: kanidm
@@ -25,6 +26,8 @@ spec:
       APP: home-assistant
       APP_NAMESPACE: home-assistant
       KOPIUR_CAPACITY: 10Gi
+      KOPIUR_RESTORE_NAME: home-assistant-local-restore
+      KOPIUR_RESTORE_SNAPSHOT: home-assistant-pre-local-migration-20260812092624
       SUBDOMAIN: home
       OIDC_CALLBACK: /auth/openid/callback
       OIDC_SHORT_USERNAME: "true"
