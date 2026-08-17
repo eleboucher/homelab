@@ -242,9 +242,9 @@ spec:
                   icon: wizarr.png
                   href: https://wizarr.erwanleboucher.dev
                   description: User Invitations
-              - jellystat:
+              - Streamystats:
                   icon: jellyfin.png
-                  href: https://jellystat.erwanleboucher.dev
+                  href: https://streamystats.erwanleboucher.dev
                   description: Jellyfin Statistics
 
             - Downloads:

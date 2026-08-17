@@ -1,0 +1,85 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: maintainerr
+  namespace: media
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: maintainerr
+  interval: 1h
+  values:
+    controllers:
+      maintainerr:
+        pod:
+          securityContext:
+            fsGroup: 1000
+            fsGroupChangePolicy: OnRootMismatch
+            runAsGroup: 1000
+            runAsNonRoot: true
+            runAsUser: 1000
+        replicas: 1
+        type: deployment
+        containers:
+          app:
+            image:
+              repository: ghcr.io/maintainerr/maintainerr
+              tag: 3.22.1@sha256:8759d68ceef64093893596df78d9045b5d100e59409af6cea14d41735ba7de5a
+            env:
+              TZ: Europe/Paris
+            probes:
+              liveness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /api/health/live
+                    port: 6246
+                  initialDelaySeconds: 30
+                  periodSeconds: 30
+              readiness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /api/health/ready
+                    port: 6246
+                  initialDelaySeconds: 10
+                  periodSeconds: 10
+              startup:
+                enabled: true
+                spec:
+                  failureThreshold: 30
+                  periodSeconds: 5
+            resources:
+              requests:
+                cpu: 5m
+                memory: 128Mi
+              limits:
+                memory: 512Mi
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop:
+                  - ALL
+    service:
+      app:
+        controller: maintainerr
+        ports:
+          http:
+            port: 6246
+    route:
+      app:
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
+        hostnames:
+          - maintainerr.erwanleboucher.dev
+    persistence:
+      config:
+        type: persistentVolumeClaim
+        existingClaim: "{{ .Release.Name }}"
+        globalMounts:
+          - path: /opt/data

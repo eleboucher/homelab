@@ -7,12 +7,12 @@ namespace: media
 resources:
   - bazarr/ks.yaml
   - flaresolverr/ks.yaml
-  - janitorr/ks.yaml
   - jellyfin/ks.yaml
   - jellyseerr/ks.yaml
-  - jellystat/ks.yaml
+  - maintainerr/ks.yaml
   - namespace.yaml
   - profilarr/ks.yaml
   - prowlarr/ks.yaml
   - radarr/ks.yaml
   - sonarr/ks.yaml
+  - streamystats/ks.yaml
