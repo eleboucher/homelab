@@ -89,12 +89,8 @@ spec:
             imagePullPolicy: IfNotPresent
             name: main
             resources:
-              # Deliberately Burstable, not Guaranteed. At 36Gi request=limit on
-              # a 46Gi node this pod held oom_score_adj -997, so when the build
-              # approached its ceiling the kernel killed postgres and most of
-              # the observability DaemonSets instead of the build. A low request
-              # makes the build the first victim, and the 24Gi ceiling leaves
-              # the node ~22Gi so it should not come to that.
+              # Burstable on purpose: at 36Gi request=limit this held
+              # oom_score_adj -997 and the kernel killed postgres instead of it.
               requests:
                 cpu: "4"
                 memory: 8Gi
@@ -103,6 +99,14 @@ spec:
                 cpu: "12"
                 memory: 24Gi
                 ephemeral-storage: 60Gi
+            volumeMounts:
+              # $BUILDDIR: the plugin's own "shared" workdir is capped at 10Gi.
+              - name: build
+                mountPath: /build
+        volumes:
+          - name: build
+            emptyDir:
+              sizeLimit: 40Gi
         nodeSelector:
           kubernetes.io/hostname: kharkiv
         restartPolicy: Never
