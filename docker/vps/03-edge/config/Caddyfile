@@ -136,8 +136,7 @@ erwanleboucher.dev {
 	# *after* the registry-webfinger rule so apoci still handles its own case.
 	@fediverse path /.well-known/webfinger /.well-known/host-meta* /.well-known/nodeinfo*
 	handle @fediverse {
-		header Access-Control-Allow-Origin *
-		redir https://gts.erwanleboucher.dev{uri} 301
+		reverse_proxy https://gts.erwanleboucher.dev{uri}
 	}
 
 	# Everything else → anubis bot-challenge; anubis forwards non-challenge
