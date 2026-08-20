@@ -29,7 +29,7 @@ spec:
           copy-agent-source:
             image:
               repository: nousresearch/hermes-agent
-              tag: v2026.7.7.2@sha256:9c841866021c54c4596849f6135717e8a4d52ba510b7f52c50aef1de1a283973
+              tag: v2026.8.16.2@sha256:a39fc11620213e3669a327aff5c6cb1eb2b8a238c6044e33e7ef8885833d89a7
             command:
               - /bin/sh
               - -c
@@ -76,7 +76,7 @@ spec:
           install-tools:
             image:
               repository: nousresearch/hermes-agent
-              tag: v2026.7.7.2@sha256:9c841866021c54c4596849f6135717e8a4d52ba510b7f52c50aef1de1a283973
+              tag: v2026.8.16.2@sha256:a39fc11620213e3669a327aff5c6cb1eb2b8a238c6044e33e7ef8885833d89a7
             command:
               - /bin/sh
               - -c
@@ -118,7 +118,7 @@ spec:
           app:
             image:
               repository: nousresearch/hermes-agent
-              tag: v2026.7.7.2@sha256:9c841866021c54c4596849f6135717e8a4d52ba510b7f52c50aef1de1a283973
+              tag: v2026.8.16.2@sha256:a39fc11620213e3669a327aff5c6cb1eb2b8a238c6044e33e7ef8885833d89a7
             args:
               - gateway
               - run
