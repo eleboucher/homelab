@@ -19,4 +19,5 @@ spec:
     podMonitor:
       enabled: true
     remoteWrite:
-      - url: http://victoria-logs-server.observability.svc.cluster.local:9428
+      - maxDiskUsagePerURL: "10737418240"
+        url: http://victoria-logs-server.observability.svc.cluster.local:9428

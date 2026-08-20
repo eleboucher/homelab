@@ -24,7 +24,7 @@ spec:
       persistentVolume:
         enabled: true
         storageClassName: miroir-local
-        size: 20Gi
+        size: 50Gi
       retentionPeriod: 14d
       route:
         enabled: true
