@@ -23,7 +23,7 @@ spec:
             image:
               # renovate: datasource=github-releases depName=gethomepage/homepage
               repository: ghcr.io/gethomepage/homepage
-              tag: v2.0.0
+              tag: v2.1.0
             env:
               - name: TZ
                 value: "Europe/Paris"
