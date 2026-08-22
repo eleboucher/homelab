@@ -139,7 +139,7 @@ resource "routeros_routing_bgp_connection" "kharkiv_v6" {
   disabled         = false
 
   remote {
-    address = "2a01:e0a:e4b:aa31:3a05:25ff:fe35:3b9a"
+    address = "2a01:e0a:e4b:aa31::43"
     as      = "64514"
   }
 
@@ -169,7 +169,7 @@ resource "routeros_routing_bgp_connection" "paris_v6" {
   disabled         = false
 
   remote {
-    address = "2a01:e0a:e4b:aa31:c662:37ff:fe09:dfff"
+    address = "2a01:e0a:e4b:aa31::42"
     as      = "64514"
   }
 
