@@ -1,5 +1,7 @@
 resource "routeros_interface_bridge" "bridge1" {
   name           = "bridge1"
+  admin_mac      = "04:F4:1C:66:38:24"
+  auto_mac       = false
   vlan_filtering = true
   igmp_snooping  = true
   pvid           = 10
