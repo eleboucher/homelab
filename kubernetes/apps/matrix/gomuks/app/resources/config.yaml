@@ -1,8 +1,14 @@
 ---
-# Auth is handled by Envoy Gateway (SecurityPolicy OIDC via Kanidm), so the
-# built-in basic auth is disabled. Do not expose this service outside the gateway.
+# Auth is handled by Envoy Gateway (SecurityPolicy OIDC via Kanidm), so backend
+# auth is disabled below. Do not expose this service outside the gateway.
+#
+# gomuks still requires non-empty credentials on first run even when auth is
+# disabled (LoadConfig prompts interactively otherwise and exits with EOF),
+# so these placeholders exist purely to satisfy startup. They are never checked.
 web:
   listen_address: 0.0.0.0:29325
+  username: gateway
+  password_hash: "$2y$12$iASbXPN587tmx2cwCD9feu5uL5Sh6jnH1Pr65ttFXCb3r/00NPbEy"
   origin_patterns:
     - "gomuks.erwanleboucher.dev"
   disable_auth_because_i_want_my_account_to_be_hacked: true
