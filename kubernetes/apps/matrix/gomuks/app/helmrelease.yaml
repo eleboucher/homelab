@@ -73,6 +73,7 @@ spec:
         type: persistentVolumeClaim
         accessMode: ReadWriteOnce
         size: 5Gi
+        storageClass: miroir-local
         advancedMounts:
           gomuks:
             app:
