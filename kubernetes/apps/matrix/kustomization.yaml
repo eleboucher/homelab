@@ -8,5 +8,5 @@ resources:
   - livekit/ks.yaml
   - mautrix-signal/ks.yaml
   - mautrix-whatsapp/ks.yaml
+  - gomuks/ks.yaml
   - namespace.yaml
-  - sable/ks.yaml

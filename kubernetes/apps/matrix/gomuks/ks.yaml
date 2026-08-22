@@ -3,21 +3,27 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: sable
+  name: gomuks
   namespace: flux-system
 spec:
   commonMetadata:
     labels:
-      app.kubernetes.io/name: sable
+      app.kubernetes.io/name: gomuks
   interval: 1h
-  path: ./kubernetes/apps/matrix/sable/app
+  path: ./kubernetes/apps/matrix/gomuks/app
+  components:
+    - ../../../../components/oidc/envoy
   dependsOn:
     - name: envoy-gateway
       namespace: network
+    - name: kanidm
+      namespace: security
   postBuild:
     substitute:
-      APP: sable
+      APP: gomuks
       APP_NAMESPACE: matrix
+      OIDC_DISPLAY_NAME: Gomuks
+      OIDC_GROUP: admins
   prune: true
   sourceRef:
     kind: OCIRepository

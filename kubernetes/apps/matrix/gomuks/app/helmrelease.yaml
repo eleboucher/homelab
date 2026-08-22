@@ -1,0 +1,106 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app gomuks
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: gomuks
+  interval: 1h
+  values:
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+    controllers:
+      gomuks:
+        type: statefulset
+        annotations:
+          reloader.stakater.com/auto: "true"
+        initContainers:
+          init-config:
+            image:
+              repository: docker.io/library/busybox
+              tag: 1.38.0
+            command:
+              - /bin/sh
+              - -c
+              # gomuks writes back to its config (token key, VAPID keys), so seed
+              # the secret-provided config once and let it own the file afterwards
+              - mkdir -p /data/config && [ -f /data/config/config.yaml ] || cp /secrets/config.yaml /data/config/config.yaml
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - "ALL"
+            resources:
+              requests:
+                cpu: 10m
+                memory: 16Mi
+              limits:
+                memory: 32Mi
+        containers:
+          app:
+            image:
+              repository: dock.mau.dev/gomuks/gomuks
+              tag: v26.08
+            env:
+              TZ: Europe/Paris
+            probes:
+              liveness:
+                enabled: true
+              readiness:
+                enabled: true
+            resources:
+              requests:
+                cpu: 10m
+                memory: 128Mi
+              limits:
+                memory: 512Mi
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - "ALL"
+    persistence:
+      data:
+        type: persistentVolumeClaim
+        accessMode: ReadWriteOnce
+        size: 5Gi
+        advancedMounts:
+          gomuks:
+            app:
+              - path: /data
+            init-config:
+              - path: /data
+      config:
+        type: configMap
+        name: gomuks-configmap
+        advancedMounts:
+          gomuks:
+            init-config:
+              - path: /secrets
+    route:
+      app:
+        hostnames:
+          - "gomuks.erwanleboucher.dev"
+        parentRefs:
+          - name: envoy-external
+            namespace: network
+        rules:
+          - backendRefs:
+              - identifier: app
+                port: 8080
+    service:
+      app:
+        controller: gomuks
+        ports:
+          http:
+            port: 8080
+            targetPort: 29325

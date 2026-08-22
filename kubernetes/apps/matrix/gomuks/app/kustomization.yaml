@@ -6,9 +6,9 @@ resources:
   - ./helmrelease.yaml
   - ./ocirepository.yaml
 configMapGenerator:
-  - name: sable-configmap
+  - name: gomuks-configmap
     files:
-      - ./resources/config.json
+      - ./resources/config.yaml
 generatorOptions:
   disableNameSuffixHash: true
   annotations:
