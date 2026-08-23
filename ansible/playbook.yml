@@ -44,6 +44,24 @@
       when: netplan_additional_removed.changed
       changed_when: true
 
+    # Unbounded journald filled the root filesystem and crashed apoci-postgres.
+    - name: logging | Ensure journald conf.d exists
+      ansible.builtin.file:
+        path: /etc/systemd/journald.conf.d
+        state: directory
+        mode: "0755"
+
+    - name: logging | Cap journald disk usage
+      ansible.builtin.copy:
+        dest: /etc/systemd/journald.conf.d/99-size.conf
+        owner: root
+        group: root
+        mode: "0644"
+        content: |
+          [Journal]
+          SystemMaxUse=500M
+      notify: Restart systemd-journald
+
     - name: Install Docker
       ansible.builtin.shell: curl -fsSL https://get.docker.com | sh
       args:
@@ -60,7 +78,12 @@
         content: |
           {
             "ipv6": true,
-            "fixed-cidr-v6": "fd00:d0c::/64"
+            "fixed-cidr-v6": "fd00:d0c::/64",
+            "log-driver": "json-file",
+            "log-opts": {
+              "max-size": "50m",
+              "max-file": "3"
+            }
           }
       register: docker_daemon_json
 
@@ -264,6 +287,11 @@
           - "VPS IP     : {{ vps_ip }}"
 
   handlers:
+    - name: Restart systemd-journald
+      ansible.builtin.service:
+        name: systemd-journald
+        state: restarted
+
     - name: Restart ssh.socket
       ansible.builtin.service:
         name: ssh.socket
