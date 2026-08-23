@@ -19,6 +19,17 @@ spec:
         redirectUrl: https://renovate.erwanleboucher.dev/auth/callback
         additionalScopes:
           - groups
+    authorization:
+      defaults:
+        # kanidm emits group SPNs in the groups claim, not bare names
+        adminGroups:
+          - admins@idm.erwanleboucher.dev
+    extraEnv:
+      - name: OIDC_SESSION_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: renovate-operator-session
+            key: session-secret
     fullnameOverride: renovate-operator
     route:
       enabled: true

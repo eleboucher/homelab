@@ -9,6 +9,8 @@ spec:
   components:
     - ../../../../components/oidc
   dependsOn:
+    - name: external-secrets
+      namespace: security
     - name: kanidm
       namespace: security
   interval: 1h
