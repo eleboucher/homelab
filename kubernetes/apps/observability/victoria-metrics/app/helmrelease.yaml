@@ -98,9 +98,17 @@ spec:
           allowCrossNamespaceImport: true
     defaultRules:
       rules:
+        # Upstream matches on(group,file) only, which collides across clusters
+        # remote-writing into this vmsingle (homelab + towonel-ops) and 422s.
+        AlertingRuleResultsApproachingLimit:
+          spec:
+            expr: (vmalert_alerting_rules_last_evaluation_samples > on(cluster,instance,group,file) group_left() (vmalert_group_rule_results_limit * 0.9)) and on(cluster,instance,group,file) (vmalert_group_rule_results_limit > 0)
         NodeMemoryHighUtilization:
           spec:
             expr: (100 - ((node_memory_MemAvailable_bytes{job="node-exporter"} / node_memory_MemTotal_bytes{job="node-exporter"}) * 100)) > 95
+        RecordingRuleResultsApproachingLimit:
+          spec:
+            expr: (vmalert_recording_rules_last_evaluation_samples > on(cluster,instance,group,file) group_left() (vmalert_group_rule_results_limit * 0.9)) and on(cluster,instance,group,file) (vmalert_group_rule_results_limit > 0)
     defaultDatasources:
       grafanaOperator:
         enabled: true
