@@ -23,8 +23,14 @@ data:
             context_length: 1000000
           opencode-go/mimo-v2.5-pro:
             context_length: 1048576
+          opencode-go/mimo-v2.5:
+            context_length: 1000000
+          opencode-go/hy3:
+            context_length: 256000
+          opencode-go/ox-alpha-free:
+            context_length: 1000000
     model:
-      default: opencode-go/qwen3.8-max
+      default: opencode-go/minimax-m3
       provider: custom:litellm
       context_length: 1000000
     model_aliases:
@@ -41,7 +47,16 @@ data:
         model: opencode-go/deepseek-v4-flash
         provider: custom:litellm
       mimo:
+        model: opencode-go/mimo-v2.5
+        provider: custom:litellm
+      mimo-pro:
         model: opencode-go/mimo-v2.5-pro
+        provider: custom:litellm
+      hy3:
+        model: opencode-go/hy3
+        provider: custom:litellm
+      free:
+        model: opencode-go/ox-alpha-free
         provider: custom:litellm
       kimi:
         model: opencode-go/kimi-k3
@@ -54,6 +69,8 @@ data:
         model: opencode-go/minimax-m3
       - provider: custom:litellm
         model: opencode-go/deepseek-v4-flash
+      - provider: custom:litellm
+        model: opencode-go/ox-alpha-free
     auxiliary:
       approval:
         provider: custom:litellm
@@ -64,10 +81,10 @@ data:
         model: opencode-go/minimax-m3
       web_extract:
         provider: custom:litellm
-        model: opencode-go/minimax-m3
+        model: opencode-go/hy3
       session_search:
         provider: custom:litellm
-        model: opencode-go/deepseek-v4-flash
+        model: opencode-go/hy3
       vision:
         provider: custom:litellm
         model: opencode-go/minimax-m3
@@ -76,10 +93,10 @@ data:
         model: opencode-go/deepseek-v4-flash
       title_generation:
         provider: custom:litellm
-        model: opencode-go/deepseek-v4-flash
+        model: opencode-go/hy3
       profile_describer:
         provider: custom:litellm
-        model: opencode-go/deepseek-v4-flash
+        model: opencode-go/hy3
       triage_specifier:
         provider: custom:litellm
         model: opencode-go/deepseek-v4-flash
@@ -142,10 +159,10 @@ data:
             - provider: custom:litellm
               model: opencode-go/glm-5.3
             - provider: custom:litellm
-              model: opencode-go/mimo-v2.5-pro
+              model: opencode-go/mimo-v2.5
           aggregator:
             provider: custom:litellm
-            model: opencode-go/qwen3.8-max
+            model: opencode-go/minimax-m3
           reference_temperature: 0.6
           aggregator_temperature: 0.4
           max_tokens: 8192

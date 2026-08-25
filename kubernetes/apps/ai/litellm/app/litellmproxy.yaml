@@ -16,6 +16,17 @@ spec:
     redis_port: os.environ/REDIS_PORT
     num_retries: 3
     timeout: 600
+    fallbacks:
+      # ox-alpha-free stays available after the Go plan's $12/5h cap is hit
+      - opencode-go/qwen3.8-max: ["opencode-go/ox-alpha-free"]
+      - opencode-go/minimax-m3: ["opencode-go/ox-alpha-free"]
+      - opencode-go/glm-5.3: ["opencode-go/ox-alpha-free"]
+      - opencode-go/kimi-k3: ["opencode-go/ox-alpha-free"]
+      - opencode-go/deepseek-v4-pro: ["opencode-go/ox-alpha-free"]
+      - opencode-go/deepseek-v4-flash: ["opencode-go/ox-alpha-free"]
+      - opencode-go/mimo-v2.5-pro: ["opencode-go/ox-alpha-free"]
+      - opencode-go/mimo-v2.5: ["opencode-go/ox-alpha-free"]
+      - opencode-go/hy3: ["opencode-go/ox-alpha-free"]
   litellmSettings:
     success_callback: ["prometheus"]
     prometheus_adapter: true
