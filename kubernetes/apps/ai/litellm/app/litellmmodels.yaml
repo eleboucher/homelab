@@ -2,131 +2,22 @@
 apiVersion: litellm.home-operations.com/v1alpha1
 kind: LiteLLMModel
 metadata:
-  name: opencode-go-glm-5-2
+  name: opencode-go-qwen3-8-max
 spec:
-  modelName: opencode-go/glm-5.2
+  modelName: opencode-go/qwen3.8-max
   params:
-    model: openai/glm-5.2
-    apiBase: https://opencode.ai/zen/go/v1
-    apiKeyRef:
-      name: litellm
-      key: OPENCODE_GO_API_KEY
-    dropParams: true
-  info:
-    maxInputTokens: 1048560
-    maxOutputTokens: 131072
-    supportsFunctionCalling: true
-    supportsPromptCaching: true
-    extra:
-      supports_reasoning: true
----
-# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
-apiVersion: litellm.home-operations.com/v1alpha1
-kind: LiteLLMModel
-metadata:
-  name: opencode-go-kimi-k2-7-code
-spec:
-  modelName: opencode-go/kimi-k2.7-code
-  params:
-    model: openai/kimi-k2.7-code
-    apiBase: https://opencode.ai/zen/go/v1
-    apiKeyRef:
-      name: litellm
-      key: OPENCODE_GO_API_KEY
-    dropParams: true
-  info:
-    maxInputTokens: 262128
-    maxOutputTokens: 131072
-    supportsFunctionCalling: true
-    supportsPromptCaching: true
-    supportsVision: true
-    extra:
-      supports_reasoning: true
----
-# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
-apiVersion: litellm.home-operations.com/v1alpha1
-kind: LiteLLMModel
-metadata:
-  name: opencode-go-kimi-k2-6
-spec:
-  modelName: opencode-go/kimi-k2.6
-  params:
-    model: openai/kimi-k2.6
-    apiBase: https://opencode.ai/zen/go/v1
-    apiKeyRef:
-      name: litellm
-      key: OPENCODE_GO_API_KEY
-    dropParams: true
-  info:
-    maxInputTokens: 262128
-    maxOutputTokens: 131072
-    supportsFunctionCalling: true
-    supportsPromptCaching: true
-    supportsVision: true
-    extra:
-      supports_reasoning: true
----
-# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
-apiVersion: litellm.home-operations.com/v1alpha1
-kind: LiteLLMModel
-metadata:
-  name: opencode-go-deepseek-v4-flash
-spec:
-  modelName: opencode-go/deepseek-v4-flash
-  params:
-    model: openai/deepseek-v4-flash
-    apiBase: https://opencode.ai/zen/go/v1
-    apiKeyRef:
-      name: litellm
-      key: OPENCODE_GO_API_KEY
-    dropParams: true
-  info:
-    maxInputTokens: 131072
-    maxOutputTokens: 65536
-    supportsFunctionCalling: true
-    supportsPromptCaching: true
----
-# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
-apiVersion: litellm.home-operations.com/v1alpha1
-kind: LiteLLMModel
-metadata:
-  name: opencode-go-mimo-v2-5
-spec:
-  modelName: opencode-go/mimo-v2.5
-  params:
-    model: openai/mimo-v2.5
-    apiBase: https://opencode.ai/zen/go/v1
-    apiKeyRef:
-      name: litellm
-      key: OPENCODE_GO_API_KEY
-    dropParams: true
-  info:
-    maxInputTokens: 262144
-    maxOutputTokens: 32768
-    supportsFunctionCalling: true
-    supportsPromptCaching: true
-    extra:
-      supports_reasoning: true
----
-# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
-apiVersion: litellm.home-operations.com/v1alpha1
-kind: LiteLLMModel
-metadata:
-  name: opencode-go-qwen3-7-max
-spec:
-  modelName: opencode-go/qwen3.7-max
-  params:
-    model: anthropic/qwen3.7-max
+    model: anthropic/qwen3.8-max
     apiBase: https://opencode.ai/zen/go
     apiKeyRef:
       name: litellm
       key: OPENCODE_GO_API_KEY
     dropParams: true
   info:
-    maxInputTokens: 262144
-    maxOutputTokens: 32768
+    maxInputTokens: 1000000
+    maxOutputTokens: 131072
     supportsFunctionCalling: true
     supportsPromptCaching: true
+    supportsVision: true
     extra:
       supports_reasoning: true
 ---
@@ -157,6 +48,28 @@ spec:
 apiVersion: litellm.home-operations.com/v1alpha1
 kind: LiteLLMModel
 metadata:
+  name: opencode-go-qwen3-7-max
+spec:
+  modelName: opencode-go/qwen3.7-max
+  params:
+    model: anthropic/qwen3.7-max
+    apiBase: https://opencode.ai/zen/go
+    apiKeyRef:
+      name: litellm
+      key: OPENCODE_GO_API_KEY
+    dropParams: true
+  info:
+    maxInputTokens: 1000000
+    maxOutputTokens: 65536
+    supportsFunctionCalling: true
+    supportsPromptCaching: true
+    extra:
+      supports_reasoning: true
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
   name: opencode-go-qwen3-6-plus
 spec:
   modelName: opencode-go/qwen3.6-plus
@@ -168,10 +81,11 @@ spec:
       key: OPENCODE_GO_API_KEY
     dropParams: true
   info:
-    maxInputTokens: 262144
-    maxOutputTokens: 32768
+    maxInputTokens: 1000000
+    maxOutputTokens: 65536
     supportsFunctionCalling: true
     supportsPromptCaching: true
+    supportsVision: true
     extra:
       supports_reasoning: true
 ---
@@ -179,22 +93,90 @@ spec:
 apiVersion: litellm.home-operations.com/v1alpha1
 kind: LiteLLMModel
 metadata:
-  name: lilac-minimax-m3
+  name: opencode-go-kimi-k3
 spec:
-  modelName: minimaxai/minimax-m3
+  modelName: opencode-go/kimi-k3
   params:
-    model: openai/minimax-m3
-    apiBase: https://api.getlilac.com/v1
+    model: openai/kimi-k3
+    apiBase: https://opencode.ai/zen/go/v1
     apiKeyRef:
       name: litellm
-      key: LILAC_API_KEY
+      key: OPENCODE_GO_API_KEY
+    dropParams: true
+  info:
+    maxInputTokens: 1048576
+    maxOutputTokens: 131072
+    supportsFunctionCalling: true
+    supportsPromptCaching: true
+    supportsVision: true
+    extra:
+      supports_reasoning: true
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: opencode-go-kimi-k2-7-code
+spec:
+  modelName: opencode-go/kimi-k2.7-code
+  params:
+    model: openai/kimi-k2.7-code
+    apiBase: https://opencode.ai/zen/go/v1
+    apiKeyRef:
+      name: litellm
+      key: OPENCODE_GO_API_KEY
+    dropParams: true
+  info:
+    maxInputTokens: 262144
+    maxOutputTokens: 262144
+    supportsFunctionCalling: true
+    supportsPromptCaching: true
+    supportsVision: true
+    extra:
+      supports_reasoning: true
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: opencode-go-kimi-k2-6
+spec:
+  modelName: opencode-go/kimi-k2.6
+  params:
+    model: openai/kimi-k2.6
+    apiBase: https://opencode.ai/zen/go/v1
+    apiKeyRef:
+      name: litellm
+      key: OPENCODE_GO_API_KEY
+    dropParams: true
+  info:
+    maxInputTokens: 262144
+    maxOutputTokens: 65536
+    supportsFunctionCalling: true
+    supportsPromptCaching: true
+    supportsVision: true
+    extra:
+      supports_reasoning: true
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: opencode-go-glm-5-3
+spec:
+  modelName: opencode-go/glm-5.3
+  params:
+    model: openai/glm-5.3
+    apiBase: https://opencode.ai/zen/go/v1
+    apiKeyRef:
+      name: litellm
+      key: OPENCODE_GO_API_KEY
     dropParams: true
   info:
     maxInputTokens: 1000000
     maxOutputTokens: 131072
     supportsFunctionCalling: true
     supportsPromptCaching: true
-    supportsVision: true
     extra:
       supports_reasoning: true
 ---
@@ -202,41 +184,18 @@ spec:
 apiVersion: litellm.home-operations.com/v1alpha1
 kind: LiteLLMModel
 metadata:
-  name: lilac-kimi-k2-6
+  name: opencode-go-glm-5-2
 spec:
-  modelName: moonshotai/kimi-k2.6
-  params:
-    model: openai/moonshotai/kimi-k2.6
-    apiBase: https://api.getlilac.com/v1
-    apiKeyRef:
-      name: litellm
-      key: LILAC_API_KEY
-    dropParams: true
-  info:
-    maxInputTokens: 262128
-    maxOutputTokens: 131072
-    supportsFunctionCalling: true
-    supportsPromptCaching: true
-    supportsVision: true
-    extra:
-      supports_reasoning: true
----
-# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
-apiVersion: litellm.home-operations.com/v1alpha1
-kind: LiteLLMModel
-metadata:
-  name: lilac-glm-5-2
-spec:
-  modelName: zai-org/glm-5.2
+  modelName: opencode-go/glm-5.2
   params:
     model: openai/glm-5.2
-    apiBase: https://api.getlilac.com/v1
+    apiBase: https://opencode.ai/zen/go/v1
     apiKeyRef:
       name: litellm
-      key: LILAC_API_KEY
+      key: OPENCODE_GO_API_KEY
     dropParams: true
   info:
-    maxInputTokens: 1048560
+    maxInputTokens: 1000000
     maxOutputTokens: 131072
     supportsFunctionCalling: true
     supportsPromptCaching: true
@@ -247,18 +206,87 @@ spec:
 apiVersion: litellm.home-operations.com/v1alpha1
 kind: LiteLLMModel
 metadata:
-  name: lilac-gemma-4-31b-it
+  name: opencode-go-deepseek-v4-pro
 spec:
-  modelName: google/gemma-4-31b-it
+  modelName: opencode-go/deepseek-v4-pro
   params:
-    model: openai/google/gemma-4-31b-it
-    apiBase: https://api.getlilac.com/v1
+    model: openai/deepseek-v4-pro
+    apiBase: https://opencode.ai/zen/go/v1
     apiKeyRef:
       name: litellm
-      key: LILAC_API_KEY
+      key: OPENCODE_GO_API_KEY
     dropParams: true
   info:
-    maxInputTokens: 131072
-    maxOutputTokens: 8192
-    supportsFunctionCalling: false
+    maxInputTokens: 1000000
+    maxOutputTokens: 384000
+    supportsFunctionCalling: true
     supportsPromptCaching: true
+    extra:
+      supports_reasoning: true
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: opencode-go-deepseek-v4-flash
+spec:
+  modelName: opencode-go/deepseek-v4-flash
+  params:
+    model: openai/deepseek-v4-flash
+    apiBase: https://opencode.ai/zen/go/v1
+    apiKeyRef:
+      name: litellm
+      key: OPENCODE_GO_API_KEY
+    dropParams: true
+  info:
+    maxInputTokens: 1000000
+    maxOutputTokens: 384000
+    supportsFunctionCalling: true
+    supportsPromptCaching: true
+    extra:
+      supports_reasoning: true
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: opencode-go-mimo-v2-5-pro
+spec:
+  modelName: opencode-go/mimo-v2.5-pro
+  params:
+    model: openai/mimo-v2.5-pro
+    apiBase: https://opencode.ai/zen/go/v1
+    apiKeyRef:
+      name: litellm
+      key: OPENCODE_GO_API_KEY
+    dropParams: true
+  info:
+    maxInputTokens: 1048576
+    maxOutputTokens: 128000
+    supportsFunctionCalling: true
+    supportsPromptCaching: true
+    extra:
+      supports_reasoning: true
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: opencode-go-mimo-v2-5
+spec:
+  modelName: opencode-go/mimo-v2.5
+  params:
+    model: openai/mimo-v2.5
+    apiBase: https://opencode.ai/zen/go/v1
+    apiKeyRef:
+      name: litellm
+      key: OPENCODE_GO_API_KEY
+    dropParams: true
+  info:
+    maxInputTokens: 1000000
+    maxOutputTokens: 128000
+    supportsFunctionCalling: true
+    supportsPromptCaching: true
+    supportsVision: true
+    extra:
+      supports_reasoning: true
