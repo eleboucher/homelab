@@ -59,6 +59,9 @@ spec:
           - matches:
               - path:
                   value: /_heisenbridge/media/
+            backendRefs:
+              - identifier: app
+                port: 80
     persistence:
       config:
         type: secret
