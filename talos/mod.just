@@ -2,49 +2,44 @@ set quiet
 set script-interpreter := ['bash', '-euo', 'pipefail']
 set shell := ['bash', '-euo', 'pipefail', '-c']
 
-# Requires `op` authenticated (vals resolves ref+op:// in secrets.yaml).
-topf_config := source_directory() / "topf.yaml"
-
 [private]
 default:
     just -l talos
 
-[doc('List all nodes and their live state')]
-nodes:
-    topf --topfconfig "{{ topf_config }}" nodes
-
-[doc('Render machine configs for all nodes to a directory (default: /tmp/topf-render)')]
-render out="/tmp/topf-render":
-    topf --topfconfig "{{ topf_config }}" render -o "{{ out }}"
-    just log info "Rendered machine configs" "out" "{{ out }}"
-
-[doc('Show the pending config diff against the live cluster (dry-run, applies nothing)')]
-diff *args:
-    topf --topfconfig "{{ topf_config }}" apply --dry-run {{ args }}
-
 [confirm('Apply Talos config to ' + node + ' [y|N] ?')]
-[doc('Apply Talos config to a node (extra flags pass through, e.g. --mode=no-reboot)')]
+[doc('Apply Talos config to a node')]
 apply-node node *args:
-    topf --topfconfig "{{ topf_config }}" apply --nodes-filter "{{ node }}" {{ args }}
+    just talos render-config "{{ node }}" | talosctl -n "{{ node }}" apply-config -f /dev/stdin {{ args }}
+
+[doc('Download Talos machine image')]
+[script]
+download-image version:
+    export SCHEMATIC="$(just talos schematic-id)"
+    gum spin --title "Downloading Talos {{ version }} ..." -- \
+    curl -sfL --remove-on-error --retry 5 --retry-delay 5 --retry-all-errors \
+        -o "{{ source_directory() }}/talos-{{ version }}-${SCHEMATIC:0:8}.iso" \
+        "https://factory.talos.dev/image/${SCHEMATIC}/{{ version }}/metal-amd64.iso"
+    just log info "Downloaded Talos" version "{{ version }}" schematic "${SCHEMATIC}"
 
 [confirm('Reboot node ' + node + ' [y|N] ?')]
 [doc('Reboot a node')]
 reboot-node node:
     talosctl -n {{ node }} reboot -m powercycle
 
-[doc('Render Talos config for a node and print it')]
+[doc('Render Talos config for a node')]
 [script]
 render-config node:
-    out="$(mktemp -d)"
-    topf --topfconfig "{{ topf_config }}" render --nodes-filter "{{ node }}" -o "$out" >/dev/null
-    cat "$out/{{ node }}.yaml"
-    rm -rf "$out"
+    export CONTROLPLANE="$(just talos machine-controller {{ node }})"
+    export NODE="{{ node }}"
+    export SCHEMATIC="$(just talos schematic-id)"
+    talosctl machineconfig patch <(just template "{{ source_directory() }}/machineconfig.yaml.j2") \
+        -p @<(just template "{{ source_directory() }}/nodes/{{ node }}.yaml.j2")
 
-[doc('Fetch kubeconfig and talosconfig, then restart controllers (use after a Talos apply)')]
+[doc('Fetch kubeconfig and restart controllers (use after a Talos config apply)')]
 [script]
 kubeconfig:
-    topf --topfconfig "{{ topf_config }}" talosconfig > "{{ justfile_dir() }}/talosconfig"
-    topf --topfconfig "{{ topf_config }}" kubeconfig --validity 720h > "{{ justfile_dir() }}/kubeconfig"
+    controller="$(talosctl config info -o yaml | yq -e '.endpoints[0]')"
+    talosctl kubeconfig -n "$controller" -f --force-context-name main "{{ justfile_dir() }}"
     namespaces=(kube-system observability cert-manager security flux-system cnpg-system volsync-system)
     for ns in "${namespaces[@]}"; do
         if kubectl get ns "$ns" >/dev/null 2>&1; then
@@ -53,8 +48,7 @@ kubeconfig:
     done
 
 [confirm('Reset node ' + node + ' [y|N] ?')]
-[doc('Reset a node (lazy-detaches NFS first so a dying in-cluster NFS server cannot wedge the unmount)')]
-[script]
+[doc('Reset a node')]
 reset-node node *args:
     # normandie (the NFS server) runs in-cluster, so it dies mid-reset; hard NFS
     # mounts would then hang the unmount forever. Lazy force-detach NFS on the node
@@ -72,28 +66,14 @@ shutdown-node node *args:
     talosctl -n "{{ node }}" shutdown --force {{ args }}
 
 [confirm('Upgrade Kubernetes to ' + version + ' [y|N] ?')]
-[doc('Upgrade Kubernetes on the cluster (topf does not manage k8s; bump kubernetesVersion in topf.yaml afterwards)')]
+[doc('Upgrade Kubernetes version on the cluster')]
 upgrade-k8s version:
     talosctl -n "$(talosctl config info -o yaml | yq -e '.endpoints[0]')" upgrade-k8s --to {{ version }}
 
 [confirm('Upgrade node ' + node + ' [y|N] ?')]
-[doc('Upgrade Talos on a node to the version in topf.yaml')]
+[doc('Upgrade Talos version on a node')]
 upgrade-node node *args:
-    topf --topfconfig "{{ topf_config }}" upgrade --nodes-filter "{{ node }}" --reboot-mode powercycle {{ args }}
-
-[doc('Print the resolved schematic ID')]
-schematic-id:
-    topf --topfconfig "{{ topf_config }}" schematic-ids
-
-[doc('Download Talos machine image')]
-[script]
-download-image version:
-    schematic="$(topf --topfconfig "{{ topf_config }}" schematic-ids | head -1)"
-    gum spin --title "Downloading Talos {{ version }} ..." -- \
-    curl -sfL --remove-on-error --retry 5 --retry-delay 5 --retry-all-errors \
-        -o "{{ source_directory() }}/talos-{{ version }}-${schematic:0:8}.iso" \
-        "https://factory.talos.dev/image/${schematic}/{{ version }}/metal-amd64.iso"
-    just log info "Downloaded Talos" version "{{ version }}" schematic "${schematic}"
+    talosctl -n "{{ node }}" upgrade -i "$(just talos machine-image)" -m powercycle --timeout=10m {{ args }}
 
 [confirm('Create ZFS pool data-pool on ' + node + ' using ' + disk + ' — this WIPES the disk [y|N] ?')]
 [doc('Create the OpenEBS ZFS pool on a node (wipes the target disk)')]
@@ -128,3 +108,17 @@ zpool-destroy node:
     kubectl wait --for=jsonpath='{.status.phase}'=Succeeded "pod/zpool-destroy-{{ node }}" --timeout=120s
     kubectl logs "zpool-destroy-{{ node }}"
     kubectl delete pod "zpool-destroy-{{ node }}"
+
+[private]
+schematic-id:
+    curl -sX POST --data-binary @<(just template "{{ source_directory() }}/schematic.yaml.j2") "https://factory.talos.dev/schematics" | jq -r '.id'
+
+[private]
+machine-controller node:
+    just template "{{ source_directory() }}/nodes/{{ node }}.yaml.j2" | yq -e 'select(.machine) | (.machine.type == "controlplane") // ""'
+
+[private]
+[script]
+machine-image:
+    export SCHEMATIC="$(just talos schematic-id)"
+    just template "{{ source_directory() }}/machineconfig.yaml.j2" | yq -er 'select(.machine) | .machine.install.image'

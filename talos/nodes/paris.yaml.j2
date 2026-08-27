@@ -1,0 +1,59 @@
+---
+machine:
+  type: controlplane
+  certSANs:
+    - 127.0.0.1
+    - 192.168.1.42
+  install:
+    diskSelector:
+      type: nvme
+  udev:
+    rules:
+      - SUBSYSTEM=="drm", KERNEL=="renderD*", GROUP="992", MODE="0660"
+---
+apiVersion: v1alpha1
+kind: ExistingVolumeConfig
+name: media
+discovery:
+  volumeSelector:
+    match: disk.transport == "sata" && disk.size > 4000000000000u
+---
+
+apiVersion: v1alpha1
+kind: VolumeConfig
+name: EPHEMERAL
+provisioning:
+  diskSelector:
+    match: disk.transport == "sata" && disk.size < 4000000000000u
+  maxSize: 300GiB
+  grow: false
+---
+apiVersion: v1alpha1
+kind: RawVolumeConfig
+name: data-pool
+provisioning:
+  diskSelector:
+    match: disk.transport == "sata" && disk.size < 4000000000000u
+  maxSize: 1400GiB
+  grow: true
+---
+apiVersion: v1alpha1
+kind: LinkAliasConfig
+name: lan0
+selector:
+  match: mac(link.permanent_addr) == "c4:62:37:09:df:ff"
+---
+apiVersion: v1alpha1
+kind: BondConfig
+name: lacp0
+mtu: 9000
+links:
+  - lan0
+bondMode: active-backup
+miimon: 100
+---
+apiVersion: v1alpha1
+kind: BridgeConfig
+name: bond0
+addresses:
+  - address: 2a01:e0a:e4b:aa31::42/64

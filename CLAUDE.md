@@ -16,8 +16,9 @@ All commands use `just` (task runner). Run `just -l` to list available commands.
 
 ```bash
 just bootstrap cluster        # Run full bootstrap end-to-end
-just bootstrap apply          # topf apply --auto-bootstrap (config all nodes + bootstrap etcd)
-just bootstrap credentials    # Generate talosconfig + kubeconfig
+just bootstrap nodes          # Install Talos on nodes
+just bootstrap k8s            # Bootstrap Kubernetes
+just bootstrap kubeconfig     # Fetch kubeconfig
 just bootstrap base           # Wait for nodes, apply bootstrap kustomize + CRDs
 just bootstrap apps           # Sync Helmfile apps
 ```
@@ -36,21 +37,14 @@ just kube view-secret <ns> <secret>  # View decoded secret
 
 ### Talos Management
 
-Talos config is managed with [topf](https://github.com/postfinance/topf); recipes wrap it.
-
 ```bash
-just talos nodes              # List nodes and their live state
-just talos diff               # Pending config diff vs live cluster (topf dry-run)
-just talos render [out]       # Render all machine configs to a directory
-just talos render-config <node>   # Render and print one node's machine config
-just talos apply-node <node>  # Apply Talos config to a node (topf apply)
-just talos upgrade-node <node>    # Upgrade Talos on node to topf.yaml version
-just talos upgrade-k8s <version>  # Upgrade Kubernetes (via talosctl; not topf)
+just talos apply-node <node>  # Apply Talos config to node
+just talos render-config <node>   # Render Talos config (dry-run)
 just talos reboot-node <node>     # Reboot node
 just talos reset-node <node>      # Reset node (wipe)
 just talos shutdown-node <node>   # Shutdown node
-just talos kubeconfig         # Fetch kubeconfig + talosconfig, restart controllers
-just talos schematic-id       # Print the resolved Talos Factory schematic ID
+just talos upgrade-k8s <version>  # Upgrade Kubernetes version
+just talos upgrade-node <node>    # Upgrade Talos on node
 just talos download-image <ver>   # Download Talos ISO
 ```
 
@@ -79,14 +73,10 @@ bootstrap/
 ├── helmfile/                # Helmfile for CRDs and core apps
 ├── kustomize/               # Bootstrap manifests (namespaces, secrets) applied before Flux
 
-talos/                       # Talos cluster config, managed with topf
-├── topf.yaml                # Cluster identity (name, endpoint, versions) + node list
-├── secrets.yaml             # Talos PKI bundle (ref+op:// → 1Password, vals-resolved)
-├── schematic.yaml           # Talos Factory schematic (extensions, kernel args)
-├── all/                     # Patches applied to every node
-├── control-plane/           # Patches applied to control-plane nodes
-├── worker/                  # Patches applied to worker nodes
-└── node/<host>/             # Per-node patches (paris, kharkiv)
+talos/
+├── machineconfig.yaml.j2    # Base Talos machine config (Jinja2)
+├── schematic.yaml.j2        # Talos Factory schematic
+└── nodes/                   # Per-node Talos configs
 ```
 
 ## Key Patterns
@@ -101,7 +91,7 @@ talos/                       # Talos cluster config, managed with topf
 
 **Secrets:** Use 1Password + External Secrets for all secrets. Store credentials in 1Password vault, sync to Kubernetes with External Secrets.
 
-**Talos config (topf):** `talos/topf.yaml` declares the cluster + nodes; layered strategic-merge patches under `all/`, `control-plane/`, `worker/`, `node/<host>/` build each machine config (applied in that order). PKI lives in `talos/secrets.yaml` as `ref+op://` references resolved via `vals`/1Password at apply time — so `op` must be authenticated when topf runs. Preview changes with `just talos diff` before `just talos apply-node <node>`.
+**Templates:** Jinja2 templates (`.j2` files) processed with `minijinja-cli`. Used for Talos configs.
 
 **GitOps Flow:** Push to repo → Flux detects changes → Reconciles cluster state
 

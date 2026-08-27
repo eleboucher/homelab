@@ -1,4 +1,0 @@
-machine:
-  install:
-    grubUseUKICmdline: true
-    wipe: false

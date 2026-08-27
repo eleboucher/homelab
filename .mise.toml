@@ -1,19 +1,20 @@
 
 [env]
 _.python.venv = { path = "{{config_root}}/.venv", create = true }
+MINIJINJA_CONFIG_FILE = "{{config_root}}/.minijinja.toml"
 JUST_UNSTABLE = "1"
 
 [tools]
 "python" = "latest"
 "uv" = "latest"
+"github:mitsuhiko/minijinja" = "2.24.0"
+"github:siderolabs/talos" = "1.14.0-rc.2"
+vals = "latest"
 kustomize = "5.8.1"
 "aqua:opentofu/opentofu" = "1"
 oxfmt = "latest"
 "aqua:yannh/kubeconform" = "latest"
 "aqua:mikefarah/yq" = "latest"
-"github:postfinance/topf" = "0.5.0"
-vals = "latest"
-dyff = "latest"
 prek = "latest"
 "helm" = "latest"
 "helmfile" = "latest"
