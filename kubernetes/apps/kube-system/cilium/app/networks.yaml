@@ -100,6 +100,30 @@ spec:
           peerConfigRef:
             name: l3-bgp-peer-config-v6
 ---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/cilium.io/ciliumbgpnodeconfigoverride_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumBGPNodeConfigOverride
+metadata:
+  name: kharkiv
+spec:
+  bgpInstances:
+    - name: cilium
+      peers:
+        - name: mikrotik-v6
+          localAddress: 2a01:e0a:e4b:aa31::43
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/cilium.io/ciliumbgpnodeconfigoverride_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumBGPNodeConfigOverride
+metadata:
+  name: paris
+spec:
+  bgpInstances:
+    - name: cilium
+      peers:
+        - name: mikrotik-v6
+          localAddress: 2a01:e0a:e4b:aa31::42
+---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/core/service_v1.json
 apiVersion: v1
 kind: Service
