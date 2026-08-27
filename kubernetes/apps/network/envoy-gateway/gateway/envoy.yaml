@@ -112,7 +112,6 @@ spec:
           value: "%DOWNSTREAM_REMOTE_ADDRESS_WITHOUT_PORT%"
   http2:
     onInvalidMessage: TerminateStream
-  http3: {}
   path:
     escapedSlashesAction: KeepUnchanged
   targetSelectors:
