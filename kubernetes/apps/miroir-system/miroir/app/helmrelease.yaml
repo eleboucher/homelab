@@ -17,6 +17,12 @@ spec:
     # Top-level key since chart 0.4.0 (was controller.autoTieBreaker).
     autoTieBreaker: false
     replicaCount: 2
+    agent:
+      resources:
+        requests:
+          memory: 64Mi
+        limits:
+          memory: 256Mi
     # Larger DRBD activity log cuts write amplification under the scattered
     # random writes of the DB/media workloads; must be a prime below 65534.
     drbd:
