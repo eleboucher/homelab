@@ -11,7 +11,7 @@ spec:
   concurrencyPolicy: Forbid
   jobTemplate:
     spec:
-      activeDeadlineSeconds: 72000 # 20 hours (gdrive throughput ~750 KB/s; recent runs take 8-9h and creep past 10h)
+      activeDeadlineSeconds: 72000 # 20 hours (gdrive throughput ~750 KB/s; runs reached 17-19h at --parallel=4)
       backoffLimit: 5
       template:
         spec:
@@ -44,7 +44,7 @@ spec:
                   echo "Syncing to Google Drive: ${RCLONE_REMOTE_PATH}"
                   kopia repository sync-to rclone \
                     --remote-path "${RCLONE_REMOTE_PATH}" \
-                    --parallel=4 \
+                    --parallel=8 \
                     --delete
 
                   echo "Disconnecting from Kopia repository"
