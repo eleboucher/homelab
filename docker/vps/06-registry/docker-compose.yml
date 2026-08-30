@@ -6,6 +6,14 @@ services:
     container_name: apoci
     restart: unless-stopped
     user: "1000:1000"
+    # Retention lives here, not in apoci_config: compose leaves configs.content
+    # out of the service config-hash, so edits to the inlined config never
+    # recreate the container. Env vars are hashed and override YAML.
+    environment:
+      APOCI_GC_RETENTION_KEEP_LAST_N: "0"
+      APOCI_GC_RETENTION_MAX_AGE: "0s"
+      APOCI_GC_RETENTION_PINNED_GLOBS: "latest,v*,*.*.*,main"
+      APOCI_GC_RETENTION_PER_REPO: '[{"repo":"eleboucher/homelab","keepLastN":20}]'
     labels:
       - prometheus.scrape=true
       - prometheus.port=9090
@@ -96,23 +104,9 @@ configs:
         interval: 30m
         diskUsageThreshold: 80
         diskUsageCheckInterval: 5m
-        retention:
-          # Retention is origin-blind (sweeps peer repos too); keep the global
-          # default off so federated mirrors survive. Aggressive policy is scoped
-          # per-repo to repos we own.
-          keepLastN: 0
-          maxAge: 0s
-          pinnedGlobs:
-            - "latest"
-            - "v*"
-            - "*.*.*"
-            # Flux tracks eleboucher/homelab:main; never let GC cull it.
-            - "main"
-          perRepo:
-            # Count-based only: no maxAge, which culled sha tags just for the repo
-            # being idle a day.
-            - repo: "eleboucher/homelab"
-              keepLastN: 20
+        # retention: see APOCI_GC_RETENTION_* above. It is origin-blind (sweeps
+        # peer repos too), so the global default stays off and the count-based
+        # policy is scoped to repos we own. "main" is pinned: Flux tracks it.
 
       metrics:
         enabled: true
