@@ -225,6 +225,11 @@ stp:
 routes:
   - destination: 2a01:e0a:e4b:aa30::/64
     gateway: 2a01:e0a:e4b:aa31::1
+  # aa31::/64 is delegated to the Mikrotik, so egress from it has to leave the
+  # same way or its stateful forward chain drops the replies. Metric beats the
+  # RA default via the Freebox.
+  - gateway: 2a01:e0a:e4b:aa31::1
+    metric: 100
 ---
 apiVersion: v1alpha1
 kind: DHCPv4Config
