@@ -65,7 +65,8 @@ spec:
                 mkdir -p "$skill_dir" $skill_dir/scripts
                 cp /run/skills/homelab-commit-watcher/SKILL.md "$skill_dir/SKILL.md"
                 cp /run/skills/homelab-commit-watcher/fetch_k8s_repos.py "$skill_dir/scripts/fetch_k8s_repos.py"
-                chmod +x "$skill_dir/scripts/fetch_k8s_repos.py"
+                cp /run/skills/homelab-commit-watcher/post_discord.py "$skill_dir/scripts/post_discord.py"
+                chmod +x "$skill_dir/scripts/fetch_k8s_repos.py" "$skill_dir/scripts/post_discord.py"
             securityContext:
               allowPrivilegeEscalation: false
               capabilities:

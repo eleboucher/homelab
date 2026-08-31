@@ -118,6 +118,11 @@ data:
       timeout: 900
       lifetime_seconds: 1800
       persistent_shell: true
+    timeouts:
+      tools:
+        # Match terminal.timeout — the 420s default preempted the
+        # commit-watcher fetcher mid-run and forced a full re-fetch.
+        concurrent_batch: 900
     compression:
       enabled: true
       protect_last_n: 20

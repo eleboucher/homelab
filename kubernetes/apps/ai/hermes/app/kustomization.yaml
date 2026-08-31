@@ -12,6 +12,7 @@ configMapGenerator:
     files:
       - skills/homelab-commit-watcher/SKILL.md
       - skills/homelab-commit-watcher/fetch_k8s_repos.py
+      - skills/homelab-commit-watcher/post_discord.py
     options:
       disableNameSuffixHash: true
       annotations:
