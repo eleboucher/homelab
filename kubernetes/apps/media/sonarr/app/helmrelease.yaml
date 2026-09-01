@@ -34,6 +34,8 @@ spec:
                 value: External
               - name: SONARR__AUTH__REQUIRED
                 value: DisabledForLocalAddresses
+              - name: SONARR__SERVER__ALLOWEDHOSTS
+                value: "*"
             probes:
               liveness: &probes
                 enabled: true

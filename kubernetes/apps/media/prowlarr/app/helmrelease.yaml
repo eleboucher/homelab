@@ -33,6 +33,8 @@ spec:
                 value: External
               - name: PROWLARR__AUTH__REQUIRED
                 value: DisabledForLocalAddresses
+              - name: PROWLARR__SERVER__ALLOWEDHOSTS
+                value: "*"
             probes:
               liveness: &probes
                 enabled: true
