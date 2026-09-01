@@ -34,6 +34,7 @@ machine:
     wipe: false
   kernel:
     modules:
+      - name: binfmt_misc # qemu-user registration for multi-arch buildx
       - name: dm_thin_pool # homefs lvmthin backend
       - name: drbd # homefs replication
         parameters:

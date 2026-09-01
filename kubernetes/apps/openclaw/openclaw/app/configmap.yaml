@@ -9,7 +9,7 @@ data:
       agents: {
         defaults: {
           contextPruning: { mode: "off" },
-          compaction: { mode: "default", reserveTokensFloor: 30000, memoryFlush: { enabled: true, model: "litellm/opencode-go/deepseek-v4-flash", softThresholdTokens: 80000, prompt: "Extract key decisions, state changes, lessons, blockers to memory/YYYY-MM-DD.md. Format: ## [HH:MM] Topic. Skip routine work. NO_FLUSH if nothing important.", systemPrompt: "Compacting session context. Extract only what's worth remembering. No fluff." },
+          compaction: { mode: "default", memoryFlush: { enabled: true, model: "litellm/opencode-go/deepseek-v4-flash", softThresholdTokens: 80000 },
           },
           imageModel: {
             primary: "litellm-anthropic/opencode-go/minimax-m3",
@@ -18,17 +18,6 @@ data:
           subagents: {
             maxConcurrent: 4,
             runTimeoutSeconds: 900,
-          },
-          memorySearch: {
-            provider: "local",
-            fallback: "none",
-            local: {
-              modelPath: "hf:ggml-org/embeddinggemma-300M-GGUF/embeddinggemma-300M-Q8_0.gguf",
-            },
-            sync: { watch: true },
-            query: {
-              hybrid: { enabled: true, vectorWeight: 0.7, textWeight: 0.3 },
-            },
           },
           model: {
             primary: "litellm-anthropic/opencode-go/minimax-m3",
@@ -53,7 +42,6 @@ data:
             directPolicy: "allow",
             lightContext: true,
             isolatedSession: false,
-            includeReasoning: false,
           },
           contextInjection: "always",
           bootstrapMaxChars: 50000,
@@ -296,6 +284,15 @@ data:
           },
         },
       },
+      memory: {
+        search: {
+          provider: "local",
+          fallback: "none",
+          local: {
+            modelPath: "hf:ggml-org/embeddinggemma-300M-GGUF/embeddinggemma-300M-Q8_0.gguf",
+          },
+        },
+      },
       plugins: {
         entries: {
           browser: { enabled: true },
@@ -362,7 +359,6 @@ data:
           mode: "enforce",
           pruneAfter: "7d",
           maxEntries: 1000,
-          rotateBytes: "100mb",
           resetArchiveRetention: "7d",
         },
       },
@@ -394,7 +390,6 @@ data:
         auth: { mode: "token", token: "{{ .GATEWAY_TOKEN }}" },
         bind: "lan",
         controlUi: {
-          allowInsecureAuth: true,
           allowedOrigins: [
             "https://openclaw.erwanleboucher.dev",
             "https://chat.erwanleboucher.dev",
@@ -407,20 +402,22 @@ data:
         },
         mode: "local",
         nodes: {
-          denyCommands: [
-            "camera.snap",
-            "camera.clip",
-            "screen.record",
-            "contacts.add",
-            "calendar.add",
-            "reminders.add",
-            "sms.send",
-            "sms.search",
-          ],
+          commands: {
+            deny: [
+              "camera.snap",
+              "camera.clip",
+              "screen.record",
+              "contacts.add",
+              "calendar.add",
+              "reminders.add",
+              "sms.send",
+              "sms.search",
+            ],
+          },
         },
         port: 18789,
-        reload: { debounceMs: 300, mode: "hybrid" },
-        tailscale: { mode: "off", resetOnExit: false },
+        reload: { mode: "hybrid" },
+        tailscale: { mode: "off" },
         trustedProxies: ["10.42.0.0/16", "192.168.0.0/16", "fd42::/56"],
       },
     }
