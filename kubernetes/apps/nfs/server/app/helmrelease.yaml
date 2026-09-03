@@ -28,6 +28,31 @@ spec:
             - key: node.kubernetes.io/unschedulable
               operator: Exists
               effect: NoSchedule
+        initContainers:
+          wait-for-media:
+            image:
+              repository: quay.io/aminvakil/alpine-nfs-server
+              tag: latest@sha256:8de68eea860cb1f885be2fb97ce081a3d35c4597b7063a7e7ccef1aec470af98
+            command:
+              - sh
+              - -c
+              - |
+                # Guard against the export race seen after the 2026-09-03 paris reboot:
+                # if this pod starts before Talos has mounted the e-media volume at
+                # /var/mnt/media, nfsd caches its fsid=0 pseudo-root against the empty
+                # mountpoint. Every client mount then fails immediately with
+                # "NFS4: Couldn't follow remote path" while the pod still looks healthy,
+                # and only a pod restart clears it (exportfs -ra does not).
+                for i in $(seq 1 60); do
+                  if [ -d /mnt/media/backups ] && [ -d /mnt/media/kopiur ]; then
+                    echo "media volume is mounted, proceeding"
+                    exit 0
+                  fi
+                  echo "waiting for /var/mnt/media to be mounted ($i/60)"
+                  sleep 2
+                done
+                echo "media volume still not mounted after 120s; refusing to export" >&2
+                exit 1
         containers:
           app:
             image:
