@@ -17,6 +17,8 @@ spec:
     num_retries: 3
     timeout: 600
   litellmSettings:
+    callbacks:
+      - /opt/litellm-compat/chatgpt_stream_recovery.proxy_handler_instance
     success_callback: ["prometheus"]
     prometheus_adapter: true
     cache: true
@@ -42,10 +44,16 @@ spec:
           name: litellm
           key: LITELLM_MASTER_KEY
   volumes:
+    - configMap:
+        name: litellm-chatgpt-compat
+      name: chatgpt-compat
     - name: chatgpt-tokens
       persistentVolumeClaim:
         claimName: litellm-chatgpt
   volumeMounts:
+    - mountPath: /opt/litellm-compat
+      name: chatgpt-compat
+      readOnly: true
     - name: chatgpt-tokens
       mountPath: /app/chatgpt_tokens
   resources:

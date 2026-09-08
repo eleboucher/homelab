@@ -2,6 +2,14 @@
 # yaml-language-server: $schema=https://json.schemastore.org/kustomization
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
+configMapGenerator:
+  - name: litellm-chatgpt-compat
+    files:
+      - compat/chatgpt_stream_recovery.py
+    options:
+      annotations:
+        kustomize.toolkit.fluxcd.io/substitute: disabled
+      disableNameSuffixHash: true
 resources:
   - ./pvc.yaml
   - ./externalsecret.yaml
