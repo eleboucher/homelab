@@ -9,103 +9,56 @@ data:
         base_url: http://litellm.ai:4000/v1
         key_env: LITELLM_API_KEY
         models:
-          opencode-go/qwen3.8-max:
-            context_length: 1000000
-          opencode-go/minimax-m3:
-            context_length: 1000000
-          opencode-go/glm-5.3:
-            context_length: 1000000
-          opencode-go/kimi-k3:
-            context_length: 1048576
-          opencode-go/deepseek-v4-pro:
-            context_length: 1000000
-          opencode-go/deepseek-v4-flash:
-            context_length: 1000000
-          opencode-go/mimo-v2.5-pro:
-            context_length: 1048576
-          opencode-go/mimo-v2.5:
-            context_length: 1000000
-          opencode-go/hy3:
-            context_length: 256000
-          opencode-go/ox-alpha-free:
-            context_length: 1000000
+          chatgpt/gpt-5.6-luna:
+            context_length: 272000
+          chatgpt/gpt-5.6-terra:
+            context_length: 272000
     model:
-      default: opencode-go/minimax-m3
+      default: chatgpt/gpt-5.6-luna
       provider: custom:litellm
-      context_length: 1000000
+      context_length: 272000
     model_aliases:
-      qwen:
-        model: opencode-go/qwen3.8-max
+      luna:
+        model: chatgpt/gpt-5.6-luna
         provider: custom:litellm
-      minimax:
-        model: opencode-go/minimax-m3
+      terra:
+        model: chatgpt/gpt-5.6-terra
         provider: custom:litellm
-      glm:
-        model: opencode-go/glm-5.3
-        provider: custom:litellm
-      glm-turbo:
-        model: opencode-go/deepseek-v4-flash
-        provider: custom:litellm
-      mimo:
-        model: opencode-go/mimo-v2.5
-        provider: custom:litellm
-      mimo-pro:
-        model: opencode-go/mimo-v2.5-pro
-        provider: custom:litellm
-      hy3:
-        model: opencode-go/hy3
-        provider: custom:litellm
-      free:
-        model: opencode-go/ox-alpha-free
-        provider: custom:litellm
-      kimi:
-        model: opencode-go/kimi-k3
-        provider: custom:litellm
-      deepseek:
-        model: opencode-go/deepseek-v4-pro
-        provider: custom:litellm
-    fallback_providers:
-      - provider: custom:litellm
-        model: opencode-go/minimax-m3
-      - provider: custom:litellm
-        model: opencode-go/deepseek-v4-flash
-      - provider: custom:litellm
-        model: opencode-go/ox-alpha-free
     auxiliary:
       approval:
         provider: custom:litellm
-        model: opencode-go/minimax-m3
+        model: chatgpt/gpt-5.6-luna
         timeout: 60
       compression:
         provider: custom:litellm
-        model: opencode-go/minimax-m3
+        model: chatgpt/gpt-5.6-luna
       web_extract:
         provider: custom:litellm
-        model: opencode-go/hy3
+        model: chatgpt/gpt-5.6-luna
       session_search:
         provider: custom:litellm
-        model: opencode-go/hy3
+        model: chatgpt/gpt-5.6-luna
       vision:
         provider: custom:litellm
-        model: opencode-go/minimax-m3
+        model: chatgpt/gpt-5.6-luna
       goal_judge:
         provider: custom:litellm
-        model: opencode-go/deepseek-v4-flash
+        model: chatgpt/gpt-5.6-luna
       title_generation:
         provider: custom:litellm
-        model: opencode-go/hy3
+        model: chatgpt/gpt-5.6-luna
       profile_describer:
         provider: custom:litellm
-        model: opencode-go/hy3
+        model: chatgpt/gpt-5.6-luna
       triage_specifier:
         provider: custom:litellm
-        model: opencode-go/deepseek-v4-flash
+        model: chatgpt/gpt-5.6-luna
       kanban_decomposer:
         provider: custom:litellm
-        model: opencode-go/deepseek-v4-flash
+        model: chatgpt/gpt-5.6-luna
       curator:
         provider: custom:litellm
-        model: opencode-go/deepseek-v4-flash
+        model: chatgpt/gpt-5.6-luna
         timeout: 600
     memory:
       provider: memini
@@ -150,7 +103,7 @@ data:
       api_max_retries: 3
       reasoning_effort: medium
     delegation:
-      model: opencode-go/deepseek-v4-flash
+      model: chatgpt/gpt-5.6-luna
       max_concurrent_children: 8
       max_spawn_depth: 2
     moa:
@@ -160,16 +113,12 @@ data:
           enabled: true
           reference_models:
             - provider: custom:litellm
-              model: opencode-go/minimax-m3
+              model: chatgpt/gpt-5.6-luna
             - provider: custom:litellm
-              model: opencode-go/glm-5.3
-            - provider: custom:litellm
-              model: opencode-go/mimo-v2.5
+              model: chatgpt/gpt-5.6-terra
           aggregator:
             provider: custom:litellm
-            model: opencode-go/minimax-m3
-          reference_temperature: 0.6
-          aggregator_temperature: 0.4
+            model: chatgpt/gpt-5.6-terra
           max_tokens: 8192
     platforms:
       matrix:
