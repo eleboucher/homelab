@@ -5,7 +5,7 @@ kind: GarageCluster
 metadata:
   name: garage
 spec:
-  image: dxflrs/garage:v2.3.0
+  image: dxflrs/garage:v2.4.1
   layoutPolicy: Manual
   replication:
     factor: 1
