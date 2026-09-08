@@ -37,13 +37,16 @@ spec:
                   export KOPIA_CHECK_FOR_UPDATES=false
 
                   echo "Connecting to source Kopia repository: filesystem:///repository"
+                  # Listing concurrency is separate from copy parallelism.
                   kopia repository connect filesystem \
                     --path /repository \
+                    --list-parallelism=16 \
                     --password "${KOPIA_PASSWORD}"
 
                   echo "Syncing to Google Drive: ${RCLONE_REMOTE_PATH}"
                   kopia repository sync-to rclone \
                     --remote-path "${RCLONE_REMOTE_PATH}" \
+                    --list-parallelism=16 \
                     --parallel=8 \
                     --delete
 
