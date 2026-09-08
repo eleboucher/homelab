@@ -9,7 +9,7 @@ resources:
   - ./ocirepository.yaml
   - ./prometheusrule-towonel-edge.yaml
   - ./prometheusrule-towonel-hub.yaml
-# Preserve the /cache backup exclusion on the kopiur component's SnapshotPolicy.
+# Exclude cache and the root-only runtime marker from backups.
 patches:
   - target:
       kind: SnapshotPolicy
@@ -19,3 +19,4 @@ patches:
         value:
           ignoreRules:
             - /cache
+            - /.vm_app_running
