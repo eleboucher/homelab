@@ -6,334 +6,565 @@ metadata:
 data:
   openclaw.json: |-
     {
-      agents: {
-        defaults: {
-          contextPruning: { mode: "off" },
-          compaction: { mode: "default", memoryFlush: { enabled: true, model: "litellm/chatgpt/gpt-5.6-luna", softThresholdTokens: 80000 },
+      "agents": {
+        "defaults": {
+          "contextPruning": {
+            "mode": "off"
           },
-          imageModel: {
-            primary: "litellm/chatgpt/gpt-5.6-luna",
+          "compaction": {
+            "mode": "default",
+            "memoryFlush": {
+              "enabled": true,
+              "model": "litellm/chatgpt/gpt-5.6-luna",
+              "softThresholdTokens": 80000
+            }
           },
-          maxConcurrent: 4,
-          subagents: {
-            maxConcurrent: 4,
-            runTimeoutSeconds: 900,
+          "imageModel": {
+            "primary": "litellm/chatgpt/gpt-5.6-luna"
           },
-          model: {
-            primary: "litellm/chatgpt/gpt-5.6-luna",
+          "maxConcurrent": 4,
+          "subagents": {
+            "maxConcurrent": 4,
+            "runTimeoutSeconds": 900
           },
-          models: {
-            "litellm/chatgpt/gpt-5.6-luna": { alias: "luna" },
-            "litellm/chatgpt/gpt-5.6-terra": { alias: "terra" },
+          "model": {
+            "primary": "litellm/chatgpt/gpt-5.6-luna"
           },
-          heartbeat: {
-            every: "60m",
-            model: "litellm/chatgpt/gpt-5.6-luna",
-            directPolicy: "allow",
-            lightContext: true,
-            isolatedSession: false,
+          "models": {
+            "litellm/chatgpt/gpt-5.6-luna": {
+              "alias": "luna"
+            },
+            "litellm/chatgpt/gpt-5.6-terra": {
+              "alias": "terra"
+            }
           },
-          contextInjection: "always",
-          bootstrapMaxChars: 50000,
-          bootstrapTotalMaxChars: 100000,
-          thinkingDefault: "medium",
-          timeoutSeconds: 600,
+          "heartbeat": {
+            "every": "60m",
+            "model": "litellm/chatgpt/gpt-5.6-luna",
+            "directPolicy": "allow",
+            "lightContext": true,
+            "isolatedSession": false
+          },
+          "contextInjection": "always",
+          "bootstrapMaxChars": 50000,
+          "bootstrapTotalMaxChars": 100000,
+          "thinkingDefault": "medium",
+          "timeoutSeconds": 600,
+          "systemAgent": {
+            "agentId": "main"
+          },
+          "modelPolicy": {
+            "allow": [
+              "litellm/chatgpt/gpt-5.6-luna",
+              "litellm/chatgpt/gpt-5.6-terra"
+            ]
+          }
         },
-        list: [
-          {
-            id: "main",
-            default: true,
-            name: "Owl",
-            workspace: "/home/node/.openclaw/workspace",
-            agentDir: "/home/node/.openclaw/agents/main/agent",
-            subagents: { allowAgents: ["explorer", "fixer", "fixer-bigctx", "oracle", "reviewer"] },
-            identity: {
-              name: "Owl",
-              avatar: "avatars/owl_avatar.png",
+        "ownership": "explicit",
+        "entries": {
+          "main": {
+            "name": "Owl",
+            "workspace": "/home/node/.openclaw/workspace",
+            "agentDir": "/home/node/.openclaw/agents/main/agent",
+            "subagents": {
+              "allowAgents": [
+                "explorer",
+                "fixer",
+                "fixer-bigctx",
+                "oracle",
+                "reviewer"
+              ]
             },
-            heartbeat: {
-              every: "60m",
-              model: "litellm/chatgpt/gpt-5.6-luna",
-              activeHours: { start: "06:00", end: "23:00" },
+            "identity": {
+              "name": "Owl",
+              "avatar": "avatars/owl_avatar.png"
             },
+            "heartbeat": {
+              "every": "60m",
+              "model": "litellm/chatgpt/gpt-5.6-luna",
+              "activeHours": {
+                "start": "06:00",
+                "end": "23:00"
+              }
+            }
           },
-          {
-            id: "explorer",
-            name: "Explorer",
-            model: "litellm/chatgpt/gpt-5.6-luna",
-            workspace: "/home/node/.openclaw/workspace",
-            thinkingDefault: "low",
-            description: "Recon specialist. Codebase scouting, search, 'where/how is X', read-only. Be fast and concise; return findings, not edits.",
-            tools: { allow: ["read", "sessions_history"], deny: ["write", "edit", "apply_patch", "exec", "process", "browser"] },
+          "explorer": {
+            "name": "Explorer",
+            "model": "litellm/chatgpt/gpt-5.6-luna",
+            "workspace": "/home/node/.openclaw/workspace",
+            "thinkingDefault": "low",
+            "description": "Recon specialist. Codebase scouting, search, 'where/how is X', read-only. Be fast and concise; return findings, not edits.",
+            "tools": {
+              "allow": [
+                "read",
+                "sessions_history"
+              ],
+              "deny": [
+                "write",
+                "edit",
+                "apply_patch",
+                "exec",
+                "process",
+                "browser"
+              ]
+            }
           },
-          {
-            id: "fixer",
-            name: "Fixer",
-            model: "litellm/chatgpt/gpt-5.6-luna",
-            workspace: "/home/node/.openclaw/workspace",
-            thinkingDefault: "high",
-            description: "Default code executor. Scoped implementation and edits: make the change, verify it, report concisely.",
+          "fixer": {
+            "name": "Fixer",
+            "model": "litellm/chatgpt/gpt-5.6-luna",
+            "workspace": "/home/node/.openclaw/workspace",
+            "thinkingDefault": "high",
+            "description": "Default code executor. Scoped implementation and edits: make the change, verify it, report concisely."
           },
-          {
-            id: "fixer-bigctx",
-            name: "Fixer (big context)",
-            model: "litellm/chatgpt/gpt-5.6-terra",
-            workspace: "/home/node/.openclaw/workspace",
-            thinkingDefault: "high",
-            description: "Implementation needing the strongest general model or vision. Use for work that benefits from deeper reasoning.",
+          "fixer-bigctx": {
+            "name": "Fixer (big context)",
+            "model": "litellm/chatgpt/gpt-5.6-terra",
+            "workspace": "/home/node/.openclaw/workspace",
+            "thinkingDefault": "high",
+            "description": "Implementation needing the strongest general model or vision. Use for work that benefits from deeper reasoning."
           },
-          {
-            id: "oracle",
-            name: "Oracle",
-            model: "litellm/chatgpt/gpt-5.6-terra",
-            workspace: "/home/node/.openclaw/workspace",
-            thinkingDefault: "high",
-            description: "Hard debugging, root-cause, architecture (strongest reasoning tier). Read-mostly: return analysis and a recommendation, don't sprawl into edits.",
-            tools: { deny: ["write", "edit", "apply_patch"] },
+          "oracle": {
+            "name": "Oracle",
+            "model": "litellm/chatgpt/gpt-5.6-terra",
+            "workspace": "/home/node/.openclaw/workspace",
+            "thinkingDefault": "high",
+            "description": "Hard debugging, root-cause, architecture (strongest reasoning tier). Read-mostly: return analysis and a recommendation, don't sprawl into edits.",
+            "tools": {
+              "deny": [
+                "write",
+                "edit",
+                "apply_patch"
+              ]
+            }
           },
-          {
-            id: "reviewer",
-            name: "Reviewer",
-            model: "litellm/chatgpt/gpt-5.6-luna",
-            workspace: "/home/node/.openclaw/workspace",
-            thinkingDefault: "high",
-            description: "Independent second opinion and creative/prose. Review the work carefully and return a concise assessment.",
-            tools: { deny: ["write", "edit", "apply_patch"] },
-          },
-        ],
+          "reviewer": {
+            "name": "Reviewer",
+            "model": "litellm/chatgpt/gpt-5.6-luna",
+            "workspace": "/home/node/.openclaw/workspace",
+            "thinkingDefault": "high",
+            "description": "Independent second opinion and creative/prose. Review the work carefully and return a concise assessment.",
+            "tools": {
+              "deny": [
+                "write",
+                "edit",
+                "apply_patch"
+              ]
+            }
+          }
+        }
       },
-      bindings: [
-        { agentId: "main", match: { channel: "discord", accountId: "default" } },
+      "bindings": [
+        {
+          "agentId": "main",
+          "match": {
+            "channel": "discord",
+            "accountId": "default"
+          }
+        },
+        {
+          "agentId": "main",
+          "match": {
+            "channel": "discord",
+            "accountId": "*"
+          }
+        }
       ],
-      channels: {
-        discord: {
-          enabled: true,
-          defaultAccount: "default",
-          groupPolicy: "open",
-          accounts: {
-            default: {
-              token: "{{ .DISCORD_TOKEN }}",
-              guilds: {
+      "channels": {
+        "discord": {
+          "enabled": true,
+          "defaultAccount": "default",
+          "groupPolicy": "open",
+          "accounts": {
+            "default": {
+              "token": "{{ .DISCORD_TOKEN }}",
+              "guilds": {
                 "1441534507017703547": {
-                  channels: {
-                    "1501981764430594189": { enabled: true, requireMention: false },
-                  },
+                  "channels": {
+                    "1501981764430594189": {
+                      "enabled": true,
+                      "requireMention": false
+                    }
+                  }
                 },
                 "1503020857423822858": {
-                  requireMention: false,
-                },
-              },
-            },
-          },
-        },
-      },
-      commands: {
-        native: "auto",
-        nativeSkills: "auto",
-        allowFrom: {
-          discord: ["user:178154257042636800"],
-        },
-      },
-      auth: {
-        profiles: {
-          "litellm:default": { provider: "litellm", mode: "api_key" },
-        },
-      },
-      hooks: {
-        internal: {
-          enabled: true,
-          entries: {
-            "compaction-notifier": { enabled: true },
-            "session-memory": { enabled: true },
-          },
-        },
-      },
-
-      models: {
-        providers: {
-          litellm: {
-            api: "openai-responses",
-            apiKey: "{{ .LITELLM_MASTER_KEY }}",
-            baseUrl: "http://litellm.ai:4000/v1",
-            request: { allowPrivateNetwork: true },
-            models: [
-              {
-                id: "chatgpt/gpt-5.6-luna",
-                name: "GPT-5.6 Luna (ChatGPT subscription)",
-                reasoning: true,
-                input: ["text", "image"],
-                cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
-                contextWindow: 272000,
-                maxTokens: 128000,
-                compat: { supportsUsageInStreaming: true },
-              },
-              {
-                id: "chatgpt/gpt-5.6-terra",
-                name: "GPT-5.6 Terra (ChatGPT subscription)",
-                reasoning: true,
-                input: ["text", "image"],
-                cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
-                contextWindow: 272000,
-                maxTokens: 128000,
-                compat: { supportsUsageInStreaming: true },
+                  "requireMention": false
+                }
               }
-            ],
+            }
           },
-        },
+          "responsePrefix": "[{model}]"
+        }
       },
-      messages: {
-        ackReactionScope: "group-mentions",
-        responsePrefix: "[{model}]"
+      "commands": {
+        "native": "auto",
+        "nativeSkills": "auto",
+        "allowFrom": {
+          "discord": [
+            "user:178154257042636800"
+          ]
+        }
       },
-      mcp: {
-        servers: {
-          homelab: {
-            transport: "streamable-http",
-            url: "http://litellm.ai:4000/mcp",
-            headers: { Authorization: "Bearer {{ .LITELLM_MASTER_KEY }}" },
-          },
-          skiplagged: {
-            transport: "streamable-http",
-            url: "https://mcp.skiplagged.com/mcp",
-          },
-          kiwi: {
-            transport: "streamable-http",
-            url: "https://mcp.kiwi.com",
-          },
-          trivago: {
-            transport: "streamable-http",
-            url: "https://mcp.trivago.com/mcp",
-          },
-          ferryhopper: {
-            transport: "streamable-http",
-            url: "https://mcp.ferryhopper.com/mcp",
-          },
-          airbnb: {
-            command: "npx",
-            args: ["-y", "@openbnb/mcp-server-airbnb@latest", "--ignore-robots-txt"],
-          },
-        },
+      "auth": {
+        "profiles": {
+          "litellm:default": {
+            "provider": "litellm",
+            "mode": "api_key"
+          }
+        }
       },
-      memory: {
-        search: {
-          provider: "local",
-          fallback: "none",
-          local: {
-            modelPath: "hf:ggml-org/embeddinggemma-300M-GGUF/embeddinggemma-300M-Q8_0.gguf",
-          },
-        },
-      },
-      plugins: {
-        entries: {
-          browser: { enabled: true },
-          discord: { enabled: true },
-          "memory-core": { enabled: false },
-          memini: {
-            enabled: true,
-            hooks: { allowConversationAccess: true },
-            config: {
-              base_url: "http://memini.ai.svc.cluster.local:8080",
-              namespace: "openclaw",
-              fallback_on_error: true,
-              timeout_ms: 5000,
+      "hooks": {
+        "internal": {
+          "enabled": true,
+          "entries": {
+            "compaction-notifier": {
+              "enabled": true
             },
+            "session-memory": {
+              "enabled": true
+            }
+          }
+        }
+      },
+      "models": {
+        "providers": {
+          "litellm": {
+            "api": "openai-responses",
+            "apiKey": "{{ .LITELLM_MASTER_KEY }}",
+            "baseUrl": "http://litellm.ai:4000/v1",
+            "request": {
+              "allowPrivateNetwork": true
+            },
+            "models": [
+              {
+                "id": "chatgpt/gpt-5.6-luna",
+                "name": "GPT-5.6 Luna (ChatGPT subscription)",
+                "reasoning": true,
+                "input": [
+                  "text",
+                  "image"
+                ],
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0
+                },
+                "contextWindow": 272000,
+                "maxTokens": 128000,
+                "compat": {
+                  "supportsUsageInStreaming": true
+                }
+              },
+              {
+                "id": "chatgpt/gpt-5.6-terra",
+                "name": "GPT-5.6 Terra (ChatGPT subscription)",
+                "reasoning": true,
+                "input": [
+                  "text",
+                  "image"
+                ],
+                "cost": {
+                  "input": 0,
+                  "output": 0,
+                  "cacheRead": 0,
+                  "cacheWrite": 0
+                },
+                "contextWindow": 272000,
+                "maxTokens": 128000,
+                "compat": {
+                  "supportsUsageInStreaming": true
+                }
+              }
+            ]
+          }
+        }
+      },
+      "messages": {
+        "ackReactionScope": "group-mentions",
+        "responsePrefix": "[{model}]"
+      },
+      "mcp": {
+        "servers": {
+          "homelab": {
+            "transport": "streamable-http",
+            "url": "http://litellm.ai:4000/mcp",
+            "headers": {
+              "Authorization": "Bearer {{ .LITELLM_MASTER_KEY }}"
+            }
+          },
+          "skiplagged": {
+            "transport": "streamable-http",
+            "url": "https://mcp.skiplagged.com/mcp"
+          },
+          "kiwi": {
+            "transport": "streamable-http",
+            "url": "https://mcp.kiwi.com"
+          },
+          "trivago": {
+            "transport": "streamable-http",
+            "url": "https://mcp.trivago.com/mcp"
+          },
+          "ferryhopper": {
+            "transport": "streamable-http",
+            "url": "https://mcp.ferryhopper.com/mcp"
+          },
+          "airbnb": {
+            "command": "npx",
+            "args": [
+              "-y",
+              "@openbnb/mcp-server-airbnb@latest",
+              "--ignore-robots-txt"
+            ]
+          }
+        }
+      },
+      "memory": {
+        "search": {
+          "provider": "local",
+          "fallback": "none",
+          "local": {
+            "modelPath": "hf:ggml-org/embeddinggemma-300M-GGUF/embeddinggemma-300M-Q8_0.gguf"
+          }
+        }
+      },
+      "plugins": {
+        "entries": {
+          "browser": {
+            "enabled": true
+          },
+          "discord": {
+            "enabled": true
+          },
+          "memory-core": {
+            "enabled": false
+          },
+          "memini": {
+            "enabled": true,
+            "hooks": {
+              "allowConversationAccess": true
+            },
+            "config": {
+              "base_url": "http://memini.ai.svc.cluster.local:8080",
+              "namespace": "openclaw",
+              "fallback_on_error": true,
+              "timeout_ms": 5000
+            }
           },
           "memory-wiki": {
-            enabled: true,
-            config: {
-              vaultMode: "bridge",
-              vault: {
-                path: "/home/node/.openclaw/wiki/main",
-                renderMode: "native",
+            "enabled": true,
+            "config": {
+              "vaultMode": "bridge",
+              "vault": {
+                "path": "/home/node/.openclaw/wiki/main",
+                "renderMode": "native"
               },
-              bridge: {
-                enabled: true,
-                readMemoryArtifacts: true,
-                indexDreamReports: true,
-                indexDailyNotes: true,
-                indexMemoryRoot: true,
-                followMemoryEvents: true,
+              "bridge": {
+                "enabled": true,
+                "readMemoryArtifacts": true,
+                "indexDreamReports": true,
+                "indexDailyNotes": true,
+                "indexMemoryRoot": true,
+                "followMemoryEvents": true
               },
-              search: {
-                backend: "shared",
-                corpus: "all",
+              "search": {
+                "backend": "shared",
+                "corpus": "all"
               },
-              render: {
-                preserveHumanBlocks: true,
-                createBacklinks: true,
-                createDashboards: true,
-              },
-            },
+              "render": {
+                "preserveHumanBlocks": true,
+                "createBacklinks": true,
+                "createDashboards": true
+              }
+            }
           },
-          searxng: {
-            enabled: true,
-            config: {
-              webSearch: {
-                baseUrl: "http://searxng.selfhosted.svc.cluster.local:8080",
-              },
-            },
+          "searxng": {
+            "enabled": true,
+            "config": {
+              "webSearch": {
+                "baseUrl": "http://searxng.selfhosted.svc.cluster.local:8080"
+              }
+            }
           },
-          "skill-workshop": { enabled: true },
+          "litellm": {
+            "enabled": true
+          }
         },
-        slots: {
-          memory: "memini",
-        },
+        "slots": {
+          "memory": "memini"
+        }
       },
-      session: {
-        dmScope: "main",
-        reset: {
-          mode: "idle",
-          idleMinutes: 1440,
+      "session": {
+        "dmScope": "main",
+        "reset": {
+          "mode": "idle",
+          "idleMinutes": 1440
         },
-        maintenance: {
-          mode: "enforce",
-          pruneAfter: "7d",
-          maxEntries: 1000,
-          resetArchiveRetention: "7d",
-        },
+        "maintenance": {
+          "mode": "enforce",
+          "pruneAfter": "7d",
+          "maxEntries": 1000,
+          "resetArchiveRetention": "7d"
+        }
       },
-      skills: {
-        load: {
-          extraDirs: [
-            "/home/node/.openclaw/plugins/travel-hacking-toolkit/plugins/travel-hacking-toolkit/skills",
-          ],
+      "skills": {
+        "load": {
+          "extraDirs": [
+            "/home/node/.openclaw/plugins/travel-hacking-toolkit/plugins/travel-hacking-toolkit/skills"
+          ]
         },
-      },
-      tools: {
-        alsoAllow: ["browser"],
-        media: { image: { timeoutSeconds: 180 } },
-        sessions: { visibility: "all" },
-        agentToAgent: { enabled: true },
-        exec: { security: "full", ask: "off", strictInlineEval: false },
-        elevated: {
-          enabled: true,
-          allowFrom: {
-            discord: ["178154257042636800"],
+        "entries": {
+          "1password": {
+            "enabled": false
           },
-        },
-        web: {
-          fetch: { enabled: true },
-          search: { enabled: true, provider: "searxng" },
-        },
+          "blogwatcher": {
+            "enabled": false
+          },
+          "blucli": {
+            "enabled": false
+          },
+          "camsnap": {
+            "enabled": false
+          },
+          "coding-agent": {
+            "enabled": false
+          },
+          "eightctl": {
+            "enabled": false
+          },
+          "gemini": {
+            "enabled": false
+          },
+          "gifgrep": {
+            "enabled": false
+          },
+          "gog": {
+            "enabled": false
+          },
+          "goplaces": {
+            "enabled": false
+          },
+          "himalaya": {
+            "enabled": false
+          },
+          "mcporter": {
+            "enabled": false
+          },
+          "model-usage": {
+            "enabled": false
+          },
+          "nano-pdf": {
+            "enabled": false
+          },
+          "obsidian": {
+            "enabled": false
+          },
+          "openai-whisper": {
+            "enabled": false
+          },
+          "openai-whisper-api": {
+            "enabled": false
+          },
+          "openhue": {
+            "enabled": false
+          },
+          "oracle": {
+            "enabled": false
+          },
+          "ordercli": {
+            "enabled": false
+          },
+          "sag": {
+            "enabled": false
+          },
+          "sherpa-onnx-tts": {
+            "enabled": false
+          },
+          "songsee": {
+            "enabled": false
+          },
+          "sonoscli": {
+            "enabled": false
+          },
+          "spotify-player": {
+            "enabled": false
+          },
+          "summarize": {
+            "enabled": false
+          },
+          "tmux": {
+            "enabled": false
+          },
+          "trello": {
+            "enabled": false
+          },
+          "video-frames": {
+            "enabled": false
+          },
+          "xurl": {
+            "enabled": false
+          }
+        }
       },
-      gateway: {
-        auth: { mode: "token", token: "{{ .GATEWAY_TOKEN }}" },
-        bind: "lan",
-        controlUi: {
-          allowedOrigins: [
+      "tools": {
+        "alsoAllow": [
+          "browser"
+        ],
+        "media": {
+          "image": {
+            "timeoutSeconds": 180
+          }
+        },
+        "sessions": {
+          "visibility": "all"
+        },
+        "agentToAgent": {
+          "enabled": true
+        },
+        "exec": {
+          "strictInlineEval": false,
+          "mode": "full"
+        },
+        "elevated": {
+          "enabled": true,
+          "allowFrom": {
+            "discord": [
+              "178154257042636800"
+            ]
+          }
+        },
+        "web": {
+          "fetch": {
+            "enabled": true
+          },
+          "search": {
+            "enabled": true,
+            "provider": "searxng"
+          }
+        }
+      },
+      "gateway": {
+        "auth": {
+          "mode": "token",
+          "token": "{{ .GATEWAY_TOKEN }}"
+        },
+        "bind": "lan",
+        "controlUi": {
+          "allowedOrigins": [
             "https://openclaw.erwanleboucher.dev",
-            "https://chat.erwanleboucher.dev",
-          ],
+            "https://chat.erwanleboucher.dev"
+          ]
         },
-        http: {
-          endpoints: {
-            chatCompletions: { enabled: true },
-          },
+        "http": {
+          "endpoints": {
+            "chatCompletions": {
+              "enabled": true
+            }
+          }
         },
-        mode: "local",
-        nodes: {
-          commands: {
-            deny: [
+        "mode": "local",
+        "nodes": {
+          "commands": {
+            "deny": [
               "camera.snap",
               "camera.clip",
               "screen.record",
@@ -341,13 +572,36 @@ data:
               "calendar.add",
               "reminders.add",
               "sms.send",
-              "sms.search",
-            ],
-          },
+              "sms.search"
+            ]
+          }
         },
-        port: 18789,
-        reload: { mode: "hybrid" },
-        tailscale: { mode: "off" },
-        trustedProxies: ["10.42.0.0/16", "192.168.0.0/16", "fd42::/56"],
+        "port": 18789,
+        "reload": {
+          "mode": "hybrid"
+        },
+        "tailscale": {
+          "mode": "off"
+        },
+        "trustedProxies": [
+          "10.42.0.0/16",
+          "192.168.0.0/16",
+          "fd42::/56"
+        ]
       },
+      "talk": {
+        "agentId": "main"
+      },
+      "meta": {
+        "migrations": {
+          "modelPolicyAllowlist": true
+        },
+        "lastTouchedVersion": "2026.9.3"
+      },
+      "wizard": {
+        "lastRunAt": "2026-09-10T09:22:25.305Z",
+        "lastRunVersion": "2026.9.3",
+        "lastRunCommand": "doctor",
+        "lastRunMode": "local"
+      }
     }
