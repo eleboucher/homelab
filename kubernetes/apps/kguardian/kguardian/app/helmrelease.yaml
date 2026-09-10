@@ -13,7 +13,7 @@ spec:
     broker:
       image:
         repository: ghcr.io/kguardian-dev/kguardian/broker
-        tag: v1.12.4@sha256:83f7556a7571ceb3b31da4be7852b85144859ded37e48c37931f25c31d49b180
+        tag: v1.16.1@sha256:83843e418604f85a48b1b06324f10b11d19fdf0adf2f24117508b8b910f8868b
       resources:
         limits:
           memory: 1Gi
@@ -22,7 +22,7 @@ spec:
     controller:
       image:
         repository: ghcr.io/kguardian-dev/kguardian/controller
-        tag: v1.9.3@sha256:3ac168f505ce9b8f37a379a9d00dce0ef357eaa29cf108b5925f909448c3de22
+        tag: v1.13.0@sha256:e36f22fae31970b854d99dc4275d0042e4d18864baa5856432713b4ea4f76eb5
       excludedNamespaces:
         - kguardian
     database:
@@ -32,4 +32,4 @@ spec:
     frontend:
       image:
         repository: ghcr.io/kguardian-dev/kguardian/frontend
-        tag: v1.11.4@sha256:4521895ec0ec2b0605012a49c9dd49928f8490e2ddb66b44def57a7806843521
+        tag: v1.16.0@sha256:fd0894fac183b8387f423b425f5a54a971096aecd265bd89c3bb53af49eb0459
