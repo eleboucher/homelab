@@ -48,10 +48,10 @@ spec:
   resources:
     gpu: 1
     cpu: 100m
-    # 2Gi OOM-killed llama-server (exit 137): on the Iris Xe iGPU Vulkan
-    # buffers are kernel-backed and charged to the pod cgroup, unlike the
-    # B580's discrete VRAM where the reranker fits in 2Gi.
-    memory: 4Gi
+    # Vulkan on the iGPU backs weights/KV/compute with kernel-charged memcg
+    # pages (the B580's discrete VRAM doesn't hit the pod cgroup), so the
+    # 2Gi limit OOM-killed llama-server during load; steady-state is ~5.1Gi.
+    memory: 8Gi
   extraArgs:
     # Qwen3-Embedding uses last-token pooling with left padding;
     # --embedding + --pooling last exposes the OpenAI-compatible
