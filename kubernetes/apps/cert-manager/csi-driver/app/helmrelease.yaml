@@ -1,0 +1,15 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: cert-manager-csi-driver
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: cert-manager-csi-driver
+  interval: 1h
+  values:
+    metrics:
+      podmonitor:
+        enabled: true

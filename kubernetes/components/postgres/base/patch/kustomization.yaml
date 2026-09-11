@@ -45,9 +45,21 @@ patches:
               - name: k8s.ksgate.org/database-applied
           persistence:
             postgres-certs:
-              type: secret
-              name: "postgres-{{ .Release.Name }}-cert"
-              defaultMode: 0600
+              type: custom
+              volumeSpec:
+                csi:
+                  driver: csi.cert-manager.io
+                  readOnly: true
+                  volumeAttributes:
+                    csi.cert-manager.io/issuer-name: postgres-client-ca
+                    csi.cert-manager.io/issuer-kind: ClusterIssuer
+                    csi.cert-manager.io/key-algorithm: ECDSA
+                    csi.cert-manager.io/key-size: "384"
+                    csi.cert-manager.io/key-encoding: PKCS8
+                    csi.cert-manager.io/key-usages: client auth
+                    csi.cert-manager.io/common-name: ${DATABASE_OWNER:=${APP}}
+                    csi.cert-manager.io/dns-names: $${POD_NAME}.$${POD_NAMESPACE}.svc.cluster.local
+                    csi.cert-manager.io/fs-group: "1000"
               globalMounts:
                 - path: /var/run/secrets/postgresql
             root-ca:

@@ -143,9 +143,19 @@ spec:
       claimName: ${APP}
     extraVolumes:
       - name: postgres-forgejo
-        secret:
-          defaultMode: 0o600
-          secretName: postgres-forgejo-cert
+        csi:
+          driver: csi.cert-manager.io
+          readOnly: true
+          volumeAttributes:
+            csi.cert-manager.io/issuer-name: postgres-client-ca
+            csi.cert-manager.io/issuer-kind: ClusterIssuer
+            csi.cert-manager.io/key-algorithm: ECDSA
+            csi.cert-manager.io/key-size: "384"
+            csi.cert-manager.io/key-encoding: PKCS8
+            csi.cert-manager.io/key-usages: client auth
+            csi.cert-manager.io/common-name: forgejo
+            csi.cert-manager.io/dns-names: $${POD_NAME}.$${POD_NAMESPACE}.svc.cluster.local
+            csi.cert-manager.io/fs-group: "1000"
       - name: root-ca
         secret:
           defaultMode: 0o600
