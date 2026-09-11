@@ -10,11 +10,6 @@ spec:
     kind: OCIRepository
     name: jellyfin
   interval: 1h
-  timeout: 1h
-  upgrade:
-    remediation:
-      retries: 0
-      remediateLastFailure: false
   values:
     defaultPodOptions:
       resourceClaims:
@@ -57,17 +52,6 @@ spec:
                   timeoutSeconds: 1
                   failureThreshold: 3
               readiness: *probes
-              startup:
-                enabled: true
-                custom: true
-                spec:
-                  httpGet:
-                    path: /health
-                    port: 8096
-                  initialDelaySeconds: 10
-                  periodSeconds: 10
-                  timeoutSeconds: 5
-                  failureThreshold: 360
             resources:
               claims:
                 - name: gpu
