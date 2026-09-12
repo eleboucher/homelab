@@ -20,8 +20,7 @@ spec:
             fsGroup: *context
             fsGroupChangePolicy: "OnRootMismatch"
           dnsPolicy: ClusterFirst
-        replicas: 2
-        type: deployment
+        type: daemonset
         containers:
           app:
             image:
@@ -65,6 +64,7 @@ spec:
     service:
       app:
         controller: flaresolverr
+        internalTrafficPolicy: Local
         ports:
           http:
             port: 8191
