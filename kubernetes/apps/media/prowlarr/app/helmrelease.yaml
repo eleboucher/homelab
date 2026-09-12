@@ -35,12 +35,6 @@ spec:
                 value: DisabledForLocalAddresses
               - name: PROWLARR__SERVER__ALLOWEDHOSTS
                 value: "*"
-              - name: HTTP_PROXY
-                value: http://qbittorrent-proxy.downloads.svc.cluster.local:8888
-              - name: HTTPS_PROXY
-                value: http://qbittorrent-proxy.downloads.svc.cluster.local:8888
-              - name: NO_PROXY
-                value: localhost,127.0.0.1,flaresolverr,flaresolverr.media.svc,flaresolverr.media.svc.cluster.local
             probes:
               liveness: &probes
                 enabled: true
