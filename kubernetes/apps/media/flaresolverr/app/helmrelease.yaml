@@ -14,13 +14,16 @@ spec:
     controllers:
       flaresolverr:
         pod:
+          nodeSelector:
+            kubernetes.io/hostname: paris
           securityContext:
             runAsUser: &context 1000
             runAsGroup: *context
             fsGroup: *context
             fsGroupChangePolicy: "OnRootMismatch"
           dnsPolicy: ClusterFirst
-        type: daemonset
+        replicas: 1
+        type: deployment
         containers:
           app:
             image:
@@ -65,7 +68,6 @@ spec:
     service:
       app:
         controller: flaresolverr
-        internalTrafficPolicy: Local
         ports:
           http:
             port: 8191
