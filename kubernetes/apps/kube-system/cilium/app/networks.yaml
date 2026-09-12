@@ -130,7 +130,7 @@ kind: Service
 metadata:
   name: kube-api
   annotations:
-    external-dns.alpha.kubernetes.io/hostname: k8s.erwanleboucher.dev
+    external-dns.kubernetes.io/hostname: k8s.erwanleboucher.dev
     lbipam.cilium.io/ips: "192.168.69.120,2a01:e0a:e4b:aa32::120"
 spec:
   type: LoadBalancer
