@@ -103,6 +103,11 @@ spec:
         AlertingRuleResultsApproachingLimit:
           spec:
             expr: (vmalert_alerting_rules_last_evaluation_samples > on(cluster,instance,group,file) group_left() (vmalert_group_rule_results_limit * 0.9)) and on(cluster,instance,group,file) (vmalert_group_rule_results_limit > 0)
+        # The shared vmsingle receives Alertmanager metrics from both clusters.
+        # Evaluate configuration consistency inside each cluster.
+        AlertmanagerConfigInconsistent:
+          spec:
+            expr: count(count_values("config_hash", alertmanager_config_hash{job=~"vmalertmanager-.*",container="alertmanager",namespace=~"observability"}) by(namespace,service,cluster)) by(namespace,service,cluster) != 1
         NodeMemoryHighUtilization:
           spec:
             expr: (100 - ((node_memory_MemAvailable_bytes{job="node-exporter"} / node_memory_MemTotal_bytes{job="node-exporter"}) * 100)) > 95
