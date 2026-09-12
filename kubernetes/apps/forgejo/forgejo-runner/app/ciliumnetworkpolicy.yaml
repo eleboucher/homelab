@@ -39,6 +39,8 @@ spec:
               values:
                 - forgejo-runner
                 - forgejo-runner-codeberg
+                - forgejo-runner-ow-ops
+                - forgejo-runner-sable
             - key: k8s:io.kubernetes.pod.namespace
               operator: In
               values:

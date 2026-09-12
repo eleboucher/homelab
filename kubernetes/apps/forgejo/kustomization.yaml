@@ -8,5 +8,7 @@ resources:
   - forgejo/ks.yaml
   - forgejo-runner/ks.yaml
   - forgejo-runner-codeberg/ks.yaml
+  - forgejo-runner-ow-ops/ks.yaml
+  - forgejo-runner-sable/ks.yaml
   - forgesync/ks.yaml
   - namespace.yaml
