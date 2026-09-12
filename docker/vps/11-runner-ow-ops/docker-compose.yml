@@ -1,0 +1,69 @@
+---
+name: runner-ow-ops
+
+services:
+  forgejo-runner-ow-ops-dind:
+    # renovate: datasource=docker depName=docker
+    image: docker.io/library/docker:29-dind
+    container_name: forgejo-runner-ow-ops-dind
+    restart: unless-stopped
+    privileged: true
+    command:
+      - dockerd
+      - -H
+      - tcp://0.0.0.0:2375
+      - --tls=false
+    volumes:
+      - /opt/forgejo-runner-ow-ops/dind-data:/var/lib/docker
+
+  forgejo-runner-ow-ops:
+    # renovate: datasource=docker depName=data.forgejo.org/forgejo/runner
+    image: data.forgejo.org/forgejo/runner:13
+    container_name: forgejo-runner-ow-ops
+    restart: unless-stopped
+    depends_on:
+      forgejo-runner-ow-ops-dind:
+        condition: service_started
+    environment:
+      DOCKER_HOST: tcp://forgejo-runner-ow-ops-dind:2375
+      FORGEJO_RUNNER_UUID: ${FORGEJO_RUNNER_OW_OPS_UUID}
+      FORGEJO_RUNNER_TOKEN: ${FORGEJO_RUNNER_OW_OPS_TOKEN}
+    user: 1001:1001
+    working_dir: /data
+    volumes:
+      - /opt/forgejo-runner-ow-ops/data:/data
+    entrypoint:
+      - sh
+      - -c
+      - |-
+        set -e
+        umask 077
+        cat > /data/runner-config.yml <<EOF
+        cache:
+          enabled: true
+          dir: /data/cache
+        container:
+          docker_host: tcp://forgejo-runner-ow-ops-dind:2375
+          options: --add-host=forgejo-runner-ow-ops-dind:host-gateway
+          workdir_parent: /data/workdir
+        log:
+          level: info
+        runner:
+          capacity: 1
+          envs:
+            DOCKER_HOST: tcp://forgejo-runner-ow-ops-dind:2375
+          file: .runner
+          labels:
+            - ubuntu-latest:docker://ghcr.io/bjw-s-labs/forgejo-runner:ubuntu-24.04
+            - default:docker://ghcr.io/bjw-s-labs/forgejo-runner:ubuntu-24.04
+            - docker:docker://ghcr.io/bjw-s-labs/forgejo-runner:ubuntu-24.04
+            - multiarch:docker://ghcr.io/bjw-s-labs/forgejo-runner:ubuntu-24.04
+          timeout: 3h
+        server:
+          connections:
+            forgejo:
+              url: https://git.ow-ops.eu/
+              uuid: "$${FORGEJO_RUNNER_OW_OPS_UUID}"
+              token: "$${FORGEJO_RUNNER_OW_OPS_TOKEN}"
+        EOF
+        exec forgejo-runner daemon --config /data/runner-config.yml
