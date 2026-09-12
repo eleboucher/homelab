@@ -10,6 +10,7 @@ spec:
     - ../../../../components/nfs-media
     - ../../../../components/oidc/envoy
     - ../../../../components/kopiur/hot
+    - ../../../../components/kopiur/snapshot-restore
     - ../../../../components/zeroscaler
   interval: 1h
   path: ./kubernetes/apps/media/bazarr/app
@@ -26,6 +27,8 @@ spec:
     substitute:
       APP: bazarr
       APP_NAMESPACE: media
+      KOPIUR_RESTORE_NAME: bazarr-local-restore
+      KOPIUR_RESTORE_SNAPSHOT: bazarr-local-migration-202609121530
       OIDC_DISPLAY_NAME: Bazarr
       OIDC_GROUP: admins
       OIDC_SCOPES: '["openid", "profile"]'
