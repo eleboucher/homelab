@@ -49,10 +49,10 @@ spec:
             runner:
               capacity: 3
               labels:
-                - ubuntu-latest:k8s:/config/podspec-default.yaml
-                - default:k8s:/config/podspec-default.yaml
-                - docker:k8s:/config/podspec-dind.yaml
-                - multiarch:k8s:/config/podspec-dind.yaml  # you need binfmt-misc extension for multiarch
+                - ubuntu-latest:k8s:///config/podspec-default.yaml
+                - default:k8s:///config/podspec-default.yaml
+                - docker:k8s:///config/podspec-dind.yaml
+                - multiarch:k8s:///config/podspec-dind.yaml  # you need binfmt-misc extension for multiarch
               timeout: 3h
               shutdown_timeout: 3m
           podspec-default.yaml: |-
@@ -162,7 +162,7 @@ spec:
           k8s-plugin:
             image:
               repository: registry.erwanleboucher.dev/eleboucher/runner-k8s-plugin
-              tag: 12.10.9
+              tag: 13.1.0
             args:
               - --listen
               - unix:///plugin/forgejo-runner-k8s.sock
@@ -182,8 +182,8 @@ spec:
         containers:
           runner:
             image:
-              repository: registry.erwanleboucher.dev/eleboucher/runner
-              tag: 12.13.0
+              repository: data.forgejo.org/forgejo/runner
+              tag: 13.1.0
             command:
               - sh
               - -ec

@@ -13,8 +13,8 @@ spec:
       url: http://forgejo-http:3000
       existingSecret: forgejo-runner-secret
     image:
-      repository: registry.erwanleboucher.dev/eleboucher/runner
-      tag: "12.13.0"
+      repository: data.forgejo.org/forgejo/runner
+      tag: "13.1.0"
     plugin:
       image:
         repository: registry.erwanleboucher.dev/eleboucher/runner-k8s-plugin
@@ -52,11 +52,11 @@ spec:
       runner:
         capacity: 3
         labels:
-          - ubuntu-latest:k8s:/config/podspec-default.yaml
-          - default:k8s:/config/podspec-default.yaml
-          - docker:k8s:/config/podspec-dind.yaml
-          - multiarch:k8s:/config/podspec-dind.yaml  # you need binfmt-misc extension for multiarch
-          - heavy:k8s:/config/podspec-heavy.yaml  # long compiles (webkitgtk); see podspec-heavy
+          - ubuntu-latest:k8s:///config/podspec-default.yaml
+          - default:k8s:///config/podspec-default.yaml
+          - docker:k8s:///config/podspec-dind.yaml
+          - multiarch:k8s:///config/podspec-dind.yaml  # you need binfmt-misc extension for multiarch
+          - heavy:k8s:///config/podspec-heavy.yaml  # long compiles (webkitgtk); see podspec-heavy
         # Ceiling for every job, not a target. webkitgtk needs ~1.5-4h and the
         # previous 3h cut it too fine; ordinary jobs are unaffected.
         timeout: 8h
