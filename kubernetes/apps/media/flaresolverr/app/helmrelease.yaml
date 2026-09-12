@@ -30,6 +30,7 @@ spec:
             env:
               TZ: "Europe/Paris"
               LOG_LEVEL: INFO
+              PROXY_SERVER: http://qbittorrent-proxy.downloads.svc.cluster.local:8888
             probes:
               startup: &healthProbe
                 enabled: true
