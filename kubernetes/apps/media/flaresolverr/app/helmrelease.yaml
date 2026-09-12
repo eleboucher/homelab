@@ -25,15 +25,25 @@ spec:
         containers:
           app:
             image:
-              repository: ghcr.io/flaresolverr/flaresolverr
-              tag: v3.5.0
+              repository: ghcr.io/thephaseless/byparr
+              tag: latest
               pullPolicy: IfNotPresent
             env:
               TZ: "Europe/Paris"
-              LOG_LEVEL: info
+              LOG_LEVEL: INFO
             probes:
-              liveness:
-                enabled: false
+              startup: &healthProbe
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /health
+                    port: 8191
+                  failureThreshold: 24
+                  periodSeconds: 5
+                  timeoutSeconds: 3
+              liveness: *healthProbe
+              readiness: *healthProbe
             resources:
               requests:
                 cpu: 20m
