@@ -60,16 +60,20 @@ spec:
               - env:
                   - name: DEBIAN_FRONTEND
                     value: noninteractive
+                  - name: CARGO_BUILD_JOBS
+                    value: "6"
+                  - name: MAKEFLAGS
+                    value: "-j6"
                 image: ghcr.io/bjw-s-labs/forgejo-runner:ubuntu-24.04@sha256:d3f142f768c72e6f54443a07275889ee5b6c1e6560613be12a903744d6835c53
                 imagePullPolicy: IfNotPresent
                 name: main
                 resources:
                   requests:
-                    cpu: 100m
-                    memory: 1Gi
+                    cpu: 1
+                    memory: 2Gi
                   limits:
-                    cpu: 500m
-                    memory: 4Gi
+                    cpu: 6
+                    memory: 16Gi
             nodeSelector:
               kubernetes.io/hostname: kharkiv
             restartPolicy: Never
