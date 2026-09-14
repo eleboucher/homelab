@@ -24,6 +24,11 @@ kind: HTTPRoute
 metadata:
   name: misdirected-request
   annotations:
+    # Load-bearing opt-out: without it external-dns publishes *.erwanleboucher.dev
+    # A/AAAA records pointing at the gateway LB IPs (external-dns 1.22.0 did exactly
+    # this when it dropped the external-dns.alpha.kubernetes.io prefix — every
+    # internal hostname then resolved publicly and GatusEndpointExposed fired,
+    # 2026-09-14). Never remove.
     external-dns.kubernetes.io/controller: none
 spec:
   hostnames:
