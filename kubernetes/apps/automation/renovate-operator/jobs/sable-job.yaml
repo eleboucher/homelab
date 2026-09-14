@@ -3,26 +3,24 @@
 apiVersion: renovate-operator.mogenius.com/v1alpha1
 kind: RenovateJob
 metadata:
-  name: codeberg
+  name: sable
 spec:
   provider:
     name: forgejo
-    endpoint: https://codeberg.org/api/v1
+    endpoint: https://git.sable.moe/api/v1
   discoveryFilters:
-    - towonel/*
+    - SableClient/*
   extraEnv:
     - name: LOG_LEVEL
       value: debug
     - name: RENOVATE_PLATFORM_COMMIT
       value: "true"
     - name: RENOVATE_REDIS_URL
-      value: "redis://dragonfly.database.svc:6379/3"
-    - name: RENOVATE_GIT_TIMEOUT
-      value: "1200000"
+      value: "redis://dragonfly.database.svc:6379/4"
     - name: RENOVATE_REPOSITORY_CACHE
       value: enabled
     - name: RENOVATE_REPOSITORY_CACHE_TYPE
-      value: "s3://renovate/codeberg"
+      value: "s3://renovate/sable-moe"
     - name: RENOVATE_S3_ENDPOINT
       value: "http://garage.garage-system.svc.cluster.local:3900"
     - name: RENOVATE_S3_PATH_STYLE
@@ -38,5 +36,5 @@ spec:
       memory: 128Mi
     limits:
       cpu: "2"
-  schedule: 0 * * * *
-  secretRef: renovate-codeberg-secret
+  schedule: 15 * * * *
+  secretRef: renovate-sable-secret

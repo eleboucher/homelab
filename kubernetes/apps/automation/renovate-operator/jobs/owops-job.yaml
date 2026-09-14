@@ -1,0 +1,43 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/renovate-operator.mogenius.com/renovatejob_v1alpha1.json
+apiVersion: renovate-operator.mogenius.com/v1alpha1
+kind: RenovateJob
+metadata:
+  name: ow-ops
+spec:
+  provider:
+    name: forgejo
+    endpoint: https://git.ow-ops.eu/api/v1
+  discoveryFilters:
+    - towonel/*
+    - passoword/*
+  extraEnv:
+    - name: LOG_LEVEL
+      value: debug
+    - name: RENOVATE_PLATFORM_COMMIT
+      value: "true"
+    - name: RENOVATE_REDIS_URL
+      value: "redis://dragonfly.database.svc:6379/5"
+    - name: RENOVATE_GIT_TIMEOUT
+      value: "1200000"
+    - name: RENOVATE_REPOSITORY_CACHE
+      value: enabled
+    - name: RENOVATE_REPOSITORY_CACHE_TYPE
+      value: "s3://renovate/ow-ops"
+    - name: RENOVATE_S3_ENDPOINT
+      value: "http://garage.garage-system.svc.cluster.local:3900"
+    - name: RENOVATE_S3_PATH_STYLE
+      value: "true"
+    - name: AWS_REGION
+      value: us-east-1
+  skipForks: true
+  image: ghcr.io/renovatebot/renovate:44.83.1
+  parallelism: 3
+  resources:
+    requests:
+      cpu: 500m
+      memory: 128Mi
+    limits:
+      cpu: "2"
+  schedule: 45 * * * *
+  secretRef: renovate-ow-ops-secret
