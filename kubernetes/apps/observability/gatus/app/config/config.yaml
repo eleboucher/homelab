@@ -54,6 +54,24 @@ endpoints:
       - "[STATUS] == 200"
       - "[BODY] == pat(*Iroh Relay*)"
       - "[CERTIFICATE_EXPIRATION] > 168h"
+
+  # Tripwire: the public zone must never contain a wildcard record. If one
+  # appears, every internal hostname resolves publicly (2026-09-14 incident:
+  # external-dns 1.22.0 dropped the alpha annotation prefix, ignored the
+  # opt-out on the misdirected-request route, and published *.erwanleboucher.dev).
+  # Fails -> GatusEndpointExposed fires.
+  - name: wildcard-dns
+    group: internal
+    url: "1.1.1.1"
+    interval: 1m
+    dns:
+      query-name: "*.erwanleboucher.dev"
+      query-type: "A"
+    conditions:
+      - "len([BODY]) == 0"
+    ui:
+      hide-hostname: true
+      hide-url: true
 metrics: true
 
 storage:
