@@ -74,6 +74,12 @@ spec:
                   limits:
                     cpu: 6
                     memory: 16Gi
+            # runner-k8s-plugin defaults the shared workdir emptyDir to 10Gi,
+            # too small for CEF builds; kubelet evicts the pod on emptydirfs.limit.
+            volumes:
+              - name: shared
+                emptyDir:
+                  sizeLimit: 50Gi
             nodeSelector:
               kubernetes.io/hostname: kharkiv
             restartPolicy: Never
@@ -144,6 +150,9 @@ spec:
                 emptyDir: {}
               - name: docker-certs
                 emptyDir: {}
+              - name: shared
+                emptyDir:
+                  sizeLimit: 50Gi
             nodeSelector:
               kubernetes.io/hostname: kharkiv
             restartPolicy: Never
