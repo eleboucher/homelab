@@ -48,7 +48,7 @@ spec:
           app:
             image:
               repository: dock.mau.dev/gomuks/gomuks
-              tag: v26.08
+              tag: v26.09
             env:
               TZ: Europe/Paris
             probes:
