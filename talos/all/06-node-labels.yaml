@@ -1,0 +1,7 @@
+---
+apiVersion: v1alpha1
+kind: KubeNodeConfig
+labels:
+  node.kubernetes.io/gpu: "true"
+  intel.feature.node.kubernetes.io/gpu: "true"
+  topology.kubernetes.io/region: main

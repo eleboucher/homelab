@@ -1,0 +1,9 @@
+machine:
+  features:
+    apidCheckExtKeyUsage: true
+    diskQuotaSupport: true
+    rbac: true
+---
+apiVersion: v1alpha1
+kind: KubePrismConfig
+port: 7445

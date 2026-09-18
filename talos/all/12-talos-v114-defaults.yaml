@@ -1,0 +1,8 @@
+---
+apiVersion: v1alpha1
+kind: KubeFlannelCNIConfig
+$patch: delete # Cilium is the CNI; cluster.network.cni.name: none isn't enough on its own
+---
+apiVersion: v1alpha1
+kind: SecurityProfileConfig
+workloadIsolation: false # live-enabling deadlocks CRI waiting on sandboxd -> node NotReady

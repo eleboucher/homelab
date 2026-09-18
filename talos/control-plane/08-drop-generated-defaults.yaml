@@ -1,0 +1,6 @@
+---
+apiVersion: v1alpha1
+kind: KubeNodeConfig
+labels:
+  node.kubernetes.io/exclude-from-external-load-balancers:
+    $patch: delete # never run with this; injected into KubeNodeConfig, not machine.nodeLabels
