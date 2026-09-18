@@ -26,7 +26,7 @@ spec:
             image:
               # renovate: datasource=docker depName=dock.mau.dev/mautrix/whatsapp
               repository: dock.mau.dev/mautrix/whatsapp
-              tag: v0.2608.0@sha256:86237c4d0d33a1e08910b1f820e6c561f9b8e21dc26943caf266e01021087002
+              tag: v0.2609.0@sha256:e92b5217929622aabfea3cf72b279d1b73790a035a293d7149bcce7ae220b86f
             args:
               - -c=/data/config.yaml
               - -r=/data/registration.yaml
