@@ -14,6 +14,15 @@
   ],
   "packageRules": [
     {
+      "description": "Talos Group",
+      "groupName": "talos",
+      "matchPackageNames": ["siderolabs/talos"],
+      "group": {
+        "commitMessageTopic": "{{{groupName}}} group"
+      },
+      "minimumGroupSize": 2
+    },
+    {
       "description": "Auto merge container digests",
       "matchDatasources": ["docker"],
       "matchUpdateTypes": ["digest"],
