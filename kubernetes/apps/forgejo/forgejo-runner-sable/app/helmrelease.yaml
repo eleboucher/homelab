@@ -184,12 +184,14 @@ spec:
               - --listen
               - unix:///plugin/forgejo-runner-k8s.sock
             restartPolicy: Always
+            # 128Mi OOMKills the sidecar once capacity: 3 jobs are in flight,
+            # and the socket takes every running job down with it.
             resources:
               requests:
                 cpu: 5m
-                memory: 32Mi
+                memory: 64Mi
               limits:
-                memory: 128Mi
+                memory: 512Mi
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true

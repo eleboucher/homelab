@@ -18,6 +18,13 @@ spec:
     plugin:
       image:
         repository: registry.erwanleboucher.dev/eleboucher/runner-k8s-plugin
+      # The chart default of 128Mi OOMKills the sidecar under capacity: 3.
+      resources:
+        requests:
+          cpu: 5m
+          memory: 64Mi
+        limits:
+          memory: 512Mi
     podLabels:
       app.kubernetes.io/component: forgejo-runner
     runnerConfig: |
