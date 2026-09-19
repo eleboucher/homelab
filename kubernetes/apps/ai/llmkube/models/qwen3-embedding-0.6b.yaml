@@ -50,11 +50,11 @@ spec:
     cpu: 100m
     # Vulkan on the iGPU backs weights/KV/compute with kernel-charged memcg
     # pages (the B580's discrete VRAM doesn't hit the pod cgroup), so the
-    # 2Gi limit OOM-killed llama-server during load; steady-state is ~5.1Gi.
-    memory: 8Gi
+    # 2Gi limit OOM-killed llama-server during load; peaks ~7.9Gi on long documents.
+    memory: 10Gi
   extraArgs:
     - --flash-attn
-    - "off"
+    - "on"
     # Qwen3-Embedding uses last-token pooling with left padding;
     # --embedding + --pooling last exposes the OpenAI-compatible
     # /v1/embeddings endpoint.
