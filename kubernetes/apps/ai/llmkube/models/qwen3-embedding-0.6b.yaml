@@ -54,7 +54,7 @@ spec:
     memory: 8Gi
   extraArgs:
     - --flash-attn
-    - "on"
+    - "off"
     # Qwen3-Embedding uses last-token pooling with left padding;
     # --embedding + --pooling last exposes the OpenAI-compatible
     # /v1/embeddings endpoint.
