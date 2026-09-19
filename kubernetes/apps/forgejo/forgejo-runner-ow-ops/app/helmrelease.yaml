@@ -178,7 +178,7 @@ spec:
           k8s-plugin:
             image:
               repository: registry.erwanleboucher.dev/eleboucher/runner-k8s-plugin
-              tag: 13.1.0
+              tag: 13.2.0
             args:
               - --listen
               - unix:///plugin/forgejo-runner-k8s.sock
