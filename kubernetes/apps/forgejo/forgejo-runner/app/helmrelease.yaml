@@ -84,8 +84,16 @@ spec:
               limits:
                 cpu: 500m
                 memory: 4Gi
-        nodeSelector:
-          kubernetes.io/hostname: kharkiv
+        affinity:
+          nodeAffinity:
+            preferredDuringSchedulingIgnoredDuringExecution:
+              - weight: 100
+                preference:
+                  matchExpressions:
+                    - key: kubernetes.io/hostname
+                      operator: In
+                      values:
+                        - kharkiv
         restartPolicy: Never
       podspec-heavy.yaml: |
         containers:
@@ -114,8 +122,16 @@ spec:
           - name: build
             emptyDir:
               sizeLimit: 40Gi
-        nodeSelector:
-          kubernetes.io/hostname: kharkiv
+        affinity:
+          nodeAffinity:
+            preferredDuringSchedulingIgnoredDuringExecution:
+              - weight: 100
+                preference:
+                  matchExpressions:
+                    - key: kubernetes.io/hostname
+                      operator: In
+                      values:
+                        - kharkiv
         restartPolicy: Never
       podspec-dind.yaml: |
         initContainers:
@@ -180,6 +196,14 @@ spec:
             emptyDir: {}
           - name: docker-certs
             emptyDir: {}
-        nodeSelector:
-          kubernetes.io/hostname: kharkiv
+        affinity:
+          nodeAffinity:
+            preferredDuringSchedulingIgnoredDuringExecution:
+              - weight: 100
+                preference:
+                  matchExpressions:
+                    - key: kubernetes.io/hostname
+                      operator: In
+                      values:
+                        - kharkiv
         restartPolicy: Never

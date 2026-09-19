@@ -80,8 +80,16 @@ spec:
               - name: shared
                 emptyDir:
                   sizeLimit: 50Gi
-            nodeSelector:
-              kubernetes.io/hostname: kharkiv
+            affinity:
+              nodeAffinity:
+                preferredDuringSchedulingIgnoredDuringExecution:
+                  - weight: 100
+                    preference:
+                      matchExpressions:
+                        - key: kubernetes.io/hostname
+                          operator: In
+                          values:
+                            - kharkiv
             restartPolicy: Never
           podspec-dind.yaml: |-
             initContainers:
@@ -153,8 +161,16 @@ spec:
               - name: shared
                 emptyDir:
                   sizeLimit: 50Gi
-            nodeSelector:
-              kubernetes.io/hostname: kharkiv
+            affinity:
+              nodeAffinity:
+                preferredDuringSchedulingIgnoredDuringExecution:
+                  - weight: 100
+                    preference:
+                      matchExpressions:
+                        - key: kubernetes.io/hostname
+                          operator: In
+                          values:
+                            - kharkiv
             restartPolicy: Never
     controllers:
       forgejo-runner-sable:
