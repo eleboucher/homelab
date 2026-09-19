@@ -13,6 +13,10 @@ rocksdb_bottommost_compression_level = 32767
 rocksdb_bottommost_compression = true
 rocksdb_direct_io = false
 
+# Temporary: confirm how much timeline history the gapfill path is pulling in.
+# Surfaces "Fetched N missing events" from fetch_prevs. Revert once measured.
+log = "info,conduwuit_service::rooms::event_handler=debug"
+
 # Perf tuning
 cache_capacity_modifier = 2.0
 max_request_size = 524288000
