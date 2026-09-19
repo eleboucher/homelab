@@ -43,7 +43,7 @@ spec:
   # per-slot ctx = contextSize/parallelSlots; 2 slots = 4096, enough for long memini docs.
   contextSize: 8192
   parallelSlots: 2
-  batchSize: 8192
+  batchSize: 4096
   uBatchSize: 4096
   resources:
     gpu: 1
@@ -53,6 +53,8 @@ spec:
     # 2Gi limit OOM-killed llama-server during load; steady-state is ~5.1Gi.
     memory: 8Gi
   extraArgs:
+    - --flash-attn
+    - "on"
     # Qwen3-Embedding uses last-token pooling with left padding;
     # --embedding + --pooling last exposes the OpenAI-compatible
     # /v1/embeddings endpoint.
