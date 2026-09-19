@@ -200,7 +200,7 @@ spec:
           runner:
             image:
               repository: data.forgejo.org/forgejo/runner
-              tag: 13.1.0
+              tag: 13.2.0
             command:
               - sh
               - -ec
