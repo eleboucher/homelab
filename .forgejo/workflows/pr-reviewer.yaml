@@ -45,7 +45,7 @@ jobs:
           apt-get install -y gh
 
       - name: AI PR Review
-        uses: https://github.com/misospace/pr-reviewer-action@f1605b97871cc821302a8b4827f9058a4d6cd7cb # v2.3.3
+        uses: https://github.com/misospace/pr-reviewer-action@a962cdfc21c378a3b8cf2d8b194c787408e60e6b # v2.5.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           platform: forgejo
