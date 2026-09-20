@@ -41,8 +41,9 @@ spec:
             configBlock: |-
               pods verified
               fallthrough in-addr.arpa ip6.arpa
-          - name: autopath
-            parameters: "@kubernetes"
+          # No autopath: it answers the search-path name with a CNAME, and
+          # Cilium keys toFQDNs on the query name, so any FQDN policy would
+          # match nothing. cilium/cilium#20191.
           - name: hosts
             configBlock: |-
               192.168.1.40 normandie.internal normandie
