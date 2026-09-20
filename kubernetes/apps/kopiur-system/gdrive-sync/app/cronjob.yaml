@@ -6,6 +6,7 @@ metadata:
   name: kopiur-sync-gdrive
 spec:
   schedule: "0 4 * * *" # Daily at 4 AM (after the 12h snapshot schedules)
+  suspend: true
   successfulJobsHistoryLimit: 3
   failedJobsHistoryLimit: 1
   concurrencyPolicy: Forbid
