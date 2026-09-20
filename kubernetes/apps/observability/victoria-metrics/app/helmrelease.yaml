@@ -97,7 +97,11 @@ spec:
         spec:
           allowCrossNamespaceImport: true
     defaultRules:
+      disabled:
+        RecordingRulesNoData: true
       rules:
+        kubeApiserverBurnrate: false
+        kubeApiserverHistogram: false
         # Upstream matches on(group,file) only, which collides across clusters
         # remote-writing into this vmsingle (homelab + towonel-ops) and 422s.
         AlertingRuleResultsApproachingLimit:

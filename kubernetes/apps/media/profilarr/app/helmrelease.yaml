@@ -61,7 +61,7 @@ spec:
                 cpu: 25m
                 memory: 64Mi
               limits:
-                memory: 700Mi
+                memory: 1Gi
     service:
       app:
         controller: profilarr
