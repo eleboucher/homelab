@@ -6,3 +6,4 @@ resources:
   - ./catchup-job.yaml
   - ./cronjob.yaml
   - ./externalsecret.yaml
+  - ./ovh-initial-sync-job.yaml
