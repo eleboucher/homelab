@@ -134,7 +134,7 @@ spec:
           daemon:
             image:
               repository: docker
-              tag: 29.8.0-dind@sha256:5efed980cba3fc126cf54e21a5a6ff8849d05b6e0623d6e7612f48e9cd6cd17e
+              tag: 29.8.1-dind@sha256:3f3c01aaaebf7cce837356b688b7c059a4749f10bd7660dec7c58fc454a283f0
             restartPolicy: Always
             env:
               DOCKER_TLS_CERTDIR: /certs
