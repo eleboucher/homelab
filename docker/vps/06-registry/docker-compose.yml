@@ -56,7 +56,7 @@ services:
       retries: 5
   apoci-postgres-backup:
     # renovate: datasource=docker depName=ghcr.io/itbm/postgresql-backup-s3
-    image: ghcr.io/itbm/postgresql-backup-s3:1.3.0
+    image: ghcr.io/itbm/postgresql-backup-s3:1.4.0
     container_name: apoci-postgres-backup
     restart: unless-stopped
     depends_on:
