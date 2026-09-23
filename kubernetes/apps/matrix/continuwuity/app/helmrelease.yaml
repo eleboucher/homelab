@@ -80,8 +80,8 @@ spec:
         containers:
           app:
             image:
-              repository: forgejo.ellis.link/continuwuation/continuwuity
-              tag: main@sha256:27e3fda723069b0b3aa265fbe62591f612c8200ca7c910bcb21098f220a15575
+              repository: registry.erwanleboucher.dev/eleboucher/continuwuity
+              tag: 20c7b32-ab9a9b0
             env:
               CONDUWUIT_CONFIG: /etc/conduwuit/conduwuit.toml
               TOKIO_WORKER_THREADS: "4"

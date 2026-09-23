@@ -55,6 +55,12 @@ admin_execute_errors_ignore = true
 registration_token = "{{ .registration_token }}"
 emergency_password = "{{ .emergency_password }}"
 
+# Monitor this development build in its dedicated Sentry project.
+sentry = true
+sentry_endpoint = "https://195b9db009825345c2882604cb19d42e@o911502.ingest.us.sentry.io/4512137797435392"
+sentry_send_server_name = false
+sentry_traces_sample_rate = 0.15
+
 
 [global.well_known]
 client = "https://matrix.erwanleboucher.dev"
