@@ -70,9 +70,9 @@ spec:
             resources:
               requests:
                 cpu: 25m
-                memory: 128Mi
+                memory: 256Mi
               limits:
-                memory: 512Mi
+                memory: 1536Mi
             securityContext: *securityContext
     persistence:
       config:
