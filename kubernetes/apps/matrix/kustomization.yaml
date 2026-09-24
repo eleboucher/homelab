@@ -6,6 +6,7 @@ resources:
   - continuwuity/ks.yaml
   - heisenbridge/ks.yaml
   - livekit/ks.yaml
+  - mautrix-discord/ks.yaml
   - mautrix-signal/ks.yaml
   - mautrix-whatsapp/ks.yaml
   - gomuks/ks.yaml

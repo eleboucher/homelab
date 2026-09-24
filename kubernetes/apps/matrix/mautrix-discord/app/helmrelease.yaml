@@ -1,0 +1,97 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: mautrix-discord
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: mautrix-discord
+  interval: 1h
+  values:
+    defaultPodOptions:
+      securityContext:
+        fsGroup: 1337
+        fsGroupChangePolicy: OnRootMismatch
+        runAsGroup: 1337
+        runAsNonRoot: true
+        runAsUser: 1337
+    controllers:
+      app:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        initContainers:
+          config:
+            image: &image # renovate: datasource=docker depName=dock.mau.dev/mautrix/discord
+              repository: dock.mau.dev/mautrix/discord
+              tag: v0.7.7@sha256:065405ca2f961b2687ca577c4eb65592c139d641342a9611d98b5394f30cf84a
+            args:
+              - -c
+              - yq '.appservice.database.uri = strenv(DATABASE_URI)' /config/config.yaml > /data/config.yaml
+            command:
+              - /bin/sh
+            env:
+              DATABASE_URI:
+                valueFrom:
+                  secretKeyRef:
+                    name: mautrix-discord-postgres
+                    key: url
+            securityContext: &securityContext
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - "ALL"
+        containers:
+          app:
+            image: *image
+            args:
+              - -c=/data/config.yaml
+            command:
+              - /usr/bin/mautrix-discord
+            probes:
+              liveness:
+                enabled: true
+                custom: true
+                spec:
+                  tcpSocket:
+                    port: 29334
+                  initialDelaySeconds: 30
+                  periodSeconds: 30
+              readiness:
+                enabled: true
+                custom: true
+                spec:
+                  tcpSocket:
+                    port: 29334
+                  initialDelaySeconds: 10
+                  periodSeconds: 10
+            resources:
+              requests:
+                cpu: 25m
+                memory: 128Mi
+              limits:
+                memory: 512Mi
+            securityContext: *securityContext
+    persistence:
+      config:
+        type: secret
+        name: mautrix-discord
+        globalMounts:
+          - path: /config
+            readOnly: true
+      data:
+        type: emptyDir
+        globalMounts:
+          - path: /data
+      tmp:
+        type: emptyDir
+        globalMounts:
+          - path: /tmp
+    service:
+      app:
+        controller: app
+        ports:
+          appservice:
+            port: 29334
