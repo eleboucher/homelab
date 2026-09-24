@@ -83,9 +83,4 @@ profile_key_import_mode = "on_registration"
 profile_key_map = { displayname = "name" }
 
 [global.matrix_rtc]
-
-[global.matrix_rtc.livekit]
-url = "wss://livekit.erwanleboucher.dev"
-key = "{{ .api_key }}"
-secret_file = "/etc/continuwuity/livekit_secret"
-auto_create = true
+foci = [{ type = "livekit", livekit_service_url = "https://livekit.erwanleboucher.dev" }]
