@@ -5,8 +5,8 @@ timeout: 5m
 ---
 apiVersion: v1alpha1
 kind: ResolverConfig
-# Use Quad9's independent dual-stack resolvers. RouterOS DNS drops concurrent cache-miss
-# queries, while the cluster's local names are served directly by CoreDNS.
+# Use Quad9's dual-stack resolvers. Static LAN names needed by host workloads
+# are defined below, so kubelet mounts do not depend on RouterOS DNS.
 nameservers:
   - address: 9.9.9.9
   - address: 149.112.112.112
@@ -16,6 +16,13 @@ hostDNS:
   enabled: true
   forwardKubeDNSToHost: true # Requires Cilium socketLB features
   resolveMemberNames: true
+---
+apiVersion: v1alpha1
+kind: StaticHostConfig
+name: 192.168.1.40
+hostnames:
+  - normandie.internal
+  - normandie
 ---
 apiVersion: v1alpha1
 kind: KmsgLogConfig
