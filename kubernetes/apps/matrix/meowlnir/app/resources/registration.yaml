@@ -1,0 +1,11 @@
+---
+id: meowlnir
+url: http://meowlnir.matrix.svc:29339
+as_token: "{{ .AS_TOKEN }}"
+hs_token: "{{ .HS_TOKEN }}"
+sender_localpart: meowlnir
+rate_limited: false
+namespaces:
+  users:
+    - regex: "@meowlnir:erwanleboucher\\.dev"
+      exclusive: true

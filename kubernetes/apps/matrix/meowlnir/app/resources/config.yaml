@@ -1,0 +1,33 @@
+---
+homeserver:
+  address: http://continuwuity.matrix.svc:8080
+  domain: erwanleboucher.dev
+
+meowlnir:
+  id: meowlnir
+  as_token: "{{ .AS_TOKEN }}"
+  hs_token: "{{ .HS_TOKEN }}"
+  address: http://meowlnir.matrix.svc:29339
+  hostname: 0.0.0.0
+  port: 29339
+  management_secret: "{{ .MANAGEMENT_SECRET }}"
+  data_secret: "{{ .DATA_SECRET }}"
+
+encryption:
+  enable: false
+
+database:
+  type: postgres
+  uri: postgres://placeholder
+  max_open_conns: 5
+  max_idle_conns: 1
+
+synapse_db:
+  type: ""
+  uri: ""
+
+logging:
+  min_level: info
+  writers:
+    - type: stdout
+      format: json

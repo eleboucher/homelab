@@ -1,0 +1,99 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: meowlnir
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: meowlnir
+  interval: 1h
+  values:
+    defaultPodOptions:
+      securityContext:
+        fsGroup: 1337
+        fsGroupChangePolicy: OnRootMismatch
+        runAsGroup: 1337
+        runAsNonRoot: true
+        runAsUser: 1337
+    controllers:
+      app:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        initContainers:
+          config:
+            image: &image # renovate: datasource=docker depName=dock.mau.dev/maunium/meowlnir
+              repository: dock.mau.dev/maunium/meowlnir
+              tag: v0.2609.0@sha256:63299f801614edd28f56c6d600455b10c620b0d4d516230bcf3666216276ac4a
+            command:
+              - /bin/sh
+            args:
+              - -c
+              - >-
+                awk -v database_uri="$DATABASE_URI" '/^  uri: postgres:\/\/placeholder$/ { print "  uri: " database_uri; next } { print }' /config/config.yaml > /data/config.yaml
+            env:
+              DATABASE_URI:
+                valueFrom:
+                  secretKeyRef:
+                    name: meowlnir-postgres
+                    key: url
+            securityContext: &securityContext
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - "ALL"
+        containers:
+          app:
+            image: *image
+            args:
+              - -c=/data/config.yaml
+              - -n
+            command:
+              - /usr/bin/meowlnir
+            probes:
+              liveness:
+                enabled: true
+                custom: true
+                spec:
+                  tcpSocket:
+                    port: 29339
+                  initialDelaySeconds: 30
+                  periodSeconds: 30
+              readiness:
+                enabled: true
+                custom: true
+                spec:
+                  tcpSocket:
+                    port: 29339
+                  initialDelaySeconds: 10
+                  periodSeconds: 10
+            resources:
+              requests:
+                cpu: 25m
+                memory: 128Mi
+              limits:
+                memory: 512Mi
+            securityContext: *securityContext
+    persistence:
+      config:
+        type: secret
+        name: meowlnir
+        globalMounts:
+          - path: /config
+            readOnly: true
+      data:
+        type: emptyDir
+        globalMounts:
+          - path: /data
+      tmp:
+        type: emptyDir
+        globalMounts:
+          - path: /tmp
+    service:
+      app:
+        controller: app
+        ports:
+          appservice:
+            port: 29339
