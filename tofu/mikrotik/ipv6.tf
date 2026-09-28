@@ -24,15 +24,6 @@ resource "routeros_ipv6_neighbor_discovery" "lan" {
   ra_lifetime         = "none"
 }
 
-resource "routeros_ipv6_nd_prefix" "lb_vip_v6" {
-  interface          = "vlan10-mgmt"
-  prefix             = "2a01:e0a:e4b:aa32::/64"
-  autonomous         = false
-  on_link            = true
-  valid_lifetime     = "1h"
-  preferred_lifetime = "30m"
-}
-
 resource "routeros_ipv6_route" "default" {
   dst_address = "::/0"
   gateway     = "fe80::3a07:16ff:fec7:1815%vlan10-mgmt"
@@ -118,12 +109,13 @@ resource "routeros_ipv6_firewall_filter" "forward_icmpv6" {
   depends_on = [routeros_ipv6_firewall_filter.forward_vx0_to_lan]
 }
 
-resource "routeros_ipv6_firewall_filter" "forward_lb_inbound" {
+resource "routeros_ipv6_firewall_filter" "forward_lb_inbound_tcp" {
   chain       = "forward"
   action      = "accept"
+  protocol    = "tcp"
   dst_address = "2a01:e0a:e4b:aa32::126/128"
-  disabled    = true
-  comment     = "Inbound to external gateway VIP (staged; public is v4-via-tunnel)"
+  dst_port    = "80,443,2222"
+  comment     = "Inbound TCP to external gateway VIP"
 
   depends_on = [routeros_ipv6_firewall_filter.forward_icmpv6]
 }
@@ -133,5 +125,27 @@ resource "routeros_ipv6_firewall_filter" "forward_drop" {
   action  = "drop"
   comment = "Drop rest"
 
-  depends_on = [routeros_ipv6_firewall_filter.forward_lb_inbound]
+  depends_on = [routeros_ipv6_firewall_filter.forward_lb_inbound_tcp]
+}
+
+resource "routeros_move_items" "ipv6_filter_rules" {
+  resource_path = "/ipv6/firewall/filter"
+  sequence = [
+    routeros_ipv6_firewall_filter.input_wireguard.id,
+    routeros_ipv6_firewall_filter.input_established.id,
+    routeros_ipv6_firewall_filter.input_icmpv6.id,
+    routeros_ipv6_firewall_filter.forward_established.id,
+    routeros_ipv6_firewall_filter.forward_lan_to_wan.id,
+    routeros_ipv6_firewall_filter.input_lan_v6.id,
+    routeros_ipv6_firewall_filter.input_link_local.id,
+    routeros_ipv6_firewall_filter.forward_vx0_to_lan.id,
+    routeros_ipv6_firewall_filter.forward_icmpv6.id,
+    routeros_ipv6_firewall_filter.forward_lb_inbound_tcp.id,
+    routeros_ipv6_firewall_filter.forward_drop.id,
+  ]
+
+  depends_on = [
+    routeros_ipv6_firewall_filter.forward_drop,
+    routeros_ipv6_firewall_filter.forward_lb_inbound_tcp,
+  ]
 }
