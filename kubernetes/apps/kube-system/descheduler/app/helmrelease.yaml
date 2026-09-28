@@ -23,7 +23,6 @@ spec:
                   defaultDisabled:
                     - FailedBarePods
                     - PodsWithLocalStorage
-                    - SystemCriticalPods
             - name: RemoveFailedPods
               args:
                 reasons:
