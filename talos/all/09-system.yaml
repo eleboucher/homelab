@@ -5,9 +5,13 @@ timeout: 5m
 ---
 apiVersion: v1alpha1
 kind: ResolverConfig
+# Use Quad9's independent dual-stack resolvers. RouterOS DNS drops concurrent cache-miss
+# queries, while the cluster's local names are served directly by CoreDNS.
 nameservers:
-  - address: 192.168.1.2
-  - address: 2a01:e0a:e4b:aa31::1
+  - address: 9.9.9.9
+  - address: 149.112.112.112
+  - address: 2620:fe::fe
+  - address: 2620:fe::9
 hostDNS:
   enabled: true
   forwardKubeDNSToHost: true # Requires Cilium socketLB features
