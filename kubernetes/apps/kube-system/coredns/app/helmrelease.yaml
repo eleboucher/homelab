@@ -26,6 +26,21 @@ spec:
     replicaCount: 2
     servers:
       - zones:
+          - zone: internal
+            scheme: dns://
+            use_tcp: true
+        port: 53
+        plugins:
+          - name: errors
+          - name: hosts
+            parameters: /etc/hosts internal
+            configBlock: |-
+              192.168.1.40 normandie.internal
+              192.168.1.41 kharkiv.k8s.internal
+              192.168.1.42 paris.k8s.internal k8s.internal
+              192.168.1.2 router.erwanleboucher.dev
+          - name: cache
+      - zones:
           - zone: .
             scheme: dns://
             use_tcp: true
