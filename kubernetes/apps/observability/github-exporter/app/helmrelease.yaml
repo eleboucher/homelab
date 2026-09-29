@@ -59,6 +59,7 @@ spec:
         endpoints:
           - port: http
             interval: 1m
+            scrapeTimeout: 30s
 
     persistence:
       config:
