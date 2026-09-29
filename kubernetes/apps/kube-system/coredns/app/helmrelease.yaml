@@ -32,13 +32,8 @@ spec:
         port: 53
         plugins:
           - name: errors
-          - name: hosts
-            parameters: /etc/hosts internal
-            configBlock: |-
-              192.168.1.40 normandie.internal
-              192.168.1.41 kharkiv.k8s.internal
-              192.168.1.42 paris.k8s.internal k8s.internal
-              192.168.1.2 router.erwanleboucher.dev
+          - name: file
+            parameters: /etc/coredns/internal.db internal
           - name: cache
       - zones:
           - zone: .
@@ -80,6 +75,17 @@ spec:
           - name: log
             configBlock: |-
               class error
+    zoneFiles:
+      - filename: internal.db
+        domain: internal
+        contents: |-
+          internal. 60 IN SOA ns.internal. hostmaster.internal. 1 60 60 60 60
+          internal. 60 IN NS ns.internal.
+          ns.internal. 60 IN A 192.168.1.2
+          normandie.internal. 60 IN A 192.168.1.40
+          kharkiv.k8s.internal. 60 IN A 192.168.1.41
+          paris.k8s.internal. 60 IN A 192.168.1.42
+          k8s.internal. 60 IN A 192.168.1.42
     affinity:
       nodeAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
