@@ -31,6 +31,19 @@ spec:
         enabled: true
       serviceMonitor:
         enabled: true
+        # CR metrics belong to the singleton controller, not its replaceable pod.
+        # Keep snapshot/policy names and target identity on non-Kopiur metrics.
+        metricRelabelings:
+          - action: replace
+            sourceLabels: [__name__]
+            regex: kopiur_.+
+            targetLabel: instance
+            replacement: kopiur-controller
+          - action: replace
+            sourceLabels: [__name__]
+            regex: kopiur_.+
+            targetLabel: pod
+            replacement: ""
     podSecurityContext:
       runAsNonRoot: true
       runAsUser: 1000

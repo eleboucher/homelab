@@ -139,5 +139,5 @@ spec:
     name: garage-data-restore
   resources:
     requests:
-      storage: 50Gi
+      storage: 100Gi
   storageClassName: miroir-local

@@ -156,6 +156,12 @@ spec:
               sourceLabels:
                 - "__name__"
               regex: (rest_client_request_duration_seconds_bucket|rest_client_request_duration_seconds_sum|rest_client_request_duration_seconds_count)
+            # Unused kernel tunnel devices multiply network series for each pod.
+            - action: drop
+              sourceLabels:
+                - "__name__"
+                - interface
+              regex: container_network_.+;(ip6tnl0|sit0|tunl0)
     kubeApiServer:
       vmScrape:
         spec:

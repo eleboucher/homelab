@@ -30,7 +30,7 @@ spec:
     metadata:
       size: 5Gi
     data:
-      size: 50Gi
+      size: 100Gi
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/garage.rajsingh.info/garagenode_v1beta1.json
 apiVersion: garage.rajsingh.info/v1beta1
@@ -41,7 +41,7 @@ spec:
   clusterRef:
     name: garage
   zone: us-east-1
-  capacity: 50Gi
+  capacity: 100Gi
   storage:
     metadata:
       existingClaim: garage-meta
