@@ -21,7 +21,8 @@ resource "routeros_ipv6_neighbor_discovery" "lan" {
   dns                 = "2a01:e0a:e4b:aa31::1"
   other_configuration = true
   ra_interval         = "20s-1m"
-  ra_lifetime         = "none"
+  ra_lifetime         = "3m"
+  ra_preference       = "high"
 }
 
 resource "routeros_ipv6_route" "default" {
