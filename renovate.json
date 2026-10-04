@@ -1,6 +1,12 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["local>eleboucher/renovate-config", "github>home-operations/renovate-presets#8.1.0"],
+  "extends": [
+    "github>home-operations/renovate-presets#8.1.0",
+    "github>home-operations/renovate-presets//apps/grafanaDashboards.json5#8.1.0",
+    "github>home-operations/renovate-presets//apps/searxng.json5#8.1.0",
+    "github>home-operations/renovate-presets//apps/cnpg.json5#8.1.0",
+    "github>home-operations/renovate-presets//apps/talosFactory.json5#8.1.0"
+  ],
   "customManagers": [
     {
       "customType": "regex",
@@ -14,9 +20,20 @@
   ],
   "packageRules": [
     {
-      "description": "Talos Group",
-      "groupName": "talos",
-      "matchPackageNames": ["siderolabs/talos"],
+      "description": "Talos group",
+      "groupName": "Talos",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["/installer/", "/talosctl/"],
+      "group": {
+        "commitMessageTopic": "{{{groupName}}} group"
+      },
+      "minimumGroupSize": 2
+    },
+    {
+      "description": "Towonel group",
+      "groupName": "Towonel",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["/towonel/"],
       "group": {
         "commitMessageTopic": "{{{groupName}}} group"
       },
@@ -30,19 +47,39 @@
       "automerge": true
     },
     {
-      "description": "Auto merge minors and patches",
+      "description": "Auto-merge trusted OCI digests",
+      "matchDatasources": ["docker"],
+      "matchUpdateTypes": ["digest"],
+      "matchPackagePrefixes": ["ghcr.io/home-operations", "ghcr.io/bjw-s", "ghcr.io/bjw-s-labs"],
+      "automerge": true,
+      "automergeType": "pr",
+      "ignoreTests": false
+    },
+    {
+      "description": "Auto-merge high-cadence OCI packages weekly",
       "matchDatasources": ["docker"],
       "matchUpdateTypes": ["minor", "patch"],
-      "matchPackageNames": [
-        "/kube-prometheus-stack/",
-        "ghcr.io/mogenius/helm-charts/renovate-operator",
-        "ghcr.io/nesquena/hermes-webui",
-        "ghcr.io/ggml-org/llama.cpp",
-        "ghcr.io/home-operations/charts/konflate",
-        "ollama/ollama"
-      ],
+      "matchPackageNames": ["ghcr.io/renovatebot/renovate", "/kube-prometheus-stack/"],
       "automerge": true,
-      "automergeType": "pr"
+      "automergeType": "pr",
+      "ignoreTests": false,
+      "schedule": ["before 6am on Monday"]
+    },
+    {
+      "description": "Auto-merge Grafana dashboards",
+      "matchDatasources": ["custom.grafana-dashboards"],
+      "matchUpdateTypes": ["major"],
+      "automerge": true,
+      "automergeType": "branch",
+      "ignoreTests": true
+    },
+    {
+      "description": "Auto-merge Renovate Presets",
+      "matchManagers": ["renovate-config"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "automerge": true,
+      "automergeType": "branch",
+      "ignoreTests": true
     },
     {
       "description": "Auto-merge Renovate Presents",
@@ -106,8 +143,8 @@
       "minimumGroupSize": 2
     },
     {
-      "description": "Kubernetes Group",
-      "groupName": "kubernetes",
+      "description": "Kubernetes group",
+      "groupName": "Kubernetes",
       "matchDatasources": ["docker"],
       "matchPackageNames": [
         "/kube-apiserver/",
@@ -130,12 +167,6 @@
         "commitMessageTopic": "{{{groupName}}} group"
       },
       "minimumGroupSize": 2
-    },
-    {
-      "description": "agentmemory uses semver + '-<commit-sha>' tags",
-      "matchDatasources": ["docker"],
-      "matchPackageNames": ["registry.erwanleboucher.dev/eleboucher/agentmemory"],
-      "versioning": "regex:^(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)-[a-f0-9]+$"
     }
   ]
 }
