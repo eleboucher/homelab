@@ -10,15 +10,6 @@ spec:
       recordType: CNAME
       targets:
         - edge-eu.towonel.dev
-    - dnsName: doco-cd.erwanleboucher.dev
-      recordType: A
-      targets:
-        - ${VPS_IP}
-    - dnsName: doco-cd.erwanleboucher.dev
-      recordType: AAAA
-      targets:
-        - ${VPS_IP6}
-    # Served by the towonel-ops envoy-external gateway (IPv4 only).
     - dnsName: erwanleboucher.dev
       recordType: A
       targets:
@@ -35,30 +26,6 @@ spec:
       recordType: A
       targets:
         - 151.80.142.238
-    - dnsName: towonel.erwanleboucher.dev
-      recordType: A
-      targets:
-        - ${VPS_IP}
-    - dnsName: towonel.erwanleboucher.dev
-      recordType: AAAA
-      targets:
-        - ${VPS_IP6}
-    - dnsName: tunnel.erwanleboucher.dev
-      recordType: A
-      targets:
-        - ${VPS_IP}
-    - dnsName: tunnel.erwanleboucher.dev
-      recordType: AAAA
-      targets:
-        - ${VPS_IP6}
-    - dnsName: relay.towonel.erwanleboucher.dev
-      recordType: A
-      targets:
-        - ${VPS_IP}
-    - dnsName: relay.towonel.erwanleboucher.dev
-      recordType: AAAA
-      targets:
-        - ${VPS_IP6}
     - dnsName: turn.erwanleboucher.dev
       recordType: CNAME
       targets:

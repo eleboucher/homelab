@@ -1,7 +1,0 @@
----
-name: custom/home-whitelist
-description: "Whitelist home ISP (Free SAS - AS12322) and work (OVH SAS - AS35540)"
-whitelist:
-  reason: "home ISP (Free SAS) or work (OVH SAS)"
-  expression:
-    - evt.Meta.ASNumber == "12322" || evt.Meta.ASNumber == "35540"

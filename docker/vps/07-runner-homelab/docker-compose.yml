@@ -1,11 +1,11 @@
 ---
-name: runner-freek
+name: runner-homelab
 
 services:
-  forgejo-runner-freek-dind:
+  forgejo-runner-homelab-dind:
     # renovate: datasource=docker depName=docker
     image: docker.io/library/docker:29-dind
-    container_name: forgejo-runner-freek-dind
+    container_name: forgejo-runner-homelab-dind
     restart: unless-stopped
     privileged: true
     command:
@@ -14,56 +14,57 @@ services:
       - tcp://0.0.0.0:2375
       - --tls=false
     volumes:
-      - /opt/forgejo-runner-freek/dind-data:/var/lib/docker
+      - /opt/forgejo-runner-homelab/dind-data:/var/lib/docker
 
-  forgejo-runner-freek:
+  forgejo-runner-homelab:
     # renovate: datasource=docker depName=data.forgejo.org/forgejo/runner
     image: data.forgejo.org/forgejo/runner:13
-    container_name: forgejo-runner-freek
+    container_name: forgejo-runner-homelab
     restart: unless-stopped
     depends_on:
-      forgejo-runner-freek-dind:
+      forgejo-runner-homelab-dind:
         condition: service_started
     environment:
-      DOCKER_HOST: tcp://forgejo-runner-freek-dind:2375
-      FORGEJO_RUNNER_TOKEN: ${FORGEJO_RUNNER_FREEK_TOKEN}
+      DOCKER_HOST: tcp://forgejo-runner-homelab-dind:2375
+      FORGEJO_RUNNER_UUID: ${FORGEJO_RUNNER_HOMELAB_UUID}
+      FORGEJO_RUNNER_TOKEN: ${FORGEJO_RUNNER_HOMELAB_TOKEN}
     user: 1001:1001
     working_dir: /data
     volumes:
-      - /opt/forgejo-runner-freek/data:/data
+      - /opt/forgejo-runner-homelab/data:/data
     entrypoint:
       - sh
       - -c
       - |-
         set -e
         umask 077
-        if [ ! -f /data/.runner ]; then
-          forgejo-runner register \
-            --no-interactive \
-            --instance https://codeberg.org/ \
-            --token "$${FORGEJO_RUNNER_TOKEN}" \
-            --name "$$(hostname)" \
-            --labels "ubuntu-latest:docker://ghcr.io/bjw-s-labs/forgejo-runner:ubuntu-24.04,default:docker://ghcr.io/bjw-s-labs/forgejo-runner:ubuntu-24.04,docker:docker://ghcr.io/bjw-s-labs/forgejo-runner:ubuntu-24.04"
-        fi
         cat > /data/runner-config.yml <<EOF
         cache:
           enabled: true
           dir: /data/cache
         container:
-          docker_host: tcp://forgejo-runner-freek-dind:2375
-          options: --add-host=forgejo-runner-freek-dind:host-gateway
+          docker_host: tcp://forgejo-runner-homelab-dind:2375
+          options: --add-host=forgejo-runner-homelab-dind:host-gateway
           workdir_parent: /data/workdir
         log:
           level: info
         runner:
-          capacity: 1
+          capacity: 2
           envs:
-            DOCKER_HOST: tcp://forgejo-runner-freek-dind:2375
+            DOCKER_HOST: tcp://forgejo-runner-homelab-dind:2375
           file: .runner
           labels:
             - ubuntu-latest:docker://ghcr.io/bjw-s-labs/forgejo-runner:ubuntu-24.04
             - default:docker://ghcr.io/bjw-s-labs/forgejo-runner:ubuntu-24.04
+            - light:docker://ghcr.io/bjw-s-labs/forgejo-runner:ubuntu-24.04
             - docker:docker://ghcr.io/bjw-s-labs/forgejo-runner:ubuntu-24.04
+            - multiarch:docker://ghcr.io/bjw-s-labs/forgejo-runner:ubuntu-24.04
           timeout: 3h
+        server:
+          connections:
+            forgejo:
+              url: https://git.erwanleboucher.dev/
+              uuid: "$${FORGEJO_RUNNER_UUID}"
+              token: "$${FORGEJO_RUNNER_TOKEN}"
         EOF
         exec forgejo-runner daemon --config /data/runner-config.yml
