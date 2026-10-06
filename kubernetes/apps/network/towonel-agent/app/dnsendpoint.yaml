@@ -42,14 +42,11 @@ spec:
       recordType: AAAA
       targets:
         - ${VPS_IP6}
+    # Served by the towonel-ops envoy-external gateway (IPv4 only).
     - dnsName: registry.erwanleboucher.dev
       recordType: A
       targets:
-        - ${VPS_IP}
-    - dnsName: registry.erwanleboucher.dev
-      recordType: AAAA
-      targets:
-        - ${VPS_IP6}
+        - 151.80.142.238
     - dnsName: towonel.erwanleboucher.dev
       recordType: A
       targets:
