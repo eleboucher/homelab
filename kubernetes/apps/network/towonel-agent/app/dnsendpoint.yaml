@@ -10,30 +10,6 @@ spec:
       recordType: CNAME
       targets:
         - tunnel.erwanleboucher.dev
-    - dnsName: erwanleboucher.dev
-      recordType: A
-      targets:
-        - ${VPS_IP}
-    - dnsName: erwanleboucher.dev
-      recordType: AAAA
-      targets:
-        - ${VPS_IP6}
-    - dnsName: www.erwanleboucher.dev
-      recordType: A
-      targets:
-        - ${VPS_IP}
-    - dnsName: www.erwanleboucher.dev
-      recordType: AAAA
-      targets:
-        - ${VPS_IP6}
-    - dnsName: openpgpkey.erwanleboucher.dev
-      recordType: A
-      targets:
-        - ${VPS_IP}
-    - dnsName: openpgpkey.erwanleboucher.dev
-      recordType: AAAA
-      targets:
-        - ${VPS_IP6}
     - dnsName: doco-cd.erwanleboucher.dev
       recordType: A
       targets:
@@ -43,6 +19,18 @@ spec:
       targets:
         - ${VPS_IP6}
     # Served by the towonel-ops envoy-external gateway (IPv4 only).
+    - dnsName: erwanleboucher.dev
+      recordType: A
+      targets:
+        - 151.80.142.238
+    - dnsName: www.erwanleboucher.dev
+      recordType: A
+      targets:
+        - 151.80.142.238
+    - dnsName: openpgpkey.erwanleboucher.dev
+      recordType: A
+      targets:
+        - 151.80.142.238
     - dnsName: registry.erwanleboucher.dev
       recordType: A
       targets:
