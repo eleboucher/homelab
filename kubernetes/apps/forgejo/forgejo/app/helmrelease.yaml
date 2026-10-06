@@ -67,7 +67,7 @@ spec:
           APP_DATA_PATH: /data/gitea
           ROOT_URL: https://git.erwanleboucher.dev
           SSH_DOMAIN: git.erwanleboucher.dev
-          SSH_PORT: 22
+          SSH_PORT: 222
           SSH_LISTEN_PORT: 2222
           SSH_SERVER_HOST_KEYS: ssh/ssh_host_ed25519_key
           START_SSH_SERVER: true

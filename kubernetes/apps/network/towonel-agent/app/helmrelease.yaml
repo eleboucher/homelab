@@ -23,7 +23,7 @@ spec:
       tcpServices:
         - name: forgejo-ssh
           origin: envoy-external.network.svc.cluster.local:2222
-          listen_port: 22
+          listen_port: 222
         - name: stunner-turns-tls
           origin: stunner.network.svc.cluster.local:5349
           listen_port: 5350
