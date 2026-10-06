@@ -9,7 +9,7 @@ spec:
     - dnsName: external.erwanleboucher.dev
       recordType: CNAME
       targets:
-        - tunnel.erwanleboucher.dev
+        - edge-eu.towonel.dev
     - dnsName: doco-cd.erwanleboucher.dev
       recordType: A
       targets:
@@ -60,10 +60,6 @@ spec:
       targets:
         - ${VPS_IP6}
     - dnsName: turn.erwanleboucher.dev
-      recordType: A
+      recordType: CNAME
       targets:
-        - ${VPS_IP}
-    - dnsName: turn.erwanleboucher.dev
-      recordType: AAAA
-      targets:
-        - ${VPS_IP6}
+        - edge-eu.towonel.dev

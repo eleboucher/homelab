@@ -23,14 +23,14 @@ spec:
       tcpServices:
         - name: forgejo-ssh
           origin: envoy-external.network.svc.cluster.local:2222
-          listen_port: 2222
+          listen_port: 22
         - name: stunner-turns-tls
           origin: stunner.network.svc.cluster.local:5349
-          listen_port: 5349
+          listen_port: 5350
       udpServices:
         - name: stunner-turn-udp
           origin: stunner.network.svc.cluster.local:3478
-          listen_port: 3478
+          listen_port: 3479
       inviteTokenSecret:
         name: towonel-agent-secret
         key: TOWONEL_INVITE_TOKEN
