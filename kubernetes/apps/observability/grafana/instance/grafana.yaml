@@ -89,12 +89,4 @@ spec:
         - backendRefs:
             - name: grafana-service
               port: 3000
-  persistentVolumeClaim:
-    spec:
-      accessModes:
-        - ReadWriteOnce
-      resources:
-        requests:
-          storage: 10Gi
-      storageClassName: miroir-local
   disableDefaultSecurityContext: All
