@@ -1,0 +1,27 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/monitoring.coreos.com/servicemonitor_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: &app continuwuity
+  labels: &labels
+    app.kubernetes.io/instance: *app
+    app.kubernetes.io/name: *app
+spec:
+  selector:
+    matchLabels:
+      !!merge <<: *labels
+  namespaceSelector:
+    matchNames:
+      - matrix
+  targetLabels:
+    - app.kubernetes.io/instance
+    - app.kubernetes.io/name
+  endpoints:
+    - port: http
+      path: /_continuwuity/metrics
+      interval: 30s
+      scrapeTimeout: 10s
+      bearerTokenSecret:
+        name: continuwuity
+        key: metrics_token

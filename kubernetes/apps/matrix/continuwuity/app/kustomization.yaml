@@ -6,10 +6,15 @@ resources:
   - ./helmrelease.yaml
   - ./ocirepository.yaml
   - ./externalsecret.yaml
+  - ./grafanadashboard.yaml
+  - ./servicemonitor.yaml
 configMapGenerator:
   - name: continuwuity-configmap
     files:
       - ./resources/conduwuit.toml
+  - name: continuwuity-dashboard
+    files:
+      - continuwuity.json=./resources/dashboard.json
   - name: unbound-configmap
     files:
       - unbound.conf=./resources/unbound.conf

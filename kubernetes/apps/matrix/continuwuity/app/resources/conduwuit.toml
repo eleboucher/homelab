@@ -27,6 +27,10 @@ dns_timeout = 60
 query_over_tcp_only = true
 ip_lookup_strategy = 3
 
+# Metrics, scraped by the ServiceMonitor
+allow_prometheus_metrics = true
+prometheus_metrics_token = "{{ .prometheus_metrics_token }}"
+
 # User settings
 allow_encryption = true
 allow_federation = true

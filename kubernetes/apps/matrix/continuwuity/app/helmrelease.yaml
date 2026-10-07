@@ -81,7 +81,7 @@ spec:
           app:
             image:
               repository: registry.erwanleboucher.dev/eleboucher/continuwuity
-              tag: pr-2280-da7a22c
+              tag: 7821133-22c7fe0
             env:
               CONDUWUIT_CONFIG: /etc/conduwuit/conduwuit.toml
               TOKIO_WORKER_THREADS: "4"
