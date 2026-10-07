@@ -20,7 +20,7 @@ spec:
     substitute:
       APP: victoria-metrics
       APP_NAMESPACE: observability
-      KOPIUR_CAPACITY: 50Gi
+      KOPIUR_CAPACITY: 80Gi
       KOPIUR_SNAPSHOTCLASS: miroir-snap
       KOPIUR_STORAGECLASS: miroir-local
   prune: true

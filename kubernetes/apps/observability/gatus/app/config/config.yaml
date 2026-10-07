@@ -44,17 +44,6 @@ endpoints:
     conditions:
       - "[STATUS] == 200"
 
-  - name: iroh-relay
-    group: external
-    url: https://relay.towonel.erwanleboucher.dev/
-    interval: 1m
-    client:
-      dns-resolver: tcp://1.1.1.1:53
-    conditions:
-      - "[STATUS] == 200"
-      - "[BODY] == pat(*Iroh Relay*)"
-      - "[CERTIFICATE_EXPIRATION] > 168h"
-
   # Tripwire: the public zone must never contain a wildcard record. If one
   # appears, every internal hostname resolves publicly (2026-09-14 incident:
   # external-dns 1.22.0 dropped the alpha annotation prefix, ignored the
