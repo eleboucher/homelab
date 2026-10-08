@@ -44,6 +44,76 @@ endpoints:
     conditions:
       - "[STATUS] == 200"
 
+  # towonel's own alerting lives on its nodes, so it cannot report losing one.
+  - name: towonel n1
+    group: towonel
+    url: icmp://151.80.142.238
+    interval: 1m
+    conditions:
+      - "[CONNECTED] == true"
+
+  - name: towonel n2
+    group: towonel
+    url: icmp://57.129.171.29
+    interval: 1m
+    conditions:
+      - "[CONNECTED] == true"
+
+  - name: towonel n3
+    group: towonel
+    url: icmp://141.94.123.155
+    interval: 1m
+    conditions:
+      - "[CONNECTED] == true"
+
+  - name: towonel ca1
+    group: towonel
+    url: icmp://142.44.211.76
+    interval: 1m
+    conditions:
+      - "[CONNECTED] == true"
+
+  - name: towonel ci1
+    group: towonel
+    url: icmp://163.172.251.228
+    interval: 1m
+    conditions:
+      - "[CONNECTED] == true"
+
+  - name: towonel ci2
+    group: towonel
+    url: icmp://92.222.247.160
+    interval: 1m
+    conditions:
+      - "[CONNECTED] == true"
+
+  - name: towonel.dev
+    group: towonel
+    url: https://towonel.dev
+    interval: 1m
+    client:
+      dns-resolver: tcp://1.1.1.1:53
+    conditions:
+      - "[STATUS] == 200"
+
+  - name: git.ow-ops.eu
+    group: towonel
+    url: https://git.ow-ops.eu
+    interval: 1m
+    client:
+      dns-resolver: tcp://1.1.1.1:53
+    conditions:
+      - "[STATUS] == 200"
+
+  - name: git.sable.moe
+    group: towonel
+    url: https://git.sable.moe
+    interval: 1m
+    client:
+      dns-resolver: tcp://1.1.1.1:53
+    conditions:
+      - "[STATUS] == 200"
+
   # Tripwire: the public zone must never contain a wildcard record. If one
   # appears, every internal hostname resolves publicly (2026-09-14 incident:
   # external-dns 1.22.0 dropped the alpha annotation prefix, ignored the
