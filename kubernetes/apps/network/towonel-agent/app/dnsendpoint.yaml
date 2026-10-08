@@ -13,19 +13,19 @@ spec:
     - dnsName: erwanleboucher.dev
       recordType: A
       targets:
-        - 151.80.142.238
+        - 51.38.160.51
     - dnsName: www.erwanleboucher.dev
       recordType: A
       targets:
-        - 151.80.142.238
+        - 51.38.160.51
     - dnsName: openpgpkey.erwanleboucher.dev
       recordType: A
       targets:
-        - 151.80.142.238
+        - 51.38.160.51
     - dnsName: registry.erwanleboucher.dev
       recordType: A
       targets:
-        - 151.80.142.238
+        - 51.38.160.51
     - dnsName: turn.erwanleboucher.dev
       recordType: CNAME
       targets:
