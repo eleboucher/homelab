@@ -46,6 +46,8 @@ jobs:
 
       - name: AI PR Review
         uses: https://github.com/misospace/pr-reviewer-action@768a1320d67f14b99737633a5f8ba58449c3caeb # v3.4.1
+        env:
+          CI_STATUS_CONTEXT: AI PR Review / AI PR Review (pull_request)
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           platform: forgejo
