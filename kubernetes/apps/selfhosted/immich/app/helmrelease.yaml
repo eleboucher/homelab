@@ -16,7 +16,7 @@ spec:
           main:
             image:
               # renovate: datasource=github-releases depName=immich-app/immich
-              tag: v3.2.4
+              tag: v3.3.1
             env:
               DB_URL:
                 valueFrom:
