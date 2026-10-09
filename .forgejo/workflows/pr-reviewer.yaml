@@ -45,38 +45,40 @@ jobs:
           apt-get install -y gh
 
       - name: AI PR Review
-        uses: https://github.com/misospace/pr-reviewer-action@a962cdfc21c378a3b8cf2d8b194c787408e60e6b # v2.5.0
+        uses: https://github.com/misospace/pr-reviewer-action@768a1320d67f14b99737633a5f8ba58449c3caeb # v3.4.1
+        env:
+          CI_STATUS_CONTEXT: AI PR Review / AI PR Review (pull_request)
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           platform: forgejo
-          forgejo_api_url: https://git.erwanleboucher.dev/
-          forgejo_token: ${{ secrets.GITHUB_TOKEN }}
-          allowed_source_hosts: github.com,api.github.com,gitlab.com,registry.terraform.io,artifacthub.io,git.erwanleboucher.dev,codeberg.org
-          ai_base_url: https://litellm.erwanleboucher.dev/v1
-          ai_api_format: anthropic
-          ai_model: MiniMax-M3
-          ai_api_key: ${{ secrets.LITELLM_API_KEY }}
-          ai_max_tokens: "16000"
-          ai_primary_retries: "2"
-          ai_primary_retry_delay_sec: "5"
-          ai_connect_timeout_sec: "10"
-          ai_fallback_base_url: https://litellm.erwanleboucher.dev/v1
-          ai_fallback_api_format: openai
-          ai_fallback_model: neuralwatt-qwen3-6-35b
-          ai_fallback_api_key: ${{ secrets.LITELLM_API_KEY }}
-          on_model_failure: notice
-          tool_mode: native_loop
-          tool_max_requests: "4"
-          tool_max_rounds: "2"
-          tool_loop_wall_clock_sec: "180"
-          tool_request_timeout_sec: "15"
-          tool_max_response_bytes: "12000"
-          tool_planning_timeout_sec: "60"
-          tool_planning_max_context_bytes: "30000"
-          tool_planning_max_tokens: "8000"
-          tool_allowed_gh_api_repos: "eleboucher/homelab"
-          tool_enable_for_forks: "false"
-          tool_mcp_servers: "tools=https://litellm.erwanleboucher.dev/mcp,konflate=https://konflate.erwanleboucher.dev/mcp"
-          tool_mcp_token: ${{ secrets.LITELLM_API_KEY }}
-          tool_mcp_name_prefixes: "github,talos_mcp,searxng,ha_mcp,grafana,victoria_logs,context7,sidero"
-          publish_review_comment: "true"
+          forgejo-api-url: https://git.erwanleboucher.dev/
+          forgejo-token: ${{ secrets.GITHUB_TOKEN }}
+          allowed-source-hosts: github.com,api.github.com,gitlab.com,registry.terraform.io,artifacthub.io,git.erwanleboucher.dev,codeberg.org
+          ai-base-url: https://litellm.erwanleboucher.dev/v1
+          ai-api-format: anthropic
+          ai-model: MiniMax-M3
+          ai-api-key: ${{ secrets.LITELLM_API_KEY }}
+          ai-max-tokens: "16000"
+          ai-primary-retries: "2"
+          ai-primary-retry-delay-sec: "5"
+          ai-connect-timeout-sec: "10"
+          ai-fallback-base-url: https://litellm.erwanleboucher.dev/v1
+          ai-fallback-api-format: openai
+          ai-fallback-model: neuralwatt-qwen3-6-35b
+          ai-fallback-api-key: ${{ secrets.LITELLM_API_KEY }}
+          on-model-failure: notice
+          tool-mode: native_loop
+          tool-max-requests: "4"
+          tool-max-rounds: "2"
+          tool-loop-wall-clock-sec: "180"
+          tool-request-timeout-sec: "15"
+          tool-max-response-bytes: "12000"
+          tool-turn-timeout-sec: "60"
+          tool-corpus-max-bytes: "30000"
+          tool-max-tokens-per-turn: "8000"
+          tool-allowed-gh-api-repos: "eleboucher/homelab"
+          tool-enable-for-forks: "false"
+          tool-mcp-servers: "tools=https://litellm.erwanleboucher.dev/mcp,konflate=https://konflate.erwanleboucher.dev/mcp"
+          tool-mcp-token: ${{ secrets.LITELLM_API_KEY }}
+          tool-mcp-name-prefixes: "github,talos_mcp,searxng,ha_mcp,grafana,victoria_logs,context7,sidero"
+          publish-review-comment: "true"
