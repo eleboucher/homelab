@@ -46,7 +46,7 @@ spec:
           app:
             image:
               repository: ghcr.io/element-hq/lk-jwt-service
-              tag: 0.7.0@sha256:e0c7cecfa74e2342a3e79d47e1d4ab4bd228fe05b1a4dc4ba7f807686b0c214b
+              tag: 0.8.0@sha256:fe787619877b9c12d4370ed39dc8edecf99b1a71fa8958c0fdcb687c1d31c775
             env:
               LIVEKIT_URL: wss://livekit.erwanleboucher.dev
               LIVEKIT_FULL_ACCESS_HOMESERVERS: erwanleboucher.dev
