@@ -287,6 +287,19 @@ spec:
             memory: 1Gi
           limits:
             memory: 3Gi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+              - ALL
+          fsGroup: 1000
+          fsGroupChangePolicy: Always
+          readOnlyRootFilesystem: true
+          runAsGroup: 1000
+          runAsNonRoot: true
+          runAsUser: 1000
+          seccompProfile:
+            type: RuntimeDefault
         # Use the kopiur-managed PVC (carries the Restore populator) instead of an
         # operator-managed claim. Zeroing the storage request makes the operator
         # treat storage as empty (isStorageEmpty -> Requests.Storage().IsZero()),
