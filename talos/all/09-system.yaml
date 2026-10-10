@@ -25,6 +25,12 @@ hostnames:
   - normandie
 ---
 apiVersion: v1alpha1
+kind: StaticHostConfig
+name: 192.168.1.42
+hostnames:
+  - k8s.internal
+---
+apiVersion: v1alpha1
 kind: KmsgLogConfig
 name: fluent-bit
 url: tcp://127.0.0.1:5170/
