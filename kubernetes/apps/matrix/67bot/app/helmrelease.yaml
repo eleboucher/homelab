@@ -30,7 +30,7 @@ spec:
           app:
             image:
               repository: git.sable.moe/sableclient/67bot
-              tag: sha-0a79b2c@sha256:1cabd30ed7a3555ccbb9a63b47368ba1173f2ed375ebb460a18db33fc6e1b09d
+              tag: sha-17e4419@sha256:57cb0c06e7e6ff89b959616269dc3ef226e9f8f05ffaa854a22383f438f527ed
             env:
               FORGEJO_TOKEN:
                 valueFrom:
