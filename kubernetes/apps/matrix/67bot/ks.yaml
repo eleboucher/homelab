@@ -24,10 +24,6 @@ spec:
     substitute:
       APP: *app
       APP_NAMESPACE: matrix
-      KOPIUR_PUID: "1337"
-      KOPIUR_PGID: "1337"
-      KOPIUR_MOVER_UID: "1337"
-      KOPIUR_MOVER_GID: "1337"
   prune: true
   sourceRef:
     kind: OCIRepository
