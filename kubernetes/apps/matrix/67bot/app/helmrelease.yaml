@@ -1,0 +1,87 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: 67bot
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: 67bot
+  interval: 1h
+  values:
+    defaultPodOptions:
+      securityContext:
+        fsGroup: 1337
+        fsGroupChangePolicy: OnRootMismatch
+        runAsGroup: 1337
+        runAsNonRoot: true
+        runAsUser: 1337
+        seccompProfile:
+          type: RuntimeDefault
+    controllers:
+      app:
+        type: deployment
+        replicas: 1
+        strategy: Recreate
+        annotations:
+          reloader.stakater.com/auto: "true"
+        containers:
+          app:
+            image:
+              repository: git.sable.moe/sableclient/67bot
+              tag: sha-0a79b2c@sha256:1cabd30ed7a3555ccbb9a63b47368ba1173f2ed375ebb460a18db33fc6e1b09d
+            env:
+              FORGEJO_TOKEN:
+                valueFrom:
+                  secretKeyRef:
+                    name: 67bot
+                    key: FORGEJO_TOKEN
+            probes:
+              liveness:
+                enabled: true
+                custom: true
+                spec:
+                  tcpSocket:
+                    port: 29316
+                  initialDelaySeconds: 30
+              readiness:
+                enabled: true
+                custom: true
+                spec:
+                  tcpSocket:
+                    port: 29316
+                  initialDelaySeconds: 10
+            resources:
+              requests:
+                cpu: 10m
+                memory: 128Mi
+              limits:
+                memory: 512Mi
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - ALL
+    persistence:
+      data:
+        existingClaim: 67bot
+        globalMounts:
+          - path: /data
+      config:
+        type: secret
+        name: 67bot
+        globalMounts:
+          - path: /config
+            readOnly: true
+      tmp:
+        type: emptyDir
+        globalMounts:
+          - path: /tmp
+    service:
+      app:
+        controller: app
+        ports:
+          http:
+            port: 29316
