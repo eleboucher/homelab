@@ -35,13 +35,16 @@ spec:
               - name: SONARR__AUTH__REQUIRED
                 value: DisabledForLocalAddresses
               - name: SONARR__SERVER__ALLOWEDHOSTS
-                value: "*"
+                value: "sonarr.erwanleboucher.dev,sonarr,sonarr.media,sonarr.media.svc,sonarr.media.svc.cluster.local"
             probes:
               liveness: &probes
                 enabled: true
                 custom: true
                 spec:
                   httpGet:
+                    httpHeaders:
+                      - name: Host
+                        value: sonarr.media
                     path: /
                     port: 8989
                   initialDelaySeconds: 0
