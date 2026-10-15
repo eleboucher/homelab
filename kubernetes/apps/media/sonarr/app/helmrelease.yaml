@@ -31,9 +31,24 @@ spec:
               - name: TZ
                 value: "Europe/Paris"
               - name: SONARR__AUTH__METHOD
-                value: External
+                value: Oidc
               - name: SONARR__AUTH__REQUIRED
-                value: DisabledForLocalAddresses
+                value: Enabled
+              - name: SONARR__AUTH__OIDCAUTHORITY
+                value: https://idm.erwanleboucher.dev/oauth2/openid/sonarr
+              - name: SONARR__AUTH__OIDCCLIENTID
+                value: sonarr
+              - name: SONARR__AUTH__OIDCCLIENTSECRET
+                valueFrom:
+                  secretKeyRef:
+                    name: kanidm-sonarr-oidc
+                    key: client-secret
+              - name: SONARR__AUTH__OIDCUSERIDENTIFIER
+                value: "565c8455-aacb-47d5-9cf7-3fbdda096686"
+              - name: SONARR__AUTH__OIDCSCOPES
+                value: "openid profile email"
+              - name: SONARR__SERVER__TRUSTEDNETWORKS
+                value: "10.42.0.0/16,fd42::/56"
               - name: SONARR__SERVER__ALLOWEDHOSTS
                 value: "sonarr.erwanleboucher.dev,sonarr,sonarr.media,sonarr.media.svc,sonarr.media.svc.cluster.local"
             probes:
@@ -45,7 +60,7 @@ spec:
                     httpHeaders:
                       - name: Host
                         value: sonarr.media
-                    path: /
+                    path: /ping
                     port: 8989
                   initialDelaySeconds: 0
                   periodSeconds: 10

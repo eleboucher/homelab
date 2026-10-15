@@ -8,7 +8,7 @@ metadata:
 spec:
   components:
     - ../../../../components/nfs-media
-    - ../../../../components/oidc/envoy
+    - ../../../../components/oidc
     - ../../../../components/kopiur/hot
     - ../../../../components/kopiur/snapshot-restore
     - ../../../../components/zeroscaler
@@ -31,7 +31,8 @@ spec:
       KOPIUR_RESTORE_SNAPSHOT: sonarr-pre-local-migration-20260812092624
       OIDC_DISPLAY_NAME: Sonarr
       OIDC_GROUP: admins
-      OIDC_SCOPES: '["openid", "profile"]'
+      OIDC_CALLBACK: /signin-oidc
+      OIDC_SCOPES: '["openid", "profile", "email"]'
   prune: true
   sourceRef:
     kind: OCIRepository
