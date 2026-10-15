@@ -64,6 +64,11 @@ locals {
       comment    = "cachyos desktop (Wake-on-LAN)"
       lease_time = null
     }
+    "192.168.1.23" = {
+      mac        = "C8:80:6D:69:92:5C"
+      comment    = "Mac mini (dev + macOS CI)"
+      lease_time = null
+    }
   }
 }
 
