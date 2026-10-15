@@ -1,0 +1,20 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/operator.victoriametrics.com/vmstaticscrape_v1beta1.json
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMStaticScrape
+metadata:
+  name: macmini
+spec:
+  jobName: macmini
+  targetEndpoints:
+    - basicAuth:
+        password:
+          key: password
+          name: macmini-node-exporter
+        username:
+          key: username
+          name: macmini-node-exporter
+      labels:
+        instance: macmini
+      targets:
+        - macmini.internal:9100

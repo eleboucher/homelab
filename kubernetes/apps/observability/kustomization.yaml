@@ -15,6 +15,7 @@ resources:
   - kromgo/ks.yaml
   - kube-prometheus-stack/ks.yaml
   - kube-state-metrics/ks.yaml
+  - macmini/ks.yaml
   - mikrotik-exporter/ks.yaml
   - namespace.yaml
   - node-exporter/ks.yaml

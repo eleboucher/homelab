@@ -1,0 +1,64 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/monitoring.coreos.com/prometheusrule_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: macmini-rules
+spec:
+  groups:
+    - name: macmini.rules
+      rules:
+        - alert: MacminiExporterDown
+          annotations:
+            summary: >-
+              Mac mini node_exporter has been unreachable for 15 minutes
+          expr: |-
+            up{job="macmini"} == 0
+          for: 15m
+          labels:
+            severity: warning
+
+        # The data volume shares the internal APFS container with every other volume,
+        # so its free space is the Mac's real free space.
+        - alert: MacminiDiskLow
+          annotations:
+            summary: >-
+              Mac mini has {{ $value | humanize1024 }}B free on its internal disk
+          expr: |-
+            node_filesystem_avail_bytes{job="macmini", mountpoint="/System/Volumes/Data"} < 40 * 1024^3
+          for: 10m
+          labels:
+            severity: warning
+
+        - alert: MacminiDiskCritical
+          annotations:
+            summary: >-
+              Mac mini has only {{ $value | humanize1024 }}B free on its internal disk
+          expr: |-
+            node_filesystem_avail_bytes{job="macmini", mountpoint="/System/Volumes/Data"} < 20 * 1024^3
+          for: 5m
+          labels:
+            severity: critical
+
+        - alert: MacminiDiskFillingUp
+          annotations:
+            summary: >-
+              Mac mini internal disk is predicted to fill within 12 hours
+          expr: |-
+            predict_linear(node_filesystem_avail_bytes{job="macmini", mountpoint="/System/Volumes/Data"}[6h], 12 * 3600) < 0
+              and
+            node_filesystem_avail_bytes{job="macmini", mountpoint="/System/Volumes/Data"} < 80 * 1024^3
+          for: 30m
+          labels:
+            severity: warning
+
+        # macOS CI home has its own volume with a 50 GB quota.
+        - alert: MacminiCIVolumeNearQuota
+          annotations:
+            summary: >-
+              Mac mini CI volume has {{ $value | humanize1024 }}B left under its quota
+          expr: |-
+            node_filesystem_avail_bytes{job="macmini", mountpoint="/Volumes/ForgejoCI"} < 5 * 1024^3
+          for: 15m
+          labels:
+            severity: warning
