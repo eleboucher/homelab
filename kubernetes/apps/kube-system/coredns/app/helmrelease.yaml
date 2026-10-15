@@ -79,9 +79,10 @@ spec:
       - filename: internal.db
         domain: internal
         contents: |-
-          internal. 60 IN SOA ns.internal. hostmaster.internal. 1 60 60 60 60
+          internal. 60 IN SOA ns.internal. hostmaster.internal. 2 60 60 60 60
           internal. 60 IN NS ns.internal.
           ns.internal. 60 IN A 192.168.1.2
+          macmini.internal. 60 IN A 192.168.1.23
           normandie.internal. 60 IN A 192.168.1.40
           kharkiv.k8s.internal. 60 IN A 192.168.1.41
           paris.k8s.internal. 60 IN A 192.168.1.42
