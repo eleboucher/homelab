@@ -12,6 +12,9 @@ spec:
   oidc:
     provider:
       issuer: "https://idm.erwanleboucher.dev/oauth2/openid/${APP}"
+      # Avoid discovery through this gateway during Kanidm TLS-secret rollouts.
+      authorizationEndpoint: "https://idm.erwanleboucher.dev/ui/oauth2"
+      tokenEndpoint: "https://idm.erwanleboucher.dev/oauth2/token"
     clientID: *app
     clientSecret:
       name: "kanidm-${APP}-oidc"
