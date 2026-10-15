@@ -32,10 +32,11 @@ resource "routeros_interface_bonding" "bonds" {
 resource "routeros_interface_vlan" "vlans" {
   for_each = local.vlans
 
-  name      = each.value.name
-  interface = routeros_interface_bridge.bridge1.name
-  vlan_id   = each.value.vlan_id
-  mtu       = each.value.mtu
+  name         = each.value.name
+  interface    = routeros_interface_bridge.bridge1.name
+  vlan_id      = each.value.vlan_id
+  mtu          = each.value.mtu
+  hw_offloaded = lookup(each.value, "hw_offloaded", null)
 }
 
 locals {

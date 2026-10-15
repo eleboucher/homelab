@@ -5,9 +5,10 @@ locals {
 
   vlans = {
     mgmt = {
-      name    = "vlan10-mgmt"
-      vlan_id = 10
-      mtu     = 1500
+      name         = "vlan10-mgmt"
+      vlan_id      = 10
+      mtu          = 1500
+      hw_offloaded = true
     }
   }
 
