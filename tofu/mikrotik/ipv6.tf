@@ -16,10 +16,11 @@ resource "routeros_ipv6_address" "wg_mb_ll" {
 }
 
 resource "routeros_ipv6_neighbor_discovery" "lan" {
-  interface           = "vlan10-mgmt"
-  advertise_dns       = true
-  dns                 = "2a01:e0a:e4b:aa31::1"
-  other_configuration = true
+  interface     = "vlan10-mgmt"
+  advertise_dns = true
+  dns           = "2a01:e0a:e4b:aa31::1"
+  # We advertise DNS through RA and do not run DHCPv6 on this LAN.
+  other_configuration = false
   ra_interval         = "20s-1m"
   ra_lifetime         = "3m"
   ra_preference       = "high"
