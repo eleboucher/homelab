@@ -33,6 +33,8 @@ spec:
     # without a store the whole session, groups included, lives in the cookie
     valkey:
       enabled: true
+      auth:
+        usersExistingSecret: renovate-operator-valkey
     fullnameOverride: renovate-operator
     route:
       enabled: true
