@@ -8,3 +8,4 @@ resources:
   - ./httproute.yaml
   - ./kopiur.yaml
   - ./referencegrant.yaml
+  - ./sccache-bucket.yaml

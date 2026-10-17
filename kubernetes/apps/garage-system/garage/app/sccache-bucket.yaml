@@ -1,0 +1,21 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/garage.rajsingh.info/garagebucket_v1beta1.json
+apiVersion: garage.rajsingh.info/v1beta1
+kind: GarageBucket
+metadata:
+  name: sccache
+spec:
+  clusterRef:
+    name: garage
+  bucketId: 7678566fa7697b2d9e5ea7d8aea3aab1b871ddc75ee0be3778b7132ac4552a22
+  deletionPolicy: Retain
+  quotas:
+    maxSize: 60Gi
+  lifecycle:
+    rules:
+      - id: expire-cache-entries
+        status: Enabled
+        expirationDays: 14
+      - id: abort-incomplete-uploads
+        status: Enabled
+        abortIncompleteMultipartUploadDays: 1
