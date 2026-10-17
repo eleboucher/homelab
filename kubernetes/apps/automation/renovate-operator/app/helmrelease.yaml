@@ -30,6 +30,9 @@ spec:
           secretKeyRef:
             name: renovate-operator-session
             key: session-secret
+    # without a store the whole session, groups included, lives in the cookie
+    valkey:
+      enabled: true
     fullnameOverride: renovate-operator
     route:
       enabled: true
