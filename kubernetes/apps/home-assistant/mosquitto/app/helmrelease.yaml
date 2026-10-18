@@ -1,0 +1,86 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: mosquitto
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: mosquitto
+  interval: 30m
+  values:
+    controllers:
+      mosquitto:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        pod:
+          securityContext:
+            fsGroup: 1000
+            fsGroupChangePolicy: OnRootMismatch
+            runAsGroup: 1000
+            runAsNonRoot: true
+            runAsUser: 1000
+        initContainers:
+          init-config:
+            image:
+              repository: docker.io/library/eclipse-mosquitto
+              tag: 2.1.2-alpine@sha256:38c0da4f2ef84284d47b3b3eeea1cb3bdeabe81ee10caf0cd5c5ff61ee3ea408
+            command: ["/bin/sh", "-c"]
+            args:
+              - install -m 0600 /secret/mosquitto_pwd /mosquitto/external_config/mosquitto_pwd &&
+                mosquitto_passwd -U /mosquitto/external_config/mosquitto_pwd
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: { drop: ["ALL"] }
+        containers:
+          app:
+            image:
+              repository: docker.io/library/eclipse-mosquitto
+              tag: 2.1.2-alpine@sha256:38c0da4f2ef84284d47b3b3eeea1cb3bdeabe81ee10caf0cd5c5ff61ee3ea408
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: { drop: ["ALL"] }
+            resources:
+              requests:
+                cpu: 5m
+              limits:
+                memory: 64Mi
+    service:
+      app:
+        type: LoadBalancer
+        annotations:
+          lbipam.cilium.io/ips: "192.168.69.122"
+        ports:
+          mqtt:
+            port: 1883
+    persistence:
+      config-file:
+        type: configMap
+        name: mosquitto-configmap
+        globalMounts:
+          - path: /mosquitto/config/mosquitto.conf
+            subPath: mosquitto.conf
+      data:
+        existingClaim: "{{ .Release.Name }}"
+        globalMounts:
+          - path: /data
+      external-config:
+        type: emptyDir
+        globalMounts:
+          - path: /mosquitto/external_config
+      secret-file:
+        type: secret
+        name: mosquitto-secret
+        advancedMounts:
+          mosquitto:
+            init-config:
+              - path: /secret
+      tmp:
+        type: emptyDir
+        advancedMounts:
+          mosquitto:
+            init-config:
+              - path: /tmp
