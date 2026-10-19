@@ -1,3 +1,5 @@
+version: 0.18-0
+
 mqtt:
   host: mosquitto.home-assistant.svc.cluster.local
   user: frigate
@@ -25,6 +27,17 @@ go2rtc:
   streams:
     openqiara:
       - rtsp://{FRIGATE_CAMERA_HOST}:8554/openqiara
+
+audio:
+  enabled: true
+  listen:
+    - bark
+    - breaking
+    - fire_alarm
+    - shatter
+    - smoke_detector
+    - speech
+    - yell
 
 objects:
   track:
@@ -59,6 +72,7 @@ cameras:
         - path: rtsp://127.0.0.1:8554/openqiara
           input_args: preset-rtsp-restream
           roles:
+            - audio
             - detect
             - record
     detect:
