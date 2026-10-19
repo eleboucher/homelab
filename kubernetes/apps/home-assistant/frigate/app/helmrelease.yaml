@@ -110,3 +110,5 @@ spec:
             primary: true
           go2rtc:
             port: 1984
+          rtsp:
+            port: 8554
