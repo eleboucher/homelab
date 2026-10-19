@@ -101,6 +101,16 @@ spec:
           - backendRefs:
               - identifier: frigate
                 port: http
+      go2rtc:
+        hostnames:
+          - frigate-go2rtc.erwanleboucher.dev
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
+        rules:
+          - backendRefs:
+              - identifier: frigate
+                port: go2rtc
     service:
       frigate:
         ports:
