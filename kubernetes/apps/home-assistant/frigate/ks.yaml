@@ -23,6 +23,7 @@ spec:
     substitute:
       APP: frigate
       APP_NAMESPACE: home-assistant
+      GPU_MODEL: Unknown
       KOPIUR_CAPACITY: 5Gi
   prune: true
   sourceRef:
