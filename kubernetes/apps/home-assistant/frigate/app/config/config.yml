@@ -35,10 +35,13 @@ audio:
     - bark
     - breaking
     - fire_alarm
+    - howl
     - shatter
     - smoke_detector
     - speech
+    - whimper_dog
     - yell
+    - yip
 
 objects:
   track:
@@ -64,13 +67,18 @@ record:
 review:
   alerts:
     labels:
+      - bark
       - breaking
+      - dog
       - fire_alarm
+      - howl
       - person
       - shatter
       - smoke_detector
       - speech
+      - whimper_dog
       - yell
+      - yip
 
 snapshots:
   enabled: true
