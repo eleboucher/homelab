@@ -60,6 +60,17 @@ record:
       days: 30
       mode: motion
 
+review:
+  alerts:
+    labels:
+      - breaking
+      - fire_alarm
+      - person
+      - shatter
+      - smoke_detector
+      - speech
+      - yell
+
 snapshots:
   enabled: true
   retain:
