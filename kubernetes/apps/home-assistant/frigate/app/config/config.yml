@@ -42,6 +42,7 @@ audio:
     - whimper_dog
     - yell
     - yip
+  min_volume: 100
 
 objects:
   track:
