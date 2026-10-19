@@ -14,12 +14,13 @@ detectors:
     device: GPU
 
 model:
-  width: 300
-  height: 300
-  input_tensor: nhwc
-  input_pixel_format: bgr
-  path: /openvino-model/ssdlite_mobilenet_v2.xml
-  labelmap_path: /openvino-model/coco_91cl_bkgr.txt
+  height: 320
+  input_dtype: float
+  input_tensor: nchw
+  labelmap_path: /labelmap/coco-80.txt
+  model_type: yolo-generic
+  path: /config/model_cache/yolo.onnx
+  width: 320
 
 # One connection to the camera, shared by Frigate and Home Assistant: the
 # OpenQiara RTSP stream starts on demand and pauses while the shutter is closed.
