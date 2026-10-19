@@ -13,9 +13,8 @@ spec:
     controllers:
       frigate:
         pod:
-          resourceClaims:
-            - name: gpu
-              resourceClaimTemplateName: frigate-gpu
+          nodeSelector:
+            kubernetes.io/hostname: paris
         annotations:
           reloader.stakater.com/auto: "true"
         containers:
@@ -52,12 +51,12 @@ spec:
                   failureThreshold: 30
                   periodSeconds: 10
             resources:
-              claims:
-                - name: gpu
               requests:
                 cpu: 200m
               limits:
                 memory: 3Gi
+            securityContext:
+              privileged: true
     persistence:
       config:
         existingClaim: "{{ .Release.Name }}"

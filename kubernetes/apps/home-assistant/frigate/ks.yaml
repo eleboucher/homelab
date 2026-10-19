@@ -9,7 +9,6 @@ spec:
     labels:
       app.kubernetes.io/name: frigate
   components:
-    - ../../../../components/gpu
     - ../../../../components/kopiur/hot
   dependsOn:
     - name: kopiur-repository
@@ -23,7 +22,6 @@ spec:
     substitute:
       APP: frigate
       APP_NAMESPACE: home-assistant
-      GPU_MODEL: Unknown
       KOPIUR_CAPACITY: 5Gi
   prune: true
   sourceRef:
