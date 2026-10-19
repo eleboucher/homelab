@@ -1,0 +1,67 @@
+mqtt:
+  host: mosquitto.home-assistant.svc.cluster.local
+  user: frigate
+  password: "{FRIGATE_MQTT_PASSWORD}"
+
+ffmpeg:
+  hwaccel_args: preset-vaapi
+
+detectors:
+  ov:
+    type: openvino
+    device: GPU
+
+model:
+  width: 300
+  height: 300
+  input_tensor: nhwc
+  input_pixel_format: bgr
+  path: /openvino-model/ssdlite_mobilenet_v2.xml
+  labelmap_path: /openvino-model/coco_91cl_bkgr.txt
+
+# One connection to the camera, shared by Frigate and Home Assistant: the
+# OpenQiara RTSP stream starts on demand and pauses while the shutter is closed.
+go2rtc:
+  streams:
+    openqiara:
+      - rtsp://{FRIGATE_CAMERA_HOST}:8554/openqiara
+
+objects:
+  track:
+    - person
+    - cat
+    - dog
+
+record:
+  enabled: true
+  continuous:
+    days: 0
+  motion:
+    days: 0
+  alerts:
+    retain:
+      days: 30
+      mode: motion
+  detections:
+    retain:
+      days: 30
+      mode: motion
+
+snapshots:
+  enabled: true
+  retain:
+    default: 30
+
+cameras:
+  openqiara:
+    ffmpeg:
+      inputs:
+        - path: rtsp://127.0.0.1:8554/openqiara
+          input_args: preset-rtsp-restream
+          roles:
+            - detect
+            - record
+    detect:
+      width: 1280
+      height: 720
+      fps: 5

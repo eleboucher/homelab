@@ -1,0 +1,113 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: frigate
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: frigate
+  interval: 30m
+  values:
+    controllers:
+      frigate:
+        pod:
+          resourceClaims:
+            - name: gpu
+              resourceClaimTemplateName: frigate-gpu
+        annotations:
+          reloader.stakater.com/auto: "true"
+        containers:
+          app:
+            image:
+              repository: ghcr.io/blakeblackshear/frigate
+              tag: 0.18.2@sha256:fd60f99ffd4eb6c42360ed4e14953e270586f239309ab3983e55b2e97ffac09a
+            env:
+              FRIGATE_CAMERA_HOST: 192.168.1.16
+              TZ: Europe/Paris
+            envFrom:
+              - secretRef:
+                  name: frigate-secret
+            probes:
+              liveness:
+                enabled: true
+                spec:
+                  failureThreshold: 5
+                  periodSeconds: 30
+                  timeoutSeconds: 5
+              readiness:
+                enabled: true
+                custom: true
+                spec:
+                  failureThreshold: 5
+                  httpGet:
+                    path: /api/version
+                    port: 5000
+                  periodSeconds: 10
+                  timeoutSeconds: 5
+              startup:
+                enabled: true
+                spec:
+                  failureThreshold: 30
+                  periodSeconds: 10
+            resources:
+              claims:
+                - name: gpu
+              requests:
+                cpu: 200m
+              limits:
+                memory: 3Gi
+    persistence:
+      config:
+        existingClaim: "{{ .Release.Name }}"
+        globalMounts:
+          - path: /config
+      config-file:
+        type: configMap
+        name: frigate-configmap
+        globalMounts:
+          - path: /config/config.yml
+            readOnly: true
+            subPath: config.yml
+      media:
+        type: nfs
+        path: /
+        server: normandie.internal
+        globalMounts:
+          - path: /media/frigate
+            subPath: frigate
+      cache:
+        enabled: true
+        type: emptyDir
+        medium: Memory
+        sizeLimit: 2Gi
+        globalMounts:
+          - path: /dev/shm
+      tmpfs:
+        type: emptyDir
+        advancedMounts:
+          frigate:
+            app:
+              - path: /tmp
+                subPath: tmp
+    route:
+      frigate:
+        hostnames:
+          - frigate.erwanleboucher.dev
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
+        rules:
+          - backendRefs:
+              - identifier: frigate
+                port: http
+    service:
+      frigate:
+        ports:
+          http:
+            appProtocol: kubernetes.io/ws
+            port: 5000
+            primary: true
+          go2rtc:
+            port: 1984

@@ -7,5 +7,6 @@ namespace: home-assistant
 resources:
   - home-assistant/ks.yaml
   - esphome/ks.yaml
+  - frigate/ks.yaml
   - mosquitto/ks.yaml
   - namespace.yaml
