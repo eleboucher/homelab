@@ -41,6 +41,9 @@ spec:
             envFrom:
               - secretRef:
                   name: dashbrr
+              - secretRef:
+                  name: dashbrr-qui
+                  optional: true
             resources: &resources
               requests:
                 cpu: 10m

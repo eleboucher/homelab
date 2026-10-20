@@ -33,9 +33,7 @@ spec:
               - name: RADARR__AUTH__METHOD
                 value: External
               - name: RADARR__AUTH__REQUIRED
-                value: DisabledForLocalAddresses
-              - name: RADARR__SERVER__ALLOWEDHOSTS
-                value: "*"
+                value: Enabled
             probes:
               liveness: &probes
                 enabled: true

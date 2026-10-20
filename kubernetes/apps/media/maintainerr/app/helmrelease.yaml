@@ -67,6 +67,12 @@ spec:
     service:
       app:
         controller: maintainerr
+        annotations:
+          com.dashbrr.service.type: maintainerr
+          com.dashbrr.service.url: http://maintainerr.media.svc:6246
+          # Dashbrr requires a nonempty value; Maintainerr's API does not use it.
+          com.dashbrr.service.apikey: unused
+          com.dashbrr.service.name: Maintainerr
         ports:
           http:
             port: 6246

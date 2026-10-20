@@ -83,6 +83,11 @@ spec:
     service:
       app:
         controller: qui
+        annotations:
+          com.dashbrr.service.type: qui
+          com.dashbrr.service.url: http://qui.downloads.svc:8080
+          com.dashbrr.service.apikey: $${DASHBRR_QUI_API_KEY}
+          com.dashbrr.service.name: Qui
         ports:
           http:
             port: 8080

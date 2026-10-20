@@ -78,6 +78,11 @@ spec:
                   - ALL
     service:
       app:
+        annotations:
+          com.dashbrr.service.type: autobrr
+          com.dashbrr.service.url: http://autobrr.downloads.svc:80
+          com.dashbrr.service.apikey: $${DASHBRR_AUTOBRR_API_KEY}
+          com.dashbrr.service.name: Autobrr
         ports:
           http:
             port: *port

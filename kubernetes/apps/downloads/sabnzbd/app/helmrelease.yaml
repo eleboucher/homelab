@@ -58,6 +58,11 @@ spec:
     service:
       app:
         controller: sabnzbd
+        annotations:
+          com.dashbrr.service.type: sabnzbd
+          com.dashbrr.service.url: http://sabnzbd.downloads.svc:8080
+          com.dashbrr.service.apikey: $${DASHBRR_SABNZBD_API_KEY}
+          com.dashbrr.service.name: SABnzbd
         ports:
           http:
             port: *port
