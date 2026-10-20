@@ -24,7 +24,7 @@ spec:
     substitute:
       APP: continuwuity
       APP_NAMESPACE: matrix
-      KOPIUR_CAPACITY: 15Gi
+      KOPIUR_CAPACITY: 25Gi
       KOPIUR_STORAGECLASS: miroir-local
       SUBDOMAIN: matrix
       OIDC_CALLBACK: /_continuwuity/oidc/complete
