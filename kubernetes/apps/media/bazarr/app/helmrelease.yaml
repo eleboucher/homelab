@@ -61,6 +61,11 @@ spec:
     service:
       app:
         controller: bazarr
+        annotations:
+          com.dashbrr.service.type: bazarr
+          com.dashbrr.service.url: http://bazarr.media.svc:6767
+          com.dashbrr.service.apikey: $${DASHBRR_BAZARR_API_KEY}
+          com.dashbrr.service.name: Bazarr
         ports:
           http:
             port: 6767

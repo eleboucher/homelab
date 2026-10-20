@@ -1,0 +1,126 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: dashbrr
+  namespace: media
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: dashbrr
+  interval: 1h
+  values:
+    controllers:
+      dashbrr:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        replicas: 1
+        type: deployment
+        strategy: Recreate
+        serviceAccount:
+          identifier: dashbrr
+        pod:
+          automountServiceAccountToken: true
+          securityContext:
+            runAsUser: 1000
+            runAsGroup: 1000
+            runAsNonRoot: true
+            fsGroup: 1000
+            fsGroupChangePolicy: OnRootMismatch
+        initContainers:
+          discover:
+            image: &image
+              repository: ghcr.io/autobrr/dashbrr
+              tag: v0.7.0
+            workingDir: /tmp
+            args: ["config", "discover", "--k8s", "--yes"]
+            env: &database
+              DASHBRR__DB_TYPE: sqlite
+              DASHBRR__DB_PATH: /config/dashbrr.db
+            envFrom:
+              - secretRef:
+                  name: dashbrr
+            resources: &resources
+              requests:
+                cpu: 10m
+                memory: 128Mi
+              limits:
+                memory: 256Mi
+            securityContext: &securityContext
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - ALL
+        containers:
+          app:
+            image: *image
+            workingDir: /tmp
+            env:
+              <<: *database
+              TZ: Europe/Paris
+              DASHBRR__LISTEN_ADDR: "[::]:8080"
+              DASHBRR__LOG_LEVEL: info
+              DASHBRR__OIDC_ISSUER: https://idm.erwanleboucher.dev/oauth2/openid/dashbrr
+              DASHBRR__OIDC_CLIENT_ID: dashbrr
+              DASHBRR__OIDC_CLIENT_SECRET:
+                valueFrom:
+                  secretKeyRef:
+                    name: kanidm-dashbrr-oidc
+                    key: client-secret
+              DASHBRR__OIDC_REDIRECT_URL: https://dashbrr.erwanleboucher.dev/api/auth/oidc/callback
+            probes:
+              liveness:
+                enabled: true
+              readiness:
+                enabled: true
+              startup:
+                enabled: true
+                spec:
+                  failureThreshold: 30
+                  periodSeconds: 5
+            resources: *resources
+            securityContext: *securityContext
+    service:
+      app:
+        controller: dashbrr
+        ports:
+          http:
+            port: 8080
+            protocol: TCP
+    serviceAccount:
+      dashbrr: {}
+    rbac:
+      roles:
+        dashbrr-discovery:
+          type: ClusterRole
+          rules:
+            - apiGroups: [""]
+              resources: ["services"]
+              verbs: ["get", "list", "watch"]
+      bindings:
+        dashbrr-discovery:
+          type: ClusterRoleBinding
+          roleRef:
+            identifier: dashbrr-discovery
+          subjects:
+            - identifier: dashbrr
+              serviceAccount: dashbrr
+    route:
+      app:
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
+        hostnames:
+          - dashbrr.erwanleboucher.dev
+    persistence:
+      config:
+        type: persistentVolumeClaim
+        existingClaim: "{{ .Release.Name }}"
+        globalMounts:
+          - path: /config
+      tmp:
+        type: emptyDir
+        globalMounts:
+          - path: /tmp

@@ -66,6 +66,11 @@ spec:
     service:
       app:
         controller: prowlarr
+        annotations:
+          com.dashbrr.service.type: prowlarr
+          com.dashbrr.service.url: http://prowlarr.media.svc:9696
+          com.dashbrr.service.apikey: $${DASHBRR_PROWLARR_API_KEY}
+          com.dashbrr.service.name: Prowlarr
         ports:
           http:
             port: 9696

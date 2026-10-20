@@ -67,6 +67,11 @@ spec:
     service:
       app:
         controller: radarr
+        annotations:
+          com.dashbrr.service.type: radarr
+          com.dashbrr.service.url: http://radarr.media.svc:7878
+          com.dashbrr.service.apikey: $${DASHBRR_RADARR_API_KEY}
+          com.dashbrr.service.name: Radarr
         ports:
           http:
             port: 7878

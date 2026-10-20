@@ -56,6 +56,11 @@ spec:
     service:
       app:
         controller: jellyseerr
+        annotations:
+          com.dashbrr.service.type: overseerr
+          com.dashbrr.service.url: http://jellyseerr.media.svc:5055
+          com.dashbrr.service.apikey: $${DASHBRR_OVERSEERR_API_KEY}
+          com.dashbrr.service.name: Jellyseerr
         ports:
           http:
             port: 5055

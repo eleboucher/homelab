@@ -82,6 +82,11 @@ spec:
     service:
       app:
         controller: sonarr
+        annotations:
+          com.dashbrr.service.type: sonarr
+          com.dashbrr.service.url: http://sonarr.media.svc:8989
+          com.dashbrr.service.apikey: $${DASHBRR_SONARR_API_KEY}
+          com.dashbrr.service.name: Sonarr
         ports:
           http:
             port: 8989

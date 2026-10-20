@@ -1,0 +1,39 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: dashbrr
+  namespace: flux-system
+spec:
+  interval: 1h
+  components:
+    - ../../../../components/oidc
+    - ../../../../components/kopiur/hot
+  path: ./kubernetes/apps/media/dashbrr/app
+  dependsOn:
+    - name: envoy-gateway
+      namespace: network
+    - name: kanidm
+      namespace: security
+    - name: kopiur-repository
+      namespace: kopiur-system
+    - name: miroir
+      namespace: miroir-system
+  postBuild:
+    substitute:
+      APP: dashbrr
+      APP_NAMESPACE: media
+      OIDC_DISPLAY_NAME: Dashbrr
+      OIDC_GROUP: admins
+      OIDC_CALLBACK: /api/auth/oidc/callback
+      OIDC_SCOPES: '["openid", "profile", "email"]'
+      OIDC_DISABLE_PKCE: "true"
+  prune: true
+  sourceRef:
+    kind: OCIRepository
+    name: flux-system
+    namespace: flux-system
+  targetNamespace: media
+  timeout: 5m
+  wait: false

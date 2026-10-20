@@ -115,6 +115,11 @@ spec:
     service:
       app:
         controller: jellyfin
+        annotations:
+          com.dashbrr.service.type: jellyfin
+          com.dashbrr.service.url: http://jellyfin.media.svc:8096
+          com.dashbrr.service.apikey: $${DASHBRR_JELLYFIN_API_KEY}
+          com.dashbrr.service.name: Jellyfin
         ports:
           http:
             port: 8096
