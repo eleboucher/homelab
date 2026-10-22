@@ -17,7 +17,7 @@ spec:
     agent:
       logLevel: info
       healthPort: 9090
-      healthBindAddress: "::"
+      healthBindAddress: "[::]"
       services:
         - hostname: "*.erwanleboucher.dev"
           origin: envoy-external.network.svc.cluster.local:443
