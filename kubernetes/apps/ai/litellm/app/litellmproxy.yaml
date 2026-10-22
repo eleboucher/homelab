@@ -30,6 +30,10 @@ spec:
     merge_reasoning_content_in_choices: true
     set_verbose: false
   env:
+    - name: HOST
+      value: "::"
+    - name: NUM_WORKERS
+      value: "2"
     - name: CHATGPT_TOKEN_DIR
       value: /app/chatgpt_tokens
     - name: LITELLM_LOG

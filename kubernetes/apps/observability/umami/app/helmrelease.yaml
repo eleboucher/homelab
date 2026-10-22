@@ -25,6 +25,7 @@ spec:
               tag: 3.4.0
             env:
               TZ: "Europe/Paris"
+              HOSTNAME: "::"
               DISABLE_TELEMETRY: "true"
               APP_SECRET:
                 valueFrom:

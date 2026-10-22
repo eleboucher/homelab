@@ -265,8 +265,8 @@ spec:
               - /home/node/.vscode
               - --extensions-dir
               - /home/node/.vscode
-              - --port
-              - "12321"
+              - --bind-addr
+              - "[::]:12321"
               - /config
             env:
               TZ: "Europe/Paris"

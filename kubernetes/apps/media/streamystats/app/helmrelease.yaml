@@ -28,6 +28,7 @@ spec:
               repository: ghcr.io/fredrikburmester/streamystats-nextjs
               tag: v2.20.0
             env: &env
+              HOSTNAME: "::"
               NODE_ENV: production
               DATABASE_URL:
                 valueFrom:
@@ -70,7 +71,7 @@ spec:
               tag: v2.20.0
             env:
               !!merge <<: *env
-              HOST: 0.0.0.0
+              HOST: "::"
               SESSION_POLL_INTERVAL_MS: "30000"
               CRON_ACTIVITY_SYNC: "*/5 * * * *"
               CRON_RECENT_ITEMS_SYNC: "*/5 * * * *"

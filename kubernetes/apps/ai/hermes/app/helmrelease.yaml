@@ -127,6 +127,7 @@ spec:
             env:
               API_SERVER_ENABLED: "true"
               API_SERVER_HOST: 0.0.0.0
+              HERMES_DASHBOARD_HOST: 0.0.0.0
               GOPATH: /opt/data/go
               HERMES_GID: "1000"
               HERMES_HOME: /opt/data
@@ -217,8 +218,8 @@ spec:
               - /opt/data/.vscode
               - --extensions-dir
               - /opt/data/.vscode
-              - --port
-              - "12321"
+              - --bind-addr
+              - "[::]:12321"
               - /opt/data
             env:
               GH_TOKEN:

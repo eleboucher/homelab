@@ -30,6 +30,7 @@ spec:
               repository: ghcr.io/dictionarry-hub/profilarr
               tag: 2.2.0
             env:
+              HOST: "::"
               PUID: 1000
               PGID: 1000
               ORIGIN: https://profilarr.erwanleboucher.dev

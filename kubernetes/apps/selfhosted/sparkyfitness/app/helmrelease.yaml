@@ -31,6 +31,15 @@ spec:
                 memory: 64M
               limits:
                 memory: 64M
+    persistence:
+      nginx-config:
+        type: configMap
+        name: sparkyfitness-frontend-nginx
+        globalMounts:
+          - path: /etc/nginx/templates/default.conf.template
+            readOnly: true
+            subPath: default.conf
+
     service:
       app:
         controller: main

@@ -7,6 +7,7 @@ metadata:
 spec:
   replicas: 1
   args:
+    - "--bind=::"
     # maxmemory bounds only the dataset; keep it well below the container
     # limit so Dragonfly's process overhead (buffers, snapshots, fragmentation)
     # fits under the cgroup ceiling instead of getting OOMKilled on bursts.

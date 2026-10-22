@@ -37,7 +37,7 @@ spec:
               - --port
               - "8080"
               - --hostname
-              - 0.0.0.0
+              - "::"
               - --huggingface-hub-cache
               - /data
               - --auto-truncate

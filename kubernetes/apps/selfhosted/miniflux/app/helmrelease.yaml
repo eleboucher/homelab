@@ -21,6 +21,7 @@ spec:
               tag: 2.3.4-distroless@sha256:4a457e73b6c298bd44f42b38d744afb8a08d3b94318f0c636162d0b35ce0f217
             env:
               BASE_URL: https://rss.erwanleboucher.dev
+              LISTEN_ADDR: "[::]:8080"
               CREATE_ADMIN: "1"
               DISABLE_LOCAL_AUTH: "1"
               DISABLE_SCHEDULER_SERVICE: "1"

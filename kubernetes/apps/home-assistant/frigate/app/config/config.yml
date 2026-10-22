@@ -85,6 +85,10 @@ snapshots:
   retain:
     default: 30
 
+networking:
+  ipv6:
+    enabled: true
+
 cameras:
   openqiara:
     ffmpeg:

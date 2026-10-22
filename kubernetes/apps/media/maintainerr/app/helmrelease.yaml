@@ -29,6 +29,7 @@ spec:
               tag: 3.30.2@sha256:816779316fc9a2d8e45946dc7a0e676784bc1453eaaff701900132ab67d5abba
             env:
               TZ: Europe/Paris
+              UI_HOSTNAME: "::"
             probes:
               liveness:
                 enabled: true

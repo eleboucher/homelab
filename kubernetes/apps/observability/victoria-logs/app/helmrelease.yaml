@@ -21,6 +21,8 @@ spec:
     vector:
       enabled: false
     server:
+      extraArgs:
+        enableTCP6: true
       persistentVolume:
         enabled: true
         storageClassName: miroir-local

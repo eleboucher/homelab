@@ -227,6 +227,7 @@ spec:
         externalLabels:
           cluster: homelab
         extraArgs:
+          enableTCP6: "true"
           promscrape.dropOriginalLabels: "true"
           promscrape.streamParse: "true"
           promscrape.maxScrapeSize: "32MB"
@@ -254,6 +255,8 @@ spec:
             regex: "extensions_talos_dev_.+"
     vmalert:
       spec:
+        extraArgs:
+          enableTCP6: "true"
         evaluationInterval: 30s
         ruleSelector:
           matchExpressions:
@@ -265,6 +268,7 @@ spec:
       enabled: true
       spec:
         extraArgs:
+          enableTCP6: "true"
           requestBufferSize: "65536"
         unauthorizedUserAccessSpec:
           url_map:
@@ -280,6 +284,7 @@ spec:
       spec:
         retentionPeriod: 90d
         extraArgs:
+          enableTCP6: "true"
           maxLabelsPerTimeseries: "40"
         resources:
           requests:

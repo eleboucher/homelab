@@ -30,7 +30,7 @@ spec:
               - start
             env:
               ATUIN_DB_URI: sqlite:///config/atuin.db
-              ATUIN_HOST: 0.0.0.0
+              ATUIN_HOST: "::"
               ATUIN_PORT: &port 8888
               ATUIN_OPEN_REGISTRATION: true
             probes:

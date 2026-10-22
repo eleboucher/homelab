@@ -31,6 +31,19 @@ spec:
         replicas: 1
         strategy: Recreate
         type: deployment
+        initContainers:
+          enable-ipv6:
+            image:
+              repository: docker.io/library/busybox
+              tag: "1.37"
+            command:
+              - sh
+              - -c
+              - |
+                f=/config/config/network.xml
+                if [ -f "$f" ]; then
+                  sed -i 's#<EnableIPv6>false</EnableIPv6>#<EnableIPv6>true</EnableIPv6>#' "$f"
+                fi
         containers:
           app:
             image:
