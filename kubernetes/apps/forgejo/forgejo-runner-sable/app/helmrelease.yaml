@@ -73,7 +73,7 @@ spec:
                     memory: 2Gi
                   limits:
                     cpu: 6
-                    memory: 16Gi
+                    memory: 20Gi
             # runner-k8s-plugin defaults the shared workdir emptyDir to 10Gi,
             # too small for CEF builds; kubelet evicts the pod on emptydirfs.limit.
             volumes:
@@ -148,7 +148,7 @@ spec:
                     memory: 2Gi
                   limits:
                     cpu: 6
-                    memory: 16Gi
+                    memory: 20Gi
                 volumeMounts:
                   - name: docker-certs
                     mountPath: /certs
