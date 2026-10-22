@@ -28,7 +28,7 @@ spec:
           app:
             image:
               repository: ghcr.io/dictionarry-hub/profilarr
-              tag: 2.2.0
+              tag: 2.3.1
             env:
               HOST: "::"
               PUID: 1000
