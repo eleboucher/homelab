@@ -36,7 +36,9 @@ spec:
               SABNZBD__HOST_WHITELIST_ENTRIES: >-
                 sabnzbd, sabnzbd.downloads, sabnzbd.downloads.svc, sabnzbd.downloads.svc.cluster, sabnzbd.downloads.svc.cluster.local, sabnzbd.erwanleboucher.dev
               SABNZBD__LOCAL_RANGES_ENTRIES: >-
-                10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16, 2a01:e0a:e4b:aa30::/60
+                10.10.0.0/24, 10.42.0.0/16, 10.43.0.0/16, 10.222.0.0/16,
+                192.168.1.0/24, 192.168.69.0/24, 2a01:e0a:e4b:aa30::/60,
+                fd42::/56, fd43::/108, fd4d:ac20:c274::/48
             probes:
               liveness: &probes
                 enabled: true
