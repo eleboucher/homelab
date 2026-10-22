@@ -43,6 +43,8 @@ spec:
                 memory: 2Gi
     service:
       app:
+        ipFamilies:
+          - IPv4
         ports:
           http:
             appProtocol: kubernetes.io/ws
