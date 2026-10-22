@@ -21,7 +21,7 @@ spec:
     substitute:
       APP: mosquitto
       APP_NAMESPACE: home-assistant
-      KOPIUR_CAPACITY: 1Gi
+      KOPIUR_CAPACITY: 5Gi
   prune: true
   sourceRef:
     kind: OCIRepository
