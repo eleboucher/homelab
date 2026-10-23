@@ -25,7 +25,7 @@ spec:
           init-config:
             image:
               repository: docker.io/library/eclipse-mosquitto
-              tag: 2.1.2-alpine@sha256:af2da74b42274e53e90f907800887ca9ac7930ad9979003d757ebd79af043ded
+              tag: 2.1.2-alpine@sha256:860aeb5d63ce509508f6dcfb2bc8a1c1dd2bc60555b562b45ce90e52d8dabb0f
             command: ["/bin/sh", "-c"]
             args:
               - install -m 0600 /secret/mosquitto_pwd /mosquitto/external_config/mosquitto_pwd &&
@@ -38,7 +38,7 @@ spec:
           app:
             image:
               repository: docker.io/library/eclipse-mosquitto
-              tag: 2.1.2-alpine@sha256:af2da74b42274e53e90f907800887ca9ac7930ad9979003d757ebd79af043ded
+              tag: 2.1.2-alpine@sha256:860aeb5d63ce509508f6dcfb2bc8a1c1dd2bc60555b562b45ce90e52d8dabb0f
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
