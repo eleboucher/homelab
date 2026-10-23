@@ -182,3 +182,5 @@ spec:
         ports:
           http:
             port: 8080
+          metrics:
+            port: 9100

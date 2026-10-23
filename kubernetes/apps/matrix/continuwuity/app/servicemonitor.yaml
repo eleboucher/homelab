@@ -18,8 +18,8 @@ spec:
     - app.kubernetes.io/instance
     - app.kubernetes.io/name
   endpoints:
-    - port: http
-      path: /_continuwuity/metrics
+    - port: metrics
+      path: /metrics
       interval: 30s
       scrapeTimeout: 10s
       bearerTokenSecret:

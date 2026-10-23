@@ -30,6 +30,7 @@ ip_lookup_strategy = 3
 
 # Metrics, scraped by the ServiceMonitor
 allow_prometheus_metrics = true
+prometheus_metrics_address = "0.0.0.0:9100"
 prometheus_metrics_token = "{{ .prometheus_metrics_token }}"
 
 # User settings
