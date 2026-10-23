@@ -1,7 +1,8 @@
 clusterName: homelab
 clusterEndpoint: https://k8s.internal:6443
-kubernetesVersion: 1.37.0
-talosVersion: 1.14.4
+# Bootstrap versions follow tuppr; run topf from the repository root.
+kubernetesVersion: ref+file://kubernetes/apps/system-upgrade/tuppr/upgrade/kubeupgrade.yaml#/spec/kubernetes/version
+talosVersion: ref+file://kubernetes/apps/system-upgrade/tuppr/upgrade/talosupgrade.yaml#/spec/talos/version
 schematicId: "@schematic.yaml"
 nodes:
   - host: paris

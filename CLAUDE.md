@@ -44,8 +44,6 @@ just talos diff               # Pending config diff vs live cluster (topf dry-ru
 just talos render [out]       # Render all machine configs to a directory
 just talos render-config <node>   # Render and print one node's machine config
 just talos apply-node <node>  # Apply Talos config to a node (topf apply)
-just talos upgrade-node <node>    # Upgrade Talos on node to topf.yaml version
-just talos upgrade-k8s <version>  # Upgrade Kubernetes (via talosctl; not topf)
 just talos reboot-node <node>     # Reboot node
 just talos reset-node <node>      # Reset node (wipe)
 just talos shutdown-node <node>   # Shutdown node
@@ -102,6 +100,8 @@ talos/                       # Talos cluster config, managed with topf
 **Secrets:** Use 1Password + External Secrets for all secrets. Store credentials in 1Password vault, sync to Kubernetes with External Secrets.
 
 **Talos config (topf):** `talos/topf.yaml` declares the cluster + nodes; layered strategic-merge patches under `all/`, `control-plane/`, `worker/`, `node/<host>/` build each machine config (applied in that order). PKI lives in `talos/secrets.yaml` as `ref+op://` references resolved via `vals`/1Password at apply time — so `op` must be authenticated when topf runs. Preview changes with `just talos diff` before `just talos apply-node <node>`.
+
+**Upgrades:** tuppr manages Talos and all Kubernetes components, including kubelet. Change versions only in `kubernetes/apps/system-upgrade/tuppr/upgrade/{talosupgrade,kubeupgrade}.yaml`; topf reads those manifests for bootstrap versions via vals. Run topf from the repository root. `just talos apply-node` requires completed upgrades and matching node versions so a config apply cannot bypass tuppr's upgrade sequence.
 
 **GitOps Flow:** Push to repo → Flux detects changes → Reconciles cluster state
 

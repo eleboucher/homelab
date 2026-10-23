@@ -16,7 +16,7 @@ nodeIP:
 machine:
   kubelet:
     defaultRuntimeSeccompProfileEnabled: true
-    image: ghcr.io/siderolabs/kubelet:v1.37.1
+    image: ghcr.io/siderolabs/kubelet:v{{ .KubernetesVersion | trimPrefix "v" }}
     extraMounts:
       # openebs-hostpath basePath — /var/mnt is read-only for kubelet unless bind-mounted
       - destination: /var/mnt/local-hostpath

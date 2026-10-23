@@ -1,4 +1,5 @@
 set quiet
+set working-directory := '..'
 set script-interpreter := ['bash', '-euo', 'pipefail']
 set shell := ['bash', '-euo', 'pipefail', '-c']
 
@@ -24,8 +25,22 @@ diff *args:
 
 [confirm('Apply Talos config to ' + node + ' [y|N] ?')]
 [doc('Apply Talos config to a node (extra flags pass through, e.g. --mode=no-reboot)')]
-apply-node node *args:
+apply-node node *args: _upgrades-complete
     topf --topfconfig "{{ topf_config }}" apply --nodes-filter "{{ node }}" {{ args }}
+
+[private]
+[script]
+_upgrades-complete:
+    for resource in kubernetesupgrade/kubernetes talosupgrade/talos; do
+        kubectl wait --for=jsonpath='{.status.phase}'=Completed "$resource" --timeout=1s
+    done
+    kubernetes_version="$(yq -r '.spec.kubernetes.version' kubernetes/apps/system-upgrade/tuppr/upgrade/kubeupgrade.yaml)"
+    talos_version="$(yq -r '.spec.talos.version' kubernetes/apps/system-upgrade/tuppr/upgrade/talosupgrade.yaml)"
+    kubectl get nodes -o json | jq -e --arg kubernetes "$kubernetes_version" --arg talos "Talos ($talos_version)" \
+        'all(.items[]; .status.nodeInfo.kubeletVersion == $kubernetes and .status.nodeInfo.osImage == $talos)' >/dev/null || {
+        echo 'Let tuppr finish the configured upgrades before applying Talos config.' >&2
+        exit 1
+    }
 
 [confirm('Reboot node ' + node + ' [y|N] ?')]
 [doc('Reboot a node')]
@@ -70,16 +85,6 @@ reset-node node *args:
 [doc('Shutdown a node')]
 shutdown-node node *args:
     talosctl -n "{{ node }}" shutdown --force {{ args }}
-
-[confirm('Upgrade Kubernetes to ' + version + ' [y|N] ?')]
-[doc('Upgrade Kubernetes on the cluster (topf does not manage k8s; bump kubernetesVersion in topf.yaml afterwards)')]
-upgrade-k8s version:
-    talosctl -n "$(talosctl config info -o yaml | yq -e '.endpoints[0]')" upgrade-k8s --to {{ version }}
-
-[confirm('Upgrade node ' + node + ' [y|N] ?')]
-[doc('Upgrade Talos on a node to the version in topf.yaml')]
-upgrade-node node *args:
-    topf --topfconfig "{{ topf_config }}" upgrade --nodes-filter "{{ node }}" --reboot-mode powercycle {{ args }}
 
 [doc('Print the resolved schematic ID')]
 schematic-id:
