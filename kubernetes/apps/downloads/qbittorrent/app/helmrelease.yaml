@@ -28,7 +28,7 @@ spec:
           gluetun:
             image:
               repository: qmcgaw/gluetun
-              tag: v3.41.3
+              tag: latest@sha256:c2ee4191762fca6b6a3c3359a731198a95d9c9af4db32d466e223bf3a84e779b
             env:
               DOT: "off"
               FIREWALL_INPUT_PORTS: "8080,8388,8888,9999"
