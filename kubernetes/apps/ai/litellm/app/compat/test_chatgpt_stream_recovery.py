@@ -78,7 +78,7 @@ class StreamRecoveryTest(unittest.TestCase):
         ], response()))
         result = choices(raw)
         self.assertEqual(result[0].message.content, "first")
-        self.assertEqual(result[1].message.tool_calls[0]["function"]["arguments"], '{"city":"Paris"}')
+        self.assertEqual(result[0].message.tool_calls[0]["function"]["arguments"], '{"city":"Paris"}')
 
     def test_30_keeps_complete_output_and_missing_or_failed_terminal_errors(self):
         _load_patch()

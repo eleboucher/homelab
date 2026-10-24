@@ -6,6 +6,7 @@ configMapGenerator:
   - name: litellm-chatgpt-compat
     files:
       - compat/chatgpt_stream_recovery.py
+      - compat/chatgpt_token_recovery.py
     options:
       annotations:
         kustomize.toolkit.fluxcd.io/substitute: disabled

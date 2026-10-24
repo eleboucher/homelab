@@ -19,6 +19,7 @@ spec:
   litellmSettings:
     callbacks:
       - /opt/litellm-compat/chatgpt_stream_recovery.proxy_handler_instance
+      - /opt/litellm-compat/chatgpt_token_recovery.proxy_handler_instance
     success_callback: ["prometheus"]
     prometheus_adapter: true
     cache: true

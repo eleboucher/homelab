@@ -64,3 +64,13 @@ The pinned LiteLLM version discards streamed output when ChatGPT sends a final `
 Run `python test_chatgpt_stream_recovery.py -v` from the `compat` directory in an environment with the pinned LiteLLM dependencies. The tests reproduce the unpatched failure and check text, tool calls, ordering, and failure handling. Retest on LiteLLM upgrades, and remove the helper once upstream retains these events itself.
 
 After changing the compatibility ConfigMap on an existing deployment, restart LiteLLM to reload the Python module. The initial rollout adds a volume and callback, which already triggers a new Pod.
+
+## Rejected-token recovery
+
+ChatGPT can return `401 token_expired` before the saved access token's expiry. LiteLLM only refreshes based on that expiry, leaving requests broken until the credential is renewed.
+
+`compat/chatgpt_token_recovery.py` loads as a second callback. It refreshes the credential and retries once when the configured ChatGPT Responses endpoint returns `401 token_expired`. This happens before response streaming starts. Other errors and a second rejection follow LiteLLM's normal error handling.
+
+Normal expiry refreshes and recovery refreshes share a file lock on the token PVC. A worker reuses credentials that another worker has already renewed. Credential writes use a temporary file with mode `0600` and an atomic rename. Async recovery runs outside the event loop. A failed refresh logs a warning and preserves the original authentication error; it does not start a device login.
+
+Run `python test_chatgpt_token_recovery.py -v` in the pinned LiteLLM image. Retest both compatibility modules when upgrading LiteLLM, and remove this patch once upstream handles rejected tokens and concurrent refreshes.
