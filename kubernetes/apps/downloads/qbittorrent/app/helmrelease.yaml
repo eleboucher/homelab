@@ -38,7 +38,7 @@ spec:
               HTTPPROXY: "on"
               IPV6_DISABLED: "true"
               PORT_FORWARD_ONLY: "on"
-              SERVER_COUNTRIES: "Netherlands"
+              SERVER_COUNTRIES: "France"
               SHADOWSOCKS: "on"
               TZ: "Europe/Paris"
               VPN_PORT_FORWARDING: "on"
