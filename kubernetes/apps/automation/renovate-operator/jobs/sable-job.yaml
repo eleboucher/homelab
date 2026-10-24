@@ -20,7 +20,7 @@ spec:
     - name: RENOVATE_REPOSITORY_CACHE
       value: enabled
     - name: RENOVATE_REPOSITORY_CACHE_TYPE
-      value: "s3://renovate/sable-moe"
+      value: "s3://renovate/sable-moe/"
     - name: RENOVATE_S3_ENDPOINT
       value: "http://garage.garage-system.svc.cluster.local:3900"
     - name: RENOVATE_S3_PATH_STYLE
