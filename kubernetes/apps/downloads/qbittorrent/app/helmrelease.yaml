@@ -24,7 +24,7 @@ spec:
         replicas: 1
         strategy: Recreate
         type: deployment
-        containers:
+        initContainers:
           gluetun:
             image:
               repository: qmcgaw/gluetun
@@ -48,7 +48,20 @@ spec:
                   name: vpn-config
             probes:
               startup:
-                enabled: false
+                enabled: true
+                custom: true
+                spec:
+                  exec:
+                    command:
+                      - wget
+                      - -q
+                      - -t1
+                      - -O
+                      - "-"
+                      - http://127.0.0.1:9999
+                  periodSeconds: 5
+                  timeoutSeconds: 2
+                  failureThreshold: 60
               liveness:
                 enabled: true
                 custom: true
@@ -66,16 +79,20 @@ spec:
                 memory: 128Mi
               limits:
                 memory: 256Mi
+            restartPolicy: Always
             securityContext:
               privileged: true
               capabilities:
                 add:
                   - NET_ADMIN
+        containers:
           port-forward:
-            dependsOn: gluetun
             image:
               repository: docker.io/snoringdragon/gluetun-qbittorrent-port-manager
               tag: "1.3"
+            command:
+              - /bin/bash
+              - /scripts/update-port.sh
             resources:
               requests:
                 memory: 32Mi
@@ -132,9 +149,19 @@ spec:
         globalMounts:
           - path: /data
       incomplete:
-        type: emptyDir
+        type: hostPath
+        hostPath: /var/mnt/media/downloads/torrents/.incomplete
         globalMounts:
           - path: /incomplete-downloads
+      port-forward-script:
+        type: configMap
+        name: qbittorrent-port-forward
+        advancedMounts:
+          qbittorrent:
+            port-forward:
+              - path: /scripts/update-port.sh
+                subPath: update-port.sh
+                readOnly: true
       gluetun-data:
         type: emptyDir
         advancedMounts:

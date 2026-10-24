@@ -6,3 +6,11 @@ resources:
   - ./helmrelease.yaml
   - ./ocirepository.yaml
   - externalsecret.yaml
+configMapGenerator:
+  - name: qbittorrent-port-forward
+    files:
+      - resources/update-port.sh
+generatorOptions:
+  disableNameSuffixHash: true
+  annotations:
+    kustomize.toolkit.fluxcd.io/substitute: disabled

@@ -1,0 +1,34 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/monitoring.coreos.com/prometheusrule_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: media-download-storage
+spec:
+  groups:
+    - name: media-download-storage
+      rules:
+        - alert: MediaDownloadDiskSpaceLow
+          expr: node_filesystem_avail_bytes{kubernetes_node="paris",mountpoint="/var/mnt/media"} < 100 * 1024^3
+          for: 15m
+          labels:
+            severity: warning
+          annotations:
+            summary: Media storage has less than 100 GiB available
+            description: Check download data and retained media on paris.
+        - alert: MediaDownloadDiskSpaceCritical
+          expr: node_filesystem_avail_bytes{kubernetes_node="paris",mountpoint="/var/mnt/media"} < 50 * 1024^3
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: Media storage has less than 50 GiB available
+            description: Free space on /var/mnt/media before resuming downloads.
+        - alert: DownloadNodeDiskSpaceLow
+          expr: node_filesystem_avail_bytes{kubernetes_node="paris",mountpoint="/var"} < 20 * 1024^3
+          for: 15m
+          labels:
+            severity: warning
+          annotations:
+            summary: The download node has less than 20 GiB available on /var
+            description: Check container images, logs, and temporary downloads on paris.
