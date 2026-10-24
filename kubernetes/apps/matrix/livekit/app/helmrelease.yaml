@@ -98,8 +98,6 @@ spec:
         hostnames:
           - livekit.erwanleboucher.dev
         parentRefs:
-          - name: envoy-internal
-            namespace: network
           - name: envoy-external
             namespace: network
         rules:
