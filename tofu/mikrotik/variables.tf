@@ -51,3 +51,9 @@ variable "user_password_external_dns" {
   default   = null
 }
 
+variable "user_password_home_assistant" {
+  type      = string
+  sensitive = true
+  default   = null
+}
+

@@ -85,6 +85,9 @@ locals {
     external_dns = {
       policies = ["read", "write", "api", "rest-api", "!local", "!telnet", "!ssh", "!ftp", "!reboot", "!policy", "!test", "!winbox", "!password", "!web", "!sniff", "!sensitive", "!romon"]
     }
+    home_assistant = {
+      policies = ["read", "api", "test", "!local", "!telnet", "!ssh", "!ftp", "!reboot", "!write", "!policy", "!winbox", "!password", "!web", "!sniff", "!sensitive", "!romon", "!rest-api"]
+    }
   }
 
   users = {
@@ -104,6 +107,10 @@ locals {
     }
     external-dns = {
       group = "external_dns"
+    }
+    home-assistant = {
+      group   = "home_assistant"
+      address = "192.168.1.0/24,10.42.0.0/16"
     }
   }
 }
