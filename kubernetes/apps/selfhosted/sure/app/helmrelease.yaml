@@ -20,7 +20,7 @@ spec:
             args: bundle exec puma -b tcp://[::]:3000
             image: &img
               repository: ghcr.io/we-promise/sure
-              tag: 0.7.0-hotfix.3@sha256:55c4da94f60a6a0e1da107dd6d61bdef06661bebaed26c1cd2a5c4d3d10af4ef
+              tag: 0.7.5-hotfix.3@sha256:9cbcc5a21654d95ff784da7f0425f2bd1c8363252d898a09e749772f666436ce
             env: &env
               AI_DEBUG_MODE: "false"
               APP_DOMAIN: fin.erwanleboucher.dev
