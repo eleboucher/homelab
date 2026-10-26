@@ -31,7 +31,7 @@ spec:
     - name: AWS_REGION
       value: us-east-1
   skipForks: true
-  image: ghcr.io/renovatebot/renovate:44.181.7
+  image: ghcr.io/renovatebot/renovate:44.181.8
   parallelism: 3
   resources:
     requests:
