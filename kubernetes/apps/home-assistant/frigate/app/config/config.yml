@@ -19,7 +19,7 @@ model:
   input_tensor: nchw
   labelmap_path: /labelmap/coco-80.txt
   model_type: yolo-generic
-  path: /config/model_cache/yolov9-c-320.onnx
+  path: /config/model_cache/yolov9-e-320.onnx
   width: 320
 
 # One connection to the camera, shared by Frigate and Home Assistant: the
