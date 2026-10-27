@@ -11,6 +11,7 @@ spec:
   discoveryFilters:
     - towonel/*
     - passoword/*
+    - ow-ops/*
   extraEnv:
     - name: LOG_LEVEL
       value: debug
