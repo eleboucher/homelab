@@ -128,3 +128,9 @@ spec:
           webrtc-udp:
             port: 8555
             protocol: UDP
+    serviceMonitor:
+      frigate:
+        endpoints:
+          - interval: 30s
+            path: /api/metrics
+            port: http
