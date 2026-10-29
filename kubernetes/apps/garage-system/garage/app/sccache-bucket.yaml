@@ -10,12 +10,12 @@ spec:
   bucketId: 7678566fa7697b2d9e5ea7d8aea3aab1b871ddc75ee0be3778b7132ac4552a22
   deletionPolicy: Retain
   quotas:
-    maxSize: 60Gi
+    maxSize: 80Gi
   lifecycle:
     rules:
       - id: expire-cache-entries
         status: Enabled
-        expirationDays: 14
+        expirationDays: 7
       - id: abort-incomplete-uploads
         status: Enabled
         abortIncompleteMultipartUploadDays: 1
