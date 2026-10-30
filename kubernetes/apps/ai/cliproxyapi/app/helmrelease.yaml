@@ -1,0 +1,126 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: cliproxyapi
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: cliproxyapi
+  interval: 15m
+  values:
+    defaultPodOptions:
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              preference:
+                matchExpressions:
+                  - key: kubernetes.io/hostname
+                    operator: In
+                    values:
+                      - kharkiv
+      automountServiceAccountToken: false
+      securityContext:
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+        runAsGroup: 1000
+        runAsNonRoot: true
+        runAsUser: 1000
+        seccompProfile:
+          type: RuntimeDefault
+    controllers:
+      cliproxyapi:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        replicas: 1
+        strategy: Recreate
+        type: deployment
+        containers:
+          app:
+            image:
+              repository: docker.io/eceasy/cli-proxy-api
+              tag: v8.0.47@sha256:d1874eba7f9819f3a19a0fea0333b457d6fdd4cf290d4bfe4283be102dc489d9
+            args:
+              - --config
+              - /etc/cliproxyapi/config.yaml
+              - --local-model
+            command:
+              - /CLIProxyAPI/CLIProxyAPI
+            env:
+              HOME: /tmp
+              TZ: Europe/Paris
+            probes:
+              liveness: &healthProbe
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /healthz
+                    port: 8317
+                  periodSeconds: 15
+                  timeoutSeconds: 5
+                  failureThreshold: 3
+              readiness: *healthProbe
+              startup:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /healthz
+                    port: 8317
+                  periodSeconds: 5
+                  timeoutSeconds: 5
+                  failureThreshold: 24
+            resources:
+              requests:
+                cpu: 50m
+                memory: 128Mi
+              limits:
+                memory: 512Mi
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop:
+                  - ALL
+              readOnlyRootFilesystem: true
+    service:
+      app:
+        controller: cliproxyapi
+        ports:
+          http:
+            port: 8317
+    route:
+      app:
+        annotations:
+          gatus.home-operations.com/endpoint: |-
+            path: /healthz
+        hostnames:
+          - cliproxyapi.erwanleboucher.dev
+          - litellm.erwanleboucher.dev
+        parentRefs:
+          - name: envoy-external
+            namespace: network
+    persistence:
+      auth:
+        type: persistentVolumeClaim
+        accessMode: ReadWriteOnce
+        size: 1Gi
+        storageClass: miroir-replicated
+        globalMounts:
+          - path: /auth
+      config:
+        type: secret
+        name: cliproxyapi
+        globalMounts:
+          - path: /etc/cliproxyapi
+            readOnly: true
+      logs:
+        type: emptyDir
+        globalMounts:
+          - path: /CLIProxyAPI/logs
+      tmp:
+        type: emptyDir
+        globalMounts:
+          - path: /tmp

@@ -1,0 +1,14 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: litellm
+spec:
+  ports:
+    - name: http
+      port: 4000
+      targetPort: 8317
+  selector:
+    app.kubernetes.io/controller: cliproxyapi
+    app.kubernetes.io/instance: cliproxyapi
+    app.kubernetes.io/name: cliproxyapi

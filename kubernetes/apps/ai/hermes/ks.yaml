@@ -14,7 +14,7 @@ spec:
       namespace: security
     - name: kopiur-repository
       namespace: kopiur-system
-    - name: litellm
+    - name: cliproxyapi
     - name: miroir
       namespace: miroir-system
   interval: 15m

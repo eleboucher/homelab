@@ -229,8 +229,8 @@ data:
         "providers": {
           "litellm": {
             "api": "openai-responses",
-            "apiKey": "{{ .LITELLM_MASTER_KEY }}",
-            "baseUrl": "http://litellm.ai:4000/v1",
+            "apiKey": "{{ .CLIPROXY_API_KEY }}",
+            "baseUrl": "http://cliproxyapi.ai:8317/v1",
             "request": {
               "allowPrivateNetwork": true
             },
@@ -285,11 +285,11 @@ data:
       },
       "mcp": {
         "servers": {
-          "homelab": {
+          "context7": {
             "transport": "streamable-http",
-            "url": "http://litellm.ai:4000/mcp",
+            "url": "https://mcp.context7.com/mcp",
             "headers": {
-              "Authorization": "Bearer {{ .LITELLM_MASTER_KEY }}"
+              "Authorization": "Bearer {{ .CONTEXT7_API_KEY }}"
             }
           },
           "skiplagged": {

@@ -6,8 +6,8 @@ data:
   config.yaml: |-
     custom_providers:
       - name: litellm
-        base_url: http://litellm.ai:4000/v1
-        key_env: LITELLM_API_KEY
+        base_url: http://cliproxyapi.ai:8317/v1
+        key_env: CLIPROXY_API_KEY
         models:
           chatgpt/gpt-5.6-luna:
             context_length: 272000
@@ -132,16 +132,18 @@ data:
         matrix:
           tool_progress: "off"
     mcp_servers:
-      homelab:
-        url: http://litellm.ai:4000/mcp
+      context7:
+        url: https://mcp.context7.com/mcp
         headers:
-          Authorization: "Bearer $${LITELLM_API_KEY}"
+          Authorization: "Bearer $${CONTEXT7_API_KEY}"
     web:
       search_backend: searxng
   env: |-
-    LITELLM_API_KEY={{ .LITELLM_MASTER_KEY }}
-    OPENAI_API_KEY={{ .LITELLM_MASTER_KEY }}
-    OPENAI_BASE_URL=http://litellm.ai:4000/v1
-    SUMMARY_LLM_API_KEY={{ .LITELLM_MASTER_KEY }}
+    CLIPROXY_API_KEY={{ .CLIPROXY_API_KEY }}
+    LITELLM_API_KEY={{ .CLIPROXY_API_KEY }}
+    CONTEXT7_API_KEY={{ .CONTEXT7_API_KEY }}
+    OPENAI_API_KEY={{ .CLIPROXY_API_KEY }}
+    OPENAI_BASE_URL=http://cliproxyapi.ai:8317/v1
+    SUMMARY_LLM_API_KEY={{ .CLIPROXY_API_KEY }}
     API_SERVER_KEY={{ .API_SERVER_KEY }}
     GATEWAY_ALLOWED_USERS={{ .GATEWAY_ALLOWED_USERS }}

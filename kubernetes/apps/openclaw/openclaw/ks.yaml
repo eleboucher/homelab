@@ -10,6 +10,8 @@ spec:
     - ../../../../components/kopiur/hot
     - ../../../../components/kopiur/snapshot-restore
   dependsOn:
+    - name: cliproxyapi
+      namespace: ai
     - name: external-secrets
       namespace: security
     - name: kopiur-repository

@@ -4,10 +4,9 @@ kind: Kustomization
 namespace: ai
 resources:
   - namespace.yaml
+  - cliproxyapi/ks.yaml
   - hermes/ks.yaml
   - hermes-matrix/ks.yaml
-  - litellm/ks.yaml
-  - litellm-operator/ks.yaml
   # - llama-cpp/ks.yaml
   - llmkube/ks.yaml
   - memini/ks.yaml
