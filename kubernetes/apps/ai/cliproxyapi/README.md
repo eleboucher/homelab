@@ -18,7 +18,8 @@ The downstream API key still comes from the existing 1Password `litellm` item's
 clients retain their existing key value.
 
 Context7 connects directly from OpenClaw and Hermes, with its API key supplied
-through External Secrets. Memini's embedding and reranking endpoints continue to
+through External Secrets. Existing shared MCP credentials and the Talos MCP
+service account remain managed separately in `ai/mcp-secrets`. Memini's embedding and reranking endpoints continue to
 use the LLMKube services directly. These endpoints are not served by CLIProxyAPI.
 LiteLLM's Redis response cache and its request metrics are not provided by this
 replacement. Gateway health is monitored through Gatus at `/healthz`; Kubernetes

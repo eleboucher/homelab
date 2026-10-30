@@ -9,6 +9,7 @@ resources:
   - hermes-matrix/ks.yaml
   # - llama-cpp/ks.yaml
   - llmkube/ks.yaml
+  - mcp-secrets/ks.yaml
   - memini/ks.yaml
   - minimax-shim/ks.yaml
   - open-webui/ks.yaml
