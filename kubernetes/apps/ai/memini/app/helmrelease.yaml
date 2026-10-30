@@ -31,6 +31,7 @@ spec:
                 memory: 256Mi
             env:
               MEMINI_BACKEND: postgres
+              MEMINI_BACKGROUND_EMBED_TIMEOUT: "45s"
               MEMINI_LOG_FORMAT: json
               MEMINI_DEMOTE_AFTER: 1440h
               MEMINI_TOMBSTONE_TTL: 720h

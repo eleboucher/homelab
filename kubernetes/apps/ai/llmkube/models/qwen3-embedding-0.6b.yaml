@@ -44,14 +44,13 @@ spec:
   contextSize: 8192
   parallelSlots: 2
   batchSize: 4096
-  uBatchSize: 4096
+  uBatchSize: 512
   resources:
     gpu: 1
     cpu: 100m
-    # Vulkan on the iGPU backs weights/KV/compute with kernel-charged memcg
-    # pages (the B580's discrete VRAM doesn't hit the pod cgroup), so the
-    # 2Gi limit OOM-killed llama-server during load; peaks ~7.9Gi on long documents.
-    memory: 10Gi
+    # iGPU allocations count against pod memory. A 512-token microbatch peaks
+    # near 2.5Gi with two concurrent 4095-token documents; retain load headroom.
+    memory: 4Gi
   extraArgs:
     - --flash-attn
     - "on"
