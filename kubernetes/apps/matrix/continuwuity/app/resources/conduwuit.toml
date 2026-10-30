@@ -18,7 +18,7 @@ rocksdb_direct_io = false
 log = "info,conduwuit_service::rooms::event_handler=debug"
 
 # Perf tuning
-cache_capacity_modifier = 2.0
+cache_capacity_modifier = 1.0
 max_request_size = 524288000
 
 # DNS Optimisation
