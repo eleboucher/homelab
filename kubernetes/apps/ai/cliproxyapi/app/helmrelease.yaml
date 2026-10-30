@@ -41,7 +41,7 @@ spec:
           app:
             image:
               repository: docker.io/eceasy/cli-proxy-api
-              tag: v8.0.47@sha256:d1874eba7f9819f3a19a0fea0333b457d6fdd4cf290d4bfe4283be102dc489d9
+              tag: v8.0.48@sha256:c198886a86b57f49cb2508a68b6170e23b2d509c648934af5d5dd827cf6faa16
             args:
               - --config
               - /etc/cliproxyapi/config.yaml
