@@ -44,12 +44,16 @@ spec:
   contextSize: 8192
   parallelSlots: 2
   batchSize: 8192
+  # Rank pooling requires the complete input in one physical microbatch.
   uBatchSize: 4096
   resources:
     gpu: 1
     cpu: 100m
     memory: 2Gi
   extraArgs:
+    # Avoid Vulkan device loss on long rerank inputs.
+    - --flash-attn
+    - "on"
     # Qwen3-Reranker needs rank pooling; --reranking + --pooling rank exposes
     # the Cohere-style /v1/rerank endpoint memini calls.
     - --reranking
