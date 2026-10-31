@@ -89,11 +89,12 @@ spec:
           k8s.internal. 60 IN A 192.168.1.42
     affinity:
       nodeAffinity:
-        requiredDuringSchedulingIgnoredDuringExecution:
-          nodeSelectorTerms:
-            - matchExpressions:
+        preferredDuringSchedulingIgnoredDuringExecution:
+          - preference:
+              matchExpressions:
                 - key: node-role.kubernetes.io/control-plane
                   operator: Exists
+            weight: 100
     tolerations:
       - key: CriticalAddonsOnly
         operator: Exists
