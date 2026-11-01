@@ -22,7 +22,20 @@ spec:
       name: kopiur-nas-secret
       namespace: kopiur-system
       key: KOPIA_PASSWORD
+  maintenance:
+    schedule:
+      quick:
+        cron: 0 * * * *
+        jitter: 10m
+      full:
+        cron: 0 3 * * *
+        jitter: 1h
   moverDefaults:
+    cache:
+      # kopia's own budgets are 5000 MiB each, larger than the cache PVCs
+      # (smallest is 2Gi), so the sweeper never runs and the cache fills up.
+      contentCacheSizeMb: 512
+      metadataCacheSizeMb: 1024
     podSecurityContext:
       fsGroup: 1000
     securityContext:
