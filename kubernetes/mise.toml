@@ -200,5 +200,5 @@ arg "<ns>"
 arg "<ks>"
 '''
 run = '''
-flux-local build ks --namespace "$usage_ns" --sources "flux-system=." --path flux/cluster "$usage_ks"
+flux-local build ks --namespace "$usage_ns" --sources "flux-system=." --path apps "$usage_ks"
 '''

@@ -67,11 +67,13 @@ kubernetes/
 │   ├── observability/          # Prometheus, Grafana, VictoriaLogs
 │   ├── network/             # Envoy Gateway, External DNS, Cloudflared
 │   └── security/            # External Secrets
-├── components/              # Reusable Kustomize components
-│   ├── cnpg/                # CloudNative PG patches
-│   ├── gpu/                 # GPU resource patches
-│   ├── nfs-media/           # NFS media mount patches
-└── flux/cluster/cluster.yaml    # Master Kustomization
+└── components/              # Reusable Kustomize components
+    ├── cnpg/                # CloudNative PG patches
+    ├── gpu/                 # GPU resource patches
+    └── nfs-media/           # NFS media mount patches
+
+FluxInstance (flux-system/flux-instance) syncs kubernetes/apps directly and
+injects Kustomization/HelmRelease defaults via kustomize patches.
 
 bootstrap/
 ├── helmfile/                # Helmfile for CRDs and core apps
