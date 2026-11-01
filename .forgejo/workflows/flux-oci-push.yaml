@@ -14,6 +14,9 @@ concurrency:
   group: oci-push-${{ forgejo.ref }}
   cancel-in-progress: true
 
+permissions:
+  contents: read
+
 env:
   FLUX_VERSION: 2.8.3
   COSIGN_VERSION: 3.0.5

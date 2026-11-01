@@ -1,0 +1,76 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+name: CI
+
+on:
+  pull_request:
+    branches:
+      - main
+
+concurrency:
+  group: ${{ forgejo.workflow }}-${{ forgejo.event.pull_request.number || forgejo.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  CRANE_VERSION: 0.22.1
+  ZIZMOR_VERSION: 1.31.1
+
+jobs:
+  images:
+    name: Image Check
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: https://github.com/actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Install flate
+        uses: https://github.com/home-operations/flate/action@631b76b69c4e58c6f4d1cb01e23616fa61aebafa # v0.6.5
+        with:
+          token: ""
+
+      - name: Install crane
+        run: |
+          curl -fsSL "https://github.com/google/go-containerregistry/releases/download/v${CRANE_VERSION}/go-containerregistry_Linux_x86_64.tar.gz" \
+            | tar -xz -C /usr/local/bin crane
+
+      - name: Check new images exist
+        env:
+          BASE: origin/${{ forgejo.event.repository.default_branch }}
+        run: |
+          images=$(flate diff images -p ./kubernetes/apps --base "${BASE}" -o json)
+          echo "${images}"
+          failed=0
+          for image in $(jq -r '.[]' <<< "${images}"); do
+            if crane digest "${image}" > /dev/null; then
+              echo "ok: ${image}"
+            else
+              echo "::error::image not found: ${image}"
+              failed=1
+            fi
+          done
+          exit "${failed}"
+
+  zizmor:
+    name: Zizmor
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: https://github.com/actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Install zizmor
+        run: |
+          curl -fsSL "https://github.com/zizmorcore/zizmor/releases/download/v${ZIZMOR_VERSION}/zizmor-x86_64-unknown-linux-gnu.tar.gz" \
+            | tar -xz -C /usr/local/bin zizmor
+
+      - name: Run zizmor
+        run: zizmor --offline --min-severity medium .forgejo/workflows/*.yaml
