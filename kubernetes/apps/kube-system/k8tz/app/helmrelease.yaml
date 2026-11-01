@@ -5,9 +5,13 @@ kind: HelmRelease
 metadata:
   name: k8tz
 spec:
-  chartRef:
-    kind: OCIRepository
-    name: k8tz
+  chart:
+    spec:
+      chart: k8tz
+      version: 0.19.0
+      sourceRef:
+        kind: HelmRepository
+        name: k8tz
   interval: 30m
   postRenderers:
     - kustomize:
