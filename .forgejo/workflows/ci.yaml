@@ -15,9 +15,45 @@ permissions:
   contents: read
 
 env:
+  ACTIONLINT_VERSION: 1.7.12
+  YAMLLINT_VERSION: 1.38.0
   ZIZMOR_VERSION: 1.31.1
 
 jobs:
+  actionlint:
+    name: Actionlint
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: https://github.com/actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Install actionlint
+        run: |
+          curl -fsSL "https://github.com/rhysd/actionlint/releases/download/v${ACTIONLINT_VERSION}/actionlint_${ACTIONLINT_VERSION}_linux_amd64.tar.gz" \
+            | tar -xz -C /usr/local/bin actionlint
+
+      - name: Run actionlint
+        run: actionlint -config-file .forgejo/actionlint.yaml .forgejo/workflows/*.yaml
+
+  yamllint:
+    name: Yamllint
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: https://github.com/actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Install yamllint
+        run: pipx install "yamllint==${YAMLLINT_VERSION}"
+
+      - name: Run yamllint
+        run: yamllint --format github .
+
   zizmor:
     name: Zizmor
     runs-on: ubuntu-latest
