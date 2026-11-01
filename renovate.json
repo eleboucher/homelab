@@ -8,6 +8,7 @@
     "github>home-operations/renovate-presets//apps/cnpg.json5#10.0.1",
     "github>home-operations/renovate-presets//apps/talosFactory.json5#10.0.1"
   ],
+  "rebaseWhen": "conflicted",
   "customManagers": [
     {
       "customType": "regex",
