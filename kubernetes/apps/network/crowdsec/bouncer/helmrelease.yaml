@@ -25,3 +25,10 @@ spec:
         - 10.42.0.0/16
         - fd42::/56
     fullnameOverride: *app
+    podSecurityContext:
+      seccompProfile:
+        type: RuntimeDefault
+    securityContext:
+      capabilities:
+        drop:
+          - ALL
