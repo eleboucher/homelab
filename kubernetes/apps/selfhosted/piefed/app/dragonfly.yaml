@@ -6,7 +6,17 @@ metadata:
   name: piefed-dragonfly
 spec:
   replicas: 1
+  snapshot:
+    cron: "*/5 * * * *"
+    persistentVolumeClaimSpec:
+      accessModes:
+        - ReadWriteOnce
+      resources:
+        requests:
+          storage: 256Mi
+      storageClassName: miroir-local
   args:
+    - --dbfilename=dump
     - "--bind=::"
     # maxmemory bounds only the dataset; keep it well below the container
     # limit so Dragonfly's process overhead (buffers, snapshots, fragmentation)
