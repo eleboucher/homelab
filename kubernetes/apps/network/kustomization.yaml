@@ -5,6 +5,7 @@ kind: Kustomization
 namespace: network
 
 resources:
+  - crowdsec/ks.yaml
   - echo/ks.yaml
   - external-dns/ks.yaml
   - envoy-gateway/ks.yaml
