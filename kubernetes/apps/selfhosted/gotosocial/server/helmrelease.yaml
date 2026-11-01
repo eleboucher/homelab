@@ -107,6 +107,9 @@ spec:
               - path:
                   type: PathPrefix
                   value: /auth/
+              - path:
+                  type: PathPrefix
+                  value: /oauth/
           - backendRefs:
               - name: gotosocial
                 port: 8080
