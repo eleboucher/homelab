@@ -30,6 +30,14 @@ spec:
         serviceMonitor:
           enabled: true
       serviceAccountName: crowdsec-agent
+    config:
+      # Behavioural scenarios only alert: matrix, s3 and git clients look like crawlers.
+      # Signature scenarios (sensitive files, path traversal, CVEs, admin probing) still ban.
+      simulation.yaml: |
+        simulation: false
+        exclusions:
+          - crowdsecurity/http-crawl-non_statics
+          - crowdsecurity/http-probing
     container_runtime: containerd # the default (docker) mounts /var/lib/docker/containers into the agent
     image:
       repository: mirror.gcr.io/crowdsecurity/crowdsec
