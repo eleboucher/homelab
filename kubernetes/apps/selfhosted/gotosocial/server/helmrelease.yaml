@@ -98,6 +98,19 @@ spec:
               - name: gotosocial
                 port: 8080
             filters:
+              - responseHeaderModifier:
+                  set:
+                    - name: Cache-Control
+                      value: no-store
+                type: ResponseHeaderModifier
+            matches:
+              - path:
+                  type: PathPrefix
+                  value: /auth/
+          - backendRefs:
+              - name: gotosocial
+                port: 8080
+            filters:
               - cors:
                   allowHeaders:
                     - "*"
