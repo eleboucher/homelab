@@ -160,6 +160,9 @@ spec:
             - identifier: kanidm
     route:
       app:
+        annotations:
+          gatus.home-operations.com/endpoint: |-
+            path: ""
         hostnames:
           - idm.erwanleboucher.dev
         parentRefs:
