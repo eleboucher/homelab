@@ -165,6 +165,28 @@ spec:
         parentRefs:
           - name: envoy-external
             namespace: network
+        rules:
+          - backendRefs:
+              - name: kanidm
+                port: *port
+            filters:
+              - responseHeaderModifier:
+                  remove:
+                    - Cross-Origin-Opener-Policy
+                type: ResponseHeaderModifier
+            matches:
+              - path:
+                  type: PathPrefix
+                  value: /ui/oauth2
+              - path:
+                  type: PathPrefix
+                  value: /ui/login
+              - path:
+                  type: PathPrefix
+                  value: /ui/reset
+          - backendRefs:
+              - name: kanidm
+                port: *port
     service:
       app:
         controller: kanidm
