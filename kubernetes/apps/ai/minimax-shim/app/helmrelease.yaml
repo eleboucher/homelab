@@ -37,7 +37,6 @@ spec:
                     path: /healthz
                     port: 8080
                   initialDelaySeconds: 5
-                  periodSeconds: 10
                   failureThreshold: 3
               readiness:
                 enabled: true
@@ -47,7 +46,6 @@ spec:
                     path: /healthz
                     port: 8080
                   initialDelaySeconds: 5
-                  periodSeconds: 10
                   failureThreshold: 3
             resources:
               requests:

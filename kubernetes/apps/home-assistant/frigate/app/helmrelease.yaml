@@ -43,13 +43,11 @@ spec:
                   httpGet:
                     path: /api/version
                     port: 5000
-                  periodSeconds: 10
                   timeoutSeconds: 5
               startup:
                 enabled: true
                 spec:
                   failureThreshold: 30
-                  periodSeconds: 10
             resources:
               requests:
                 cpu: 200m

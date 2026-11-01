@@ -39,7 +39,6 @@ spec:
                     path: /
                     port: 6767
                   initialDelaySeconds: 0
-                  periodSeconds: 10
                   timeoutSeconds: 1
                   failureThreshold: 3
               readiness: *probes

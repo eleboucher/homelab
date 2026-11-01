@@ -48,7 +48,6 @@ spec:
                     path: /
                     port: *port
                   initialDelaySeconds: 0
-                  periodSeconds: 10
                   timeoutSeconds: 10
                   failureThreshold: 6
               readiness: *probes

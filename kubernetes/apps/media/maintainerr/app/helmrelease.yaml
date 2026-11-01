@@ -48,7 +48,6 @@ spec:
                     path: /api/health/ready
                     port: 6246
                   initialDelaySeconds: 10
-                  periodSeconds: 10
               startup:
                 enabled: true
                 spec:

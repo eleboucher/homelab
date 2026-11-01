@@ -60,7 +60,6 @@ spec:
                     path: /health
                     port: 8080
                   failureThreshold: 3
-                  periodSeconds: 10
                   timeoutSeconds: 5
               startup:
                 enabled: true

@@ -44,7 +44,6 @@ spec:
                     path: /api/v1/status
                     port: 5055
                   initialDelaySeconds: 5
-                  periodSeconds: 10
                   timeoutSeconds: 1
                   failureThreshold: 3
               readiness: *probes

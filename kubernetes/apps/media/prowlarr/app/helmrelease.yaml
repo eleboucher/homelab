@@ -42,7 +42,6 @@ spec:
                     path: /
                     port: 9696
                   initialDelaySeconds: 0
-                  periodSeconds: 10
                   timeoutSeconds: 1
                   failureThreshold: 3
               readiness: *probes

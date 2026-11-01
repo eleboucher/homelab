@@ -76,7 +76,6 @@ spec:
       httpGet:
         path: /health
         port: 8080
-      periodSeconds: 10
       failureThreshold: 60
     liveness:
       httpGet:
@@ -88,5 +87,4 @@ spec:
       httpGet:
         path: /health
         port: 8080
-      periodSeconds: 10
       failureThreshold: 3

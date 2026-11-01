@@ -33,7 +33,6 @@ spec:
                     path: /_up
                     port: &port 5984
                   initialDelaySeconds: 0
-                  periodSeconds: 10
                   timeoutSeconds: 1
                   failureThreshold: 3
               readiness: *probes
@@ -44,7 +43,6 @@ spec:
                     path: /_up
                     port: *port
                   failureThreshold: 30
-                  periodSeconds: 10
             resources:
               requests:
                 cpu: 10m

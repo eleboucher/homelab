@@ -49,7 +49,6 @@ spec:
                 spec:
                   tcpSocket:
                     port: 5000
-                  periodSeconds: 10
                   failureThreshold: 60
               liveness:
                 enabled: true

@@ -63,7 +63,6 @@ spec:
                   grpc:
                     port: 50051
                   initialDelaySeconds: 3
-                  periodSeconds: 10
                   timeoutSeconds: 3
                   failureThreshold: 3
               startup:

@@ -14,4 +14,3 @@ spec:
     namespace: flux-system
   targetNamespace: ai
   timeout: 5m
-  wait: false

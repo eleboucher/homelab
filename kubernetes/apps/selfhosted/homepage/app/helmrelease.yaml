@@ -46,7 +46,6 @@ spec:
                 enabled: true
                 spec:
                   failureThreshold: 30
-                  periodSeconds: 10
     service:
       app:
         controller: homepage

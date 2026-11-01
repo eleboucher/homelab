@@ -18,4 +18,3 @@ spec:
     name: flux-system
     namespace: flux-system
   targetNamespace: dragonfly-system
-  wait: false

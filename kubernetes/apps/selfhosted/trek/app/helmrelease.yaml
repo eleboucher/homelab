@@ -69,7 +69,6 @@ spec:
                   httpGet:
                     path: /api/health
                     port: 3000
-                  periodSeconds: 10
                   timeoutSeconds: 3
             resources:
               requests:
