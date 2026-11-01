@@ -38,6 +38,7 @@ spec:
       enabled: "true"
     plugins:
       plugin_admin_enabled: "false"
+      preinstall_auto_update: "false"
     news:
       news_feed_enabled: "false"
     security:
