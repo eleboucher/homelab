@@ -27,6 +27,7 @@ spec:
     substitute:
       APP: qui
       APP_NAMESPACE: downloads
+      CONTROLLER: StatefulSet
       KOPIUR_CAPACITY: 2Gi
       KOPIUR_RESTORE_NAME: qui-local-restore
       KOPIUR_RESTORE_SNAPSHOT: qui-20260812110200

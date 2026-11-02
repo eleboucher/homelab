@@ -24,7 +24,7 @@ spec:
         annotations:
           reloader.stakater.com/auto: "true"
         replicas: 1
-        strategy: Recreate
+        type: statefulset
         containers:
           app:
             image: &image

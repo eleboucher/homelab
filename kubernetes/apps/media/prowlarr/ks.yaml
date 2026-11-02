@@ -26,6 +26,7 @@ spec:
     substitute:
       APP: prowlarr
       APP_NAMESPACE: media
+      CONTROLLER: StatefulSet
       KOPIUR_RESTORE_NAME: prowlarr-local-restore
       KOPIUR_RESTORE_SNAPSHOT: prowlarr-pre-local-migration-20260812092624
       OIDC_DISPLAY_NAME: Prowlarr

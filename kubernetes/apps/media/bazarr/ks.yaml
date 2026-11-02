@@ -27,6 +27,7 @@ spec:
     substitute:
       APP: bazarr
       APP_NAMESPACE: media
+      CONTROLLER: StatefulSet
       KOPIUR_RESTORE_NAME: bazarr-local-restore
       KOPIUR_RESTORE_SNAPSHOT: bazarr-local-migration-202609121530
       OIDC_DISPLAY_NAME: Bazarr

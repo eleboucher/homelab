@@ -25,8 +25,7 @@ spec:
         # Single replica with Recreate: two Matrix clients on one account /
         # crypto store would clash over device identity.
         replicas: 1
-        strategy: Recreate
-        type: deployment
+        type: statefulset
         containers:
           app:
             image:

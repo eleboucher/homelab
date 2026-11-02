@@ -24,6 +24,7 @@ spec:
     substitute:
       APP: qbittorrent
       APP_NAMESPACE: downloads
+      CONTROLLER: StatefulSet
       KOPIUR_RESTORE_NAME: qbittorrent-local-restore
       KOPIUR_RESTORE_SNAPSHOT: qbittorrent-pre-local-migration-20260812092624
       OIDC_DISPLAY_NAME: qBittorrent

@@ -32,6 +32,7 @@ spec:
     substitute:
       APP: open-webui
       APP_NAMESPACE: ai
+      CONTROLLER: StatefulSet
       HTTP_SCALER_PORT: "8080"
       OIDC_CALLBACK: /oauth/oidc/callback
       OIDC_DISPLAY_NAME: Open WebUI

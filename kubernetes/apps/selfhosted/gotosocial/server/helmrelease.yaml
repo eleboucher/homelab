@@ -12,7 +12,7 @@ spec:
   values:
     controllers:
       gts:
-        type: deployment
+        type: statefulset
         pod:
           securityContext:
             fsGroup: 1000

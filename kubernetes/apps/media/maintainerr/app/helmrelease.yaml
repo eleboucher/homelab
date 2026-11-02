@@ -21,7 +21,7 @@ spec:
             runAsNonRoot: true
             runAsUser: 1000
         replicas: 1
-        type: deployment
+        type: statefulset
         containers:
           app:
             image:

@@ -22,6 +22,7 @@ spec:
     substitute:
       APP: sabnzbd
       APP_NAMESPACE: downloads
+      CONTROLLER: StatefulSet
   prune: true
   sourceRef:
     kind: OCIRepository

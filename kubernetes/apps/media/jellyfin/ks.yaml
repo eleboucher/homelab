@@ -25,6 +25,7 @@ spec:
     substitute:
       APP: jellyfin
       APP_NAMESPACE: media
+      CONTROLLER: StatefulSet
       KOPIUR_CAPACITY: 15Gi
       OIDC_DISPLAY_NAME: "Jellyfin"
       SUBDOMAIN: "watch"

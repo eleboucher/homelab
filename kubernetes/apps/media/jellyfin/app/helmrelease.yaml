@@ -29,8 +29,7 @@ spec:
         annotations:
           reloader.stakater.com/auto: "true"
         replicas: 1
-        strategy: Recreate
-        type: deployment
+        type: statefulset
         initContainers:
           enable-ipv6:
             image:

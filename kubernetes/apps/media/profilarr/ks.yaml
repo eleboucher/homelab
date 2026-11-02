@@ -22,6 +22,7 @@ spec:
     substitute:
       APP: profilarr
       APP_NAMESPACE: media
+      CONTROLLER: StatefulSet
   prune: true
   sourceRef:
     kind: OCIRepository

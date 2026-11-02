@@ -19,6 +19,7 @@ spec:
         fsGroupChangePolicy: OnRootMismatch
     controllers:
       paperless:
+        type: statefulset
         initContainers:
           init-run-dir:
             image:

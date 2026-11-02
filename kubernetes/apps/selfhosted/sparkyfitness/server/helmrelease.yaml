@@ -23,6 +23,7 @@ spec:
         annotations:
           reloader.stakater.com/auto: "true"
 
+        type: statefulset
         containers:
           app:
             image:

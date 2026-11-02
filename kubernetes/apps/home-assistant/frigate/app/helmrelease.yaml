@@ -17,6 +17,7 @@ spec:
             kubernetes.io/hostname: paris
         annotations:
           reloader.stakater.com/auto: "true"
+        type: statefulset
         containers:
           app:
             image:

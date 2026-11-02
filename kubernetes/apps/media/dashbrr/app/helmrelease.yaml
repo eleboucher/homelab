@@ -16,8 +16,7 @@ spec:
         annotations:
           reloader.stakater.com/auto: "true"
         replicas: 1
-        type: deployment
-        strategy: Recreate
+        type: statefulset
         serviceAccount:
           identifier: dashbrr
         pod:
