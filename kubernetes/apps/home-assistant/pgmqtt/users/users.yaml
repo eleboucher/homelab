@@ -1,0 +1,27 @@
+---
+apiVersion: pgmqtt.io/v1alpha1
+kind: User
+metadata:
+  name: frigate
+spec:
+  passwordSecretRef:
+    name: pgmqtt-users
+    key: frigate
+---
+apiVersion: pgmqtt.io/v1alpha1
+kind: User
+metadata:
+  name: home-assistant
+spec:
+  passwordSecretRef:
+    name: pgmqtt-users
+    key: home-assistant
+---
+apiVersion: pgmqtt.io/v1alpha1
+kind: User
+metadata:
+  name: openqiara
+spec:
+  passwordSecretRef:
+    name: pgmqtt-users
+    key: openqiara

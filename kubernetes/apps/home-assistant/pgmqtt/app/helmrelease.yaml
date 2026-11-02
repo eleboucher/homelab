@@ -1,0 +1,33 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: pgmqtt
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: pgmqtt
+  interval: 30m
+  # The postgres/pass component injects app-template values that the
+  # chart's strict values schema rejects.
+  install:
+    disableSchemaValidation: true
+  upgrade:
+    disableSchemaValidation: true
+  values:
+    database:
+      existingSecret: pgmqtt-postgres
+      existingSecretKey: url
+    listeners:
+      ws:
+        enabled: false
+    podAntiAffinity:
+      enabled: true
+    replicaCount: 2
+    service:
+      type: LoadBalancer
+      annotations:
+        lbipam.cilium.io/ips: "192.168.69.122"
+    tests:
+      enabled: false

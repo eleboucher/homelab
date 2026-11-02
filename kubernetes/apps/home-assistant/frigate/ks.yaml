@@ -15,7 +15,7 @@ spec:
       namespace: kopiur-system
     - name: miroir
       namespace: miroir-system
-    - name: mosquitto
+    - name: pgmqtt-users
   interval: 1h
   path: "./kubernetes/apps/home-assistant/frigate/app"
   postBuild:

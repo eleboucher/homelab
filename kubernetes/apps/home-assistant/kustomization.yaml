@@ -8,5 +8,5 @@ resources:
   - home-assistant/ks.yaml
   - esphome/ks.yaml
   - frigate/ks.yaml
-  - mosquitto/ks.yaml
+  - pgmqtt/ks.yaml
   - namespace.yaml

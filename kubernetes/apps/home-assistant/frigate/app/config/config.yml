@@ -1,7 +1,7 @@
 version: 0.18-0
 
 mqtt:
-  host: mosquitto.home-assistant.svc.cluster.local
+  host: pgmqtt.home-assistant.svc.cluster.local
   user: frigate
   password: "{FRIGATE_MQTT_PASSWORD}"
 
