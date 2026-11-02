@@ -32,21 +32,17 @@ spec:
         - format:
             type: JSON
             json:
-              # Key names match the crowdsec yanis-kouidri/envoy parser
-              ":authority": "%REQ(:AUTHORITY)%"
+              authority: "%REQ(:AUTHORITY)%"
               bytes_received: "%BYTES_RECEIVED%"
               bytes_sent: "%BYTES_SENT%"
-              downstream_remote_address: "%DOWNSTREAM_REMOTE_ADDRESS%"
               duration: "%DURATION%"
               envoy_route: "%ROUTE_NAME%"
               message: "%REQ(:METHOD)% %REQ(X-ENVOY-ORIGINAL-PATH?:PATH)% %RESPONSE_CODE%"
-              method: "%REQ(:METHOD)%"
               response_code: "%RESPONSE_CODE%"
               response_flags: "%RESPONSE_FLAGS%"
               start_time: "%START_TIME%"
               upstream_host: "%UPSTREAM_HOST%"
-              user-agent: "%REQ(USER-AGENT)%"
-              x-envoy-origin-path: "%REQ(X-ENVOY-ORIGINAL-PATH?:PATH)%"
+              user_agent: "%REQ(USER-AGENT)%"
               x_forwarded_for: "%REQ(X-FORWARDED-FOR)%"
           sinks:
             - file:
