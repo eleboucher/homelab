@@ -25,5 +25,7 @@ miimon: 100
 apiVersion: v1alpha1
 kind: BridgeConfig
 name: bond0
+# Keep the bridge MAC stable when VMs attach.
+hardwareAddr: 38:05:25:35:3b:9a
 addresses:
   - address: 2a01:e0a:e4b:aa31::43/64
