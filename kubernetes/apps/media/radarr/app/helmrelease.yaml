@@ -26,7 +26,7 @@ spec:
           app:
             image:
               repository: ghcr.io/home-operations/radarr
-              tag: 7.0.0.10815
+              tag: 7.0.1.10859
             env:
               - name: TZ
                 value: "Europe/Paris"
