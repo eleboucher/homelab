@@ -64,3 +64,10 @@ spec:
               protocol: TCP
             - port: "443"
               protocol: TCP
+    - # sable.moe deploy (rsync over ssh)
+      toCIDR:
+        - 208.84.102.215/32
+      toPorts:
+        - ports:
+            - port: "2222"
+              protocol: TCP
