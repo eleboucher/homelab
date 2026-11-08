@@ -32,7 +32,7 @@ spec:
           wait-for-media:
             image:
               repository: quay.io/aminvakil/alpine-nfs-server
-              tag: latest@sha256:90f471741ea950f1b44a9ccaebe0e4ebb770520ae6389f4df1b4999e9ec96a91
+              tag: latest@sha256:ecf41e1a44458d7442dd7e8aa7a9a5b809d0d6b46e86c2f4b937393e3fc3e7e7
             command:
               - sh
               - -c
@@ -57,7 +57,7 @@ spec:
           app:
             image:
               repository: quay.io/aminvakil/alpine-nfs-server
-              tag: latest@sha256:90f471741ea950f1b44a9ccaebe0e4ebb770520ae6389f4df1b4999e9ec96a91
+              tag: latest@sha256:ecf41e1a44458d7442dd7e8aa7a9a5b809d0d6b46e86c2f4b937393e3fc3e7e7
             env:
               EXPORTS_MOUNTED: "true"
             lifecycle:
