@@ -67,6 +67,13 @@ sentry_endpoint = "https://195b9db009825345c2882604cb19d42e@o911502.ingest.us.se
 sentry_send_server_name = false
 sentry_traces_sample_rate = 0.15
 
+# STUNner TURN, reached through towonel-agent on 3479/udp and 5350/tls.
+turn_uris = [
+  "turn:turn.erwanleboucher.dev:3479?transport=udp",
+  "turns:turn.erwanleboucher.dev:5350?transport=tcp",
+]
+turn_secret = "{{ .SHARED_SECRET }}"
+
 
 [global.well_known]
 client = "https://matrix.erwanleboucher.dev"
@@ -76,9 +83,6 @@ support_mxid = "@genesixx:erwanleboucher.dev"
 [global.oauth]
 compatibility_mode = "hybrid"
 
-# OIDC disabled: configuring it forces `exclusive` mode, which disables legacy
-# password login and only allows native-OAuth clients (Element family).
-# Cinny/sable use password login, so OIDC stays off to keep them working.
 [global.oauth.oidc]
 discovery_url = "https://idm.erwanleboucher.dev/oauth2/openid/continuwuity"
 client_id = "continuwuity"
