@@ -41,7 +41,7 @@ spec:
                 custom: true
                 spec:
                   httpGet:
-                    path: /api/v1/status
+                    path: /api/v1/settings/public
                     port: 5055
                   initialDelaySeconds: 5
                   timeoutSeconds: 1
