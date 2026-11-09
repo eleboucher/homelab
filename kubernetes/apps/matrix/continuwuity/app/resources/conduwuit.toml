@@ -49,6 +49,7 @@ allow_public_room_directory_over_federation = false
 lockdown_public_room_directory = true
 require_auth_for_profile_requests = true
 allow_sticky_events = true
+enable_msc4495_selective_presence = true
 trusted_servers = ["codestorm.net", "starstruck.systems", "unredacted.org"]
 
 admins_list = ["@genesixx:erwanleboucher.dev"]
