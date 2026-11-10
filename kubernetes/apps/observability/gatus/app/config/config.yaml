@@ -73,13 +73,6 @@ endpoints:
     conditions:
       - "[CONNECTED] == true"
 
-  - name: towonel ci1
-    group: towonel
-    url: icmp://163.172.251.228
-    interval: 1m
-    conditions:
-      - "[CONNECTED] == true"
-
   - name: towonel ci2
     group: towonel
     url: icmp://92.222.247.160
