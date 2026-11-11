@@ -60,16 +60,26 @@ spec:
               - env:
                   - name: DEBIAN_FRONTEND
                     value: noninteractive
+                  - name: CARGO_BUILD_JOBS
+                    value: "4"
+                  - name: MAKEFLAGS
+                    value: "-j4"
                 image: ghcr.io/bjw-s-labs/forgejo-runner:ubuntu-24.04@sha256:8b7a25c7b3235c27e97df1cbb8411c1d12d2676e739265b5fbb66bb55f72dbf6
                 imagePullPolicy: IfNotPresent
                 name: main
                 resources:
                   requests:
-                    cpu: 100m
-                    memory: 1Gi
+                    cpu: 1
+                    memory: 2Gi
                   limits:
-                    cpu: 500m
-                    memory: 4Gi
+                    cpu: 6
+                    memory: 20Gi
+            # runner-k8s-plugin defaults the shared workdir emptyDir to 10Gi,
+            # too small for CEF builds; kubelet evicts the pod on emptydirfs.limit.
+            volumes:
+              - name: shared
+                emptyDir:
+                  sizeLimit: 50Gi
             affinity:
               nodeAffinity:
                 preferredDuringSchedulingIgnoredDuringExecution:
@@ -96,10 +106,10 @@ spec:
                     value: /certs
                 resources:
                   requests:
-                    cpu: 100m
+                    cpu: 250m
                     memory: 1Gi
                   limits:
-                    cpu: 500m
+                    cpu: 4
                     memory: 8Gi
                 volumeMounts:
                   - name: docker-storage
@@ -125,16 +135,20 @@ spec:
                     value: "1"
                   - name: DOCKER_CERT_PATH
                     value: /certs/client
+                  - name: CARGO_BUILD_JOBS
+                    value: "4"
+                  - name: MAKEFLAGS
+                    value: "-j4"
                 image: ghcr.io/bjw-s-labs/forgejo-runner:ubuntu-24.04@sha256:8b7a25c7b3235c27e97df1cbb8411c1d12d2676e739265b5fbb66bb55f72dbf6
                 imagePullPolicy: IfNotPresent
                 name: main
                 resources:
                   requests:
-                    cpu: 100m
-                    memory: 1Gi
+                    cpu: 1
+                    memory: 2Gi
                   limits:
-                    cpu: 500m
-                    memory: 4Gi
+                    cpu: 6
+                    memory: 20Gi
                 volumeMounts:
                   - name: docker-certs
                     mountPath: /certs
@@ -144,6 +158,9 @@ spec:
                 emptyDir: {}
               - name: docker-certs
                 emptyDir: {}
+              - name: shared
+                emptyDir:
+                  sizeLimit: 50Gi
             affinity:
               nodeAffinity:
                 preferredDuringSchedulingIgnoredDuringExecution:
