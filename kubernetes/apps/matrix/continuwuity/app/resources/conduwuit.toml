@@ -68,12 +68,10 @@ sentry_endpoint = "https://195b9db009825345c2882604cb19d42e@o911502.ingest.us.se
 sentry_send_server_name = false
 sentry_traces_sample_rate = 0.15
 
-# STUNner TURN, reached through towonel-agent on 3479/udp and 5350/tls.
-turn_uris = [
-  "turn:turn.erwanleboucher.dev:3479?transport=udp",
-  "turns:turn.erwanleboucher.dev:5350?transport=tcp",
-]
-turn_secret = "{{ .SHARED_SECRET }}"
+# coturn on the towonel cluster. STUNner only relays to LiveKit, so it can't
+# carry client-to-client connections.
+turn_uris = ["turn:turn.sable.moe:3478?transport=udp"]
+turn_secret = "{{ .TURN_SECRET }}"
 
 
 [global.well_known]
