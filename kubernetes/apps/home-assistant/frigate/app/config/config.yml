@@ -48,6 +48,10 @@ objects:
   track:
     - person
     - dog
+  filters:
+    dog:
+      min_score: 0.4
+      threshold: 0.6
 
 record:
   enabled: true
