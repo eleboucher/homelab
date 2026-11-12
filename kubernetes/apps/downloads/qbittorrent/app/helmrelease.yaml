@@ -27,7 +27,7 @@ spec:
           gluetun:
             image:
               repository: qmcgaw/gluetun
-              tag: latest@sha256:75df789dea20551fa973f808133a712700bf198518f9d49ed581287777508556
+              tag: latest@sha256:cbafe0945d0fe5a3c55ca64d43a85c5db270458f4c645ee65797b527f6f57a64
             env:
               DNS_SERVER: "off"
               DNS_UPSTREAM_PLAIN_ADDRESSES: "1.1.1.1:53"
