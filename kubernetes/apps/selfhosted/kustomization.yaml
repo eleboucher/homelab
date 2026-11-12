@@ -22,5 +22,4 @@ resources:
   - smtp-relay/ks.yaml
   - sparkyfitness/ks.yaml
   - sure/ks.yaml
-  - ticketbooth/ks.yaml
   - trek/ks.yaml
