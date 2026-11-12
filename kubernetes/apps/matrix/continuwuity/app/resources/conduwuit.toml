@@ -71,7 +71,7 @@ sentry_traces_sample_rate = 0.15
 # coturn on the towonel cluster. STUNner only relays to LiveKit, so it can't
 # carry client-to-client connections.
 turn_uris = ["turn:turn.sable.moe:3478?transport=udp"]
-turn_secret = "{{ .TURN_SECRET }}"
+turn_secret = "{{ .turn_secret }}"
 
 
 [global.well_known]
