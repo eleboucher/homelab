@@ -127,9 +127,22 @@ spec:
           webrtc-udp:
             port: 8555
             protocol: UDP
+      # The iPhone camera (Moblin) pushes RTMP into go2rtc here.
+      rtmp:
+        type: LoadBalancer
+        annotations:
+          lbipam.cilium.io/ips: "192.168.69.123"
+        controller: frigate
+        loadBalancerSourceRanges:
+          - 192.168.1.27/32
+        ports:
+          rtmp:
+            port: 1935
     serviceMonitor:
       frigate:
         endpoints:
           - interval: 30s
             path: /api/metrics
             port: http
+        service:
+          identifier: frigate
