@@ -56,7 +56,7 @@ objects:
 record:
   enabled: true
   continuous:
-    days: 0
+    days: 2
   motion:
     days: 0
   alerts:
