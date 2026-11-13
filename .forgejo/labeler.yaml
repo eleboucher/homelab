@@ -1,8 +1,4 @@
 ---
-area/ansible:
-  - changed-files:
-      - any-glob-to-any-file:
-          - ansible/**/*
 area/bootstrap:
   - changed-files:
       - any-glob-to-any-file:
@@ -11,10 +7,6 @@ area/ci:
   - changed-files:
       - any-glob-to-any-file: ".forgejo/**/*"
       - any-glob-to-any-file: ".github/**/*"
-area/docker:
-  - changed-files:
-      - any-glob-to-any-file:
-          - docker/**/*
 area/kubernetes:
   - changed-files:
       - any-glob-to-any-file: "kubernetes/**/*"

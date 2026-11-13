@@ -16,10 +16,6 @@ mod kube "kubernetes"
 [group('Talos')]
 mod talos "talos"
 
-# Ansible Recipes
-[group('Ansible')]
-mod ansible 'ansible'
-
 # Mikrotik Recipes
 [group('Mikrotik')]
 mod mikrotik 'tofu/mikrotik'

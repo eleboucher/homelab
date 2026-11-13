@@ -1,17 +1,11 @@
 ---
 # Area labels applied by .forgejo/labeler.yaml based on changed paths.
-- name: area/ansible
-  color: "#EE0000"
-  description: Ansible changes
 - name: area/bootstrap
   color: "#6E40C9"
   description: Bootstrap / cluster-init changes
 - name: area/ci
   color: "#0E8A16"
   description: CI and Forgejo workflow changes
-- name: area/docker
-  color: "#0DB7ED"
-  description: Docker changes
 - name: area/kubernetes
   color: "#326CE5"
   description: Kubernetes manifests and apps

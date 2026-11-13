@@ -31,7 +31,7 @@ jobs:
           REPO: ${{ forgejo.repository }}
         run: |
           set -e
-          for label in area/ansible area/bootstrap area/ci area/docker area/kubernetes area/renovate area/talos; do
+          for label in area/bootstrap area/ci area/kubernetes area/renovate area/talos; do
             status=$(curl -s -o /dev/null -w '%{http_code}' \
               -H "Authorization: token $GH_TOKEN" \
               "$FORGEJO_API_URL/api/v1/repos/$REPO/labels?name=$(printf '%s' "$label" | jq -sRr @uri)")
