@@ -22,6 +22,7 @@ cache_capacity_modifier = 1.0
 max_request_size = 524288000
 
 # DNS Optimisation
+dns_servers = ["127.0.0.1", "::1"]
 dns_cache_entries = 0
 dns_timeout = 10
 dns_attempts = 3
