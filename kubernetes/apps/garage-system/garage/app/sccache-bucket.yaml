@@ -15,7 +15,7 @@ spec:
     rules:
       - id: expire-cache-entries
         status: Enabled
-        expirationDays: 7
+        expirationDays: 4
       - id: abort-incomplete-uploads
         status: Enabled
         abortIncompleteMultipartUploadDays: 1
