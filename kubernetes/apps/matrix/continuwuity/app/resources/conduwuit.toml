@@ -36,7 +36,7 @@ prometheus_metrics_token = "{{ .prometheus_metrics_token }}"
 
 # Traces, exported over OTLP to VictoriaTraces
 allow_otlp = true
-otlp_filter = "info,conduwuit_router=debug,conduwuit_api=debug"
+otlp_filter = "info,conduwuit_router=debug,conduwuit_api=debug,conduwuit_api::client::sync::v3::joined=info,conduwuit_api::client::sync::v3::left=info"
 
 # User settings
 allow_encryption = true
