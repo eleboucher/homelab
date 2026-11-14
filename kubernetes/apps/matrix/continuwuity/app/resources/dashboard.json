@@ -2361,7 +2361,7 @@
           },
           "refId": "A",
           "queryType": "traceql",
-          "query": "{resource.service.name=\"continuwuity\" && name=\"router\" && duration > 2s && span.path !~ \".*/sync\"}",
+          "query": "{resource.service.name=\"continuwuity\" && span.path != nil && duration > 2s && span.path !~ \".*/sync\"}",
           "limit": 50,
           "tableType": "traces"
         }
