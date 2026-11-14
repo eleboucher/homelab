@@ -1,0 +1,15 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/grafana.integreatly.org/grafanadatasource_v1beta1.json
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDatasource
+metadata:
+  name: vt-datasource
+spec:
+  datasource:
+    access: proxy
+    type: jaeger
+    name: VT
+    url: http://victoria-traces-server.observability.svc.cluster.local:10428/select/jaeger
+  instanceSelector:
+    matchLabels:
+      dashboards: grafana

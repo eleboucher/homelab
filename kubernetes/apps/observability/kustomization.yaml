@@ -26,3 +26,4 @@ resources:
   - victoria-logs/ks.yaml
   - victoria-logs-collector/ks.yaml
   - victoria-metrics/ks.yaml
+  - victoria-traces/ks.yaml
