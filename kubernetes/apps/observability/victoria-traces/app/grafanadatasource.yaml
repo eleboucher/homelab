@@ -13,3 +13,18 @@ spec:
   instanceSelector:
     matchLabels:
       dashboards: grafana
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/grafana.integreatly.org/grafanadatasource_v1beta1.json
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDatasource
+metadata:
+  name: vt-tempo-datasource
+spec:
+  datasource:
+    access: proxy
+    type: tempo
+    name: VT Tempo
+    url: http://victoria-traces-server.observability.svc.cluster.local:10428/select/tempo
+  instanceSelector:
+    matchLabels:
+      dashboards: grafana
