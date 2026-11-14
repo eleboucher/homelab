@@ -6,6 +6,20 @@
       "type": "datasource",
       "pluginId": "prometheus",
       "pluginName": "Prometheus"
+    },
+    {
+      "name": "DS_TEMPO",
+      "label": "Tempo",
+      "type": "datasource",
+      "pluginId": "tempo",
+      "pluginName": "Tempo"
+    },
+    {
+      "name": "DS_VL",
+      "label": "VictoriaLogs",
+      "type": "datasource",
+      "pluginId": "victoriametrics-logs-datasource",
+      "pluginName": "VictoriaLogs"
     }
   ],
   "title": "Continuwuity",
@@ -293,6 +307,247 @@
     },
     {
       "type": "row",
+      "id": 44,
+      "title": "Memory and stability",
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 5
+      },
+      "panels": []
+    },
+    {
+      "type": "timeseries",
+      "id": 45,
+      "title": "Container memory vs limit",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 0,
+        "y": 6
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "refId": "A",
+          "expr": "max(container_memory_rss{namespace=\"matrix\",pod=~\"continuwuity-.*\",container=\"app\"})",
+          "legendFormat": "rss"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "refId": "B",
+          "expr": "max(container_memory_working_set_bytes{namespace=\"matrix\",pod=~\"continuwuity-.*\",container=\"app\"})",
+          "legendFormat": "working set"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "refId": "C",
+          "expr": "max(kube_pod_container_resource_limits{namespace=\"matrix\",pod=~\"continuwuity-.*\",container=\"app\",resource=\"memory\"})",
+          "legendFormat": "limit"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "bytes",
+          "custom": {
+            "fillOpacity": 8,
+            "stacking": {
+              "mode": "none"
+            },
+            "lineWidth": 1
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "limit"
+            },
+            "properties": [
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "fill": "dash",
+                  "dash": [10, 10]
+                }
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "red"
+                }
+              },
+              {
+                "id": "custom.fillOpacity",
+                "value": 0
+              }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom",
+          "calcs": ["lastNotNull", "max"]
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "description": "Kernel view of the app container. The OOM killer fires when working set reaches the limit."
+    },
+    {
+      "type": "timeseries",
+      "id": 46,
+      "title": "RSS change over 2m",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 8,
+        "y": 6
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "refId": "A",
+          "expr": "max(delta(container_memory_rss{namespace=\"matrix\",pod=~\"continuwuity-.*\",container=\"app\"}[2m]))",
+          "legendFormat": "rss delta"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "bytes",
+          "custom": {
+            "drawStyle": "bars",
+            "fillOpacity": 60,
+            "thresholdsStyle": {
+              "mode": "line"
+            },
+            "stacking": {
+              "mode": "none"
+            },
+            "lineWidth": 1
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 268435456
+              },
+              {
+                "color": "red",
+                "value": 629145600
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom",
+          "calcs": ["lastNotNull", "max"]
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "description": "Allocation bursts. Bars above the red line (600 MiB) are the bursts that can reach the limit from a normal baseline."
+    },
+    {
+      "type": "timeseries",
+      "id": 47,
+      "title": "OOM kills and restarts",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 16,
+        "y": 6
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "refId": "A",
+          "expr": "sum(increase(container_oom_events_total{namespace=\"matrix\",pod=~\"continuwuity-.*\",container=\"app\"}[$__rate_interval]))",
+          "legendFormat": "oom kills"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "refId": "B",
+          "expr": "sum(increase(kube_pod_container_status_restarts_total{namespace=\"matrix\",pod=~\"continuwuity-.*\",container=\"app\"}[$__rate_interval]))",
+          "legendFormat": "restarts"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "custom": {
+            "fillOpacity": 80,
+            "stacking": {
+              "mode": "none"
+            },
+            "lineWidth": 1,
+            "drawStyle": "bars"
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom",
+          "calcs": ["lastNotNull", "max"]
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      }
+    },
+    {
+      "type": "row",
       "id": 8,
       "title": "HTTP",
       "collapsed": false,
@@ -300,7 +555,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 5
+        "y": 14
       },
       "panels": []
     },
@@ -316,7 +571,7 @@
         "h": 8,
         "w": 8,
         "x": 0,
-        "y": 6
+        "y": 15
       },
       "targets": [
         {
@@ -366,7 +621,7 @@
         "h": 8,
         "w": 8,
         "x": 8,
-        "y": 6
+        "y": 15
       },
       "targets": [
         {
@@ -434,7 +689,7 @@
         "h": 8,
         "w": 8,
         "x": 16,
-        "y": 6
+        "y": 15
       },
       "targets": [
         {
@@ -484,7 +739,7 @@
         "h": 8,
         "w": 8,
         "x": 0,
-        "y": 14
+        "y": 23
       },
       "targets": [
         {
@@ -534,7 +789,7 @@
         "h": 8,
         "w": 16,
         "x": 8,
-        "y": 14
+        "y": 23
       },
       "targets": [
         {
@@ -581,7 +836,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 22
+        "y": 31
       },
       "panels": []
     },
@@ -597,7 +852,7 @@
         "h": 8,
         "w": 8,
         "x": 0,
-        "y": 23
+        "y": 32
       },
       "targets": [
         {
@@ -647,7 +902,7 @@
         "h": 8,
         "w": 8,
         "x": 8,
-        "y": 23
+        "y": 32
       },
       "targets": [
         {
@@ -716,7 +971,7 @@
         "h": 8,
         "w": 8,
         "x": 16,
-        "y": 23
+        "y": 32
       },
       "targets": [
         {
@@ -775,7 +1030,7 @@
         "h": 8,
         "w": 8,
         "x": 0,
-        "y": 31
+        "y": 40
       },
       "targets": [
         {
@@ -825,7 +1080,7 @@
         "h": 8,
         "w": 8,
         "x": 8,
-        "y": 31
+        "y": 40
       },
       "targets": [
         {
@@ -875,7 +1130,7 @@
         "h": 8,
         "w": 8,
         "x": 16,
-        "y": 31
+        "y": 40
       },
       "targets": [
         {
@@ -925,7 +1180,7 @@
         "h": 8,
         "w": 8,
         "x": 0,
-        "y": 39
+        "y": 48
       },
       "targets": [
         {
@@ -976,7 +1231,7 @@
         "h": 8,
         "w": 8,
         "x": 8,
-        "y": 39
+        "y": 48
       },
       "targets": [
         {
@@ -1026,7 +1281,7 @@
         "h": 8,
         "w": 8,
         "x": 16,
-        "y": 39
+        "y": 48
       },
       "targets": [
         {
@@ -1073,7 +1328,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 47
+        "y": 56
       },
       "panels": []
     },
@@ -1089,7 +1344,7 @@
         "h": 8,
         "w": 8,
         "x": 0,
-        "y": 48
+        "y": 57
       },
       "targets": [
         {
@@ -1139,7 +1394,7 @@
         "h": 8,
         "w": 8,
         "x": 8,
-        "y": 48
+        "y": 57
       },
       "targets": [
         {
@@ -1189,7 +1444,7 @@
         "h": 8,
         "w": 8,
         "x": 16,
-        "y": 48
+        "y": 57
       },
       "targets": [
         {
@@ -1239,7 +1494,7 @@
         "h": 8,
         "w": 24,
         "x": 0,
-        "y": 56
+        "y": 65
       },
       "targets": [
         {
@@ -1286,7 +1541,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 64
+        "y": 73
       },
       "panels": []
     },
@@ -1302,7 +1557,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 65
+        "y": 74
       },
       "targets": [
         {
@@ -1361,7 +1616,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 65
+        "y": 74
       },
       "targets": [
         {
@@ -1417,7 +1672,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 73
+        "y": 82
       },
       "panels": []
     },
@@ -1433,7 +1688,7 @@
         "h": 8,
         "w": 8,
         "x": 0,
-        "y": 74
+        "y": 83
       },
       "targets": [
         {
@@ -1483,7 +1738,7 @@
         "h": 8,
         "w": 8,
         "x": 8,
-        "y": 74
+        "y": 83
       },
       "targets": [
         {
@@ -1533,7 +1788,7 @@
         "h": 8,
         "w": 8,
         "x": 16,
-        "y": 74
+        "y": 83
       },
       "targets": [
         {
@@ -1583,7 +1838,7 @@
         "h": 8,
         "w": 24,
         "x": 0,
-        "y": 82
+        "y": 91
       },
       "targets": [
         {
@@ -1630,7 +1885,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 90
+        "y": 99
       },
       "panels": []
     },
@@ -1646,7 +1901,7 @@
         "h": 8,
         "w": 8,
         "x": 0,
-        "y": 91
+        "y": 100
       },
       "targets": [
         {
@@ -1705,7 +1960,7 @@
         "h": 8,
         "w": 8,
         "x": 8,
-        "y": 91
+        "y": 100
       },
       "targets": [
         {
@@ -1756,7 +2011,7 @@
         "h": 8,
         "w": 8,
         "x": 16,
-        "y": 91
+        "y": 100
       },
       "targets": [
         {
@@ -1806,7 +2061,7 @@
         "h": 8,
         "w": 8,
         "x": 0,
-        "y": 99
+        "y": 108
       },
       "targets": [
         {
@@ -1857,7 +2112,7 @@
         "h": 8,
         "w": 8,
         "x": 8,
-        "y": 99
+        "y": 108
       },
       "targets": [
         {
@@ -1917,7 +2172,7 @@
         "h": 8,
         "w": 8,
         "x": 16,
-        "y": 99
+        "y": 108
       },
       "targets": [
         {
@@ -1955,6 +2210,337 @@
         }
       },
       "description": "Needs a tokio_unstable build."
+    },
+    {
+      "type": "row",
+      "id": 48,
+      "title": "Where time goes",
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 116
+      },
+      "panels": []
+    },
+    {
+      "type": "timeseries",
+      "id": 49,
+      "title": "Busy time by route (excluding sync)",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 117
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "refId": "A",
+          "expr": "topk(10, sum by (http_route) (rate(http_server_request_duration_seconds_sum{job=~\"$job\",http_route!~\".*/sync\"}[$__rate_interval])))",
+          "legendFormat": "{{http_route}}"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "s",
+          "custom": {
+            "fillOpacity": 8,
+            "stacking": {
+              "mode": "none"
+            },
+            "lineWidth": 1
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom",
+          "calcs": ["lastNotNull", "max"]
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "description": "Seconds spent handling each route per second, roughly how many requests of that route are in flight. Sync is excluded because long-polling inflates it. The top entries are where optimisation pays off most."
+    },
+    {
+      "type": "timeseries",
+      "id": 50,
+      "title": "Errors and rate limits by route",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 117
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "refId": "A",
+          "expr": "topk(10, sum by (http_route, http_response_status_code) (rate(http_server_request_duration_seconds_count{job=~\"$job\",http_response_status_code=~\"5..|429\"}[$__rate_interval])))",
+          "legendFormat": "{{http_response_status_code}} {{http_route}}"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "reqps",
+          "custom": {
+            "fillOpacity": 8,
+            "stacking": {
+              "mode": "none"
+            },
+            "lineWidth": 1
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom",
+          "calcs": ["lastNotNull", "max"]
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      }
+    },
+    {
+      "type": "row",
+      "id": 51,
+      "title": "Traces",
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 125
+      },
+      "panels": []
+    },
+    {
+      "type": "table",
+      "id": 52,
+      "title": "Slow requests (over 2s, excluding sync)",
+      "description": "Click a trace ID to open the span breakdown. Uses the VT Tempo datasource.",
+      "datasource": {
+        "type": "tempo",
+        "uid": "${DS_TEMPO}"
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 12,
+        "x": 0,
+        "y": 126
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "tempo",
+            "uid": "${DS_TEMPO}"
+          },
+          "refId": "A",
+          "queryType": "traceql",
+          "query": "{resource.service.name=\"continuwuity\" && name=\"router\" && duration > 2s && span.path !~ \".*/sync\"}",
+          "limit": 50,
+          "tableType": "traces"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "options": {
+        "showHeader": true,
+        "sortBy": [
+          {
+            "displayName": "Duration",
+            "desc": true
+          }
+        ]
+      }
+    },
+    {
+      "type": "table",
+      "id": 53,
+      "title": "Slow federation transactions (over 5s)",
+      "description": "Incoming federation transactions, with per-PDU and state resolution spans inside.",
+      "datasource": {
+        "type": "tempo",
+        "uid": "${DS_TEMPO}"
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 12,
+        "x": 12,
+        "y": 126
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "tempo",
+            "uid": "${DS_TEMPO}"
+          },
+          "refId": "A",
+          "queryType": "traceql",
+          "query": "{resource.service.name=\"continuwuity\" && name=\"transaction\" && duration > 5s}",
+          "limit": 50,
+          "tableType": "traces"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "options": {
+        "showHeader": true,
+        "sortBy": [
+          {
+            "displayName": "Duration",
+            "desc": true
+          }
+        ]
+      }
+    },
+    {
+      "type": "row",
+      "id": 54,
+      "title": "Logs",
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 136
+      },
+      "panels": []
+    },
+    {
+      "type": "timeseries",
+      "id": 55,
+      "title": "Warnings and errors",
+      "datasource": {
+        "type": "victoriametrics-logs-datasource",
+        "uid": "${DS_VL}"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 137
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "victoriametrics-logs-datasource",
+            "uid": "${DS_VL}"
+          },
+          "refId": "A",
+          "queryType": "statsRange",
+          "expr": "{kubernetes.pod_namespace=\"matrix\",kubernetes.container_name=\"app\"} kubernetes.pod_name:~\"continuwuity-.*\" \"ERROR\" | stats count() as errors",
+          "legendFormat": "errors"
+        },
+        {
+          "datasource": {
+            "type": "victoriametrics-logs-datasource",
+            "uid": "${DS_VL}"
+          },
+          "refId": "B",
+          "queryType": "statsRange",
+          "expr": "{kubernetes.pod_namespace=\"matrix\",kubernetes.container_name=\"app\"} kubernetes.pod_name:~\"continuwuity-.*\" \"WARN\" -~\"state_res\" | stats count() as warnings",
+          "legendFormat": "warnings"
+        },
+        {
+          "datasource": {
+            "type": "victoriametrics-logs-datasource",
+            "uid": "${DS_VL}"
+          },
+          "refId": "C",
+          "queryType": "statsRange",
+          "expr": "{kubernetes.pod_namespace=\"matrix\",kubernetes.container_name=\"app\"} kubernetes.pod_name:~\"continuwuity-.*\" ~\"state_res\" | stats count() as state_res",
+          "legendFormat": "state resolution"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "custom": {
+            "drawStyle": "bars",
+            "fillOpacity": 60,
+            "stacking": {
+              "mode": "none"
+            },
+            "lineWidth": 1
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom",
+          "calcs": ["sum", "max"]
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "description": "State resolution warnings are split out because they come in large repeated batches when remote servers send events that fail auth."
+    },
+    {
+      "type": "logs",
+      "id": 56,
+      "title": "Errors",
+      "datasource": {
+        "type": "victoriametrics-logs-datasource",
+        "uid": "${DS_VL}"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 137
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "victoriametrics-logs-datasource",
+            "uid": "${DS_VL}"
+          },
+          "refId": "A",
+          "queryType": "instant",
+          "expr": "{kubernetes.pod_namespace=\"matrix\",kubernetes.container_name=\"app\"} kubernetes.pod_name:~\"continuwuity-.*\" \"ERROR\"",
+          "maxLines": 200
+        }
+      ],
+      "options": {
+        "showTime": true,
+        "wrapLogMessage": true,
+        "sortOrder": "Descending",
+        "enableLogDetails": true,
+        "dedupStrategy": "signature"
+      }
     }
   ]
 }

@@ -12,6 +12,10 @@ spec:
   datasources:
     - datasourceName: VictoriaMetrics
       inputName: DS_PROMETHEUS
+    - datasourceName: VT Tempo
+      inputName: DS_TEMPO
+    - datasourceName: VL
+      inputName: DS_VL
   configMapRef:
     name: continuwuity-dashboard
     key: continuwuity.json

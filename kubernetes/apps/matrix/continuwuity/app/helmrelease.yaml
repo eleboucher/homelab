@@ -85,6 +85,8 @@ spec:
             env:
               CONDUWUIT_CONFIG: /etc/conduwuit/conduwuit.toml
               MALLOC_CONF: prof:true,prof_active:true,lg_prof_sample:19
+              OTEL_BSP_MAX_EXPORT_BATCH_SIZE: "2048"
+              OTEL_BSP_MAX_QUEUE_SIZE: "16384"
               OTEL_EXPORTER_OTLP_PROTOCOL: http/protobuf
               OTEL_EXPORTER_OTLP_TRACES_ENDPOINT: http://victoria-traces-server.observability.svc.cluster.local:10428/insert/opentelemetry/v1/traces
               TOKIO_WORKER_THREADS: "4"
