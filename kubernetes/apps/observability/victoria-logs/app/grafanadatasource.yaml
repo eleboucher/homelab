@@ -10,7 +10,16 @@ spec:
     access: proxy
     type: victoriametrics-logs-datasource
     name: VL
+    uid: 227a1e9d-c72e-4e4e-bcec-a3e1f769dee6
     url: http://victoria-logs-server.observability.svc.cluster.local:9428
+    jsonData:
+      derivedFields:
+        - name: trace_id
+          matcherType: regex
+          matcherRegex: 'trace_id=([0-9a-f]{32})'
+          url: '${__value.raw}'
+          urlDisplayLabel: View trace
+          datasourceUid: 17166a2e-14dc-457c-a942-51bc1ca7e044
   instanceSelector:
     matchLabels:
       dashboards: grafana

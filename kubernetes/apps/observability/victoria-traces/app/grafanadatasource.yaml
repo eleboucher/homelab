@@ -24,7 +24,15 @@ spec:
     access: proxy
     type: tempo
     name: VT Tempo
+    uid: 17166a2e-14dc-457c-a942-51bc1ca7e044
     url: http://victoria-traces-server.observability.svc.cluster.local:10428/select/tempo
+    jsonData:
+      tracesToLogsV2:
+        datasourceUid: 227a1e9d-c72e-4e4e-bcec-a3e1f769dee6
+        customQuery: true
+        query: '{kubernetes.pod_namespace="matrix"} "trace_id=${__trace.traceId}"'
+        spanStartTimeShift: "-5m"
+        spanEndTimeShift: "5m"
   instanceSelector:
     matchLabels:
       dashboards: grafana
