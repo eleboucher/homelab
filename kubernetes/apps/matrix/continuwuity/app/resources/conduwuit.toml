@@ -41,6 +41,7 @@ otlp_filter = "info,conduwuit_router=debug,conduwuit_api=debug,conduwuit_api::cl
 # User settings
 allow_encryption = true
 allow_federation = true
+forbidden_remote_server_names = ['(?i)\.ru\.?$']
 allow_registration = false
 new_user_displayname_suffix = ""
 suspend_on_register = false
