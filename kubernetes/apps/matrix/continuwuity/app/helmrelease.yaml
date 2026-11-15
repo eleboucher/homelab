@@ -125,6 +125,38 @@ spec:
               capabilities:
                 drop:
                   - "ALL"
+          unbound-exporter:
+            image:
+              repository: docker.io/cyb3rjak3/unbound-exporter
+              tag: 0.6.0@sha256:9db2304986d5496cec971da7f57507d2ed29a53c160060f2b811b35deccc209c
+            args:
+              - -unbound.host=unix:///run/unbound/control.sock
+            probes:
+              liveness:
+                enabled: true
+                custom: true
+                spec: &probeUnboundExporter
+                  tcpSocket:
+                    port: 9167
+                  periodSeconds: 30
+                  timeoutSeconds: 5
+                  failureThreshold: 3
+              readiness:
+                enabled: true
+                custom: true
+                spec: *probeUnboundExporter
+            resources:
+              requests:
+                cpu: 10m
+                memory: 32Mi
+              limits:
+                memory: 128Mi
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - "ALL"
     persistence:
       config:
         enabled: true
@@ -164,6 +196,14 @@ spec:
             unbound:
               - path: /usr/local/unbound/unbound.conf
                 subPath: unbound.conf
+      unbound-control:
+        type: emptyDir
+        advancedMounts:
+          continuwuity:
+            unbound:
+              - path: /run/unbound
+            unbound-exporter:
+              - path: /run/unbound
       unbound-iana:
         type: emptyDir
         advancedMounts:
@@ -189,3 +229,5 @@ spec:
             port: 8080
           metrics:
             port: 9100
+          unbound-metrics:
+            port: 9167

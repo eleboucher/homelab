@@ -25,3 +25,7 @@ spec:
       bearerTokenSecret:
         name: continuwuity
         key: metrics_token
+    - port: unbound-metrics
+      path: /metrics
+      interval: 30s
+      scrapeTimeout: 10s
