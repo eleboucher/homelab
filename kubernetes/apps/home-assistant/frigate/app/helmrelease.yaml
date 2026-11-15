@@ -134,7 +134,7 @@ spec:
           lbipam.cilium.io/ips: "192.168.69.123"
         controller: frigate
         loadBalancerSourceRanges:
-          - 192.168.1.27/32
+          - 192.168.1.28/32
         ports:
           rtmp:
             port: 1935
