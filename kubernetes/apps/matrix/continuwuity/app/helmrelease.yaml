@@ -84,7 +84,7 @@ spec:
               tag: 8f76591-719952e
             env:
               CONDUWUIT_CONFIG: /etc/conduwuit/conduwuit.toml
-              MALLOC_CONF: prof:true,prof_active:true,lg_prof_sample:19
+              MALLOC_CONF: prof:true,prof_active:true,lg_prof_sample:19,lg_prof_interval:34,prof_prefix:/jeprof/jeprof
               OTEL_BSP_MAX_EXPORT_BATCH_SIZE: "2048"
               OTEL_BSP_MAX_QUEUE_SIZE: "16384"
               OTEL_EXPORTER_OTLP_PROTOCOL: http/protobuf
@@ -168,6 +168,8 @@ spec:
               - path: /data
               - path: /backups
                 subPath: backups
+              - path: /jeprof
+                subPath: jeprof
       conduwuit-toml:
         type: secret
         name: continuwuity
