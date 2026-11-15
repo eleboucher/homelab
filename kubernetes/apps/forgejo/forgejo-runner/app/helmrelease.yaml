@@ -162,7 +162,7 @@ spec:
                 cpu: 100m
                 memory: 256Mi
               limits:
-                cpu: 500m
+                cpu: "4"
                 memory: 8Gi
             volumeMounts:
               - name: docker-storage
