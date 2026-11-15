@@ -137,7 +137,18 @@ spec:
         initContainers:
           - name: dind
             image: docker:29-dind
+            # Keep Buildx cgroups inside the DinD memory limit.
+            command: [sh, -ec]
             args:
+              - |
+                apk add --no-cache util-linux-misc
+                exec unshare --cgroup --mount sh -ec '
+                  mount --make-rprivate /
+                  umount /sys/fs/cgroup
+                  mount -t cgroup2 none /sys/fs/cgroup
+                  exec dockerd-entrypoint.sh "$@"
+                ' dind "$@"
+              - dind
               - --ipv6
               - --fixed-cidr-v6=fd00:d1d::/64
             securityContext:
