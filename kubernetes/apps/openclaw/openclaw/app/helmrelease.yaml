@@ -228,7 +228,7 @@ spec:
           chrome:
             image:
               repository: zenika/alpine-chrome
-              tag: with-node
+              tag: with-node@sha256:01212524dac7a050b2abd4637f615d4c3ea4a2ccceca2ee0410d4806378abcf8
             command:
               - chromium-browser
               - --headless=new

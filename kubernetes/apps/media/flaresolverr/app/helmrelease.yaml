@@ -28,7 +28,7 @@ spec:
           app:
             image:
               repository: ghcr.io/thephaseless/byparr
-              tag: latest
+              tag: 3.1.1@sha256:c66fa161187b8fa527bfad7eefa2647ea1c553f77df68cbffd6fe83366d1787b
               pullPolicy: IfNotPresent
             env:
               TZ: "Europe/Paris"
