@@ -23,7 +23,7 @@ spec:
         type: statefulset
         containers:
           app:
-            image:
+            image: &image
               repository: ghcr.io/home-operations/prowlarr
               tag: 3.0.2
             env:
@@ -51,7 +51,7 @@ spec:
                 memory: 288Mi
               limits:
                 memory: 512Mi
-            securityContext:
+            securityContext: &securityContext
               allowPrivilegeEscalation: false
               capabilities:
                 drop:
@@ -60,6 +60,18 @@ spec:
               runAsGroup: 1000
               runAsNonRoot: true
               runAsUser: 1000
+        initContainers:
+          proxy-ca:
+            image: *image
+            command:
+              - /bin/sh
+              - -ec
+              - |
+                curl --fail --silent --show-error --retry 12 --retry-all-errors \
+                  --retry-delay 5 --retry-max-time 120 --max-time 10 \
+                  http://flaresolverr.media.svc:8191/proxy-ca.crt -o /trust/trawl-ca.crt
+                cat /etc/ssl/certs/ca-certificates.crt /trust/trawl-ca.crt > /trust/ca-certificates.crt
+            securityContext: *securityContext
     service:
       app:
         controller: prowlarr
@@ -89,3 +101,13 @@ spec:
         type: emptyDir
         globalMounts:
           - path: /tmp
+      trust:
+        type: emptyDir
+        advancedMounts:
+          prowlarr:
+            proxy-ca:
+              - path: /trust
+            app:
+              - path: /etc/ssl/certs/ca-certificates.crt
+                subPath: ca-certificates.crt
+                readOnly: true

@@ -24,15 +24,25 @@ spec:
           dnsPolicy: ClusterFirst
         replicas: 1
         type: deployment
+        strategy: Recreate
         containers:
           app:
             image:
-              repository: ghcr.io/thephaseless/byparr
-              tag: 3.1.1@sha256:c66fa161187b8fa527bfad7eefa2647ea1c553f77df68cbffd6fe83366d1787b
+              repository: ghcr.io/germondai/trawl
+              tag: 1.11.1@sha256:f41dac1727c7d0c6d18381279792d89704b36ccfee537262118c7ee32d293ba8
               pullPolicy: IfNotPresent
             env:
               TZ: "Europe/Paris"
-              LOG_LEVEL: INFO
+              LOG_LEVEL: info
+              SESSION_CACHE_DRIVER: memory
+              MEMORY_SESSION_CACHE_MAX_ENTRIES: "100"
+              BROWSER_POOL_SIZE: "1"
+              BROWSER_COLD_BOOT: "true"
+              BROWSER_IDLE_TIMEOUT_MS: "1800000"
+              FLARESOLVERR_COOKIE_FALLBACK: "true"
+              WAF_DETECTION_ENABLED: "false"
+              MITM_ENABLED: "true"
+              MITM_HOST: "::"
             probes:
               startup: &healthProbe
                 enabled: true
@@ -48,14 +58,16 @@ spec:
                 enabled: true
                 custom: true
                 spec:
-                  tcpSocket:
+                  httpGet:
+                    path: /health
                     port: 8191
+                  failureThreshold: 5
                   periodSeconds: 30
                   timeoutSeconds: 3
               readiness: *healthProbe
             resources:
               requests:
-                cpu: 20m
+                cpu: 100m
                 memory: 512Mi
               limits:
                 memory: 3Gi
@@ -70,11 +82,24 @@ spec:
         ports:
           http:
             port: 8191
+          proxy:
+            port: 8192
         primary: true
     persistence:
       shm:
         type: emptyDir
         medium: Memory
-        sizeLimit: 512Mi
+        sizeLimit: 1Gi
         globalMounts:
           - path: /dev/shm
+      tmp:
+        type: emptyDir
+        globalMounts:
+          - path: /tmp
+      proxy-ca:
+        type: persistentVolumeClaim
+        storageClass: miroir-local
+        accessMode: ReadWriteOnce
+        size: 1Gi
+        globalMounts:
+          - path: /data/proxy-ca
