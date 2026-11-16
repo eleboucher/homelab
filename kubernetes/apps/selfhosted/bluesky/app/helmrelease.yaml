@@ -25,7 +25,7 @@ spec:
           init-keys:
             image:
               repository: ghcr.io/haileyok/cocoon
-              tag: 0.14.3@sha256:9e54faf8ba7d168c180b2786e149f78f773d8a48c22b4ff5890717011f828185
+              tag: 0.14.4@sha256:bef4bd571dba1ea9237e94ddea0975a0e4dab196bf56e3324f942ba06b6e8cf2
             command:
               - /bin/sh
               - -c
@@ -52,7 +52,7 @@ spec:
           app:
             image:
               repository: ghcr.io/haileyok/cocoon
-              tag: 0.14.3@sha256:9e54faf8ba7d168c180b2786e149f78f773d8a48c22b4ff5890717011f828185
+              tag: 0.14.4@sha256:bef4bd571dba1ea9237e94ddea0975a0e4dab196bf56e3324f942ba06b6e8cf2
             workingDir: /data/cocoon
             env:
               !!merge <<: *env
