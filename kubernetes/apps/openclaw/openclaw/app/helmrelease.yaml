@@ -38,6 +38,7 @@ spec:
                 chown 1000:100 /home/node/.openclaw
                 chmod 700 /home/node/.openclaw
                 # fs-safe requires sticky protection on shared temp ancestors.
+                chmod +t /home/node
                 chmod 1777 /tmp
             securityContext:
               allowPrivilegeEscalation: false
@@ -58,8 +59,8 @@ spec:
               - -c
               - |
                 set -euo pipefail
-                mkdir -p /home/node/.openclaw
-                chmod 700 /home/node/.openclaw
+                mkdir -p /home/node/.cache /home/node/.openclaw/tmp
+                chmod 700 /home/node/.cache /home/node/.openclaw /home/node/.openclaw/tmp
                 cp /run/config/openclaw.json /home/node/.openclaw/openclaw.json
                 chown 1000:100 /home/node/.openclaw/openclaw.json
                 chmod 400 /home/node/.openclaw/openclaw.json
