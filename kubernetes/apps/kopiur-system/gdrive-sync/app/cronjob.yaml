@@ -6,7 +6,7 @@ metadata:
   name: kopiur-sync-ovh
 spec:
   schedule: "0 4 * * *"
-  suspend: true
+  suspend: false
   successfulJobsHistoryLimit: 3
   failedJobsHistoryLimit: 1
   concurrencyPolicy: Forbid

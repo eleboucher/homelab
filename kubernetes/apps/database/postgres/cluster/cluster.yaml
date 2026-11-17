@@ -52,6 +52,8 @@ spec:
       - "vchord"
       - "timescaledb"
     parameters:
+      checkpoint_timeout: "15min"
+      wal_compression: "zstd"
       timescaledb.telemetry_level: "off"
       max_locks_per_transaction: "128"
 
