@@ -14,18 +14,34 @@ spec:
       recordType: A
       targets:
         - 51.38.160.51
+    - dnsName: erwanleboucher.dev
+      recordType: AAAA
+      targets:
+        - "2001:41d0:20a:900::c7e"
     - dnsName: www.erwanleboucher.dev
       recordType: A
       targets:
         - 51.38.160.51
+    - dnsName: www.erwanleboucher.dev
+      recordType: AAAA
+      targets:
+        - "2001:41d0:20a:900::c7e"
     - dnsName: openpgpkey.erwanleboucher.dev
       recordType: A
       targets:
         - 51.38.160.51
+    - dnsName: openpgpkey.erwanleboucher.dev
+      recordType: AAAA
+      targets:
+        - "2001:41d0:20a:900::c7e"
     - dnsName: registry.erwanleboucher.dev
       recordType: A
       targets:
         - 51.38.160.51
+    - dnsName: registry.erwanleboucher.dev
+      recordType: AAAA
+      targets:
+        - "2001:41d0:20a:900::c7e"
     - dnsName: turn.erwanleboucher.dev
       recordType: CNAME
       targets:
