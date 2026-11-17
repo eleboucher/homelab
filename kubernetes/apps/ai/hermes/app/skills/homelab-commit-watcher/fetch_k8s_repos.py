@@ -140,8 +140,22 @@ def fetch_repos(client: httpx.Client, since: str) -> list[dict]:
     return repos
 
 
+COMMIT_HISTORY_FRAGMENT = """
+fragment CommitHistory on Commit {
+  history(since: $since, first: 100, after: $cursor) {
+    pageInfo { hasNextPage endCursor }
+    nodes {
+      oid messageHeadline messageBody committedDate
+      additions deletions changedFilesIfAvailable
+      author { name email user { login } }
+    }
+  }
+}
+"""
+
+
 def build_commits_query(batch: list[dict]) -> str:
-    parts = ["query($since: GitTimestamp!) {"]
+    parts = ["query($since: GitTimestamp!, $cursor: String) {"]
     for i, repo in enumerate(batch):
         owner = repo["owner"]["login"].replace('"', '\\"')
         name = repo["name"].replace('"', '\\"')
@@ -151,21 +165,44 @@ def build_commits_query(batch: list[dict]) -> str:
             f"    defaultBranchRef {{\n"
             f"      name\n"
             f"      target {{\n"
-            f"        ... on Commit {{\n"
-            f"          history(since: $since, first: 100) {{\n"
-            f"            nodes {{\n"
-            f"              oid messageHeadline messageBody committedDate\n"
-            f"              additions deletions changedFilesIfAvailable\n"
-            f"              author {{ name email user {{ login }} }}\n"
-            f"            }}\n"
-            f"          }}\n"
-            f"        }}\n"
+            f"        id\n"
+            f"        ...CommitHistory\n"
             f"      }}\n"
             f"    }}\n"
             f"  }}"
         )
     parts.append("}")
+    parts.append(COMMIT_HISTORY_FRAGMENT)
     return "\n".join(parts)
+
+
+def fetch_commits(client: httpx.Client, batch: list[dict], since: str) -> dict:
+    data = gql(client, build_commits_query(batch), {"since": since})
+    query = """
+query($id: ID!, $since: GitTimestamp!, $cursor: String) {
+  node(id: $id) { ...CommitHistory }
+}
+""" + COMMIT_HISTORY_FRAGMENT
+    for node in data.values():
+        branch = (node or {}).get("defaultBranchRef") or {}
+        target = branch.get("target") or {}
+        history = target.get("history")
+        if history is None:
+            continue
+        commits = history["nodes"]
+        cursor = None
+        while history["pageInfo"]["hasNextPage"]:
+            next_cursor = history["pageInfo"]["endCursor"]
+            if not next_cursor or next_cursor == cursor:
+                raise RuntimeError("Commit history pagination did not advance")
+            cursor = next_cursor
+            # Keep paging from the original tip even if the default branch moves.
+            page = gql(
+                client, query, {"id": target["id"], "since": since, "cursor": cursor}
+            )
+            history = page["node"]["history"]
+            commits.extend(history["nodes"])
+    return data
 
 
 def _strip_bot_suffix(value: str) -> str:
@@ -699,7 +736,7 @@ def main() -> None:
             with httpx.Client(
                 headers=headers, timeout=60.0, transport=worker_transport
             ) as worker:
-                data = gql(worker, build_commits_query(batch), {"since": since})
+                data = fetch_commits(worker, batch, since)
             print(f"  batch {idx + 1}/{batches} done", file=sys.stderr)
             return idx, batch, data
 
