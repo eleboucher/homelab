@@ -25,7 +25,7 @@ spec:
           config:
             image: &image # renovate: datasource=docker depName=dock.mau.dev/maunium/meowlnir
               repository: dock.mau.dev/maunium/meowlnir
-              tag: v0.2609.0@sha256:63299f801614edd28f56c6d600455b10c620b0d4d516230bcf3666216276ac4a
+              tag: v0.2611.0@sha256:5f872ceddb96069bdef450119d762d437cda8be222ae51a53ab40dd183db2154
             command:
               - /bin/sh
             args:
