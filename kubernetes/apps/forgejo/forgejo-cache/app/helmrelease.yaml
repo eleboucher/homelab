@@ -1,0 +1,141 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: forgejo-cache
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: forgejo-cache
+  interval: 30m
+  values:
+    controllers:
+      forgejo-cache:
+        # bbolt allows a single writer.
+        strategy: Recreate
+        annotations:
+          reloader.stakater.com/auto: "true"
+        initContainers:
+          runner-bin:
+            image:
+              repository: data.forgejo.org/forgejo/runner
+              tag: 13.2.1
+            command: [sh, -c, 'cp "$(command -v forgejo-runner)" /opt/runner/']
+        containers:
+          app:
+            image:
+              repository: docker.io/juicedata/mount
+              tag: ce-v1.4.2
+            command: [sh, -ec]
+            args:
+              - |
+                meta="postgres://$PG_USER:$PG_PASSWORD@$PG_HOST:5432/$PG_DATABASE?sslmode=disable"
+                juicefs status "$meta" >/dev/null 2>&1 \
+                  || juicefs format --storage minio --bucket http://garage.garage-system.svc:3900/forgejo-actions-cache \
+                       --access-key "$S3_ACCESS_KEY" --secret-key "$S3_SECRET_KEY" \
+                       --trash-days 0 --capacity 40 "$meta" forgejo-actions-cache
+                juicefs mount -d --heartbeat 3s --cache-dir /var/jfsCache --cache-size 10240 "$meta" /jfs
+                trap 'kill "$pid" 2>/dev/null; wait "$pid"; juicefs umount /jfs; exit 0' TERM INT
+                # A crashed pod's bolt.db lock lasts until its JuiceFS session expires (5x heartbeat).
+                while :; do
+                  /opt/runner/forgejo-runner cache-server --dir /jfs/actcache --port 4000 --secret "$CACHE_SECRET" &
+                  pid=$!
+                  wait "$pid" && exit 0
+                  sleep 3
+                done
+            env:
+              MINIO_REGION: us-east-1
+              PG_USER:
+                valueFrom:
+                  secretKeyRef:
+                    name: forgejo-cache-postgres
+                    key: username
+              PG_PASSWORD:
+                valueFrom:
+                  secretKeyRef:
+                    name: forgejo-cache-postgres
+                    key: password
+              PG_HOST:
+                valueFrom:
+                  secretKeyRef:
+                    name: forgejo-cache-postgres
+                    key: host
+              PG_DATABASE:
+                valueFrom:
+                  secretKeyRef:
+                    name: forgejo-cache-postgres
+                    key: database
+              S3_ACCESS_KEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: forgejo-actions-cache-s3
+                    key: access-key-id
+              S3_SECRET_KEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: forgejo-actions-cache-s3
+                    key: secret-access-key
+              CACHE_SECRET:
+                valueFrom:
+                  secretKeyRef:
+                    name: forgejo-cache-secret
+                    key: CACHE_SECRET
+            probes:
+              startup:
+                enabled: true
+                custom: true
+                spec:
+                  tcpSocket: { port: 4000 }
+                  periodSeconds: 2
+                  failureThreshold: 60
+              liveness:
+                enabled: true
+                custom: true
+                spec:
+                  tcpSocket: { port: 4000 }
+                  periodSeconds: 30
+              readiness:
+                enabled: true
+                custom: true
+                spec:
+                  tcpSocket: { port: 4000 }
+            resources:
+              requests:
+                cpu: 50m
+                memory: 256Mi
+              limits:
+                memory: 2Gi
+            # FUSE mount.
+            securityContext:
+              privileged: true
+    service:
+      app:
+        controller: forgejo-cache
+        ports:
+          http:
+            port: 4000
+    route:
+      app:
+        hostnames:
+          - actions-cache.erwanleboucher.dev
+        parentRefs:
+          - name: envoy-external
+            namespace: network
+            sectionName: https
+        rules:
+          - backendRefs:
+              - identifier: app
+                port: 4000
+    persistence:
+      runner-bin:
+        type: emptyDir
+        globalMounts:
+          - path: /opt/runner
+      jfs-cache:
+        type: emptyDir
+        sizeLimit: 12Gi
+        advancedMounts:
+          forgejo-cache:
+            app:
+              - path: /var/jfsCache

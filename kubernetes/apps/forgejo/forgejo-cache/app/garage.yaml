@@ -1,0 +1,39 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/garage.rajsingh.info/garagebucket_v1beta1.json
+apiVersion: garage.rajsingh.info/v1beta1
+kind: GarageBucket
+metadata:
+  name: forgejo-actions-cache
+spec:
+  clusterRef:
+    name: garage
+    namespace: garage-system
+  globalAlias: forgejo-actions-cache
+  deletionPolicy: Retain
+  quotas:
+    maxSize: 45Gi
+  # No expiry rule: JuiceFS owns these objects.
+  lifecycle:
+    rules:
+      - id: abort-incomplete-uploads
+        status: Enabled
+        abortIncompleteMultipartUploadDays: 1
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/garage.rajsingh.info/garagekey_v1beta1.json
+apiVersion: garage.rajsingh.info/v1beta1
+kind: GarageKey
+metadata:
+  name: forgejo-actions-cache
+spec:
+  clusterRef:
+    name: garage
+    namespace: garage-system
+  name: forgejo-actions-cache
+  neverExpires: true
+  bucketPermissions:
+    - bucketRef:
+        name: forgejo-actions-cache
+      read: true
+      write: true
+  secretTemplate:
+    name: forgejo-actions-cache-s3

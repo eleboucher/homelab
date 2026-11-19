@@ -20,8 +20,8 @@ spec:
           runner.yaml: |-
             cache:
               enabled: true
-              dir: /data/cache
-              port: 8088
+              external_server: http://forgejo-cache.forgejo.svc:4000/
+              secret_url: file:/etc/forgejo-runner-secret/cache-secret
               proxy_port: 8089
             container:
               docker_host: "-"
