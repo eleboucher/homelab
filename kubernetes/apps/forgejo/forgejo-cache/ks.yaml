@@ -13,8 +13,6 @@ spec:
   dependsOn:
     - name: cnpg-cluster
       namespace: database
-    - name: garage
-      namespace: garage-system
   interval: 1h
   path: ./kubernetes/apps/forgejo/forgejo-cache/app
   postBuild:

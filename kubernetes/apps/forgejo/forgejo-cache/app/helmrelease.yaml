@@ -32,10 +32,10 @@ spec:
               - |
                 meta="postgres://$PG_USER:$PG_PASSWORD@$PG_HOST:5432/$PG_DATABASE?sslmode=disable"
                 juicefs status "$meta" >/dev/null 2>&1 \
-                  || juicefs format --storage minio --bucket http://garage.garage-system.svc:3900/forgejo-actions-cache \
+                  || juicefs format --storage s3 --bucket https://forgejo-cache.s3.gra.io.cloud.ovh.net \
                        --access-key "$S3_ACCESS_KEY" --secret-key "$S3_SECRET_KEY" \
-                       --trash-days 0 --capacity 40 "$meta" forgejo-actions-cache
-                juicefs mount -d --heartbeat 3s --cache-dir /var/jfsCache --cache-size 10240 "$meta" /jfs
+                       --trash-days 0 "$meta" forgejo-actions-cache
+                juicefs mount -d --heartbeat 3s --cache-dir /var/jfsCache --cache-size 40960 "$meta" /jfs
                 trap 'kill "$pid" 2>/dev/null; wait "$pid"; juicefs umount /jfs; exit 0' TERM INT
                 # A crashed pod's bolt.db lock lasts until its JuiceFS session expires (5x heartbeat).
                 while :; do
@@ -45,7 +45,7 @@ spec:
                   sleep 3
                 done
             env:
-              MINIO_REGION: us-east-1
+              AWS_REGION: gra
               PG_USER:
                 valueFrom:
                   secretKeyRef:
@@ -69,13 +69,13 @@ spec:
               S3_ACCESS_KEY:
                 valueFrom:
                   secretKeyRef:
-                    name: forgejo-actions-cache-s3
-                    key: access-key-id
+                    name: forgejo-cache-secret
+                    key: S3_ACCESS_KEY
               S3_SECRET_KEY:
                 valueFrom:
                   secretKeyRef:
-                    name: forgejo-actions-cache-s3
-                    key: secret-access-key
+                    name: forgejo-cache-secret
+                    key: S3_SECRET_KEY
               CACHE_SECRET:
                 valueFrom:
                   secretKeyRef:
@@ -134,7 +134,7 @@ spec:
           - path: /opt/runner
       jfs-cache:
         type: emptyDir
-        sizeLimit: 12Gi
+        sizeLimit: 45Gi
         advancedMounts:
           forgejo-cache:
             app:
