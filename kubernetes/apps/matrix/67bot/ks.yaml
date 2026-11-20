@@ -1,0 +1,60 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: 67bot
+spec:
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: 67bot
+  components:
+    - ../../../../components/kopiur/hot
+  dependsOn:
+    - name: continuwuity
+    - name: kopiur-repository
+      namespace: kopiur-system
+    - name: miroir
+      namespace: miroir-system
+    - name: onepassword
+      namespace: security
+  interval: 1h
+  path: ./kubernetes/apps/matrix/67bot/app
+  # Continuwuity already grants Kopiur's mover access to restores in matrix.
+  patches:
+    - patch: |-
+        $patch: delete
+        apiVersion: rbac.authorization.k8s.io/v1
+        kind: Role
+        metadata:
+          name: kopiur-mover-restore-reader
+      target:
+        kind: Role
+        name: kopiur-mover-restore-reader
+    - patch: |-
+        $patch: delete
+        apiVersion: rbac.authorization.k8s.io/v1
+        kind: RoleBinding
+        metadata:
+          name: kopiur-mover-restore-reader
+      target:
+        kind: RoleBinding
+        name: kopiur-mover-restore-reader
+    - target:
+        kind: SnapshotPolicy
+      patch: |-
+        - op: replace
+          path: /spec/mover/cache/capacity
+          value: 2Gi
+  postBuild:
+    substitute:
+      APP: 67bot
+      APP_NAMESPACE: matrix
+      KOPIUR_CAPACITY: 1Gi
+  prune: true
+  sourceRef:
+    kind: OCIRepository
+    name: flux-system
+    namespace: flux-system
+  targetNamespace: matrix
+  timeout: 5m

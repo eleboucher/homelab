@@ -11,4 +11,5 @@ resources:
   - mautrix-signal/ks.yaml
   - mautrix-whatsapp/ks.yaml
   - gomuks/ks.yaml
+  - 67bot/ks.yaml
   - namespace.yaml
