@@ -33,7 +33,6 @@ spec:
     sources:
       - crd
       - gateway-httproute
-    # Same registry as ovh-dns so the existing records are adopted.
     txtOwnerId: default
     txtPrefix: "k8s-%{record_type}."
     domainFilters:

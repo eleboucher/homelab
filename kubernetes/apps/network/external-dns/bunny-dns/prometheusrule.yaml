@@ -3,10 +3,10 @@
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
-  name: external-dns-ovh-rules
+  name: external-dns-rules
 spec:
   groups:
-    - name: external-dns-ovh.rules
+    - name: external-dns.rules
       rules:
         - alert: ExternalDNSStale
           expr: |-

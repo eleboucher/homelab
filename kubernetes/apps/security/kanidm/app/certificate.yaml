@@ -10,7 +10,7 @@ spec:
   duration: 160h
   issuerRef:
     kind: ClusterIssuer
-    name: letsencrypt-production
+    name: letsencrypt-bunny
   privateKey:
     algorithm: ECDSA
     size: 256
