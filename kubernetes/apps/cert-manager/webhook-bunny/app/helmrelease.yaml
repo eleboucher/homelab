@@ -27,8 +27,8 @@ spec:
           app:
             image:
               repository: git.ow-ops.eu/ow-ops/external-dns-bunny-webhook
-              tag: main-f5dedc5-1795030415
-              digest: sha256:865d5d660eaf2e6179095847fedb3181ca0ea6e7873f2a57ebef4578d36a345b
+              tag: main-ef9aac3-1795189553
+              digest: sha256:a6599c9a7124dc6651ca0e29475eacb24abd71cdaccc24f4f41049e7a91de8c9
             command:
               - /opt/external-dns-bunny-webhook/cert-manager-webhook
             args:
