@@ -1,0 +1,15 @@
+---
+apiVersion: apiregistration.k8s.io/v1
+kind: APIService
+metadata:
+  name: v1alpha1.bunny.acme.erwanleboucher.dev
+  annotations:
+    cert-manager.io/inject-ca-from: cert-manager/cert-manager-webhook-bunny-tls
+spec:
+  group: bunny.acme.erwanleboucher.dev
+  version: v1alpha1
+  groupPriorityMinimum: 1000
+  versionPriority: 15
+  service:
+    name: cert-manager-webhook-bunny
+    namespace: cert-manager

@@ -1,0 +1,18 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/cert-manager.io/clusterissuer_v1.json
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt-bunny
+spec:
+  acme:
+    server: https://acme-v02.api.letsencrypt.org/directory
+    email: admin@erwanleboucher.dev
+    profile: shortlived
+    privateKeySecretRef:
+      name: letsencrypt-bunny
+    solvers:
+      - dns01:
+          webhook:
+            groupName: bunny.acme.erwanleboucher.dev
+            solverName: bunny

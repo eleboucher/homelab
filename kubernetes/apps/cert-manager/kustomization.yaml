@@ -8,5 +8,6 @@ resources:
   - cert-manager/ks.yaml
   - csi-driver/ks.yaml
   - webhook-ovh/ks.yaml
+  - webhook-bunny/ks.yaml
   - trust-manager/ks.yaml
   - namespace.yaml

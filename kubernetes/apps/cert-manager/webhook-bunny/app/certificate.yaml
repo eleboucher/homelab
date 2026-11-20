@@ -1,0 +1,13 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/cert-manager.io/certificate_v1.json
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: cert-manager-webhook-bunny-tls
+spec:
+  secretName: cert-manager-webhook-bunny-tls
+  dnsNames:
+    - cert-manager-webhook-bunny.cert-manager.svc
+  issuerRef:
+    name: cluster-ca
+    kind: ClusterIssuer

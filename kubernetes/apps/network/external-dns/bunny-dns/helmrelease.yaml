@@ -1,0 +1,44 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app bunny-dns
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: bunny-dns
+  interval: 1h
+  values:
+    fullnameOverride: *app
+    provider:
+      name: webhook
+      webhook:
+        image:
+          repository: git.ow-ops.eu/ow-ops/external-dns-bunny-webhook
+          tag: main-f5dedc5-1795030415
+          digest: sha256:865d5d660eaf2e6179095847fedb3181ca0ea6e7873f2a57ebef4578d36a345b
+        env:
+          - name: BUNNY_API_KEY
+            valueFrom:
+              secretKeyRef:
+                name: &secret external-dns-bunny-secret
+                key: BUNNY_API_KEY
+    extraArgs:
+      - --crd-source-apiversion=externaldns.k8s.io/v1alpha1
+      - --crd-source-kind=DNSEndpoint
+      - --gateway-name=envoy-external
+    triggerLoopOnEvent: true
+    policy: sync
+    sources:
+      - crd
+      - gateway-httproute
+    # Same registry as ovh-dns so the existing records are adopted.
+    txtOwnerId: default
+    txtPrefix: "k8s-%{record_type}."
+    domainFilters:
+      - erwanleboucher.dev
+    serviceMonitor:
+      enabled: true
+    podAnnotations:
+      secret.reloader.stakater.com/reload: *secret

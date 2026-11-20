@@ -1,0 +1,94 @@
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: cert-manager-webhook-bunny
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: cert-manager-webhook-bunny
+  interval: 1h
+  values:
+    defaultPodOptions:
+      automountServiceAccountToken: true
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 20000
+        runAsGroup: 20000
+        seccompProfile:
+          type: RuntimeDefault
+    controllers:
+      cert-manager-webhook-bunny:
+        annotations:
+          secret.reloader.stakater.com/reload: cert-manager-webhook-bunny-secret
+        serviceAccount:
+          name: cert-manager-webhook-bunny
+        containers:
+          app:
+            image:
+              repository: git.ow-ops.eu/ow-ops/external-dns-bunny-webhook
+              tag: main-f5dedc5-1795030415
+              digest: sha256:865d5d660eaf2e6179095847fedb3181ca0ea6e7873f2a57ebef4578d36a345b
+            command:
+              - /opt/external-dns-bunny-webhook/cert-manager-webhook
+            args:
+              - --secure-port=8443
+              - --tls-cert-file=/tls/tls.crt
+              - --tls-private-key-file=/tls/tls.key
+            env:
+              GROUP_NAME: bunny.acme.erwanleboucher.dev
+            envFrom:
+              - secretRef:
+                  name: cert-manager-webhook-bunny-secret
+            probes:
+              liveness: &probe
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    scheme: HTTPS
+                    path: /healthz
+                    port: 8443
+              readiness: *probe
+            resources:
+              requests:
+                cpu: 10m
+                memory: 64Mi
+              limits:
+                memory: 256Mi
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - ALL
+    service:
+      cert-manager-webhook-bunny:
+        controller: cert-manager-webhook-bunny
+        ports:
+          https:
+            port: 443
+            targetPort: 8443
+    rawResources:
+      authentication-reader:
+        forceRename: cert-manager-webhook-bunny:webhook-authentication-reader
+        manifest:
+          apiVersion: rbac.authorization.k8s.io/v1
+          kind: RoleBinding
+          metadata:
+            namespace: kube-system
+          roleRef:
+            apiGroup: rbac.authorization.k8s.io
+            kind: Role
+            name: extension-apiserver-authentication-reader
+          subjects:
+            - kind: ServiceAccount
+              name: cert-manager-webhook-bunny
+              namespace: cert-manager
+    persistence:
+      tls:
+        type: secret
+        name: cert-manager-webhook-bunny-tls
+        globalMounts:
+          - path: /tls
+            readOnly: true
