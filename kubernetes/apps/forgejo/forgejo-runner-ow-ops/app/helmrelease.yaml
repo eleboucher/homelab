@@ -127,6 +127,8 @@ spec:
                     mountPath: /var/lib/docker
                   - name: docker-certs
                     mountPath: /certs
+                  - name: shared
+                    mountPath: /shared
                 startupProbe:
                   exec:
                     command:
