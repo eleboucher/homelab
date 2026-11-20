@@ -11,3 +11,5 @@ spec:
   rules:
     - backendRefs:
         - name: livekit
+          port: 50000
+          endPort: 60000

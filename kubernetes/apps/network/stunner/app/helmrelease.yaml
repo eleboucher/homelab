@@ -5,12 +5,35 @@ kind: HelmRelease
 metadata:
   name: stunner
 spec:
-  chartRef:
-    kind: OCIRepository
-    name: stunner
+  chart:
+    spec:
+      chart: stunner
+      sourceRef:
+        kind: HelmRepository
+        name: stunner
+      version: 2.0.2
   interval: 1h
+  postRenderers:
+    - kustomize:
+        patches:
+          - target:
+              kind: Deployment
+              name: stunner-gateway-operator-controller-manager
+            patch: |
+              - op: replace
+                path: /metadata/name
+                value: stunner-operator
+              - op: add
+                path: /spec/strategy
+                value:
+                  type: RollingUpdate
+                  rollingUpdate:
+                    maxSurge: 0
+                    maxUnavailable: 1
   values:
     standardCrds:
+      enabled: false
+    stunnerAuthService:
       enabled: false
     stunnerGatewayOperator:
       dataplane:

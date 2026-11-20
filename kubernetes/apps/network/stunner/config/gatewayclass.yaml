@@ -8,6 +8,7 @@ spec:
   authRef:
     name: stunner-auth
     namespace: network
+  authType: ephemeral
   logLevel: "all:INFO"
   realm: stunner.l7mp.io
 ---
