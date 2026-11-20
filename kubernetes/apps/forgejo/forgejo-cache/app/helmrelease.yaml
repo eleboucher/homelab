@@ -20,7 +20,7 @@ spec:
           runner-bin:
             image:
               repository: data.forgejo.org/forgejo/runner
-              tag: 13.2.1
+              tag: 13.2.2
             command: [sh, -c, 'cp "$(command -v forgejo-runner)" /opt/runner/']
         containers:
           app:
