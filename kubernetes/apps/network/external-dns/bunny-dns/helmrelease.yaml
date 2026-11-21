@@ -16,8 +16,8 @@ spec:
       webhook:
         image:
           repository: git.ow-ops.eu/ow-ops/external-dns-bunny-webhook
-          tag: main-ef9aac3-1795189553
-          digest: sha256:a6599c9a7124dc6651ca0e29475eacb24abd71cdaccc24f4f41049e7a91de8c9
+          tag: main-64605cc-1795248315
+          digest: sha256:dc7db7c47813d190319aa439ff016bd8c4ec2c332ef7bb69464e47adabf58d8d
         env:
           - name: BUNNY_API_KEY
             valueFrom:
