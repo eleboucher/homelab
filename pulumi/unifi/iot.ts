@@ -22,6 +22,13 @@ new unifi.Client(
   { dependsOn: iot },
 );
 
+// Stays on the main Wi-Fi but is placed in the IoT network.
+new unifi.Client(
+  "iot-9a77ee00193c",
+  { mac: "9a:77:ee:00:19:3c", networkId: iot.id },
+  { dependsOn: iot },
+);
+
 const zone = new unifi.FirewallZone("iot", { name: "IoT", networkIds: [iot.id] });
 const internal = unifi.getFirewallZoneOutput({ name: "Internal" });
 const gateway = unifi.getFirewallZoneOutput({ name: "Gateway" });
