@@ -1,8 +1,5 @@
 import "./system";
-import "./certificates";
-import "./users";
 import "./interfaces";
 import "./ip";
-import "./dns";
-import "./firewall";
-import "./ipv6";
+import "./users";
+import "./services";

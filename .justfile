@@ -20,10 +20,6 @@ mod talos "talos"
 [group('Mikrotik')]
 mod mikrotik 'pulumi/mikrotik'
 
-# Mikrotik OpenTofu Recipes, kept until the Pulumi import is confirmed
-[group('Mikrotik')]
-mod mikrotik-tofu 'tofu/mikrotik'
-
 # UniFi Recipes
 [group('UniFi')]
 mod unifi 'pulumi/unifi'

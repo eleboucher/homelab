@@ -24,10 +24,6 @@ up *args:
 refresh:
     cd "{{ source_directory() }}" && {{ op_run }} pulumi refresh
 
-# One-off adoption of the resources OpenTofu created; delete import.json afterwards.
-[doc('Import the live router into the stack (state only)')]
-import:
-    cd "{{ source_directory() }}" && {{ op_run }} pulumi import --file import.json --protect=false --generate-code=false
 
 [doc('Pass-through any pulumi subcommand, e.g. just mikrotik run stack ls')]
 run *args:

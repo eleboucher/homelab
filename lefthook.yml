@@ -17,9 +17,3 @@ pre-commit:
     - name: k8s-schema-hook
       glob: "kubernetes/**/*.{yml,yaml}"
       run: hooks/.venv/bin/python hooks/k8s_yaml_schema.py --config .k8s-schema-hook.yaml {staged_files}
-    - name: tofu-fmt
-      glob: "tofu/**/*.tf"
-      run: tofu -chdir=tofu/mikrotik fmt -check -recursive
-    - name: tofu-validate
-      glob: "tofu/mikrotik/**/*.tf"
-      run: tofu -chdir=tofu/mikrotik validate
