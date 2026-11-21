@@ -53,7 +53,7 @@ metadata:
   name: envoy-external-dns
   annotations:
     external-dns.kubernetes.io/hostname: external.erwanleboucher.dev
-    external-dns.kubernetes.io/target: envoy-external-lan.erwanleboucher.dev
+    external-dns.kubernetes.io/target: "192.168.69.126,2a01:e0a:e4b:aa32::126"
 spec:
   clusterIP: None
 ---
