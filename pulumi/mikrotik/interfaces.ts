@@ -15,7 +15,7 @@ const ethernetInterfaces: Record<string, Ethernet> = {
     ether6: { comment: "Access port", untagged: "vlan10-mgmt" },
     ether7: { comment: "Access port", untagged: "vlan10-mgmt" },
     ether8: { comment: "Access port", untagged: "vlan10-mgmt" },
-    "sfp-sfpplus1": { comment: "WAN uplink", untagged: "vlan10-mgmt" },
+    "sfp-sfpplus1": { comment: "UCG uplink", untagged: "vlan10-mgmt" },
     "sfp-sfpplus2": { comment: "Access port", l2mtu: 9216, mtu: 9000, untagged: "vlan10-mgmt" },
 };
 

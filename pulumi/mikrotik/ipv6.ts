@@ -2,9 +2,9 @@ import * as routeros from "@pulumi/routeros";
 import { wgMb } from "./wireguard";
 
 new routeros.Ipv6Address("lan_gua", {
-    address: "2a01:e0a:e4b:aa31::1/64",
+    address: "2a01:e0a:e4b:aa31::2/64",
     interface: "vlan10-mgmt",
-    advertise: true,
+    advertise: false,
 });
 
 new routeros.Ipv6Address("wg_mb_gua", {
@@ -18,21 +18,13 @@ new routeros.Ipv6Address("wg_mb_ll", {
     interface: wgMb.name,
 });
 
-new routeros.Ipv6NeighborDiscovery("lan-nd", {
-    interface: "vlan10-mgmt",
-    advertiseDns: true,
-    dns: "2a01:e0a:e4b:aa31::1",
-    // We advertise DNS through RA and do not run DHCPv6 on this LAN.
-    otherConfiguration: false,
-    raInterval: "20s-1m",
-    raLifetime: "3m",
-    raPreference: "high",
-});
+// The UCG sends the router advertisements for this LAN.
+new routeros.Ipv6NeighborDiscovery("lan-nd", { interface: "vlan10-mgmt", disabled: true });
 
 new routeros.Ipv6Route("default-route-v6", {
     dstAddress: "::/0",
-    gateway: "fe80::3a07:16ff:fec7:1815%vlan10-mgmt",
-    comment: "IPv6 default via Freebox",
+    gateway: "2a01:e0a:e4b:aa31::1",
+    comment: "IPv6 default via UCG",
 });
 
 // Created one after the other, in the order the router evaluates them.

@@ -58,62 +58,6 @@ new routeros.RoutingBgpConnection(
 );
 
 new routeros.RoutingBgpConnection(
-    "kharkiv_v6",
-    {
-        name: "to-kharkiv-v6",
-        as: "64513",
-        instance: k8s.name,
-        addressFamilies: "ipv6",
-        routingTable: "main",
-        disabled: false,
-        remote: { address: "2a01:e0a:e4b:aa31::43", as: "64514" },
-        local: { role: "ebgp" },
-        input: { filter: "bgp-in-cilium" },
-        output: { filterChain: "bgp-out-cilium" },
-    },
-    {
-        ignoreChanges: [
-            "addPathOut",
-            "connect",
-            "disabled",
-            "keepaliveTime",
-            "listen",
-            "local",
-            "nexthopChoice",
-            "remote",
-        ],
-    },
-);
-
-new routeros.RoutingBgpConnection(
-    "paris_v6",
-    {
-        name: "to-paris-v6",
-        as: "64513",
-        instance: k8s.name,
-        addressFamilies: "ipv6",
-        routingTable: "main",
-        disabled: false,
-        remote: { address: "2a01:e0a:e4b:aa31::42", as: "64514" },
-        local: { role: "ebgp" },
-        input: { filter: "bgp-in-cilium" },
-        output: { filterChain: "bgp-out-cilium" },
-    },
-    {
-        ignoreChanges: [
-            "addPathOut",
-            "connect",
-            "disabled",
-            "keepaliveTime",
-            "listen",
-            "local",
-            "nexthopChoice",
-            "remote",
-        ],
-    },
-);
-
-new routeros.RoutingBgpConnection(
     "mortebrume",
     {
         name: "mortebrume",
