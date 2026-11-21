@@ -29,7 +29,8 @@ spec:
 
     immich:
       metrics:
-        enabled: true
+        # v3.4.2 answers 400 on the metrics ports (immich-app/immich#33466); set back to true on v3.4.3.
+        enabled: false
       persistence:
         library:
           existingClaim: immich-library
