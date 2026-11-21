@@ -5,6 +5,7 @@ export const lan = new unifi.Network("lan", {
   name: "Default",
   subnet: "192.168.1.1/24",
   domainName: "internal",
+  multicastDns: true,
   dhcpServer: {
     enabled: true,
     start: "192.168.1.3",

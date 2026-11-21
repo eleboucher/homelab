@@ -6,3 +6,4 @@ import "./firewall";
 import "./vpn";
 import "./wifi";
 import "./security";
+import "./iot";
