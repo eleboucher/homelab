@@ -42,7 +42,7 @@ new unifi.FirewallPolicy("lan_to_iot", {
 });
 
 const mqtt = new unifi.FirewallPolicy("iot_mqtt", {
-  name: "IoT to MQTT",
+  name: "IoT to MQTT and Frigate RTMP",
   action: "ALLOW",
   protocol: "tcp",
   ipVersion: "IPV4",
@@ -50,9 +50,9 @@ const mqtt = new unifi.FirewallPolicy("iot_mqtt", {
   destination: {
     zoneId: internal.id,
     matchingTarget: "IP",
-    ips: ["192.168.69.122"],
+    ips: ["192.168.69.122", "192.168.69.123"],
     portMatchingType: "SPECIFIC",
-    port: "1883",
+    port: "1883,1935",
   },
 });
 
