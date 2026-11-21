@@ -4,3 +4,4 @@ import "./dns";
 import "./bgp";
 import "./firewall";
 import "./vpn";
+import "./wifi";

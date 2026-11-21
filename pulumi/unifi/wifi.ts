@@ -1,0 +1,18 @@
+import * as unifi from "@pulumi/unifi";
+import { requireEnv } from "./env";
+import { lan } from "./network";
+
+// The groups every UniFi site ships with.
+const apGroup = unifi.getApGroupOutput({ name: "All APs" });
+const clientGroup = unifi.getClientQosRateOutput({ name: "Default" });
+
+// Same SSID and passphrase as the Freebox, so clients move over without being touched.
+new unifi.Wlan("home", {
+  name: requireEnv("WIFI_SSID"),
+  security: "wpapsk",
+  passphraseWo: requireEnv("WIFI_PASSPHRASE"),
+  passphraseWoVersion: 1,
+  networkId: lan.id,
+  userGroupId: clientGroup.id,
+  apGroup: { ids: [apGroup.id] },
+});

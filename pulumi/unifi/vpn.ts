@@ -1,12 +1,7 @@
-import * as pulumi from "@pulumi/pulumi";
 import * as unifi from "@pulumi/unifi";
+import { requireEnv } from "./env";
 
-// Keys carried over from the MikroTik so existing peers keep working.
-const requireEnv = (name: string) => {
-  const value = process.env[name];
-  if (!value) throw new Error(`${name} is not set`);
-  return pulumi.secret(value);
-};
+// The private keys are carried over from the MikroTik so existing peers keep working.
 
 // Remote access, replacing wg-remote on the MikroTik.
 export const wgRemote = new unifi.VpnServer("wg_remote", {
