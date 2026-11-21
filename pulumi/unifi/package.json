@@ -1,0 +1,16 @@
+{
+  "name": "unifi",
+  "private": true,
+  "main": "index.ts",
+  "devDependencies": {
+    "@types/node": "^24"
+  },
+  "dependencies": {
+    "@pulumi/pulumi": "^3.277.0",
+    "@pulumi/unifi": "file:sdks/unifi",
+    "typescript": "^5"
+  },
+  "allowScripts": {
+    "file:sdks/unifi": true
+  }
+}

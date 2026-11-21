@@ -1,0 +1,14 @@
+name: unifi
+runtime:
+  name: nodejs
+  options:
+    packagemanager: npm
+backend:
+  url: s3://opentofu-homelab/pulumi?endpoint=s3.rbx.io.cloud.ovh.net&region=rbx&s3ForcePathStyle=true
+packages:
+  unifi:
+    source: terraform-provider
+    version: 1.5.1
+    parameters:
+      - ubiquiti-community/unifi
+      - 0.65.0
