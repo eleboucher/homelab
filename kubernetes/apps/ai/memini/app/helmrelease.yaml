@@ -66,6 +66,8 @@ spec:
         annotations:
           gatus.home-operations.com/endpoint: |-
             path: /healthz
+        labels:
+          external-dns.erwanleboucher.dev/lan: "false"
         parentRefs:
           - name: envoy-external
             namespace: network

@@ -17,6 +17,7 @@ spec:
       - gateway-httproute
       - service
     txtOwnerId: default
+    labelFilter: external-dns.erwanleboucher.dev/lan notin (false)
     txtPrefix: "k8s-%{record_type}."
     domainFilters:
       - erwanleboucher.dev
