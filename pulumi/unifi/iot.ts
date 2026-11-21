@@ -41,14 +41,33 @@ new unifi.FirewallPolicy("lan_to_iot", {
   destination: { zoneId: zone.id, matchingTarget: "ANY" },
 });
 
-new unifi.FirewallPolicy("iot_to_lan", {
-  name: "Block IoT to LAN",
-  action: "BLOCK",
-  protocol: "all",
-  ipVersion: "BOTH",
+const mqtt = new unifi.FirewallPolicy("iot_mqtt", {
+  name: "IoT to MQTT",
+  action: "ALLOW",
+  protocol: "tcp",
+  ipVersion: "IPV4",
   source: { zoneId: zone.id, matchingTarget: "ANY" },
-  destination: { zoneId: internal.id, matchingTarget: "ANY" },
+  destination: {
+    zoneId: internal.id,
+    matchingTarget: "IP",
+    ips: ["192.168.69.122"],
+    portMatchingType: "SPECIFIC",
+    port: "1883",
+  },
 });
+
+new unifi.FirewallPolicy(
+  "block_iot_to_lan",
+  {
+    name: "Block IoT to LAN",
+    action: "BLOCK",
+    protocol: "all",
+    ipVersion: "BOTH",
+    source: { zoneId: zone.id, matchingTarget: "ANY" },
+    destination: { zoneId: internal.id, matchingTarget: "ANY" },
+  },
+  { dependsOn: mqtt },
+);
 
 new unifi.FirewallPolicy("iot_to_gateway", {
   name: "IoT DNS, NTP and mDNS",
