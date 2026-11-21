@@ -1,0 +1,14 @@
+name: mikrotik
+runtime:
+  name: nodejs
+  options:
+    packagemanager: npm
+backend:
+  url: s3://opentofu-homelab/pulumi?endpoint=s3.rbx.io.cloud.ovh.net&region=rbx&s3ForcePathStyle=true
+packages:
+  routeros:
+    source: terraform-provider
+    version: 1.5.1
+    parameters:
+      - terraform-routeros/routeros
+      - 1.99.1
