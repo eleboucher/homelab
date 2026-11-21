@@ -14,6 +14,7 @@ spec:
     triggerLoopOnEvent: true
     policy: sync
     sources:
+      - crd
       - gateway-httproute
       - service
     txtOwnerId: default
@@ -21,6 +22,7 @@ spec:
     txtPrefix: "k8s-%{record_type}."
     domainFilters:
       - erwanleboucher.dev
+      - resolver.arpa
     serviceMonitor:
       enabled: true
     podAnnotations:

@@ -4,6 +4,8 @@ apiVersion: externaldns.k8s.io/v1alpha1
 kind: DNSEndpoint
 metadata:
   name: atproto
+  labels:
+    external-dns.erwanleboucher.dev/lan: "false"
 spec:
   endpoints:
     - dnsName: _atproto.erwanleboucher.dev
