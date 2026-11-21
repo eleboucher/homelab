@@ -1,0 +1,63 @@
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/helm.toolkit.fluxcd.io/helmrelease_v2.json
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: external-dns-unifi
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: external-dns-unifi
+  interval: 30m
+  values:
+    fullnameOverride: external-dns-unifi
+    triggerLoopOnEvent: true
+    policy: sync
+    extraArgs:
+      - --gateway-name=envoy-internal
+    sources:
+      - gateway-httproute
+      - service
+    txtOwnerId: default
+    txtPrefix: k8s.
+    domainFilters:
+      - erwanleboucher.dev
+    serviceMonitor:
+      enabled: true
+    resources:
+      requests:
+        memory: 128Mi
+      limits:
+        memory: 256Mi
+    provider:
+      name: webhook
+      webhook:
+        image:
+          repository: ghcr.io/home-operations/external-dns-unifi-webhook
+          tag: 0.11.0
+        env:
+          - name: UNIFI_HOST
+            value: "https://192.168.1.1"
+          - name: UNIFI_API_KEY
+            valueFrom:
+              secretKeyRef:
+                name: unifi-credentials
+                key: api_key
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: http-webhook
+          initialDelaySeconds: 10
+          timeoutSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /readyz
+            port: http-webhook
+          initialDelaySeconds: 10
+          timeoutSeconds: 5
+        resources:
+          requests:
+            cpu: 20m
+            memory: 32Mi
+          limits:
+            memory: 128Mi

@@ -94,6 +94,11 @@ spec:
           peerAddress: 192.168.1.2
           peerConfigRef:
             name: l3-bgp-peer-config
+        - name: unifi
+          peerASN: 64513
+          peerAddress: 192.168.1.1
+          peerConfigRef:
+            name: l3-bgp-peer-config
         - name: mikrotik-v6
           peerASN: 64513
           peerAddress: 2a01:e0a:e4b:aa31::1
