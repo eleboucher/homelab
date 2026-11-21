@@ -12,6 +12,7 @@ resources:
   - gotosocial/ks.yaml
   - homepage/ks.yaml
   - immich/ks.yaml
+  - mailbowox/ks.yaml
   - mealie/ks.yaml
   - miniflux/ks.yaml
   - obsidian-livesync/ks.yaml
