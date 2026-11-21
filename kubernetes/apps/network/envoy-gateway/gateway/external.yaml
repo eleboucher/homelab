@@ -15,8 +15,7 @@ spec:
   infrastructure:
     annotations:
       external-dns.kubernetes.io/hostname: envoy-external-lan.erwanleboucher.dev
-      # Clients on the Freebox IPv6 prefix cannot reach the direct IPv6 VIP.
-      external-dns.kubernetes.io/target: "192.168.69.126"
+      external-dns.kubernetes.io/target: "192.168.69.126,2a01:e0a:e4b:aa32::126"
       lbipam.cilium.io/ips: "192.168.69.126,2a01:e0a:e4b:aa32::126"
   listeners:
     - name: http

@@ -59,6 +59,8 @@ spec:
               192.168.1.40 normandie.internal normandie
               192.168.1.41 kharkiv.k8s.internal kharkiv
               192.168.1.42 paris.k8s.internal paris k8s.internal
+              2a01:e0a:e4b:aa31::43 kharkiv.k8s.internal kharkiv
+              2a01:e0a:e4b:aa31::42 paris.k8s.internal paris k8s.internal
               192.168.1.2 router.erwanleboucher.dev router
               fallthrough
           - name: forward
@@ -79,7 +81,7 @@ spec:
       - filename: internal.db
         domain: internal
         contents: |-
-          internal. 60 IN SOA ns.internal. hostmaster.internal. 2 60 60 60 60
+          internal. 60 IN SOA ns.internal. hostmaster.internal. 3 60 60 60 60
           internal. 60 IN NS ns.internal.
           ns.internal. 60 IN A 192.168.1.2
           macmini.internal. 60 IN A 192.168.1.23
@@ -87,6 +89,9 @@ spec:
           kharkiv.k8s.internal. 60 IN A 192.168.1.41
           paris.k8s.internal. 60 IN A 192.168.1.42
           k8s.internal. 60 IN A 192.168.1.42
+          kharkiv.k8s.internal. 60 IN AAAA 2a01:e0a:e4b:aa31::43
+          paris.k8s.internal. 60 IN AAAA 2a01:e0a:e4b:aa31::42
+          k8s.internal. 60 IN AAAA 2a01:e0a:e4b:aa31::42
     affinity:
       nodeAffinity:
         preferredDuringSchedulingIgnoredDuringExecution:
