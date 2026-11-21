@@ -189,8 +189,8 @@ spec:
               - -c
               - |
                 set -e
-                node /app/openclaw.mjs plugins update discord --accept-capabilities
                 node /app/openclaw.mjs doctor --fix
+                node /app/openclaw.mjs plugins update discord --accept-capabilities
                 exec node dist/index.js gateway --bind lan
             env:
               OPENCLAW_LOG_LEVEL: debug
