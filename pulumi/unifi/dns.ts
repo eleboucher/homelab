@@ -13,3 +13,13 @@ const staticDnsRecords: Record<string, string> = {
 for (const [name, value] of Object.entries(staticDnsRecords)) {
   new unifi.DnsRecord(`static-${name}`, { name, recordType: "A", value });
 }
+
+const staticAaaaRecords: Record<string, string> = {
+  "kharkiv.k8s.internal": "2a01:e0a:e4b:aa31::43",
+  "paris.k8s.internal": "2a01:e0a:e4b:aa31::42",
+  "k8s.internal": "2a01:e0a:e4b:aa31::42",
+};
+
+for (const [name, value] of Object.entries(staticAaaaRecords)) {
+  new unifi.DnsRecord(`static-aaaa-${name}`, { name, recordType: "AAAA", value });
+}
