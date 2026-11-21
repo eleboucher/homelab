@@ -1,21 +1,9 @@
 import * as routeros from "@pulumi/routeros";
-import { wgMb } from "./wireguard";
 
 new routeros.Ipv6Address("lan_gua", {
   address: "2a01:e0a:e4b:aa31::2/64",
   interface: "vlan10-mgmt",
   advertise: false,
-});
-
-new routeros.Ipv6Address("wg_mb_gua", {
-  address: "2a01:e0a:e4b:aa31:ffff::1/128",
-  interface: wgMb.name,
-  advertise: false,
-});
-
-new routeros.Ipv6Address("wg_mb_ll", {
-  address: "fe80::2/64",
-  interface: wgMb.name,
 });
 
 // The UCG sends the router advertisements for this LAN.
@@ -29,16 +17,6 @@ new routeros.Ipv6Route("default-route-v6", {
 
 // Created one after the other, in the order the router evaluates them.
 const filterRules: [string, routeros.Ipv6FirewallFilterArgs][] = [
-  [
-    "input_wireguard",
-    {
-      chain: "input",
-      action: "accept",
-      protocol: "udp",
-      dstPort: "51820",
-      comment: "WireGuard vx0",
-    },
-  ],
   [
     "input_established",
     {
@@ -83,10 +61,6 @@ const filterRules: [string, routeros.Ipv6FirewallFilterArgs][] = [
   [
     "input_link_local",
     { chain: "input", action: "accept", srcAddress: "fe80::/10", comment: "Allow link-local" },
-  ],
-  [
-    "forward_vx0_to_lan",
-    { chain: "forward", action: "accept", inInterface: wgMb.name, comment: "vx0 to LAN" },
   ],
   [
     "forward_icmpv6",

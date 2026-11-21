@@ -5,6 +5,4 @@ import "./interfaces";
 import "./ip";
 import "./dns";
 import "./firewall";
-import "./wireguard";
 import "./ipv6";
-import "./bgp";
