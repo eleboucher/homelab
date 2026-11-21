@@ -9,6 +9,7 @@ new unifi.FirewallPolicy("external_gateway_v6", {
   action: "ALLOW",
   protocol: "tcp",
   ipVersion: "IPV6",
+  createAllowRespond: true,
   source: { zoneId: external.id, matchingTarget: "ANY" },
   destination: {
     zoneId: internal.id,
