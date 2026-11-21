@@ -10,6 +10,9 @@ const clientGroup = unifi.getClientQosRateOutput({ name: "Default" });
 new unifi.Wlan("home", {
   name: requireEnv("WIFI_SSID"),
   security: "wpapsk",
+  // WPA2/WPA3 transition mode, as on the Freebox.
+  wpa3: { support: true, transition: true },
+  pmfMode: "optional",
   passphraseWo: requireEnv("WIFI_PASSPHRASE"),
   passphraseWoVersion: 1,
   networkId: lan.id,
