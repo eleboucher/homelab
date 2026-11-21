@@ -42,3 +42,37 @@ new routeros.SystemUser(
   },
   { ignoreChanges: ["password"] },
 );
+
+const homeAssistantGroup = new routeros.SystemUserGroup("group-home-assistant", {
+  name: "home_assistant",
+  policies: [
+    "read",
+    "api",
+    "test",
+    "!local",
+    "!telnet",
+    "!ssh",
+    "!ftp",
+    "!reboot",
+    "!write",
+    "!policy",
+    "!winbox",
+    "!password",
+    "!web",
+    "!sniff",
+    "!sensitive",
+    "!romon",
+    "!rest-api",
+  ],
+});
+
+new routeros.SystemUser(
+  "user-home-assistant",
+  {
+    name: "home-assistant",
+    group: homeAssistantGroup.name,
+    address: lanAndPods,
+    password: requireEnv("USER_PASSWORD_HOME_ASSISTANT"),
+  },
+  { ignoreChanges: ["password"] },
+);
