@@ -13,8 +13,8 @@ spec:
     fullnameOverride: external-dns-unifi
     triggerLoopOnEvent: true
     policy: sync
-    extraArgs:
-      - --gateway-name=envoy-internal
+    # Both gateways: public apps also get a LAN record so dnsmasq resolves the
+    # whole CNAME chain locally (app -> external -> envoy-external-lan).
     sources:
       - gateway-httproute
       - service
