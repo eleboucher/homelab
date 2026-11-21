@@ -5,3 +5,4 @@ import "./bgp";
 import "./firewall";
 import "./vpn";
 import "./wifi";
+import "./security";
