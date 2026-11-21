@@ -15,7 +15,6 @@ data:
             "mode": "default",
             "memoryFlush": {
               "enabled": true,
-              "model": "litellm/chatgpt/gpt-5.6-luna",
               "softThresholdTokens": 80000
             }
           },
@@ -37,13 +36,6 @@ data:
             "litellm/chatgpt/gpt-5.6-terra": {
               "alias": "terra"
             }
-          },
-          "heartbeat": {
-            "every": "60m",
-            "model": "litellm/chatgpt/gpt-5.6-luna",
-            "directPolicy": "allow",
-            "lightContext": true,
-            "isolatedSession": false
           },
           "contextInjection": "always",
           "bootstrapMaxChars": 50000,
@@ -78,14 +70,6 @@ data:
             "identity": {
               "name": "Owl",
               "avatar": "avatars/owl_avatar.png"
-            },
-            "heartbeat": {
-              "every": "60m",
-              "model": "litellm/chatgpt/gpt-5.6-luna",
-              "activeHours": {
-                "start": "06:00",
-                "end": "23:00"
-              }
             }
           },
           "explorer": {
