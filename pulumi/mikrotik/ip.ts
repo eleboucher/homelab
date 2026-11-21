@@ -13,5 +13,3 @@ new routeros.IpRoute("default-route", {
     gateway: "192.168.1.1",
     comment: "Upstream to UCG",
 });
-
-new routeros.IpUpnp("settings", { enabled: true });

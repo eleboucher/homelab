@@ -1,10 +1,5 @@
 import * as routeros from "@pulumi/routeros";
 
-const wan = new routeros.InterfaceList("firewall-WAN", { name: "WAN" });
-const wanMembers = ["sfp-sfpplus1"].map(
-    (iface) => new routeros.InterfaceListMember(`firewall-WAN/${iface}`, { list: wan.name, interface: iface }),
-);
-
 // Rules are created in this order and kept in it on the router by MoveItems.
 const filterRules: Record<string, Omit<routeros.IpFirewallFilterArgs, "comment"> & { comment: string }> = {
     "0100-accept-icmp": { chain: "input", action: "accept", protocol: "icmp", comment: "Allow Ping" },
@@ -51,12 +46,6 @@ const filterRules: Record<string, Omit<routeros.IpFirewallFilterArgs, "comment">
 };
 
 const natRules: Record<string, routeros.IpFirewallNatArgs> = {
-    "0100-fix-triangle-routing": {
-        chain: "srcnat",
-        action: "masquerade",
-        dstAddress: "192.168.69.0/24",
-        comment: "Fix Triangle Routing",
-    },
     "0200-wireguard-clients-masquerade": {
         chain: "srcnat",
         action: "masquerade",
@@ -66,7 +55,7 @@ const natRules: Record<string, routeros.IpFirewallNatArgs> = {
 };
 
 const filters = Object.entries(filterRules).map(
-    ([key, rule]) => new routeros.IpFirewallFilter(`firewall-filter-${key}`, rule, { dependsOn: wanMembers }),
+    ([key, rule]) => new routeros.IpFirewallFilter(`firewall-filter-${key}`, rule),
 );
 
 new routeros.MoveItems(
@@ -75,9 +64,7 @@ new routeros.MoveItems(
     { dependsOn: filters },
 );
 
-const nats = Object.entries(natRules).map(
-    ([key, rule]) => new routeros.IpFirewallNat(`firewall-nat-${key}`, rule, { dependsOn: wanMembers }),
-);
+const nats = Object.entries(natRules).map(([key, rule]) => new routeros.IpFirewallNat(`firewall-nat-${key}`, rule));
 
 new routeros.MoveItems(
     "firewall-nat_rules",
