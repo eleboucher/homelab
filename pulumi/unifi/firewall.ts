@@ -20,9 +20,6 @@ new unifi.FirewallPolicy("external_gateway_v6", {
   },
 });
 
-// LAN clients reach the LoadBalancer VIPs through the gateway, but the nodes
-// answer them directly on the shared L2. Masquerading keeps both directions on
-// the gateway so its stateful firewall sees the whole flow.
 new unifi.Nat("lb_hairpin", {
   description: "Fix triangle routing to Cilium LB pool",
   type: "MASQUERADE",
@@ -31,13 +28,10 @@ new unifi.Nat("lb_hairpin", {
   destinationFilter: { filterType: "ADDRESS_AND_PORT", address: "192.168.69.0/24" },
 });
 
-// Same triangle on IPv6. Only LAN sources are masqueraded so inbound internet
-// traffic to the external gateway keeps its real client address.
 new unifi.Nat("lb_hairpin_v6", {
   description: "Fix triangle routing to Cilium LB pool (IPv6)",
   type: "MASQUERADE",
   ipVersion: "IPV6",
-  // The controller rejects a second rule without an explicit, unique index.
   ruleIndex: 1,
   outInterface: lan.id,
   sourceFilter: { filterType: "ADDRESS_AND_PORT", address: "2a01:e0a:e4b:aa31::/64" },

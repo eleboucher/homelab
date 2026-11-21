@@ -6,7 +6,6 @@ metadata:
   name: ddr-opt-out
 spec:
   endpoints:
-    # Hides the gateway's encrypted upstream from DDR so clients keep using it for local names.
     - dnsName: _dns.resolver.arpa
       recordType: CNAME
       targets:

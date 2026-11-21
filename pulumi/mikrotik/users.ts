@@ -9,7 +9,6 @@ const requireEnv = (name: string) => {
 
 const lanAndPods = "192.168.1.0/24,10.42.0.0/16";
 
-// Read-only API access for the exporter and the homepage widget.
 const exporterGroup = new routeros.SystemUserGroup("group-mktxp", {
   name: "mktxp_group",
   policies: [

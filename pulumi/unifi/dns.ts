@@ -1,6 +1,5 @@
 import * as unifi from "@pulumi/unifi";
 
-// ExternalDNS owns every *.erwanleboucher.dev record; only static entries here.
 const staticDnsRecords: Record<string, string> = {
   "router.erwanleboucher.dev": "192.168.1.2",
   "unifi.erwanleboucher.dev": "192.168.1.1",

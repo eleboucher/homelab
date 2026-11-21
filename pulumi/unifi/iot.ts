@@ -15,14 +15,12 @@ export const iot = new unifi.Network("iot", {
   ipv6: { interfaceType: "none" },
 });
 
-// ESPHome Bluetooth proxy.
 new unifi.Client(
   "fixed-192.168.20.140",
   { mac: "d0:cf:13:0d:b2:d0", fixedIp: "192.168.20.140" },
   { dependsOn: iot },
 );
 
-// Stays on the main Wi-Fi but is placed in the IoT network.
 new unifi.Client(
   "iot-9a77ee00193c",
   { mac: "9a:77:ee:00:19:3c", networkId: iot.id },
