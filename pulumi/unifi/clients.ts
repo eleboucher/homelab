@@ -6,7 +6,7 @@ const fixedClients: Record<string, { mac: string; name?: string }> = {
   "192.168.1.42": { mac: "C4:62:37:09:DF:FF", name: "paris" },
   "192.168.1.135": { mac: "FC:9D:05:2B:EA:B1", name: "cachyos desktop (Wake-on-LAN)" },
   "192.168.1.23": { mac: "C8:80:6D:69:92:5C", name: "Mac mini (dev + macOS CI)" },
-  "192.168.1.45": { mac: "24:72:60:68:5F:0D", name: "openqiara" },
+  "192.168.1.16": { mac: "24:72:60:68:5F:0D", name: "openqiara" },
 };
 
 for (const [fixedIp, client] of Object.entries(fixedClients)) {

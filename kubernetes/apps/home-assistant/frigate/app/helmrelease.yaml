@@ -24,7 +24,7 @@ spec:
               repository: ghcr.io/blakeblackshear/frigate
               tag: 0.18.3@sha256:d1a3e0008557bb3f3314d442ecd4ba68e9b16ab7872d64612649f7a6e5156635
             env:
-              FRIGATE_CAMERA_HOST: 192.168.1.45
+              FRIGATE_CAMERA_HOST: 192.168.1.16
               TZ: Europe/Paris
             envFrom:
               - secretRef:
