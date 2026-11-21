@@ -5,7 +5,7 @@
   "dependencies": {
     "@pulumi/pulumi": "^3.277.0",
     "@pulumi/routeros": "file:sdks/routeros",
-    "typescript": "^5"
+    "typescript": "^7.0.0"
   },
   "devDependencies": {
     "@types/node": "^24"
