@@ -55,8 +55,8 @@ spec:
   ebgpMultihop: 2
   timers:
     connectRetryTimeSeconds: 120
-    holdTimeSeconds: 15
-    keepAliveTimeSeconds: 5
+    holdTimeSeconds: 9
+    keepAliveTimeSeconds: 3
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/cilium.io/ciliumbgppeerconfig_v2.json
 apiVersion: cilium.io/v2
@@ -73,8 +73,8 @@ spec:
   ebgpMultihop: 2
   timers:
     connectRetryTimeSeconds: 120
-    holdTimeSeconds: 15
-    keepAliveTimeSeconds: 5
+    holdTimeSeconds: 9
+    keepAliveTimeSeconds: 3
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/cilium.io/ciliumbgpclusterconfig_v2.json
 apiVersion: cilium.io/v2
