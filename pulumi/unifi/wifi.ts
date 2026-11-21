@@ -13,6 +13,8 @@ new unifi.Wlan("home", {
   // WPA2/WPA3 transition mode, as on the Freebox.
   wpa3: { support: true, transition: true },
   pmfMode: "optional",
+  // The U7 Pro is tri-band; 6 GHz clients join with WPA3.
+  wlanBands: ["2g", "5g", "6g"],
   passphraseWo: requireEnv("WIFI_PASSPHRASE"),
   passphraseWoVersion: 1,
   networkId: lan.id,
