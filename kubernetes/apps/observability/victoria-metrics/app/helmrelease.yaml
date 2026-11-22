@@ -258,6 +258,8 @@ spec:
         extraArgs:
           enableTCP6: "true"
         evaluationInterval: 30s
+        # Without this, ruleSelector only matches VMRules in observability
+        ruleNamespaceSelector: {}
         ruleSelector:
           matchExpressions:
             - key: vmalert-datasource
