@@ -40,11 +40,7 @@ Claude Code request cloaking is disabled, so clients' system prompts reach the
 API unchanged. Management endpoints, the management UI, and request logging are
 disabled.
 
-`/auth`, on a separate `miroir-local` volume, still holds the former Codex OAuth
-credential. No alias routes to it.
-
-The old `litellm-chatgpt` PVC is retained for rollback and protected from pruning.
-It is not mounted by CLIProxyAPI. The LiteLLM workload and operator are removed.
+The proxy loads no OAuth logins and keeps no persistent state.
 
 ## Compatibility checks
 

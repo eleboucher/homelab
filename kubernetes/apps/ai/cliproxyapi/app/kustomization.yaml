@@ -7,4 +7,3 @@ resources:
   - ./helmrelease.yaml
   - ./legacy-service.yaml
   - ./ocirepository.yaml
-  - ./retained-litellm-pvc.yaml

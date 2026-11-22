@@ -103,15 +103,6 @@ spec:
           - name: envoy-external
             namespace: network
     persistence:
-      auth:
-        type: persistentVolumeClaim
-        accessMode: ReadWriteOnce
-        forceRename: cliproxyapi-local
-        retain: true
-        size: 1Gi
-        storageClass: miroir-local
-        globalMounts:
-          - path: /auth
       config:
         type: secret
         name: cliproxyapi
