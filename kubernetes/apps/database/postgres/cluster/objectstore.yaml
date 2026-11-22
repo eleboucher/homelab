@@ -19,4 +19,9 @@ spec:
       compression: zstd
     data:
       compression: gzip
+  instanceSidecarConfiguration:
+    resources:
+      requests:
+        cpu: 50m
+        memory: 128Mi
   retentionPolicy: "14d"

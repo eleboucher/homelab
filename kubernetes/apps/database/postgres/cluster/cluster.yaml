@@ -17,6 +17,19 @@ spec:
     clientCASecret: postgres-client-ca
     replicationTLSSecret: postgres-replication-cert
 
+  probes:
+    liveness:
+      isolationCheck:
+        # renewDeadline (10s) + retryPeriod (2s) + requestTimeout must stay below the 15s lease
+        connectionTimeout: 2000
+        requestTimeout: 2000
+
+  # No CPU limit: throttling the primary fails its liveness check
+  resources:
+    requests:
+      cpu: "1"
+      memory: 1Gi
+
   storage:
     size: 8Gi
     storageClass: miroir-local
