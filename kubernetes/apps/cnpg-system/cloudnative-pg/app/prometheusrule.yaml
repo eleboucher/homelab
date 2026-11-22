@@ -74,3 +74,14 @@ spec:
           for: 1m
           labels:
             severity: warning
+        - alert: NoStreamingReplica
+          annotations:
+            description: No standby has streamed from the database/postgres primary for 5 minutes
+            summary: Postgres has no streaming replica
+          # vector(0) also fires when no instance reports metrics
+          expr: |-
+            (max(cnpg_pg_replication_streaming_replicas{namespace="database"}) or vector(0)) < 1
+          for: 5m
+          labels:
+            namespace: database
+            severity: critical
