@@ -24,3 +24,18 @@ patches:
           mode: Ephemeral
     target:
       kind: SnapshotPolicy
+  # The mover is unprivileged and .jwt_secret is root 0600; Frigate regenerates it when missing.
+  # ignoreRules replaces Kopiur's defaults, so they are repeated.
+  - patch: |-
+      - op: add
+        path: /spec/files
+        value:
+          ignoreRules:
+            - /lost+found
+            - System Volume Information
+            - $$RECYCLE.BIN
+            - "@eaDir"
+            - .snapshot
+            - /.jwt_secret
+    target:
+      kind: SnapshotPolicy
