@@ -79,6 +79,14 @@ client = "https://matrix.erwanleboucher.dev"
 server = "matrix.erwanleboucher.dev:443"
 support_mxid = "@genesixx:erwanleboucher.dev"
 
+[global.experiments]
+msc3814 = true
+msc4155 = true
+msc4174 = true
+msc4406 = true
+msc4484 = true
+msc4560 = true
+
 [global.oauth]
 compatibility_mode = "hybrid"
 
