@@ -97,25 +97,45 @@ spec:
                             - kharkiv
             restartPolicy: Never
           podspec-dind.yaml: |-
+            # Root in a job, privileged dind included, is nobody on the node.
+            hostUsers: false
             initContainers:
               - name: dind
-                image: docker:29-dind
-                # Keep Buildx cgroups inside the DinD memory limit.
+                image: docker:29-dind-rootless
+                # Rootless dockerd: a pod user namespace cannot write cgroups, so
+                # docker run --memory is not enforced; the container limit below is.
+                # The shim puts dockerd under rootlesskit after the entrypoint makes the
+                # TLS certs. binfmt_misc stays mounted to keep setup-qemu registrations.
                 command: [sh, -ec]
                 args:
                   - |
-                    apk add --no-cache util-linux-misc
-                    exec unshare --cgroup --mount sh -ec '
-                      mount --make-rprivate /
-                      umount /sys/fs/cgroup
-                      mount -t cgroup2 none /sys/fs/cgroup
-                      exec dockerd-entrypoint.sh "$@"
+                    chmod -x /usr/local/bin/dind
+                    echo root:1:65535 > /etc/subuid
+                    echo root:1:65535 > /etc/subgid
+                    mkdir -p /run/rootless /shim
+                    export XDG_RUNTIME_DIR=/run/rootless
+                    cat > /shim/docker-init <<'SH'
+                    #!/bin/sh
+                    shift
+                    # dockerd copies the first docker-init in PATH into --init containers
+                    PATH=$(echo "$PATH" | sed "s#/shim:##")
+                    export PATH
+                    exec rootlesskit --state-dir=/run/rootless/rk --net=slirp4netns --mtu=1500 --disable-host-loopback --port-driver=builtin --copy-up=/etc --copy-up=/run -p 0.0.0.0:2376:2376/tcp sh -ec '
+                      mount -t binfmt_misc binfmt_misc /proc/sys/fs/binfmt_misc || echo "binfmt mount failed"
+                      exec /usr/local/bin/docker-init -- "$@" --rootless --data-root=/var/lib/docker
                     ' dind "$@"
+                    SH
+                    chmod +x /shim/docker-init
+                    export PATH="/shim:$PATH"
+                    exec dockerd-entrypoint.sh "$@"
                   - dind
                   - --ipv6
                   - --fixed-cidr-v6=fd00:d1d::/64
                 securityContext:
+                  # Only privileged inside the pod user namespace (hostUsers: false).
                   privileged: true
+                  runAsUser: 0
+                  runAsGroup: 0
                 restartPolicy: Always
                 env:
                   - name: DOCKER_TLS_CERTDIR
@@ -147,6 +167,8 @@ spec:
               - env:
                   - name: DEBIAN_FRONTEND
                     value: noninteractive
+                  - name: TAR_OPTIONS
+                    value: --no-same-owner
                   - name: DOCKER_HOST
                     value: tcp://localhost:2376
                   - name: DOCKER_TLS_VERIFY
