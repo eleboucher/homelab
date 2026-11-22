@@ -70,10 +70,15 @@ spec:
         shutdown_timeout: 3m
     podSpecs:
       podspec-default.yaml: |
+        # Root in a job is nobody on the node.
+        hostUsers: false
         containers:
           - env:
               - name: DEBIAN_FRONTEND
                 value: noninteractive
+              # tar as root restores owners, and ids above 65535 do not exist in the pod.
+              - name: TAR_OPTIONS
+                value: --no-same-owner
             image: ghcr.io/bjw-s-labs/forgejo-runner:ubuntu-26.04@sha256:eafaf4a387a3274e9f199e254c24e4cda927e92bcd888f46f003c81bbbde0bae
             imagePullPolicy: IfNotPresent
             name: main
@@ -96,10 +101,13 @@ spec:
                         - kharkiv
         restartPolicy: Never
       podspec-heavy.yaml: |
+        hostUsers: false
         containers:
           - env:
               - name: DEBIAN_FRONTEND
                 value: noninteractive
+              - name: TAR_OPTIONS
+                value: --no-same-owner
             image: ghcr.io/bjw-s-labs/forgejo-runner:ubuntu-26.04@sha256:eafaf4a387a3274e9f199e254c24e4cda927e92bcd888f46f003c81bbbde0bae
             imagePullPolicy: IfNotPresent
             name: main

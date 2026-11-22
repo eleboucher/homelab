@@ -56,10 +56,15 @@ spec:
               timeout: 3h
               shutdown_timeout: 3m
           podspec-default.yaml: |-
+            # Root in a job is nobody on the node.
+            hostUsers: false
             containers:
               - env:
                   - name: DEBIAN_FRONTEND
                     value: noninteractive
+                  # tar as root restores owners, and ids above 65535 do not exist in the pod.
+                  - name: TAR_OPTIONS
+                    value: --no-same-owner
                   - name: CARGO_BUILD_JOBS
                     value: "4"
                   - name: MAKEFLAGS
