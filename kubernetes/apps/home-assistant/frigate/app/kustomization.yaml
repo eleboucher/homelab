@@ -14,3 +14,13 @@ generatorOptions:
   disableNameSuffixHash: true
   annotations:
     kustomize.toolkit.fluxcd.io/substitute: disabled
+# Not in ks.yaml: the FluxInstance defaults replace every child's spec.patches.
+patches:
+  # A local cache PVC can bind on another node than the staged source; use an emptyDir
+  - patch: |-
+      - op: replace
+        path: /spec/mover/cache
+        value:
+          mode: Ephemeral
+    target:
+      kind: SnapshotPolicy
