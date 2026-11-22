@@ -22,6 +22,9 @@ spec:
                     values:
                       - kharkiv
       automountServiceAccountToken: false
+      # Copy from kharkiv's leg: paris's diverged and is missing writes
+      nodeSelector:
+        kubernetes.io/hostname: kharkiv
       securityContext:
         fsGroup: 1000
         fsGroupChangePolicy: OnRootMismatch
@@ -37,6 +40,27 @@ spec:
         replicas: 1
         strategy: Recreate
         type: deployment
+        initContainers:
+          migrate-auth:
+            image:
+              repository: docker.io/eceasy/cli-proxy-api
+              tag: v8.0.80@sha256:0695ae8721d623ed31179369fc7127d469f10a14a37a49c366e82a16383662f8
+            command:
+              - sh
+              - -ec
+              - |
+                [ ! -e /auth/.migrated ] || exit 0
+                test -d /old/.codex-refresh
+                find /old -mindepth 1 -maxdepth 1 ! -name lost+found -exec cp -a -t /auth {} +
+                diff -r --exclude=lost+found /old /auth
+                sync
+                touch /auth/.migrated
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop:
+                  - ALL
+              readOnlyRootFilesystem: true
         containers:
           app:
             image:
@@ -103,11 +127,26 @@ spec:
           - name: envoy-external
             namespace: network
     persistence:
+      # Diverged replicated volume; forceRename and retain keep both legs intact
       auth:
         type: persistentVolumeClaim
         accessMode: ReadWriteOnce
+        forceRename: cliproxyapi
+        retain: true
         size: 1Gi
         storageClass: miroir-replicated
+        advancedMounts:
+          cliproxyapi:
+            migrate-auth:
+              - path: /old
+                readOnly: true
+      auth-local:
+        type: persistentVolumeClaim
+        accessMode: ReadWriteOnce
+        forceRename: cliproxyapi-local
+        retain: true
+        size: 1Gi
+        storageClass: miroir-local
         globalMounts:
           - path: /auth
       config:

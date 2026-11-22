@@ -28,7 +28,7 @@ LLMKube's models.
 
 ## Authentication
 
-Credentials live in `/auth` on a separate `miroir-replicated` volume. The proxy
+Credentials live in `/auth` on a separate `miroir-local` volume. The proxy
 renews its independent OAuth credential automatically. Management endpoints,
 the management UI, and request logging are disabled.
 
