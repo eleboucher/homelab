@@ -10,7 +10,7 @@ import urllib.error
 import urllib.request
 
 
-MODELS = ("chatgpt/gpt-5.6-luna", "chatgpt/gpt-5.6-terra")
+MODELS = ("claude/opus-low", "claude/opus-medium", "claude/haiku")
 MARKER = "TRIAL_OK"
 FUNCTION = {
     "name": "emit_status",

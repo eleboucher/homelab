@@ -6,12 +6,16 @@ The gateway serves `http://cliproxyapi.ai:8317/v1` inside the cluster and
 remain compatible aliases for chat and Responses requests.
 
 OpenClaw and Hermes retain the `litellm` provider identifier for saved sessions
-and scheduled jobs, but send requests to CLIProxyAPI. They use these model aliases:
+and scheduled jobs, but send requests to CLIProxyAPI. It forwards them to the
+Anthropic API under these aliases:
 
-| Alias                   | Default reasoning effort |
-| ----------------------- | ------------------------ |
-| `chatgpt/gpt-5.6-luna`  | low                      |
-| `chatgpt/gpt-5.6-terra` | medium                   |
+| Alias                | Model              | Default effort |
+| -------------------- | ------------------ | -------------- |
+| `claude/opus-low`    | `claude-opus-5-5`  | low            |
+| `claude/opus-medium` | `claude-opus-5-5`  | medium         |
+| `claude/haiku`       | `claude-haiku-5-5` | model default  |
+
+A client's own reasoning effort takes precedence over these defaults.
 
 The downstream API key still comes from the existing 1Password `litellm` item's
 `LITELLM_MASTER_KEY` field. External Secrets exposes it as `CLIPROXY_API_KEY`;
@@ -28,22 +32,16 @@ LLMKube's models.
 
 ## Authentication
 
-Credentials live in `/auth` on a separate `miroir-local` volume. The proxy
-renews its independent OAuth credential automatically. Management endpoints,
-the management UI, and request logging are disabled.
+The Anthropic API key comes from the 1Password `anthropic` item's
+`ANTHROPIC_API_KEY` field. Rotate it there; External Secrets refreshes the
+configuration within five minutes. Requests are billed per token on that key.
 
-To recover an expired or revoked login:
+Claude Code request cloaking is disabled, so clients' system prompts reach the
+API unchanged. Management endpoints, the management UI, and request logging are
+disabled.
 
-```sh
-kubectl --context admin@homelab -n ai exec -it deploy/cliproxyapi -c app -- \
-  /CLIProxyAPI/CLIProxyAPI --config /etc/cliproxyapi/config.yaml \
-  --codex-device-login --no-browser
-```
-
-Complete the displayed device login and wait for the success message. The file
-watcher loads the new credential without restarting the proxy. Do not copy a
-refresh token from another running application: both would rotate the same
-credential without coordinating their writes.
+`/auth`, on a separate `miroir-local` volume, still holds the former Codex OAuth
+credential. No alias routes to it.
 
 The old `litellm-chatgpt` PVC is retained for rollback and protected from pruning.
 It is not mounted by CLIProxyAPI. The LiteLLM workload and operator are removed.

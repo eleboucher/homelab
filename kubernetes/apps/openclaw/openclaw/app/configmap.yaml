@@ -19,7 +19,7 @@ data:
             }
           },
           "imageModel": {
-            "primary": "litellm/chatgpt/gpt-5.6-luna"
+            "primary": "litellm/claude/opus-low"
           },
           "maxConcurrent": 4,
           "subagents": {
@@ -27,14 +27,14 @@ data:
             "runTimeoutSeconds": 900
           },
           "model": {
-            "primary": "litellm/chatgpt/gpt-5.6-luna"
+            "primary": "litellm/claude/opus-low"
           },
           "models": {
-            "litellm/chatgpt/gpt-5.6-luna": {
-              "alias": "luna"
+            "litellm/claude/opus-low": {
+              "alias": "opus-low"
             },
-            "litellm/chatgpt/gpt-5.6-terra": {
-              "alias": "terra"
+            "litellm/claude/opus-medium": {
+              "alias": "opus"
             }
           },
           "contextInjection": "always",
@@ -47,8 +47,8 @@ data:
           },
           "modelPolicy": {
             "allow": [
-              "litellm/chatgpt/gpt-5.6-luna",
-              "litellm/chatgpt/gpt-5.6-terra"
+              "litellm/claude/opus-low",
+              "litellm/claude/opus-medium"
             ]
           }
         },
@@ -74,7 +74,7 @@ data:
           },
           "explorer": {
             "name": "Explorer",
-            "model": "litellm/chatgpt/gpt-5.6-luna",
+            "model": "litellm/claude/opus-low",
             "workspace": "/home/node/.openclaw/workspace",
             "thinkingDefault": "low",
             "description": "Recon specialist. Codebase scouting, search, 'where/how is X', read-only. Be fast and concise; return findings, not edits.",
@@ -95,21 +95,21 @@ data:
           },
           "fixer": {
             "name": "Fixer",
-            "model": "litellm/chatgpt/gpt-5.6-luna",
+            "model": "litellm/claude/opus-low",
             "workspace": "/home/node/.openclaw/workspace",
             "thinkingDefault": "high",
             "description": "Default code executor. Scoped implementation and edits: make the change, verify it, report concisely."
           },
           "fixer-bigctx": {
             "name": "Fixer (big context)",
-            "model": "litellm/chatgpt/gpt-5.6-terra",
+            "model": "litellm/claude/opus-medium",
             "workspace": "/home/node/.openclaw/workspace",
             "thinkingDefault": "high",
             "description": "Implementation needing the strongest general model or vision. Use for work that benefits from deeper reasoning."
           },
           "oracle": {
             "name": "Oracle",
-            "model": "litellm/chatgpt/gpt-5.6-terra",
+            "model": "litellm/claude/opus-medium",
             "workspace": "/home/node/.openclaw/workspace",
             "thinkingDefault": "high",
             "description": "Hard debugging, root-cause, architecture (strongest reasoning tier). Read-mostly: return analysis and a recommendation, don't sprawl into edits.",
@@ -123,7 +123,7 @@ data:
           },
           "reviewer": {
             "name": "Reviewer",
-            "model": "litellm/chatgpt/gpt-5.6-luna",
+            "model": "litellm/claude/opus-low",
             "workspace": "/home/node/.openclaw/workspace",
             "thinkingDefault": "high",
             "description": "Independent second opinion and creative/prose. Review the work carefully and return a concise assessment.",
@@ -220,18 +220,18 @@ data:
             },
             "models": [
               {
-                "id": "chatgpt/gpt-5.6-luna",
-                "name": "GPT-5.6 Luna (ChatGPT subscription)",
+                "id": "claude/opus-low",
+                "name": "Claude Opus 5.5 (low effort)",
                 "reasoning": true,
                 "input": [
                   "text",
                   "image"
                 ],
                 "cost": {
-                  "input": 0,
-                  "output": 0,
-                  "cacheRead": 0,
-                  "cacheWrite": 0
+                  "input": 4,
+                  "output": 20,
+                  "cacheRead": 0.2,
+                  "cacheWrite": 5
                 },
                 "contextWindow": 272000,
                 "maxTokens": 128000,
@@ -240,18 +240,18 @@ data:
                 }
               },
               {
-                "id": "chatgpt/gpt-5.6-terra",
-                "name": "GPT-5.6 Terra (ChatGPT subscription)",
+                "id": "claude/opus-medium",
+                "name": "Claude Opus 5.5 (medium effort)",
                 "reasoning": true,
                 "input": [
                   "text",
                   "image"
                 ],
                 "cost": {
-                  "input": 0,
-                  "output": 0,
-                  "cacheRead": 0,
-                  "cacheWrite": 0
+                  "input": 4,
+                  "output": 20,
+                  "cacheRead": 0.2,
+                  "cacheWrite": 5
                 },
                 "contextWindow": 272000,
                 "maxTokens": 128000,

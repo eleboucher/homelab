@@ -9,56 +9,56 @@ data:
         base_url: http://cliproxyapi.ai:8317/v1
         key_env: CLIPROXY_API_KEY
         models:
-          chatgpt/gpt-5.6-luna:
+          claude/opus-low:
             context_length: 272000
-          chatgpt/gpt-5.6-terra:
+          claude/opus-medium:
             context_length: 272000
     model:
-      default: chatgpt/gpt-5.6-luna
+      default: claude/opus-low
       provider: custom:litellm
       context_length: 272000
     model_aliases:
-      luna:
-        model: chatgpt/gpt-5.6-luna
+      opus-low:
+        model: claude/opus-low
         provider: custom:litellm
-      terra:
-        model: chatgpt/gpt-5.6-terra
+      opus:
+        model: claude/opus-medium
         provider: custom:litellm
     auxiliary:
       approval:
         provider: custom:litellm
-        model: chatgpt/gpt-5.6-luna
+        model: claude/opus-low
         timeout: 60
       compression:
         provider: custom:litellm
-        model: chatgpt/gpt-5.6-luna
+        model: claude/opus-low
       web_extract:
         provider: custom:litellm
-        model: chatgpt/gpt-5.6-luna
+        model: claude/opus-low
       session_search:
         provider: custom:litellm
-        model: chatgpt/gpt-5.6-luna
+        model: claude/opus-low
       vision:
         provider: custom:litellm
-        model: chatgpt/gpt-5.6-luna
+        model: claude/opus-low
       goal_judge:
         provider: custom:litellm
-        model: chatgpt/gpt-5.6-luna
+        model: claude/opus-low
       title_generation:
         provider: custom:litellm
-        model: chatgpt/gpt-5.6-luna
+        model: claude/opus-low
       profile_describer:
         provider: custom:litellm
-        model: chatgpt/gpt-5.6-luna
+        model: claude/opus-low
       triage_specifier:
         provider: custom:litellm
-        model: chatgpt/gpt-5.6-luna
+        model: claude/opus-low
       kanban_decomposer:
         provider: custom:litellm
-        model: chatgpt/gpt-5.6-luna
+        model: claude/opus-low
       curator:
         provider: custom:litellm
-        model: chatgpt/gpt-5.6-luna
+        model: claude/opus-low
         timeout: 600
     memory:
       provider: memini
@@ -103,7 +103,7 @@ data:
       api_max_retries: 3
       reasoning_effort: medium
     delegation:
-      model: chatgpt/gpt-5.6-luna
+      model: claude/opus-low
       max_concurrent_children: 8
       max_spawn_depth: 2
     moa:
@@ -113,12 +113,12 @@ data:
           enabled: true
           reference_models:
             - provider: custom:litellm
-              model: chatgpt/gpt-5.6-luna
+              model: claude/opus-low
             - provider: custom:litellm
-              model: chatgpt/gpt-5.6-terra
+              model: claude/opus-medium
           aggregator:
             provider: custom:litellm
-            model: chatgpt/gpt-5.6-terra
+            model: claude/opus-medium
           max_tokens: 8192
     platforms:
       matrix:
