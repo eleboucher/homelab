@@ -45,6 +45,18 @@ spec:
               kubernetes.io/metadata.name: forgejo
         kinds:
           - kind: TCPRoute
+    # LAN clients can resolve git.* to this VIP through external.*, and dial the public SSH port
+    - name: ssh-public
+      protocol: TCP
+      port: 222
+      allowedRoutes:
+        namespaces:
+          from: Selector
+          selector:
+            matchLabels:
+              kubernetes.io/metadata.name: forgejo
+        kinds:
+          - kind: TCPRoute
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/core/service_v1.json
 apiVersion: v1
