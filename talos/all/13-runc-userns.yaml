@@ -1,0 +1,12 @@
+---
+# runc with a writable cgroup, which Docker needs inside a user namespace.
+apiVersion: v1alpha1
+kind: CRICustomizationConfig
+name: runc-userns
+content: |
+  [plugins."io.containerd.cri.v1.runtime".containerd.runtimes.runc-userns]
+    runtime_type = "io.containerd.runc.v2"
+    base_runtime_spec = "/etc/cri/conf.d/base-spec.json"
+    cgroup_writable = true
+  [plugins."io.containerd.cri.v1.runtime".containerd.runtimes.runc-userns.options]
+    ShimCgroup = "/podruntime/shim"
