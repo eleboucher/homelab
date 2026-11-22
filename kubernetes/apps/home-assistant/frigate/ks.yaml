@@ -18,6 +18,15 @@ spec:
     - name: pgmqtt-users
   interval: 1h
   path: "./kubernetes/apps/home-assistant/frigate/app"
+  # A local cache PVC can bind on another node than the staged source; use an emptyDir
+  patches:
+    - patch: |-
+        - op: replace
+          path: /spec/mover/cache
+          value:
+            mode: Ephemeral
+      target:
+        kind: SnapshotPolicy
   postBuild:
     substitute:
       APP: frigate
