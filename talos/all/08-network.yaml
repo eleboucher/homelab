@@ -16,6 +16,14 @@ routes:
   - gateway: 2a01:e0a:e4b:aa31::1
     metric: 100
 ---
+# Torrent
+apiVersion: v1alpha1
+kind: VLANConfig
+name: lacp0.100
+vlanID: 100
+parent: lacp0
+mtu: 1500
+---
 apiVersion: v1alpha1
 kind: DHCPv4Config
 name: bond0

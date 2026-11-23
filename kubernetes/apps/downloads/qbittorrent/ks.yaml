@@ -20,6 +20,8 @@ spec:
       namespace: kopiur-system
     - name: miroir
       namespace: miroir-system
+    - name: multus-networks
+      namespace: kube-system
   postBuild:
     substitute:
       APP: qbittorrent

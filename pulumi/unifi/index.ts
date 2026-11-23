@@ -7,3 +7,4 @@ import "./vpn";
 import "./wifi";
 import "./security";
 import "./iot";
+import "./torrent";
