@@ -5,7 +5,7 @@
   "dependencies": {
     "@pulumi/pulumi": "^3.277.0",
     "@pulumi/unifi": "file:sdks/unifi",
-    "typescript": "^5"
+    "typescript": "^7.0.0"
   },
   "devDependencies": {
     "@types/node": "^26.0.0"
