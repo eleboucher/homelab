@@ -1,0 +1,91 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: posteryard
+  namespace: media
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: posteryard
+  interval: 1h
+  values:
+    controllers:
+      posteryard:
+        pod:
+          securityContext:
+            fsGroup: 1000
+            fsGroupChangePolicy: OnRootMismatch
+            runAsGroup: 1000
+            runAsNonRoot: true
+            runAsUser: 1000
+        annotations:
+          reloader.stakater.com/auto: "true"
+        replicas: 1
+        type: statefulset
+        containers:
+          app:
+            image:
+              repository: ghcr.io/sandobserver/posteryard
+              tag: 0.10.5@sha256:6f61d21964d531ccbddd9f5409804c77d8ecbffa1b774d085942f7e27d8521e4
+            env:
+              DATA_DIR: /data
+              DRY_RUN: "true"
+              JELLYFIN_URL: http://jellyfin.media.svc.cluster.local:8096
+              LIBRARIES: Movies,Shows
+              LISTEN_PORT: &port 8000
+              MAINTAINERR_URL: http://maintainerr.media.svc.cluster.local:6246
+              TZ: Europe/Paris
+            envFrom:
+              - secretRef:
+                  name: posteryard-secret
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /healthz
+                    port: *port
+                  periodSeconds: 60
+                  timeoutSeconds: 5
+              readiness: *probes
+              startup:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /healthz
+                    port: *port
+                  failureThreshold: 30
+                  periodSeconds: 10
+                  timeoutSeconds: 5
+            resources:
+              requests:
+                cpu: 100m
+                memory: 512Mi
+              limits:
+                memory: 1536Mi
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop:
+                  - ALL
+              readOnlyRootFilesystem: true
+    persistence:
+      data:
+        type: persistentVolumeClaim
+        existingClaim: "{{ .Release.Name }}"
+        globalMounts:
+          - path: /data
+      tmp:
+        type: emptyDir
+        globalMounts:
+          - path: /tmp
+    service:
+      app:
+        controller: posteryard
+        ports:
+          http:
+            port: *port

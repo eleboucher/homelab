@@ -12,6 +12,7 @@ resources:
   - jellyseerr/ks.yaml
   - maintainerr/ks.yaml
   - namespace.yaml
+  - posteryard/ks.yaml
   - profilarr/ks.yaml
   - prowlarr/ks.yaml
   - radarr/ks.yaml
