@@ -32,7 +32,7 @@ spec:
             env:
               APPLE_ART: "true"
               DATA_DIR: /data
-              DRY_RUN: "true"
+              DRY_RUN: "false"
               JELLYFIN_URL: http://jellyfin.media.svc.cluster.local:8096
               LIBRARIES: Movies,Shows
               LISTEN_PORT: &port 8000
