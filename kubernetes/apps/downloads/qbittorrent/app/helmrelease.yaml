@@ -105,6 +105,7 @@ spec:
     service:
       app:
         controller: qbittorrent
+        forceRename: qbittorrent-app
         ports:
           http:
             port: 8080
