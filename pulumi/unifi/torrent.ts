@@ -63,6 +63,7 @@ new unifi.Nat("airvpn_forward", {
 const zone = new unifi.FirewallZone("torrent", { name: "Torrent", networkIds: [torrent.id] });
 const external = unifi.getFirewallZoneOutput({ name: "External" });
 const internal = unifi.getFirewallZoneOutput({ name: "Internal" });
+const gateway = unifi.getFirewallZoneOutput({ name: "Gateway" });
 
 new unifi.FirewallPolicy("airvpn_to_qbittorrent", {
   name: "AirVPN forwarded port to qBittorrent",
@@ -77,6 +78,15 @@ new unifi.FirewallPolicy("airvpn_to_qbittorrent", {
     portMatchingType: "SPECIFIC",
     port: forwardedPort,
   },
+});
+
+new unifi.FirewallPolicy("block_torrent_to_gateway", {
+  name: "Block Torrent to gateway",
+  action: "BLOCK",
+  protocol: "all",
+  ipVersion: "BOTH",
+  source: { zoneId: zone.id, matchingTarget: "ANY" },
+  destination: { zoneId: gateway.id, matchingTarget: "ANY" },
 });
 
 new unifi.FirewallPolicy("block_torrent_to_lan", {
