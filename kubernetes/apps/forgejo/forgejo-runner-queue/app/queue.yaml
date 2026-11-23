@@ -8,8 +8,8 @@ metadata:
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/kueue.x-k8s.io/clusterqueue_v1beta2.json
 # Shared by every runner: their capacities only bound how many tasks each one
 # fetches, this bounds how many job pods run at once. Counts requests, not limits.
-# Sized from 14d of metrics: the two nodes have ~15.5 CPU / 40Gi unrequested,
-# capped lower on memory because jobs burst past requests next to postgres.
+# Sized from 30d of metrics: requests are ~p90 per podspec, and 32Gi is about
+# what fits on the two nodes next to postgres (four 8Gi dind pods).
 apiVersion: kueue.x-k8s.io/v1beta2
 kind: ClusterQueue
 metadata:
@@ -22,9 +22,9 @@ spec:
         - name: forgejo-ci
           resources:
             - name: cpu
-              nominalQuota: 12
+              nominalQuota: 14
             - name: memory
-              nominalQuota: 28Gi
+              nominalQuota: 32Gi
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/kueue.x-k8s.io/localqueue_v1beta2.json
 apiVersion: kueue.x-k8s.io/v1beta2

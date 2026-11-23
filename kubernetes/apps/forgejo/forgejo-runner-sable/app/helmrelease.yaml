@@ -75,8 +75,8 @@ spec:
                 name: main
                 resources:
                   requests:
-                    cpu: 1
-                    memory: 2Gi
+                    cpu: 1500m
+                    memory: 4Gi
                   limits:
                     cpu: 6
                     memory: 20Gi
@@ -100,11 +100,19 @@ spec:
           podspec-dind.yaml: |-
             # Root in a job, privileged dind included, is nobody on the node.
             hostUsers: false
+            # One budget for main and dind; requests are ~p90 of 30d usage.
+            resources:
+              requests:
+                cpu: 1500m
+                memory: 8Gi
+              limits:
+                cpu: 10
+                memory: 32Gi
             initContainers:
               - name: dind
                 image: docker:29-dind-rootless
                 # Rootless dockerd: a pod user namespace cannot write cgroups, so
-                # docker run --memory is not enforced; the container limit below is.
+                # docker run --memory is not enforced; the pod limit above is.
                 # The shim puts dockerd under rootlesskit after the entrypoint makes the
                 # TLS certs. binfmt_misc stays mounted to keep setup-qemu registrations.
                 command: [sh, -ec]
@@ -141,13 +149,6 @@ spec:
                 env:
                   - name: DOCKER_TLS_CERTDIR
                     value: /certs
-                resources:
-                  requests:
-                    cpu: 250m
-                    memory: 4Gi
-                  limits:
-                    cpu: 4
-                    memory: 12Gi
                 volumeMounts:
                   - name: docker-storage
                     mountPath: /var/lib/docker
@@ -183,13 +184,6 @@ spec:
                 image: ghcr.io/bjw-s-labs/forgejo-runner:ubuntu-26.04@sha256:eafaf4a387a3274e9f199e254c24e4cda927e92bcd888f46f003c81bbbde0bae
                 imagePullPolicy: IfNotPresent
                 name: main
-                resources:
-                  requests:
-                    cpu: 1
-                    memory: 2Gi
-                  limits:
-                    cpu: 6
-                    memory: 20Gi
                 volumeMounts:
                   - name: docker-certs
                     mountPath: /certs
