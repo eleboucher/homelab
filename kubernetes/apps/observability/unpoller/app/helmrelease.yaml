@@ -23,7 +23,7 @@ spec:
           app:
             image:
               repository: ghcr.io/unpoller/unpoller
-              tag: v5.9.6
+              tag: v5.10.0
             env:
               UP_INFLUXDB_DISABLE: true
               UP_PROMETHEUS_HTTP_LISTEN: 0.0.0.0:9130
