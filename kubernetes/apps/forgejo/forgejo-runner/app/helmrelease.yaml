@@ -49,7 +49,8 @@ spec:
           options:
             namespace: forgejo
             poll_timeout: 10m
-            labels: "app.kubernetes.io/name=forgejo-runner-instance,egress.home.arpa/custom-egress=true"
+            labels: "app.kubernetes.io/name=forgejo-runner-instance,egress.home.arpa/custom-egress=true,kueue.x-k8s.io/queue-name=forgejo-ci"
+            queue_timeout: 1h
             resources: |
               requests:
                 cpu: 100m
@@ -84,8 +85,8 @@ spec:
             name: main
             resources:
               requests:
-                cpu: 100m
-                memory: 256Mi
+                cpu: 500m
+                memory: 2Gi
               limits:
                 cpu: 500m
                 memory: 4Gi
@@ -225,8 +226,8 @@ spec:
             name: main
             resources:
               requests:
-                cpu: 100m
-                memory: 256Mi
+                cpu: 500m
+                memory: 2Gi
               limits:
                 cpu: 500m
                 memory: 4Gi

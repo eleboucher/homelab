@@ -39,7 +39,8 @@ spec:
                 options:
                   namespace: forgejo
                   poll_timeout: 10m
-                  labels: "app.kubernetes.io/name=forgejo-runner-instance,egress.home.arpa/custom-egress=true"
+                  labels: "app.kubernetes.io/name=forgejo-runner-instance,egress.home.arpa/custom-egress=true,kueue.x-k8s.io/queue-name=forgejo-ci"
+                  queue_timeout: 1h
                   resources: |
                     requests:
                       cpu: 100m
@@ -47,7 +48,7 @@ spec:
                     limits:
                       memory: 1Gi
             runner:
-              capacity: 1
+              capacity: 3
               labels:
                 - ubuntu-latest:k8s:///config/podspec-default.yaml
                 - default:k8s:///config/podspec-default.yaml
@@ -235,7 +236,7 @@ spec:
           k8s-plugin:
             image:
               repository: registry.erwanleboucher.dev/eleboucher/runner-k8s-plugin
-              tag: 13.2.2
+              tag: 13.2.3
             args:
               - --listen
               - unix:///plugin/forgejo-runner-k8s.sock

@@ -1,0 +1,36 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/kueue.x-k8s.io/resourceflavor_v1beta2.json
+apiVersion: kueue.x-k8s.io/v1beta2
+kind: ResourceFlavor
+metadata:
+  name: forgejo-ci
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/kueue.x-k8s.io/clusterqueue_v1beta2.json
+# Shared by every runner: their capacities only bound how many tasks each one
+# fetches, this bounds how many job pods run at once. Counts requests, not limits.
+# Sized from 14d of metrics: the two nodes have ~15.5 CPU / 40Gi unrequested,
+# capped lower on memory because jobs burst past requests next to postgres.
+apiVersion: kueue.x-k8s.io/v1beta2
+kind: ClusterQueue
+metadata:
+  name: forgejo-ci
+spec:
+  namespaceSelector: {}
+  resourceGroups:
+    - coveredResources: [cpu, memory]
+      flavors:
+        - name: forgejo-ci
+          resources:
+            - name: cpu
+              nominalQuota: 12
+            - name: memory
+              nominalQuota: 28Gi
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/kueue.x-k8s.io/localqueue_v1beta2.json
+apiVersion: kueue.x-k8s.io/v1beta2
+kind: LocalQueue
+metadata:
+  name: forgejo-ci
+  namespace: forgejo
+spec:
+  clusterQueue: forgejo-ci

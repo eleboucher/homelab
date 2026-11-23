@@ -8,6 +8,8 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: forgejo-runner-sable
+  dependsOn:
+    - name: forgejo-runner-queue
   interval: 1h
   path: "./kubernetes/apps/forgejo/forgejo-runner-sable/app"
   prune: true

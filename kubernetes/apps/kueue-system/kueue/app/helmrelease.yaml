@@ -1,0 +1,30 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: kueue
+  namespace: kueue-system
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: kueue
+  interval: 1h
+  values:
+    managerConfig:
+      # Only batch/job, only in forgejo: the webhooks fail closed, and the
+      # chart default would gate every pod in the cluster on Kueue being up.
+      controllerManagerConfigYaml: |-
+        apiVersion: config.kueue.x-k8s.io/v1beta2
+        kind: Configuration
+        managedJobsNamespaceSelector:
+          matchLabels:
+            kubernetes.io/metadata.name: forgejo
+        integrations:
+          frameworks:
+            - batch/job
+        # The heavy podspec requests ephemeral-storage, which the queue does
+        # not cover; uncovered resources would leave those jobs unadmittable.
+        resources:
+          excludeResourcePrefixes:
+            - ephemeral-storage
