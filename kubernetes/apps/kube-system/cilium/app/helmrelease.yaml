@@ -17,7 +17,6 @@ spec:
     bpf:
       datapathMode: netkit
       masquerade: true
-      preallocateMaps: true
     bpfClockProbe: true
     bgpControlPlane:
       enabled: true
