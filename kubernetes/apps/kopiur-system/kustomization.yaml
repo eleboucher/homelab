@@ -7,4 +7,3 @@ namespace: kopiur-system
 resources:
   - namespace.yaml
   - kopiur/ks.yaml
-  - gdrive-sync/ks.yaml

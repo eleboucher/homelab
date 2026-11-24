@@ -34,6 +34,7 @@ spec:
       full:
         cron: 0 3 * * 0
         jitter: 1h
+  mode: ReadOnly
   moverDefaults:
     cache:
       # kopia's own budgets are 5000 MiB each, larger than the cache PVCs

@@ -13,7 +13,7 @@ spec:
     enabled: true
   repository:
     kind: ClusterRepository
-    name: nas
+    name: ovh
   retention:
     keepHourly: 24
     keepDaily: 7
@@ -83,7 +83,7 @@ spec:
     enabled: true
   repository:
     kind: ClusterRepository
-    name: nas
+    name: ovh
   retention:
     keepHourly: 24
     keepDaily: 7

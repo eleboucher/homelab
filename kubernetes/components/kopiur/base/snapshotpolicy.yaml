@@ -22,7 +22,7 @@ spec:
     enabled: true
   repository:
     kind: ClusterRepository
-    name: nas
+    name: ovh
   retention:
     keepLatest: 3
     keepHourly: 24

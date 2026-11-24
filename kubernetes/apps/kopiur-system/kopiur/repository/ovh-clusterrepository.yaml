@@ -47,12 +47,3 @@ spec:
       minDuration: 6h
   scheduleDefaults:
     timezone: Europe/Paris
-  seed:
-    from:
-      backend:
-        filesystem:
-          path: /repo
-          volume:
-            nfs:
-              server: normandie.internal
-              path: /backups/kopiur
