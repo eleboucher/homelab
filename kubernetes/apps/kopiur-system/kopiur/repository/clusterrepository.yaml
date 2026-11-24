@@ -13,9 +13,6 @@ spec:
         nfs:
           server: normandie.internal
           path: /backups/kopiur
-  bootstrap:
-    failurePolicy:
-      activeDeadlineSeconds: 3600
   concurrency:
     maxConcurrentJobs: 4
   credentialProjection:
@@ -27,13 +24,6 @@ spec:
       key: KOPIA_PASSWORD
   maintenance:
     enabled: false
-    schedule:
-      quick:
-        cron: 0 * * * *
-        jitter: 10m
-      full:
-        cron: 0 3 * * 0
-        jitter: 1h
   mode: ReadOnly
   moverDefaults:
     cache:
