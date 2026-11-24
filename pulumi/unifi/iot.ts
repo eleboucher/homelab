@@ -30,6 +30,7 @@ new unifi.Client(
 const zone = new unifi.FirewallZone("iot", { name: "IoT", networkIds: [iot.id] });
 const internal = unifi.getFirewallZoneOutput({ name: "Internal" });
 const gateway = unifi.getFirewallZoneOutput({ name: "Gateway" });
+const external = unifi.getFirewallZoneOutput({ name: "External" });
 
 new unifi.FirewallPolicy("lan_to_iot", {
   name: "LAN to IoT",
@@ -80,6 +81,36 @@ new unifi.FirewallPolicy("iot_to_gateway", {
     matchingTarget: "ANY",
     portMatchingType: "SPECIFIC",
     port: "53,123,5353",
+  },
+});
+
+new unifi.Nat("iot_dns_redirect", {
+  description: "Redirect IoT DNS to gateway",
+  type: "DNAT",
+  ipVersion: "IPV4",
+  protocol: "tcp_udp",
+  inInterface: iot.id,
+  destinationFilter: {
+    filterType: "ADDRESS_AND_PORT",
+    address: "192.168.20.1",
+    invertAddress: true,
+    port: "53",
+  },
+  ipAddress: "192.168.20.1",
+  port: "53",
+});
+
+new unifi.FirewallPolicy("block_iot_dot", {
+  name: "Block IoT DNS-over-TLS",
+  action: "BLOCK",
+  protocol: "tcp_udp",
+  ipVersion: "IPV4",
+  source: { zoneId: zone.id, matchingTarget: "ANY" },
+  destination: {
+    zoneId: external.id,
+    matchingTarget: "ANY",
+    portMatchingType: "SPECIFIC",
+    port: "853",
   },
 });
 
