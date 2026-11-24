@@ -88,6 +88,7 @@ new unifi.Nat("iot_dns_redirect", {
   description: "Redirect IoT DNS to gateway",
   type: "DNAT",
   ipVersion: "IPV4",
+  ruleIndex: 3,
   protocol: "tcp_udp",
   inInterface: iot.id,
   destinationFilter: {
