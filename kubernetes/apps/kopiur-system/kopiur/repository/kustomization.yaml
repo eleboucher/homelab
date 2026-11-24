@@ -5,3 +5,5 @@ kind: Kustomization
 resources:
   - ./clusterrepository.yaml
   - ./externalsecret.yaml
+  - ./ovh-clusterrepository.yaml
+  - ./ovh-externalsecret.yaml
