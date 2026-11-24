@@ -100,6 +100,12 @@
       "schedule": ["before 6am on Monday"]
     },
     {
+      "description": "Hold PostgreSQL 18 until VectorChord ships for 19",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["ghcr.io/cloudnative-pg/postgresql"],
+      "allowedVersions": "/^18\\./"
+    },
+    {
       "description": "Flux Operator Group",
       "groupName": "flux-operator",
       "matchDatasources": ["docker"],
