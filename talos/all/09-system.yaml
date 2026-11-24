@@ -5,13 +5,13 @@ timeout: 5m
 ---
 apiVersion: v1alpha1
 kind: ResolverConfig
-# Use Quad9's dual-stack resolvers. Static LAN names needed by host workloads
+# Use Cloudflare's dual-stack resolvers. Static LAN names needed by host workloads
 # are defined below, so kubelet mounts do not depend on RouterOS DNS.
 nameservers:
-  - address: 9.9.9.9
-  - address: 149.112.112.112
-  - address: 2620:fe::fe
-  - address: 2620:fe::9
+  - address: 1.1.1.1
+  - address: 1.0.0.1
+  - address: 2606:4700:4700::1111
+  - address: 2606:4700:4700::1001
 hostDNS:
   enabled: true
   forwardKubeDNSToHost: true # Requires Cilium socketLB features

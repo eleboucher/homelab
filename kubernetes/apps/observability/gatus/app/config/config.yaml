@@ -19,13 +19,6 @@ endpoints:
     conditions:
       - "[CONNECTED] == true"
 
-  - name: Quad9
-    group: connectivity
-    url: icmp://9.9.9.9
-    interval: 1m
-    conditions:
-      - "[CONNECTED] == true"
-
   - name: erwanleboucher.dev
     group: external
     url: https://erwanleboucher.dev
