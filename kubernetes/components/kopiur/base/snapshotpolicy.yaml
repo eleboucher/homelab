@@ -14,8 +14,6 @@ spec:
     securityContext:
       runAsUser: ${KOPIUR_PUID:=1000}
       runAsGroup: ${KOPIUR_PGID:=1000}
-  # Kopiur otherwise inherits the source PVC's replicated class for its staging
-  # volume, creating unnecessary DRBD churn on every backup.
   staging:
     storageClassName: miroir-local
   credentialProjection:
