@@ -29,7 +29,7 @@ spec:
           app:
             image:
               repository: ghcr.io/germondai/trawl
-              tag: 1.11.1@sha256:f41dac1727c7d0c6d18381279792d89704b36ccfee537262118c7ee32d293ba8
+              tag: 1.12.0@sha256:da3f25e18d6c5884c5db51d7d05c2dc5a197818b25f03d3dfbb8c3994177cf41
               pullPolicy: IfNotPresent
             env:
               TZ: "Europe/Paris"
