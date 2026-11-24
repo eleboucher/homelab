@@ -26,6 +26,7 @@ spec:
       namespace: kopiur-system
       key: KOPIA_PASSWORD
   maintenance:
+    enabled: false
     schedule:
       quick:
         cron: 0 * * * *
