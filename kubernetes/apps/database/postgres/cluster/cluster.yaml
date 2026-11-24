@@ -63,19 +63,12 @@ spec:
       - pooler-map pooler-rw all
     shared_preload_libraries:
       - "vchord"
-      - "timescaledb"
     parameters:
       checkpoint_timeout: "15min"
       wal_compression: "zstd"
-      timescaledb.telemetry_level: "off"
       max_locks_per_transaction: "128"
 
     extensions:
-      - name: postgis
-        ld_library_path:
-          - system
-        image:
-          reference: ghcr.io/cloudnative-pg/postgis-extension-testing:3.7.0-18-trixie@sha256:36ba894fc359b9ddedc41842a6debbc5a64cee30526d7efd80b09ef3207a43f2
       - name: vchord
         image:
           reference: ghcr.io/tensorchord/vchord-scratch:pg18-v1.1.1@sha256:bdea43bed2a414e21bbf71767bf6f0739747ac480b267b51772dc214ac28dcb3
@@ -83,6 +76,3 @@ spec:
           - /usr/lib/postgresql/18/lib/
         extension_control_path:
           - /usr/share/postgresql/18/
-      - name: timescaledb
-        image:
-          reference: ghcr.io/shusaan/timescaledb-testing:2.24.0-18-trixie@sha256:dae25c2dde06455214ac5553b51d3ef2d48fe84795c2cfa48c51c6e15877044e
