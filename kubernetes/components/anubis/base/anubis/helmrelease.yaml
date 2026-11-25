@@ -27,6 +27,8 @@ spec:
                   secretKeyRef:
                     name: ${APP}-anubis-key
                     key: ED25519_PRIVATE_KEY_HEX
+              # Partial locales panic: https://github.com/TecharoHQ/anubis/issues/2070
+              FORCED_LANGUAGE: en
               METRICS_BIND: ":9090"
               OG_EXPIRY_TIME: "24h"
               OG_PASSTHROUGH: "true"
