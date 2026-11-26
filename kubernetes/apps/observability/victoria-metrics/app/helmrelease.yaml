@@ -92,6 +92,23 @@ spec:
           - vmalertmanager.erwanleboucher.dev
       useManagedConfig: true
     defaultDashboards:
+      dashboards:
+        k8s-resources-windows-cluster:
+          enabled: false
+        k8s-resources-windows-namespace:
+          enabled: false
+        k8s-resources-windows-pod:
+          enabled: false
+        k8s-windows-cluster-rsrc-use:
+          enabled: false
+        k8s-windows-node-rsrc-use:
+          enabled: false
+        nodes-aix:
+          enabled: false
+        prometheus:
+          enabled: false
+        prometheus-remote-write:
+          enabled: false
       grafanaOperator:
         enabled: true
         spec:
@@ -153,6 +170,13 @@ spec:
     kubelet:
       vmScrape:
         spec:
+          # Replaces the chart's rules, which also copy every node label onto each series
+          relabelConfigs:
+            - sourceLabels:
+                - __metrics_path__
+              targetLabel: metrics_path
+            - targetLabel: job
+              replacement: kubelet
           metricRelabelConfigs:
             - action: labeldrop
               regex: (uid)
@@ -187,6 +211,10 @@ spec:
                   sourceLabels:
                     - "__name__"
                   regex: (apiserver_response_sizes_bucket|apiserver_watch_events_sizes_bucket)
+                - action: drop
+                  sourceLabels:
+                    - "__name__"
+                  regex: (apiserver_request_body_size_bytes|apiserver_storage_list_duration_seconds|apiserver_watch_cache_initialization_duration_seconds|apiserver_watch_cache_read_wait_seconds|apiserver_watch_events_dispatch_duration_seconds|apiserver_watch_list_duration_seconds)_(bucket|count|sum)
     kubeControllerManager:
       vmScrape:
         spec:
@@ -215,6 +243,13 @@ spec:
               scheme: https
               tlsConfig:
                 insecureSkipVerify: true
+            # Pod-level requests per node (kube_pod_resource_request), which kube-state-metrics lacks.
+            - path: /metrics/resources
+              bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+              port: http-metrics
+              scheme: https
+              tlsConfig:
+                insecureSkipVerify: true
     victoria-metrics-operator:
       crds:
         cleanup:
@@ -223,6 +258,16 @@ spec:
         enable_converter_ownership: true
     vmagent:
       spec:
+        # On the other node, vmagent keeps queueing scrapes while the vmsingle node restarts
+        affinity:
+          podAntiAffinity:
+            preferredDuringSchedulingIgnoredDuringExecution:
+              - weight: 100
+                podAffinityTerm:
+                  labelSelector:
+                    matchLabels:
+                      app.kubernetes.io/name: vmsingle
+                  topologyKey: kubernetes.io/hostname
         scrapeInterval: 30s
         externalLabels:
           cluster: homelab
@@ -336,6 +381,17 @@ spec:
                 annotations:
                   summary: There are {{ $value }} containers pulling from Dockerhub. This may lead to rate limiting.
                 expr: count(time() - container_last_seen{image=~"(docker.io).*",container!=""} < 30) > 100
+                labels:
+                  severity: critical
+      zfs-rules:
+        create: true
+        groups:
+          - name: zfs
+            rules:
+              - alert: ZfsUnexpectedPoolState
+                annotations:
+                  summary: ZFS pool {{ $labels.zpool }} on {{ $labels.instance }} is in an unexpected state {{ $labels.state }}
+                expr: node_zfs_zpool_state{state!="online"} > 0
                 labels:
                   severity: critical
       oom-rules:

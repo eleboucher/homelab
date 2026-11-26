@@ -11,6 +11,7 @@ spec:
     name: kueue
   interval: 1h
   values:
+    enablePrometheus: true
     managerConfig:
       # Only batch/job, only in forgejo: the webhooks fail closed, and the
       # chart default would gate every pod in the cluster on Kueue being up.
