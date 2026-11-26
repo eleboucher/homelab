@@ -22,9 +22,6 @@ spec:
         - name: envoy-external
           namespace: network
           sectionName: ssh-public
-        - name: envoy-internal
-          namespace: network
-          sectionName: ssh
     image:
       rootless: true
       registry: code.forgejo.org
