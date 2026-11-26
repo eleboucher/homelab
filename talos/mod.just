@@ -28,7 +28,6 @@ diff *args:
 apply-node node *args: _upgrades-complete
     topf --topfconfig "{{ topf_config }}" apply --nodes-filter "{{ node }}" {{ args }}
 
-[confirm('Apply Talos config to all nodes [y|N] ?')]
 [doc('Apply Talos config to all nodes, one at a time (extra flags pass through, e.g. --mode=no-reboot)')]
 apply-all *args: _upgrades-complete
     topf --topfconfig "{{ topf_config }}" apply {{ args }}
