@@ -28,15 +28,21 @@ diff *args:
 apply-node node *args: _upgrades-complete
     topf --topfconfig "{{ topf_config }}" apply --nodes-filter "{{ node }}" {{ args }}
 
+[confirm('Apply Talos config to all nodes [y|N] ?')]
+[doc('Apply Talos config to all nodes, one at a time (extra flags pass through, e.g. --mode=no-reboot)')]
+apply-all *args: _upgrades-complete
+    topf --topfconfig "{{ topf_config }}" apply {{ args }}
+
 [private]
 [script]
 _upgrades-complete:
+    context="admin@$(yq -r '.clusterName' "{{ topf_config }}")"
     for resource in kubernetesupgrade/kubernetes talosupgrade/talos; do
-        kubectl wait --for=jsonpath='{.status.phase}'=Completed "$resource" --timeout=1s
+        kubectl --context "$context" wait --for=jsonpath='{.status.phase}'=Completed "$resource" --timeout=1s
     done
     kubernetes_version="$(yq -r '.spec.kubernetes.version' kubernetes/apps/system-upgrade/tuppr/upgrade/kubeupgrade.yaml)"
     talos_version="$(yq -r '.spec.talos.version' kubernetes/apps/system-upgrade/tuppr/upgrade/talosupgrade.yaml)"
-    kubectl get nodes -o json | jq -e --arg kubernetes "$kubernetes_version" --arg talos "Talos ($talos_version)" \
+    kubectl --context "$context" get nodes -o json | jq -e --arg kubernetes "$kubernetes_version" --arg talos "Talos ($talos_version)" \
         'all(.items[]; .status.nodeInfo.kubeletVersion == $kubernetes and .status.nodeInfo.osImage == $talos)' >/dev/null || {
         echo 'Let tuppr finish the configured upgrades before applying Talos config.' >&2
         exit 1

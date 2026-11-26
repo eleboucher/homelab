@@ -44,6 +44,7 @@ just talos diff               # Pending config diff vs live cluster (topf dry-ru
 just talos render [out]       # Render all machine configs to a directory
 just talos render-config <node>   # Render and print one node's machine config
 just talos apply-node <node>  # Apply Talos config to a node (topf apply)
+just talos apply-all         # Apply Talos config to all nodes, one at a time
 just talos reboot-node <node>     # Reboot node
 just talos reset-node <node>      # Reset node (wipe)
 just talos shutdown-node <node>   # Shutdown node
