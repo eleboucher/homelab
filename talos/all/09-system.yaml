@@ -30,6 +30,12 @@ name: 192.168.1.42
 hostnames:
   - k8s.internal
 ---
+machine:
+  logging:
+    destinations:
+      - endpoint: tcp://127.0.0.1:5171/
+        format: json_lines
+---
 apiVersion: v1alpha1
 kind: KmsgLogConfig
 name: fluent-bit

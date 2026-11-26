@@ -41,7 +41,23 @@ spec:
           chunk_size 32
           buffer_size 64
 
+        [INPUT]
+          name tcp
+          alias talos_service
+          listen 127.0.0.1
+          port 5171
+          tag talos.service
+          format json
+          chunk_size 64
+          buffer_size 256
+
       filters: |-
+        # KmsgLogConfig already ships the kernel lines; dns-resolve-cache logs every host DNS query
+        [FILTER]
+          name grep
+          match talos.service
+          exclude $talos-service ^(kernel|dns-resolve-cache)$
+
         [FILTER]
           name modify
           match talos.*
@@ -52,12 +68,24 @@ spec:
       outputs: |-
         [OUTPUT]
           name http
-          match talos.*
+          match talos.kernel
           host victoria-logs-server.observability.svc.cluster.local
           port 9428
           uri /insert/jsonline?_stream_fields=node,facility,priority,level&_msg_field=msg&_time_field=date
           format json_lines
           json_date_format iso8601
+          compress gzip
+          log_response_payload false
+
+        # syslogd puts its message in content, not msg
+        [OUTPUT]
+          name http
+          match talos.service
+          host victoria-logs-server.observability.svc.cluster.local
+          port 9428
+          uri /insert/jsonline?_stream_fields=node,talos-service&_msg_field=msg,content&_time_field=talos_time
+          format json_lines
+          json_date_key false
           compress gzip
           log_response_payload false
     dashboards:
