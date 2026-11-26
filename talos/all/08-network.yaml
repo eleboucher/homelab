@@ -24,6 +24,14 @@ vlanID: 100
 parent: lacp0
 mtu: 1500
 ---
+# IoT
+apiVersion: v1alpha1
+kind: VLANConfig
+name: lacp0.20
+vlanID: 20
+parent: lacp0
+mtu: 1500
+---
 apiVersion: v1alpha1
 kind: DHCPv4Config
 name: bond0

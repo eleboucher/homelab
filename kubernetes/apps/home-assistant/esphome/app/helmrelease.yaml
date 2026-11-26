@@ -15,7 +15,7 @@ spec:
       esphome:
         pod:
           annotations:
-            k8s.v1.cni.cncf.io/networks: esphome-lan
+            k8s.v1.cni.cncf.io/networks: esphome-iot
           securityContext:
             fsGroup: 2000
             fsGroupChangePolicy: OnRootMismatch
