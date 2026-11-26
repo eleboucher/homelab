@@ -41,11 +41,24 @@ spec:
     gatewayAPI:
       enabled: false
     hubble:
-      enabled: false
-      # relay:
-      #   enabled: true
-      # ui:
-      #   enabled: true
+      enabled: true
+      eventBufferCapacity: "65535"
+      metrics:
+        dashboards:
+          annotations:
+            grafana_folder: Cilium
+          enabled: true
+        enabled:
+          - drop:labelsContext=source_namespace,destination_namespace;sourceContext=app|reserved-identity;destinationContext=app|reserved-identity
+          - flow:labelsContext=source_namespace,destination_namespace;sourceContext=app|reserved-identity;destinationContext=app|reserved-identity
+          - icmp:labelsContext=source_namespace,destination_namespace;sourceContext=app|reserved-identity;destinationContext=app|reserved-identity
+          - tcp:labelsContext=source_namespace,destination_namespace;sourceContext=app|reserved-identity;destinationContext=app|reserved-identity
+        serviceMonitor:
+          enabled: true
+      relay:
+        enabled: true
+      ui:
+        enabled: true
     ipam:
       mode: kubernetes
     ipv4NativeRoutingCIDR: 10.42.0.0/16
