@@ -31,6 +31,8 @@ spec:
       continuwuity:
         annotations:
           reloader.stakater.com/auto: "true"
+        statefulset:
+          podManagementPolicy: Parallel
         type: statefulset
         initContainers:
           unbound:

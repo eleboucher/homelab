@@ -17,6 +17,8 @@ spec:
             kubernetes.io/hostname: paris
         annotations:
           reloader.stakater.com/auto: "true"
+        statefulset:
+          podManagementPolicy: Parallel
         type: statefulset
         containers:
           app:

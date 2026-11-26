@@ -12,6 +12,8 @@ spec:
   values:
     controllers:
       gts:
+        statefulset:
+          podManagementPolicy: Parallel
         type: statefulset
         pod:
           securityContext:

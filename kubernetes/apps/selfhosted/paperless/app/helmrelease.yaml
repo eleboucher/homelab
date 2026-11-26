@@ -19,6 +19,8 @@ spec:
         fsGroupChangePolicy: OnRootMismatch
     controllers:
       paperless:
+        statefulset:
+          podManagementPolicy: Parallel
         type: statefulset
         initContainers:
           init-run-dir:

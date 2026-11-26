@@ -21,6 +21,8 @@ spec:
       mealie:
         annotations:
           reloader.stakater.com/auto: "true"
+        statefulset:
+          podManagementPolicy: Parallel
         type: statefulset
         containers:
           app:

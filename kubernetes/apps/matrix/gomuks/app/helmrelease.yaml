@@ -18,6 +18,8 @@ spec:
         fsGroupChangePolicy: OnRootMismatch
     controllers:
       gomuks:
+        statefulset:
+          podManagementPolicy: Parallel
         type: statefulset
         annotations:
           reloader.stakater.com/auto: "true"

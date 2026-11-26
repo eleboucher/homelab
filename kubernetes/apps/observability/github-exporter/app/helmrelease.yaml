@@ -20,6 +20,8 @@ spec:
         fsGroupChangePolicy: OnRootMismatch
     controllers:
       github-exporter:
+        statefulset:
+          podManagementPolicy: Parallel
         type: statefulset
         annotations:
           reloader.stakater.com/auto: "true"

@@ -21,6 +21,8 @@ spec:
             runAsNonRoot: true
             runAsUser: 1000
         replicas: 1
+        statefulset:
+          podManagementPolicy: Parallel
         type: statefulset
         containers:
           app:
