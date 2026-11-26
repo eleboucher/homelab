@@ -23,6 +23,7 @@ spec:
             limits:
               memory: 2Gi
       envoyService:
+        allocateLoadBalancerNodePorts: false
         externalTrafficPolicy: Local
   shutdown:
     drainTimeout: 180s
