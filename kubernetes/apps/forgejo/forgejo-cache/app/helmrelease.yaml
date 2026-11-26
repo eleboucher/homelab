@@ -117,6 +117,10 @@ spec:
             port: 4000
     route:
       app:
+        annotations:
+          # The cache server has no health path and answers 404 on /
+          gatus.home-operations.com/endpoint: |-
+            conditions: ["[STATUS] == 404"]
         hostnames:
           - actions-cache.erwanleboucher.dev
         parentRefs:
