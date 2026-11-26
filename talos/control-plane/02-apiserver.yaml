@@ -9,7 +9,6 @@ env:
   GOMEMLIMIT: 3GiB
 extraArgs:
   enable-aggregator-routing: "true"
-  feature-gates: HPAScaleToZero=true
 ---
 apiVersion: v1alpha1
 kind: KubeAuditPolicyConfig
