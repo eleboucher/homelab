@@ -10,6 +10,11 @@ new unifi.Setting("site", {
       { serverName: "blocky", sdnsStamp: requireEnv("BLOCKY_DOH_STAMP") },
     ],
   },
-  mdns: { enabledFor: "all", mode: "auto" },
+  mdns: {
+    enabledFor: "all",
+    mode: "custom",
+    predefinedServices: ["google_chromecast", "apple_airPlay", "homeKit"],
+    customServices: [{ name: "ESPHome", address: "_esphomelib._tcp.local" }],
+  },
   usg: { sendRedirects: false },
 });
