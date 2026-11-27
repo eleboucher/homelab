@@ -4,9 +4,15 @@ kind: Kustomization
 namespace: ai
 resources:
   - namespace.yaml
+  - agentgateway/ks.yaml
   - cliproxyapi/ks.yaml
-  - hermes/ks.yaml
+  - flux-mcp/ks.yaml
   - hermes-matrix/ks.yaml
+  - hermes/ks.yaml
+  - home-assistant-mcp/ks.yaml
+  - kubectl-mcp/ks.yaml
+  - kubesearch-mcp/ks.yaml
+  - unifi-network-mcp/ks.yaml
   # - llama-cpp/ks.yaml
   - llmkube/ks.yaml
   - mcp-secrets/ks.yaml

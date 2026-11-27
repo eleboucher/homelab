@@ -1,0 +1,314 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: agentgateway
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: agentgateway
+  interval: 15m
+  values:
+    nameOverride: agentgateway
+    image:
+      tag: v1.7.0
+    mode: readonly
+    replicaCount: 1
+    session:
+      secretName: agentgateway
+    extraEnv:
+      - name: HERMES_API_KEY
+        valueFrom:
+          secretKeyRef:
+            name: agentgateway-hermes
+            key: HERMES_API_KEY
+      - name: CONTEXT7_API_KEY
+        valueFrom:
+          secretKeyRef:
+            name: context7-api-key
+            key: token
+    gateway:
+      service:
+        type: ClusterIP
+        ports:
+          - name: mcp
+            port: 8081
+            targetPort: 8081
+            protocol: TCP
+          - name: metrics
+            port: 15020
+            targetPort: 15020
+            protocol: TCP
+          - name: readiness
+            port: 15021
+            targetPort: 15021
+            protocol: TCP
+    resources:
+      requests:
+        cpu: 10m
+        memory: 128Mi
+      limits:
+        memory: 512Mi
+    config:
+      config:
+        adminAddr: "off"
+        statsAddr: 0.0.0.0:15020
+        readinessAddr: 0.0.0.0:15021
+      gateways:
+        mcp:
+          port: 8081
+      routes:
+        - name: mcp-context7
+          gateways:
+            - mcp
+          matches:
+            - path:
+                pathPrefix: /mcp/context7
+          backends:
+            - mcp:
+                targets:
+                  - name: context7
+                    mcp:
+                      host: https://mcp.context7.com/mcp
+                    policies:
+                      backendAuth:
+                        key: ${CONTEXT7_API_KEY}
+          policies:
+            urlRewrite:
+              path:
+                prefix: /mcp
+            apiKey:
+              mode: strict
+              keys:
+                - key: ${HERMES_API_KEY}
+                  metadata:
+                    client: hermes
+            mcpAuthorization:
+              rules:
+                - allow: apiKey.client == "hermes"
+        - name: mcp-flux
+          gateways:
+            - mcp
+          matches:
+            - path:
+                pathPrefix: /mcp/flux
+          backends:
+            - mcp:
+                targets:
+                  - name: flux
+                    mcp:
+                      host: http://flux-mcp.ai.svc.cluster.local:8000/mcp
+          policies:
+            urlRewrite:
+              path:
+                prefix: /mcp
+            apiKey:
+              mode: strict
+              keys:
+                - key: ${HERMES_API_KEY}
+                  metadata:
+                    client: hermes
+            mcpAuthorization:
+              rules:
+                - allow: apiKey.client == "hermes"
+        - name: mcp-home-assistant
+          gateways:
+            - mcp
+          matches:
+            - path:
+                pathPrefix: /mcp/home-assistant
+          backends:
+            - mcp:
+                targets:
+                  - name: home-assistant
+                    mcp:
+                      host: http://home-assistant-mcp.ai.svc.cluster.local:8086/mcp
+          policies:
+            urlRewrite:
+              path:
+                prefix: /mcp
+            apiKey:
+              mode: strict
+              keys:
+                - key: ${HERMES_API_KEY}
+                  metadata:
+                    client: hermes
+            mcpAuthorization:
+              rules:
+                - allow: apiKey.client == "hermes"
+        - name: mcp-kubectl
+          gateways:
+            - mcp
+          matches:
+            - path:
+                pathPrefix: /mcp/kubectl
+          backends:
+            - mcp:
+                targets:
+                  - name: kubectl
+                    mcp:
+                      host: http://kubectl-mcp.ai.svc.cluster.local:8000/mcp
+          policies:
+            urlRewrite:
+              path:
+                prefix: /mcp
+            apiKey:
+              mode: strict
+              keys:
+                - key: ${HERMES_API_KEY}
+                  metadata:
+                    client: hermes
+            mcpAuthorization:
+              rules:
+                - allow: apiKey.client == "hermes"
+        - name: mcp-kubesearch
+          gateways:
+            - mcp
+          matches:
+            - path:
+                pathPrefix: /mcp/kubesearch
+          backends:
+            - mcp:
+                targets:
+                  - name: kubesearch
+                    mcp:
+                      host: http://kubesearch-mcp.ai.svc.cluster.local:3000/mcp
+          policies:
+            urlRewrite:
+              path:
+                prefix: /mcp
+            apiKey:
+              mode: strict
+              keys:
+                - key: ${HERMES_API_KEY}
+                  metadata:
+                    client: hermes
+            mcpAuthorization:
+              rules:
+                - allow: apiKey.client == "hermes"
+        - name: mcp-unifi-network
+          gateways:
+            - mcp
+          matches:
+            - path:
+                pathPrefix: /mcp/unifi-network
+          backends:
+            - mcp:
+                targets:
+                  - name: unifi-network
+                    mcp:
+                      host: http://unifi-network-mcp.ai.svc.cluster.local:3000/mcp
+          policies:
+            urlRewrite:
+              path:
+                prefix: /mcp
+            apiKey:
+              mode: strict
+              keys:
+                - key: ${HERMES_API_KEY}
+                  metadata:
+                    client: hermes
+            mcpAuthorization:
+              rules:
+                - allow: apiKey.client == "hermes"
+        - name: mcp-skiplagged
+          gateways:
+            - mcp
+          matches:
+            - path:
+                pathPrefix: /mcp/skiplagged
+          backends:
+            - mcp:
+                targets:
+                  - name: skiplagged
+                    mcp:
+                      host: https://mcp.skiplagged.com/mcp
+          policies:
+            urlRewrite:
+              path:
+                prefix: /mcp
+            apiKey:
+              mode: strict
+              keys:
+                - key: ${HERMES_API_KEY}
+                  metadata:
+                    client: hermes
+            mcpAuthorization:
+              rules:
+                - allow: apiKey.client == "hermes"
+        - name: mcp-kiwi
+          gateways:
+            - mcp
+          matches:
+            - path:
+                pathPrefix: /mcp/kiwi
+          backends:
+            - mcp:
+                targets:
+                  - name: kiwi
+                    mcp:
+                      host: https://mcp.kiwi.com
+          policies:
+            urlRewrite:
+              path:
+                prefix: /mcp
+            apiKey:
+              mode: strict
+              keys:
+                - key: ${HERMES_API_KEY}
+                  metadata:
+                    client: hermes
+            mcpAuthorization:
+              rules:
+                - allow: apiKey.client == "hermes"
+        - name: mcp-trivago
+          gateways:
+            - mcp
+          matches:
+            - path:
+                pathPrefix: /mcp/trivago
+          backends:
+            - mcp:
+                targets:
+                  - name: trivago
+                    mcp:
+                      host: https://mcp.trivago.com/mcp
+          policies:
+            urlRewrite:
+              path:
+                prefix: /mcp
+            apiKey:
+              mode: strict
+              keys:
+                - key: ${HERMES_API_KEY}
+                  metadata:
+                    client: hermes
+            mcpAuthorization:
+              rules:
+                - allow: apiKey.client == "hermes"
+        - name: mcp-ferryhopper
+          gateways:
+            - mcp
+          matches:
+            - path:
+                pathPrefix: /mcp/ferryhopper
+          backends:
+            - mcp:
+                targets:
+                  - name: ferryhopper
+                    mcp:
+                      host: https://mcp.ferryhopper.com/mcp
+          policies:
+            urlRewrite:
+              path:
+                prefix: /mcp
+            apiKey:
+              mode: strict
+              keys:
+                - key: ${HERMES_API_KEY}
+                  metadata:
+                    client: hermes
+            mcpAuthorization:
+              rules:
+                - allow: apiKey.client == "hermes"
