@@ -5,9 +5,12 @@ kind: HelmRelease
 metadata:
   name: keda-add-ons-http
 spec:
-  chartRef:
+  chart:
     kind: OCIRepository
-    name: keda-add-ons-http
+    spec:
+      url: oci://ghcr.io/home-operations/charts-mirror/keda-add-ons-http
+      ref:
+        tag: 0.16.0
   interval: 1h
   values:
     interceptor:

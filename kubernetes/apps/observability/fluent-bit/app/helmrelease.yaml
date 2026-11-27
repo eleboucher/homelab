@@ -5,9 +5,12 @@ kind: HelmRelease
 metadata:
   name: fluent-bit
 spec:
-  chartRef:
+  chart:
     kind: OCIRepository
-    name: fluent-bit
+    spec:
+      url: oci://ghcr.io/fluent/helm-charts/fluent-bit
+      ref:
+        tag: 0.58.3
   interval: 1h
   values:
     hostNetwork: true

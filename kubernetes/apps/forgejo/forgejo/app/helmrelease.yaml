@@ -6,9 +6,12 @@ metadata:
   annotations:
     anubis.home/skip-route-patch: "true"
 spec:
-  chartRef:
+  chart:
     kind: OCIRepository
-    name: *app
+    spec:
+      url: oci://code.forgejo.org/forgejo-helm/forgejo
+      ref:
+        tag: 17.3.3
   interval: 1h
   values:
     httpRoute:

@@ -5,9 +5,12 @@ kind: HelmRelease
 metadata:
   name: agentgateway
 spec:
-  chartRef:
+  chart:
     kind: OCIRepository
-    name: agentgateway
+    spec:
+      url: oci://cr.agentgateway.dev/charts/agentgateway-standalone
+      ref:
+        tag: v1.7.0
   interval: 15m
   values:
     nameOverride: agentgateway

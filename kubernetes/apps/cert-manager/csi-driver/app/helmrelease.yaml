@@ -5,9 +5,12 @@ kind: HelmRelease
 metadata:
   name: cert-manager-csi-driver
 spec:
-  chartRef:
+  chart:
     kind: OCIRepository
-    name: cert-manager-csi-driver
+    spec:
+      url: oci://quay.io/jetstack/charts/cert-manager-csi-driver
+      ref:
+        tag: v0.16.1
   interval: 1h
   values:
     metrics:

@@ -7,4 +7,3 @@ resources:
   - ./dragonfly.yaml
   - ./externalsecret.yaml
   - ./helmrelease.yaml
-  - ./ocirepository.yaml

@@ -5,9 +5,12 @@ kind: HelmRelease
 metadata:
   name: opentelemetry-collector
 spec:
-  chartRef:
+  chart:
     kind: OCIRepository
-    name: opentelemetry-collector
+    spec:
+      url: oci://ghcr.io/open-telemetry/opentelemetry-helm-charts/opentelemetry-collector
+      ref:
+        tag: 0.183.2
   interval: 1h
   values:
     fullnameOverride: opentelemetry-collector

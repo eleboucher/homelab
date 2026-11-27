@@ -96,8 +96,7 @@ talos/                       # Talos cluster config, managed with topf
 
 - `kustomization.yaml` - Kustomize config
 - `ks.yaml` - Flux Kustomization CRD
-- `helmrelease.yaml` - Helm release config
-- `ocirepository.yaml` - OCI chart source
+- `helmrelease.yaml` - Helm release config; the chart is an inline OCI source (`spec.chart.kind: OCIRepository` with `spec.chart.spec.url` and `ref.tag`), no separate `ocirepository.yaml`
 - `externalsecret.yaml` - External Secret config (if needed)
 
 **Secrets:** Use 1Password + External Secrets for all secrets. Store credentials in 1Password vault, sync to Kubernetes with External Secrets.
@@ -137,7 +136,7 @@ Default: Sort all fields alphabetically unless overridden below.
 
 ### HelmRelease Files (app-template based)
 
-Applies to HelmReleases using `oci://ghcr.io/bjw-s-labs/helm/app-template` (identified by sidecar `ocirepository.yaml`).
+Applies to HelmReleases using `oci://ghcr.io/bjw-s-labs/helm/app-template` (identified by `spec.chart.spec.url`).
 
 **`enabled` field:** Always first within its section.
 

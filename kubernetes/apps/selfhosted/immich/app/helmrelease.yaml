@@ -5,9 +5,12 @@ kind: HelmRelease
 metadata:
   name: &app immich
 spec:
-  chartRef:
+  chart:
     kind: OCIRepository
-    name: *app
+    spec:
+      url: oci://ghcr.io/immich-app/immich-charts/immich
+      ref:
+        tag: 0.13.4
   interval: 1h
   values:
     controllers:

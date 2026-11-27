@@ -5,7 +5,10 @@ kind: HelmRelease
 metadata:
   name: reflector
 spec:
-  chartRef:
+  chart:
     kind: OCIRepository
-    name: reflector
+    spec:
+      url: oci://ghcr.io/emberstack/helm-charts/reflector
+      ref:
+        tag: 10.0.81
   interval: 1h

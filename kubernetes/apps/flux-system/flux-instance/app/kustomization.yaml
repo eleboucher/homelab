@@ -8,5 +8,4 @@ resources:
   - helmrelease.yaml
   - prometheusrule.yaml
   - receiver
-  - ocirepository.yaml
   - podmonitor.yaml

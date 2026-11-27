@@ -5,9 +5,12 @@ kind: HelmRelease
 metadata:
   name: multus
 spec:
-  chartRef:
+  chart:
     kind: OCIRepository
-    name: multus
+    spec:
+      url: oci://ghcr.io/bjw-s-labs/helm/multus
+      ref:
+        tag: 1.3.6
   interval: 1h
   values:
     cni:

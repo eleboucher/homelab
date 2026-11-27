@@ -5,7 +5,10 @@ kind: HelmRelease
 metadata:
   name: ksgate
 spec:
-  chartRef:
+  chart:
     kind: OCIRepository
-    name: ksgate
+    spec:
+      url: oci://ghcr.io/ksgate/charts/ksgate
+      ref:
+        tag: 0.6.2
   interval: 1h

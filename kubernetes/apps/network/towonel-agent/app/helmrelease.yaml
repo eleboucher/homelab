@@ -4,9 +4,16 @@ kind: HelmRelease
 metadata:
   name: towonel-agent
 spec:
-  chartRef:
+  chart:
     kind: OCIRepository
-    name: towonel-agent
+    spec:
+      url: oci://codeberg.org/towonel/charts/towonel-agent
+      ref:
+        tag: 1.15.1
+      verify:
+        provider: cosign
+        secretRef:
+          name: towonel-cosign-pub
   interval: 1h
   values:
     controllers:

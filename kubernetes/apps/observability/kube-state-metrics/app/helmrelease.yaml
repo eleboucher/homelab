@@ -5,9 +5,12 @@ kind: HelmRelease
 metadata:
   name: kube-state-metrics
 spec:
-  chartRef:
+  chart:
     kind: OCIRepository
-    name: kube-state-metrics
+    spec:
+      url: oci://ghcr.io/prometheus-community/charts/kube-state-metrics
+      ref:
+        tag: 9.1.0
   interval: 1h
   values:
     fullnameOverride: kube-state-metrics

@@ -5,4 +5,3 @@ kind: Kustomization
 resources:
   - ./helmrelease.yaml
   - ./media-download-storage.yaml
-  - ./ocirepository.yaml

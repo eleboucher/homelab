@@ -5,9 +5,12 @@ kind: HelmRelease
 metadata:
   name: onepassword
 spec:
-  chartRef:
+  chart:
     kind: OCIRepository
-    name: onepassword
+    spec:
+      url: oci://ghcr.io/1password/connect
+      ref:
+        tag: 2.4.2
   interval: 1h
   values:
     connect:
@@ -21,7 +24,8 @@ spec:
       sync:
         imageRepository: ghcr.io/1password/connect-sync
   postRenderers:
-    - # NOTE: Instead of having the credentials mounted as a file, we inject them as env vars from the secret.
+    - 
+      # NOTE: Instead of having the credentials mounted as a file, we inject them as env vars from the secret.
       # This is because on bootstrap kustomize strips quotes around the JSON in stringData values, which makes
       # the value a JSON object instead of a string. Storing the credentials as an env var (via envFrom) keeps
       # the secret a flat key/value pair and avoids the issue.

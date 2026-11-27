@@ -5,9 +5,12 @@ kind: HelmRelease
 metadata:
   name: keda
 spec:
-  chartRef:
+  chart:
     kind: OCIRepository
-    name: keda
+    spec:
+      url: oci://ghcr.io/home-operations/charts-mirror/keda
+      ref:
+        tag: 2.21.1
   interval: 1h
   values:
     enableServiceLinks: false

@@ -6,9 +6,12 @@ metadata:
   name: trust-manager
 spec:
   interval: 1h
-  chartRef:
+  chart:
     kind: OCIRepository
-    name: trust-manager
+    spec:
+      url: oci://quay.io/jetstack/charts/trust-manager
+      ref:
+        tag: v0.26.0
   values:
     secretTargets:
       enabled: true

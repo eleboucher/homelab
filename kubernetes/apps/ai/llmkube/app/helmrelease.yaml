@@ -5,9 +5,12 @@ kind: HelmRelease
 metadata:
   name: llmkube
 spec:
-  chartRef:
+  chart:
     kind: OCIRepository
-    name: llmkube
+    spec:
+      url: oci://ghcr.io/defilantech/charts/llmkube
+      ref:
+        tag: 0.10.19
   interval: 1h
   install:
     remediation:

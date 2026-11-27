@@ -5,7 +5,6 @@ kind: Kustomization
 resources:
   - ./externalsecret.yaml
   - ./helmrelease.yaml
-  - ./ocirepository.yaml
 patches:
   # skills/.curator_state is unreadable even by the workload's own user;
   # let the snapshot complete instead of failing on it.

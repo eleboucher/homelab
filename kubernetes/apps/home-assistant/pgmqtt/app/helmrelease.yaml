@@ -5,9 +5,12 @@ kind: HelmRelease
 metadata:
   name: pgmqtt
 spec:
-  chartRef:
+  chart:
     kind: OCIRepository
-    name: pgmqtt
+    spec:
+      url: oci://ghcr.io/bo0tzz/charts/pgmqtt
+      ref:
+        tag: 0.3.0
   interval: 30m
   # The postgres/pass component injects app-template values that the
   # chart's strict values schema rejects.

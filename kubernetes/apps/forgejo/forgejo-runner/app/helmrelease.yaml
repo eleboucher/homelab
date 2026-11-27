@@ -4,9 +4,12 @@ kind: HelmRelease
 metadata:
   name: forgejo-runner
 spec:
-  chartRef:
+  chart:
     kind: OCIRepository
-    name: forgejo-runner
+    spec:
+      url: oci://git.erwanleboucher.dev/eleboucher/charts/forgejo-runner
+      ref:
+        tag: 13.3.1
   interval: 30m
   values:
     forgejo:

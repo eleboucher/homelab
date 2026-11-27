@@ -13,5 +13,4 @@ configMapGenerator:
 
 resources:
   - helmrelease.yaml
-  - ocirepository.yaml
   - externalsecret.yaml

@@ -7,9 +7,12 @@ metadata:
   name: reloader
   namespace: kube-system
 spec:
-  chartRef:
+  chart:
     kind: OCIRepository
-    name: reloader
+    spec:
+      url: oci://ghcr.io/stakater/charts/reloader
+      ref:
+        tag: 2.2.21
   interval: 1h
   values:
     fullnameOverride: reloader

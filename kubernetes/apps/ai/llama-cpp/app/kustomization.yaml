@@ -6,4 +6,3 @@ resources:
   - ./configmap-download-script.yaml
   - ./externalsecret.yaml
   - ./helmrelease.yaml
-  - ./ocirepository.yaml
