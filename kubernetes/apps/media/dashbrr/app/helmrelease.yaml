@@ -39,6 +39,7 @@ spec:
             env: &database
               DASHBRR__DB_TYPE: sqlite
               DASHBRR__DB_PATH: /config/dashbrr.db
+              DASHBRR__K8S_DISCOVERY_NAMESPACES: media,downloads
             envFrom:
               - secretRef:
                   name: dashbrr
