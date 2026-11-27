@@ -64,6 +64,10 @@ new unifi.FirewallPolicy(
     action: "BLOCK",
     protocol: "all",
     ipVersion: "BOTH",
+    // Only new flows: the auto "LAN to IoT (Return)" rule sits after this one,
+    // so blocking all states would drop replies to LAN-initiated connections.
+    connectionStateType: "CUSTOM",
+    connectionStates: ["NEW", "INVALID"],
     source: { zoneId: zone.id, matchingTarget: "ANY" },
     destination: { zoneId: internal.id, matchingTarget: "ANY" },
   },
