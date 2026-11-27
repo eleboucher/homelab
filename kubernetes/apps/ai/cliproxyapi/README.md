@@ -9,11 +9,14 @@ OpenClaw and Hermes retain the `litellm` provider identifier for saved sessions
 and scheduled jobs, but send requests to CLIProxyAPI. It forwards them to the
 Anthropic API under these aliases:
 
-| Alias                | Model              | Default effort |
-| -------------------- | ------------------ | -------------- |
-| `claude/opus-low`    | `claude-opus-5-5`  | low            |
-| `claude/opus-medium` | `claude-opus-5-5`  | medium         |
-| `claude/haiku`       | `claude-haiku-5-5` | model default  |
+| Alias                | Model               | Default effort |
+| -------------------- | ------------------- | -------------- |
+| `claude/opus-low`    | `claude-opus-5-5`   | low            |
+| `claude/opus-medium` | `claude-opus-5-5`   | medium         |
+| `claude/opus-high`   | `claude-opus-5-5`   | high           |
+| `claude/sonnet`      | `claude-sonnet-5-5` | model default  |
+| `claude/haiku`       | `claude-haiku-5-5`  | model default  |
+| `claude/fable`       | `claude-fable-5-2`  | model default  |
 
 A client's own reasoning effort takes precedence over these defaults.
 

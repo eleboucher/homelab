@@ -15,6 +15,11 @@ data:
             context_length: 272000
           claude/opus-medium:
             context_length: 272000
+          claude/opus-high:
+            context_length: 272000
+          claude/sonnet: {}
+          claude/haiku: {}
+          claude/fable: {}
     model:
       default: claude/opus-low
       provider: custom:litellm
@@ -25,6 +30,18 @@ data:
         provider: custom:litellm
       opus:
         model: claude/opus-medium
+        provider: custom:litellm
+      opus-high:
+        model: claude/opus-high
+        provider: custom:litellm
+      sonnet:
+        model: claude/sonnet
+        provider: custom:litellm
+      haiku:
+        model: claude/haiku
+        provider: custom:litellm
+      fable:
+        model: claude/fable
         provider: custom:litellm
     auxiliary:
       approval:
@@ -67,6 +84,7 @@ data:
     plugins:
       enabled:
         - memini
+        - advanced-delegation
     terminal:
       backend: local
       cwd: /opt/data/workspace
@@ -104,10 +122,28 @@ data:
       restart_drain_timeout: 60
       api_max_retries: 3
       reasoning_effort: medium
+    # Replaces openclaw's explorer/fixer/oracle roles: the model picks a route per task.
+    # Second opinions use the built-in /review command.
     delegation:
-      model: claude/opus-low
       max_concurrent_children: 8
       max_spawn_depth: 2
+      backend: model_map
+      backends:
+        model_map:
+          options:
+            - name: quick
+              description: Cheapest; trivial lookups, summaries and simple searches.
+              provider: custom:litellm
+              model: claude/haiku
+            - name: fast
+              description: Default worker; scoped implementation, edits and codebase recon.
+              provider: custom:litellm
+              model: claude/opus-low
+            - name: deep
+              description: Hard debugging, root cause and architecture; strongest reasoning.
+              provider: custom:litellm
+              model: claude/opus-high
+          default: fast
     moa:
       default_preset: council
       presets:
