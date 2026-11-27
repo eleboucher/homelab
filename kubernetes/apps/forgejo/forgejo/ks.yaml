@@ -12,6 +12,7 @@ spec:
     - ../../../../components/anubis
     - ../../../../components/postgres/cert
     - ../../../../components/kopiur/hot
+    - ../../../../components/kopiur/snapshot-restore
     - ../../../../components/oidc
   dependsOn:
     - name: cnpg-cluster
@@ -32,6 +33,8 @@ spec:
       KOPIUR_CAPACITY: 50Gi
       ANUBIS_TARGET: "http://forgejo-http.forgejo.svc:3000"
       APP_NAMESPACE: forgejo
+      KOPIUR_RESTORE_NAME: forgejo-replicated-restore
+      KOPIUR_RESTORE_SNAPSHOT: forgejo-pre-replicated-migration-20261127121548
       OIDC_CALLBACK: /user/oauth2/kanidm/callback
       SUBDOMAIN: git
       OIDC_CLIENT_ID_KEY: key
