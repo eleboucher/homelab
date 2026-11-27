@@ -33,7 +33,7 @@ spec:
           discover:
             image: &image
               repository: ghcr.io/autobrr/dashbrr
-              tag: v0.8.0
+              tag: v0.9.0
             workingDir: /tmp
             args: ["config", "discover", "--k8s", "--yes"]
             env: &database
