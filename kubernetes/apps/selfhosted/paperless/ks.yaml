@@ -36,11 +36,11 @@ spec:
       APP_NAMESPACE: selfhosted
       CONTROLLER: StatefulSet
       KOPIUR_CAPACITY: 15Gi
-      KOPIUR_RESTORE_NAME: paperless-local-restore
-      KOPIUR_RESTORE_SNAPSHOT: paperless-pre-local-migration-20260812092624
       APP_UID: "1000"
       APP_GID: "65542"
       HTTP_SCALER_PORT: "8000"
+      KOPIUR_RESTORE_NAME: paperless-replicated-restore
+      KOPIUR_RESTORE_SNAPSHOT: paperless-pre-replicated-migration-20261127110433
       OIDC_DISPLAY_NAME: "Paperless"
       OIDC_CALLBACK: /accounts/oidc/kanidm/login/callback/
       OIDC_DISABLE_PKCE: "true"

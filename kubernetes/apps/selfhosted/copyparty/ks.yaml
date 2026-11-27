@@ -25,8 +25,8 @@ spec:
       APP: copyparty
       APP_NAMESPACE: selfhosted
       KOPIUR_CAPACITY: 20Gi
-      KOPIUR_RESTORE_NAME: copyparty-local-restore
-      KOPIUR_RESTORE_SNAPSHOT: copyparty-pre-local-migration-20260812092624
+      KOPIUR_RESTORE_NAME: copyparty-replicated-restore
+      KOPIUR_RESTORE_SNAPSHOT: copyparty-pre-replicated-migration-20261127110433
   prune: true
   sourceRef:
     kind: OCIRepository

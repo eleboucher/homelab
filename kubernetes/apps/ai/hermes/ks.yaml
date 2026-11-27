@@ -8,6 +8,7 @@ metadata:
 spec:
   components:
     - ../../../../components/kopiur/hot
+    - ../../../../components/kopiur/snapshot-restore
     - ../../../../components/oidc
   dependsOn:
     - name: kanidm
@@ -24,6 +25,8 @@ spec:
       APP: hermes
       APP_NAMESPACE: ai
       KOPIUR_CAPACITY: 20Gi
+      KOPIUR_RESTORE_NAME: hermes-replicated-restore
+      KOPIUR_RESTORE_SNAPSHOT: hermes-pre-replicated-migration-20261127110433
       OIDC_CALLBACK: /auth/callback
       OIDC_DISPLAY_NAME: Hermes
       SUBDOMAIN: hermes
