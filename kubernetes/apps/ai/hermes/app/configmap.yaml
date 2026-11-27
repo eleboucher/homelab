@@ -133,11 +133,54 @@ data:
       platforms:
         matrix:
           tool_progress: "off"
+    # Remote MCP servers go through agentgateway (one key, per-route auth); see kubernetes/apps/ai/agentgateway.
     mcp_servers:
       context7:
-        url: https://mcp.context7.com/mcp
+        url: http://agentgateway.ai.svc.cluster.local:8081/mcp/context7
         headers:
-          Authorization: "Bearer $${CONTEXT7_API_KEY}"
+          Authorization: "Bearer $${AGENTGATEWAY_API_KEY}"
+      flux:
+        url: http://agentgateway.ai.svc.cluster.local:8081/mcp/flux
+        headers:
+          Authorization: "Bearer $${AGENTGATEWAY_API_KEY}"
+      kubectl:
+        url: http://agentgateway.ai.svc.cluster.local:8081/mcp/kubectl
+        headers:
+          Authorization: "Bearer $${AGENTGATEWAY_API_KEY}"
+      kubesearch:
+        url: http://agentgateway.ai.svc.cluster.local:8081/mcp/kubesearch
+        headers:
+          Authorization: "Bearer $${AGENTGATEWAY_API_KEY}"
+      home-assistant:
+        url: http://agentgateway.ai.svc.cluster.local:8081/mcp/home-assistant
+        headers:
+          Authorization: "Bearer $${AGENTGATEWAY_API_KEY}"
+      unifi-network:
+        url: http://agentgateway.ai.svc.cluster.local:8081/mcp/unifi-network
+        headers:
+          Authorization: "Bearer $${AGENTGATEWAY_API_KEY}"
+      skiplagged:
+        url: http://agentgateway.ai.svc.cluster.local:8081/mcp/skiplagged
+        headers:
+          Authorization: "Bearer $${AGENTGATEWAY_API_KEY}"
+      kiwi:
+        url: http://agentgateway.ai.svc.cluster.local:8081/mcp/kiwi
+        headers:
+          Authorization: "Bearer $${AGENTGATEWAY_API_KEY}"
+      trivago:
+        url: http://agentgateway.ai.svc.cluster.local:8081/mcp/trivago
+        headers:
+          Authorization: "Bearer $${AGENTGATEWAY_API_KEY}"
+      ferryhopper:
+        url: http://agentgateway.ai.svc.cluster.local:8081/mcp/ferryhopper
+        headers:
+          Authorization: "Bearer $${AGENTGATEWAY_API_KEY}"
+      airbnb:
+        command: npx
+        args:
+          - -y
+          - "@openbnb/mcp-server-airbnb@latest"
+          - --ignore-robots-txt
     web:
       search_backend: searxng
   env: |-

@@ -127,6 +127,11 @@ spec:
               - --no-supervise
             env:
               API_SERVER_ENABLED: "true"
+              AGENTGATEWAY_API_KEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: agentgateway-hermes
+                    key: HERMES_API_KEY
               API_SERVER_HOST: 0.0.0.0
               HERMES_DASHBOARD_HOST: 0.0.0.0
               GOPATH: /opt/data/go
