@@ -106,6 +106,12 @@
       "allowedVersions": "/^18\\./"
     },
     {
+      "description": "Hermes moved from date tags (v2026.x) to SemVer (v0.x); ignore the old scheme",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["nousresearch/hermes-agent"],
+      "allowedVersions": "/^v0\\./"
+    },
+    {
       "description": "Flux Operator Group",
       "groupName": "flux-operator",
       "matchDatasources": ["docker"],

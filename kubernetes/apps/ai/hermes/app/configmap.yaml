@@ -4,9 +4,11 @@ metadata:
   name: hermes-configmap
 data:
   config.yaml: |-
-    custom_providers:
-      - name: litellm
-        base_url: http://cliproxyapi.ai:8317/v1
+    _config_version: 54
+    providers:
+      litellm:
+        api: http://cliproxyapi.ai:8317/v1
+        name: litellm
         key_env: CLIPROXY_API_KEY
         models:
           claude/opus-low:
