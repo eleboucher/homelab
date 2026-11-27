@@ -6,4 +6,5 @@ resources:
   - ./configmap.yaml
   - ./externalsecret.yaml
   - ./helmrelease.yaml
+  - ./kopiur.yaml
   - ./ocirepository.yaml

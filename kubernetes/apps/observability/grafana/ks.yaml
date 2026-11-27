@@ -24,6 +24,8 @@ spec:
     - name: grafana
     - name: kanidm
       namespace: security
+    - name: kopiur-repository
+      namespace: kopiur-system
     - name: miroir
       namespace: miroir-system
   healthChecks:
