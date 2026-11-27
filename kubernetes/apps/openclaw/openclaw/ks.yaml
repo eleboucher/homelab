@@ -8,7 +8,6 @@ metadata:
 spec:
   components:
     - ../../../../components/kopiur/hot
-    - ../../../../components/kopiur/snapshot-restore
   dependsOn:
     - name: cliproxyapi
       namespace: ai
@@ -25,8 +24,6 @@ spec:
       APP: openclaw
       APP_NAMESPACE: openclaw
       KOPIUR_CAPACITY: 10Gi
-      KOPIUR_RESTORE_NAME: openclaw-replicated-restore
-      KOPIUR_RESTORE_SNAPSHOT: openclaw-pre-replicated-migration-20261127110433
       KOPIUR_SNAPSHOTCLASS: miroir-snap
   prune: true
   sourceRef:

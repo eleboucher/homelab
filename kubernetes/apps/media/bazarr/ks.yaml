@@ -10,7 +10,6 @@ spec:
     - ../../../../components/nfs-media
     - ../../../../components/oidc/envoy
     - ../../../../components/kopiur/hot
-    - ../../../../components/kopiur/snapshot-restore
     - ../../../../components/zeroscaler
   interval: 1h
   path: ./kubernetes/apps/media/bazarr/app
@@ -28,8 +27,6 @@ spec:
       APP: bazarr
       APP_NAMESPACE: media
       CONTROLLER: StatefulSet
-      KOPIUR_RESTORE_NAME: bazarr-replicated-restore
-      KOPIUR_RESTORE_SNAPSHOT: bazarr-pre-replicated-migration-20261127095228
       OIDC_DISPLAY_NAME: Bazarr
       OIDC_GROUP: admins
       OIDC_SCOPES: '["openid", "profile"]'

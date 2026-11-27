@@ -11,7 +11,6 @@ spec:
   components:
     - ../../../../components/nfs-media
     - ../../../../components/kopiur/hot
-    - ../../../../components/kopiur/snapshot-restore
     - ../../../../components/oidc
     - ../../../../components/postgres/cert
     - ../../../../components/keda-http
@@ -39,8 +38,6 @@ spec:
       APP_UID: "1000"
       APP_GID: "65542"
       HTTP_SCALER_PORT: "8000"
-      KOPIUR_RESTORE_NAME: paperless-replicated-restore
-      KOPIUR_RESTORE_SNAPSHOT: paperless-pre-replicated-migration-20261127110433
       OIDC_DISPLAY_NAME: "Paperless"
       OIDC_CALLBACK: /accounts/oidc/kanidm/login/callback/
       OIDC_DISABLE_PKCE: "true"

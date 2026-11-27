@@ -10,7 +10,6 @@ spec:
       app.kubernetes.io/name: sparkyfitness
   components:
     - ../../../../components/kopiur/hot
-    - ../../../../components/kopiur/snapshot-restore
     - ../../../../components/postgres/pass
   dependsOn:
     - name: cnpg-cluster
@@ -27,8 +26,6 @@ spec:
       APP_NAMESPACE: selfhosted
       KOPIUR_CAPACITY: 15Gi
       APP_UID: "1000"
-      KOPIUR_RESTORE_NAME: sparkyfitness-replicated-restore
-      KOPIUR_RESTORE_SNAPSHOT: sparkyfitness-pre-replicated-migration-20261127101327
   prune: true
   sourceRef:
     kind: OCIRepository

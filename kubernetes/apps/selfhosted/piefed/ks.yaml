@@ -8,7 +8,6 @@ spec:
     - ../../../../components/anubis
     - ../../../../components/postgres/pass
     - ../../../../components/kopiur/hot
-    - ../../../../components/kopiur/snapshot-restore
   dependsOn:
     - name: cnpg-cluster
       namespace: database
@@ -31,8 +30,6 @@ spec:
       ANUBIS_TARGET: http://piefed-app.selfhosted.svc:5000
       APP_NAMESPACE: selfhosted
       KOPIUR_CAPACITY: 20Gi
-      KOPIUR_RESTORE_NAME: piefed-replicated-restore
-      KOPIUR_RESTORE_SNAPSHOT: piefed-pre-replicated-migration-20261127110433
       KOPIUR_SNAPSHOTCLASS: miroir-snap
   prune: true
   sourceRef:

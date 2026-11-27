@@ -9,7 +9,6 @@ spec:
   components:
     - ../../../../components/oidc/envoy
     - ../../../../components/kopiur/hot
-    - ../../../../components/kopiur/snapshot-restore
     - ../../../../components/zeroscaler
   interval: 1h
   path: ./kubernetes/apps/media/prowlarr/app
@@ -29,8 +28,6 @@ spec:
       APP: prowlarr
       APP_NAMESPACE: media
       CONTROLLER: StatefulSet
-      KOPIUR_RESTORE_NAME: prowlarr-replicated-restore
-      KOPIUR_RESTORE_SNAPSHOT: prowlarr-pre-replicated-migration-20261127095228
       OIDC_DISPLAY_NAME: Prowlarr
       OIDC_GROUP: admins
       OIDC_SCOPES: '["openid", "profile"]'

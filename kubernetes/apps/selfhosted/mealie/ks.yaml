@@ -9,7 +9,6 @@ spec:
     - ../../../../components/oidc
     - ../../../../components/postgres/cert
     - ../../../../components/kopiur/hot
-    - ../../../../components/kopiur/snapshot-restore
     - ../../../../components/keda-http
   dependsOn:
     - name: cnpg-cluster
@@ -30,8 +29,6 @@ spec:
       APP_NAMESPACE: selfhosted
       CONTROLLER: StatefulSet
       HTTP_SCALER_PORT: "9000"
-      KOPIUR_RESTORE_NAME: mealie-replicated-restore
-      KOPIUR_RESTORE_SNAPSHOT: mealie-pre-replicated-migration-20261127101327
       OIDC_CALLBACK: /login
       OIDC_DISPLAY_NAME: Mealie
       OIDC_LEGACY_CRYPTO: "true"

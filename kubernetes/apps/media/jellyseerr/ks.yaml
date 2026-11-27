@@ -9,7 +9,6 @@ spec:
   interval: 1h
   components:
     - ../../../../components/kopiur/hot
-    - ../../../../components/kopiur/snapshot-restore
     - ../../../../components/anubis
   path: ./kubernetes/apps/media/jellyseerr/app
   dependsOn:
@@ -24,8 +23,6 @@ spec:
       APP: jellyseerr
       APP_NAMESPACE: media
       ANUBIS_TARGET: "http://jellyseerr.media.svc:5055"
-      KOPIUR_RESTORE_NAME: jellyseerr-replicated-restore
-      KOPIUR_RESTORE_SNAPSHOT: jellyseerr-pre-replicated-migration-20261127101327
   prune: true
   sourceRef:
     kind: OCIRepository

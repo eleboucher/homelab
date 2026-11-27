@@ -10,7 +10,6 @@ spec:
     - ../../../../components/nfs-media
     - ../../../../components/oidc
     - ../../../../components/kopiur/hot
-    - ../../../../components/kopiur/snapshot-restore
     - ../../../../components/zeroscaler
   interval: 1h
   path: ./kubernetes/apps/downloads/qui/app
@@ -28,8 +27,6 @@ spec:
       APP: qui
       APP_NAMESPACE: downloads
       CONTROLLER: StatefulSet
-      KOPIUR_RESTORE_NAME: qui-replicated-restore
-      KOPIUR_RESTORE_SNAPSHOT: qui-pre-replicated-migration-20261127101327
       KOPIUR_SNAPSHOTCLASS: miroir-snap
       OIDC_CALLBACK: /api/auth/oidc/callback
       OIDC_GROUP: admins

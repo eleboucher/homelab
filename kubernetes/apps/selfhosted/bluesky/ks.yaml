@@ -11,7 +11,6 @@ spec:
   components:
     - ../../../../components/postgres/cert
     - ../../../../components/kopiur/hot
-    - ../../../../components/kopiur/snapshot-restore
   dependsOn:
     - name: cnpg-cluster
       namespace: database
@@ -27,8 +26,6 @@ spec:
     substitute:
       APP: bluesky
       APP_NAMESPACE: selfhosted
-      KOPIUR_RESTORE_NAME: bluesky-replicated-restore-2
-      KOPIUR_RESTORE_SNAPSHOT: bluesky-20261127092200
   prune: true
   sourceRef:
     kind: OCIRepository

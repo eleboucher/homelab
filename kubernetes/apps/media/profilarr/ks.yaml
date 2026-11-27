@@ -9,7 +9,6 @@ spec:
   interval: 1h
   components:
     - ../../../../components/kopiur/hot
-    - ../../../../components/kopiur/snapshot-restore
     - ../../../../components/zeroscaler
   path: ./kubernetes/apps/media/profilarr/app
   dependsOn:
@@ -24,8 +23,6 @@ spec:
       APP: profilarr
       APP_NAMESPACE: media
       CONTROLLER: StatefulSet
-      KOPIUR_RESTORE_NAME: profilarr-replicated-restore
-      KOPIUR_RESTORE_SNAPSHOT: profilarr-pre-replicated-migration-20261127095228
   prune: true
   sourceRef:
     kind: OCIRepository

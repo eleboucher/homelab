@@ -10,7 +10,6 @@ spec:
       app.kubernetes.io/name: continuwuity
   components:
     - ../../../../components/kopiur/hot
-    - ../../../../components/kopiur/snapshot-restore
     - ../../../../components/oidc
   dependsOn:
     - name: kopiur-repository
@@ -26,8 +25,6 @@ spec:
       APP: continuwuity
       APP_NAMESPACE: matrix
       KOPIUR_CAPACITY: 25Gi
-      KOPIUR_RESTORE_NAME: continuwuity-replicated-restore
-      KOPIUR_RESTORE_SNAPSHOT: continuwuity-pre-replicated-migration-20261127110433
       SUBDOMAIN: matrix
       OIDC_CALLBACK: /_continuwuity/oidc/complete
       OIDC_DISPLAY_NAME: Continuwuity
