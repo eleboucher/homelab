@@ -9,6 +9,7 @@ spec:
   interval: 1h
   components:
     - ../../../../components/kopiur/hot
+    - ../../../../components/kopiur/snapshot-restore
   path: ./kubernetes/apps/media/maintainerr/app
   dependsOn:
     - name: envoy-gateway
@@ -21,6 +22,8 @@ spec:
     substitute:
       APP: maintainerr
       APP_NAMESPACE: media
+      KOPIUR_RESTORE_NAME: maintainerr-replicated-restore
+      KOPIUR_RESTORE_SNAPSHOT: maintainerr-pre-replicated-migration-20261127101327
   prune: true
   sourceRef:
     kind: OCIRepository

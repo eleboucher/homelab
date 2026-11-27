@@ -26,9 +26,9 @@ spec:
       APP: sparkyfitness
       APP_NAMESPACE: selfhosted
       KOPIUR_CAPACITY: 15Gi
-      KOPIUR_RESTORE_NAME: sparkyfitness-local-restore
-      KOPIUR_RESTORE_SNAPSHOT: sparkyfitness-pre-local-migration-20260812092624
       APP_UID: "1000"
+      KOPIUR_RESTORE_NAME: sparkyfitness-replicated-restore
+      KOPIUR_RESTORE_SNAPSHOT: sparkyfitness-pre-replicated-migration-20261127101327
   prune: true
   sourceRef:
     kind: OCIRepository

@@ -27,8 +27,8 @@ spec:
       APP: qbittorrent
       APP_NAMESPACE: downloads
       CONTROLLER: StatefulSet
-      KOPIUR_RESTORE_NAME: qbittorrent-local-restore
-      KOPIUR_RESTORE_SNAPSHOT: qbittorrent-pre-local-migration-20260812092624
+      KOPIUR_RESTORE_NAME: qbittorrent-replicated-restore
+      KOPIUR_RESTORE_SNAPSHOT: qbittorrent-pre-replicated-migration-20261127101327
       OIDC_DISPLAY_NAME: qBittorrent
       OIDC_GROUP: admins
       OIDC_SCOPES: '["openid", "profile"]'

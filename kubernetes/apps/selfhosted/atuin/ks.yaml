@@ -22,8 +22,8 @@ spec:
     substitute:
       APP: atuin
       APP_NAMESPACE: selfhosted
-      KOPIUR_RESTORE_NAME: atuin-local-restore
-      KOPIUR_RESTORE_SNAPSHOT: atuin-pre-local-migration-20260812092624
+      KOPIUR_RESTORE_NAME: atuin-replicated-restore
+      KOPIUR_RESTORE_SNAPSHOT: atuin-pre-replicated-migration-20261127101327
   prune: true
   sourceRef:
     kind: OCIRepository

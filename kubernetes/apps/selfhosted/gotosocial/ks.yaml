@@ -26,8 +26,8 @@ spec:
       APP: *app
       APP_NAMESPACE: selfhosted
       KOPIUR_CAPACITY: 10Gi
-      KOPIUR_RESTORE_NAME: gotosocial-local-restore
-      KOPIUR_RESTORE_SNAPSHOT: gotosocial-pre-local-migration-20260812092624
+      KOPIUR_RESTORE_NAME: gotosocial-replicated-restore
+      KOPIUR_RESTORE_SNAPSHOT: gotosocial-pre-replicated-migration-20261127101327
       SUBDOMAIN: gts
       OIDC_CALLBACK: /auth/callback
       OIDC_DISABLE_PKCE: "true"

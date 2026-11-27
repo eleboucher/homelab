@@ -10,6 +10,7 @@ spec:
   components:
     - ../../../../components/oidc
     - ../../../../components/kopiur/hot
+    - ../../../../components/kopiur/snapshot-restore
   path: ./kubernetes/apps/media/dashbrr/app
   dependsOn:
     - name: envoy-gateway
@@ -24,6 +25,8 @@ spec:
     substitute:
       APP: dashbrr
       APP_NAMESPACE: media
+      KOPIUR_RESTORE_NAME: dashbrr-replicated-restore
+      KOPIUR_RESTORE_SNAPSHOT: dashbrr-pre-replicated-migration-20261127101327
       OIDC_DISPLAY_NAME: Dashbrr
       OIDC_GROUP: admins
       OIDC_CALLBACK: /api/auth/oidc/callback
