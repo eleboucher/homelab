@@ -104,6 +104,9 @@ spec:
             - apiGroups: [""]
               resources: ["services"]
               verbs: ["get", "list", "watch"]
+            - apiGroups: ["gateway.networking.k8s.io"]
+              resources: ["httproutes"]
+              verbs: ["get", "list"]
       bindings:
         dashbrr-discovery:
           type: ClusterRoleBinding

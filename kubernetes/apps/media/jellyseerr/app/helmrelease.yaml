@@ -58,6 +58,7 @@ spec:
       app:
         controller: jellyseerr
         annotations:
+          com.dashbrr.service.access_url: https://request.erwanleboucher.dev
           com.dashbrr.service.type: overseerr
           com.dashbrr.service.url: http://jellyseerr.media.svc:5055
           com.dashbrr.service.apikey: $${DASHBRR_OVERSEERR_API_KEY}
