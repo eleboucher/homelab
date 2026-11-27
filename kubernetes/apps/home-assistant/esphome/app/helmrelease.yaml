@@ -29,6 +29,14 @@ spec:
             image:
               repository: ghcr.io/home-operations/esphome
               tag: 2026.11.1@sha256:405cc7437cddd2cfbf41cbfc22edd48a0ee3e34bc4055bb31e1ce2a9576f38c3
+            # Bind to the pod network only: net1 sits on the IoT VLAN for mDNS
+            # and must not expose the dashboard to IoT devices.
+            args:
+              - --host
+              - eth0
+              - --remote-build-host
+              - eth0
+              - /config
             probes:
               liveness:
                 enabled: false
