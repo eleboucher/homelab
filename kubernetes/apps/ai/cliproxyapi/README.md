@@ -5,7 +5,7 @@ The gateway serves `http://cliproxyapi.ai:8317/v1` inside the cluster and
 `http://litellm.ai:4000/v1` and `https://litellm.erwanleboucher.dev/v1` addresses
 remain compatible aliases for chat and Responses requests.
 
-OpenClaw and Hermes retain the `litellm` provider identifier for saved sessions
+Hermes retains the `litellm` provider identifier for saved sessions
 and scheduled jobs, but send requests to CLIProxyAPI. It forwards them to the
 Anthropic API under these aliases:
 
@@ -24,7 +24,7 @@ The downstream API key still comes from the existing 1Password `litellm` item's
 `LITELLM_MASTER_KEY` field. External Secrets exposes it as `CLIPROXY_API_KEY`;
 clients retain their existing key value.
 
-Context7 connects directly from OpenClaw and Hermes, with its API key supplied
+Context7 connects directly from Hermes, with its API key supplied
 through External Secrets. Existing shared MCP credentials and the Talos MCP
 service account remain managed separately in `ai/mcp-secrets`. Memini's embedding and reranking endpoints continue to
 use the LLMKube services directly. These endpoints are not served by CLIProxyAPI.

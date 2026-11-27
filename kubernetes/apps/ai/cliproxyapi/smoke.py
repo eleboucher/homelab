@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Check the gateway contracts used by OpenClaw and Hermes with synthetic prompts."""
+"""Check the gateway contracts used by Hermes with synthetic prompts."""
 
 import argparse
 import json
