@@ -26,6 +26,11 @@ spec:
     substitute:
       APP: *app
       APP_NAMESPACE: ai
+      # Movers run as the app user: it writes 0600 state files kopiur's default uid can't read.
+      KOPIUR_MOVER_GID: "65534"
+      KOPIUR_MOVER_UID: "65534"
+      KOPIUR_PGID: "65534"
+      KOPIUR_PUID: "65534"
       KOPIUR_RESTORE_NAME: hermes-matrix-replicated-restore
       KOPIUR_RESTORE_SNAPSHOT: hermes-matrix-pre-replicated-migration-20261127101327
   prune: true
