@@ -33,7 +33,7 @@ spec:
           mcp:
             image:
               repository: ghcr.io/sirkirby/unifi-network-mcp
-              tag: 0.50.3@sha256:33ceb50cf878b80250d56f259ea73b08de54e689a217a0ae780c7c1441fd02a2
+              tag: 0.53.0@sha256:84c4221880d97d05a989b341a6f733d17f001a0451a049f03587855ff59e5787
             env:
               UNIFI_MCP_ALLOWED_HOSTS:
                 value: unifi-network-mcp.ai.svc.cluster.local,unifi-network-mcp,localhost,127.0.0.1
