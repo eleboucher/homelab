@@ -9,7 +9,7 @@ spec:
     spec:
       url: oci://ghcr.io/home-operations/charts/konflate
       ref:
-        tag: 0.6.6
+        tag: 0.7.0
   interval: 1h
   values:
     config:
