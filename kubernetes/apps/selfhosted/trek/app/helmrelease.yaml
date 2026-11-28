@@ -26,7 +26,7 @@ spec:
             image:
               # renovate: datasource=docker depName=mauriceboe/trek
               repository: mauriceboe/trek
-              tag: 5.2.1
+              tag: 5.2.2
             env:
               ALLOWED_ORIGINS: https://travel.erwanleboucher.dev
               APP_URL: https://travel.erwanleboucher.dev
