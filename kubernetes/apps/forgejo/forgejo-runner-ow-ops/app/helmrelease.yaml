@@ -73,7 +73,7 @@ spec:
                     value: "4"
                   - name: MAKEFLAGS
                     value: "-j4"
-                image: ghcr.io/bjw-s-labs/forgejo-runner:ubuntu-26.04@sha256:90ccdb10dbbe6d2b90871c9a8bc14c52ad4b7fea579f434ab7764d78d4a3ccf6
+                image: ghcr.io/bjw-s-labs/forgejo-runner:ubuntu-26.04@sha256:6aa1045f63d248cf6984f5c4073bf996e87b8e57c6cc8b03d2f7e0b9df577eec
                 imagePullPolicy: IfNotPresent
                 name: main
                 resources:
@@ -184,7 +184,7 @@ spec:
                     value: "4"
                   - name: MAKEFLAGS
                     value: "-j4"
-                image: ghcr.io/bjw-s-labs/forgejo-runner:ubuntu-26.04@sha256:90ccdb10dbbe6d2b90871c9a8bc14c52ad4b7fea579f434ab7764d78d4a3ccf6
+                image: ghcr.io/bjw-s-labs/forgejo-runner:ubuntu-26.04@sha256:6aa1045f63d248cf6984f5c4073bf996e87b8e57c6cc8b03d2f7e0b9df577eec
                 imagePullPolicy: IfNotPresent
                 name: main
                 volumeMounts:
