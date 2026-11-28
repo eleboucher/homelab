@@ -86,7 +86,7 @@ spec:
           app:
             image:
               repository: registry.erwanleboucher.dev/eleboucher/continuwuity
-              tag: 1f467f3-5b8e6b6
+              tag: d3761c6-e3333d5
             env:
               CONDUWUIT_CONFIG: /etc/conduwuit/conduwuit.toml
               MALLOC_CONF: prof:true,prof_active:true,lg_prof_sample:19,lg_prof_interval:34,prof_prefix:/jeprof/jeprof
